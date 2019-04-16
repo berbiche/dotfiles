@@ -1,0 +1,2 @@
+for_window [app_id="^launcher$"] floating enable, border none
+

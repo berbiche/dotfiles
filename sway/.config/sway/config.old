@@ -1,0 +1,276 @@
+# Read `man 5 sway` for a complete reference.
+#
+
+### Variables
+#
+set $XDG_CONFIG_HOME "$HOME/.config"
+# Logo key. Use Mod1 for Alt.
+set $mod Mod4
+set $left  h
+set $down  j
+set $up    k
+set $right l
+
+set $term alacritty
+
+set $menu "rofi -i -modi drun,run,windowcd -show drun"
+
+set $transparent #00000000
+
+# Workspaces
+set $ws1  '1: home'
+set $ws2  '2: browsing'
+set $ws3  '3: videos'
+set $ws4  '4'
+set $ws5  '5: programming'
+set $ws6  '6: sysadmin'
+set $ws7  '7: mail'
+set $ws8  '8'
+set $ws9  '9'
+set $ws10 '10'
+
+# Global settings
+default_border pixel
+workspace_auto_back_and_forth yes
+
+#
+# Startup scripts
+#
+include $XDG_CONFIG_HOME/sway/config.d/00-startup
+
+#
+# Outputs configuration
+#
+include $XDG_CONFIG_HOME/sway/config.d/10-outputs
+
+#
+# Inputs configuration
+#
+include $XDG_CONFIG_HOME/sway/config.d/10-inputs
+
+#
+# Window rules
+#
+include $XDG_CONFIG_HOME/sway/window-rules.d/*
+
+### Key bindings
+#
+# Basics:
+#
+    # start a terminal
+    bindsym $mod+Shift+Return exec $term
+
+    # kill focused window
+    bindsym $mod+Shift+d kill
+
+    # start your launcher
+    bindsym $mod+p exec "rofi -i -modi drun,run,window -show drun"
+    bindsym $mod+q exec "rofi -i -modi drun,run,window -show combi"
+
+    # lock the system
+    bindsym $mod+Ctrl+L exec "swaylock -f -c 000000"
+
+    # toggle border
+    bindsym $mod+c border toggle
+
+    # Drag floating windows by holding down $mod and left mouse button.
+    # Resize them with right mouse button + $mod.
+    # Despite the name, also works for non-floating windows.
+    # Change normal to inverse to use left mouse button for resizing and right
+    # mouse button for dragging.
+    floating_modifier $mod normal
+
+    # reload the configuration file
+    bindsym $mod+Shift+c reload
+
+    # exit sway (logs you out of your Wayland session)
+    bindsym $mod+Shift+q exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+
+#
+# Media Keys
+#
+    bindsym XF86AudioRaiseVolume  exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+    bindsym XF86AudioLowerVolume  exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+    bindsym XF86AudioMute         exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+    bindsym XF86AudioMicMute      exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+    bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
+    bindsym XF86MonBrightnessUp   exec brightnessctl set +5%
+
+    bindsym --release Print exec grim -g \"$(slurp)" \"$(xdg-user-dir PICTURES)/screenshots/$(date +'%Y')/$(date +'%m')/$(date +'%Y-%m-%d-%H.%M.%S.png')"
+    bindsym --release Shift+Print exec grim -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name') \"$(xdg-user-dir PICTURES)/screenshots/$(date +'%Y')/$(date +'%M')/%(date +'%Y-%m-%d-%H.%M.%S.png')"
+
+#
+# Moving around:
+#
+    # Move your focus around
+    bindsym $mod+$left focus left
+    bindsym $mod+$down focus down
+    bindsym $mod+$up focus up
+    bindsym $mod+$right focus right
+    # or use $mod+[up|down|left|right]
+    bindsym $mod+Left focus left
+    bindsym $mod+Down focus down
+    bindsym $mod+Up focus up
+    bindsym $mod+Right focus right
+
+    # _move_ the focused window with the same, but add Shift
+    bindsym $mod+Shift+$left move left
+    bindsym $mod+Shift+$down move down
+    bindsym $mod+Shift+$up move up
+    bindsym $mod+Shift+$right move right
+    # ditto, with arrow keys
+    bindsym $mod+Shift+Left move left
+    bindsym $mod+Shift+Down move down
+    bindsym $mod+Shift+Up move up
+    bindsym $mod+Shift+Right move right
+
+
+#
+# Workspaces:
+#
+    # Next/prev workspace
+    bindsym $mod+I workspace prev
+    bindsym $mod+O workspace next
+
+    # switch to workspace
+    bindsym $mod+1 workspace $ws1
+    bindsym $mod+2 workspace $ws2
+    bindsym $mod+3 workspace $ws3
+    bindsym $mod+4 workspace $ws4
+    bindsym $mod+5 workspace $ws5
+    bindsym $mod+6 workspace $ws6
+    bindsym $mod+7 workspace $ws7
+    bindsym $mod+8 workspace $ws8
+    bindsym $mod+9 workspace $ws9
+    bindsym $mod+0 workspace $ws10
+    # move focused container to workspace
+    bindsym $mod+Shift+1 move container to workspace number 1
+    bindsym $mod+Shift+2 move container to workspace number 2
+    bindsym $mod+Shift+3 move container to workspace number 3
+    bindsym $mod+Shift+4 move container to workspace number 4
+    bindsym $mod+Shift+5 move container to workspace number 5
+    bindsym $mod+Shift+6 move container to workspace number 6
+    bindsym $mod+Shift+7 move container to workspace number 7
+    bindsym $mod+Shift+8 move container to workspace number 8
+    bindsym $mod+Shift+9 move container to workspace number 9
+    bindsym $mod+Shift+0 move container to workspace number 10
+
+#
+# Layout stuff:
+#
+    # You can "split" the current object of your focus with
+    # $mod+b or $mod+v, for horizontal and vertical splits
+    # respectively.
+    bindsym $mod+b splith
+    bindsym $mod+v splitv
+
+    # Switch the current container between different layout styles
+    bindsym $mod+s layout stacking
+    bindsym $mod+w layout tabbed
+    bindsym $mod+e layout toggle split
+
+    # Make the current focus fullscreen
+    bindsym $mod+f fullscreen
+
+    # Make the current focus sticky
+    bindsym $mod+Shift+s sticky toggle
+
+    # Toggle the current focus between tiling and floating mode
+    bindsym $mod+Shift+space floating toggle
+    bindsym $mod+Shift+f     floating toggle
+
+    # Swap focus between the tiling area and the floating area
+    bindsym $mod+space focus mode_toggle
+
+    # move focus to the parent container
+    bindsym $mod+a focus parent
+
+
+#
+# Scratchpad:
+#
+    # Sway has a "scratchpad", which is a bag of holding for windows.
+    # You can send windows there and get them back later.
+
+    # Move the currently focused window to the scratchpad
+    bindsym $mod+Shift+minus move scratchpad
+
+    # Show the next scratchpad window or hide the focused scratchpad window.
+    # If there are multiple scratchpad windows, this command cycles through them.
+    bindsym $mod+minus scratchpad show
+
+
+#
+# Resizing containers:
+#
+mode "resize" {
+    # left will shrink the containers width
+    # right will grow the containers width
+    # up will shrink the containers height
+    # down will grow the containers height
+    bindsym $left resize shrink width 10px
+    bindsym $down resize grow height 10px
+    bindsym $up resize shrink height 10px
+    bindsym $right resize grow width 10px
+
+    # ditto, with arrow keys
+    bindsym Left resize shrink width 10px
+    bindsym Down resize grow height 10px
+    bindsym Up resize shrink height 10px
+    bindsym Right resize grow width 10px
+
+    # return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+r mode "default"
+}
+bindsym $mod+r mode "resize"
+
+#
+# Changing gaps between containers
+#
+mode "gaps" {
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+g mode "default"
+
+    # reset the gap
+    bindsym r mode "default";\
+        gaps inner current set 0;\
+	gaps outer current set 0
+
+    # complete gap
+    bindsym Plus gaps inner current plus 5
+    bindsym Underscore gaps inner current minus 5
+    bindsym Equal gaps outer current plus 5
+    bindsym Minus gaps outer current minus 5
+
+    # individually increase the gap for each direction
+    bindsym $left  gaps left  current plus 5
+    bindsym $right gaps right current plus 5
+    bindsym $down  gaps down  current plus 5
+    bindsym $up    gaps up    current plus 5
+    bindsym Left   gaps left  current plus 5
+    bindsym Right  gaps right current plus 5
+    bindsym Down   gaps down  current plus 5
+    bindsym Up     gaps up    current plus 5
+    # inverse
+    bindsym Shift+$left  gaps left  current minus 5
+    bindsym Shift+$right gaps right current minus 5
+    bindsym Shift+$down  gaps down  current minus 5
+    bindsym Shift+$up    gaps up    current minus 5
+    bindsym Shift+Left   gaps left  current minus 5
+    bindsym Shift+Right  gaps right current minus 5
+    bindsym Shift+Down   gaps down  current minus 5
+    bindsym ShifT+Up     gaps up    current minus 5
+
+    # Default mode
+    bindsym 1 mode "default";\
+	gaps inner current set 10;\
+#    	gaps outer current set 5
+
+}
+bindsym $mod+g mode "gaps"
+
+
+#include $XDG_CONFIG_HOME/sway/config.d/*

@@ -1,0 +1,319 @@
+# Read `man 5 sway` for a complete reference.
+
+#
+# Variables
+#
+set $CONFIG_DIR "$HOME/.config/sway"
+set $SCRIPTS    "$HOME/scripts"
+
+set $laptop "eDP-1"
+
+set $mod   Mod4
+set $left  h
+set $down  j
+set $up    k
+set $right l
+
+set $term 'alacritty'
+set $menu 'rofi -show combi -combi drun,run,window'
+set $explorer "alacritty --class 'file-explorer' --title 'ranger' -e ranger ~"
+set $browser 'firefox-wayland'
+
+set $ws1  "1: Browsing"
+set $ws2  "2: School"
+set $ws3  "3: Dev"
+set $ws4  "4: Sysadmin"
+set $ws5  "5: Games"
+set $ws6  "6: Videos"
+set $ws7  "7: "
+set $ws8  "8: "
+set $ws9  "9: "
+set $ws10 "10: "
+
+
+# Defaults
+#include ~/.config/sway/security.d/*
+#include /etc/sway/security.d/*
+#include /etc/sway/config.d/*
+
+#
+# Basic settings
+#
+workspace back_and_forth yes
+hide_edge_borders both
+#border 
+floating_minimum_size 400 x 300
+# Drag floating windows by holding down $mod and left mouse button.
+# Resize them with right mouse button + $mod.
+# Despite the name, also works for non-floating windows.
+# Change normal to inverse to use left mouse button for resizing and right
+# mouse button for dragging.
+floating_modifier $mod normal
+
+#
+# Startup scripts
+#
+include "$CONFIG_DIR/config.d/00-startup"
+
+#
+# Output configuration
+#
+include "$CONFIG_DIR/config.d/10-outputs"
+
+#
+# Input configuration
+#
+include "$CONFIG_DIR/config.d/10-inputs"
+
+#
+# Window rules
+#
+include "$CONFIG_DIR/window-rules.d/*"
+
+
+#
+# Laptop specific settings
+#
+bindswitch --locked lid:off "$SCRIPTS/allo.sh 'lid:off'; output $laptop disable"
+bindswitch --locked lid:on  "$SCRIPTS/allo.sh 'lid:on'; output $laptop enable"
+
+
+### Key bindings
+#
+# Basics:
+#
+    # Start a terminal
+    bindsym $mod+Shift+Return exec $term
+    bindsym $mod+Return exec $term
+
+    # Kill focused window
+    bindsym $mod+Shift+d kill
+    bindsym --release button2 kill
+
+    # Start the launcher
+    bindsym $mod+p exec $menu
+    #bindsym $mod+Shift+p exec "$menu "
+
+    # Lock
+    bindsym $mod+Ctrl+l  exec swaylock -f -c 000000
+    bindcode 105+46 exec swaylock -f -c 000000
+
+    # Toggle border
+    bindsym $mod+c border toggle
+
+    # Reload the configuration file
+    bindsym $mod+Shift+c reload
+
+    # Exit sway (logs you out of your Wayland session)
+    bindsym $mod+Shift+q exec swaynag -t warning -e bottom -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+
+    # Restart sway
+    bindsym $mod+Shift+r exec swaynag -t warning -e bottom -m 'You pressed the restart shortcut. Do you really want to restart sway?' -b 'Yes, restart sway' 'swaymsg restart'
+
+    # Volume
+    bindsym --locked XF86AudioRaiseVolume exec "$SCRIPTS/volume.sh" 'increase'
+    bindsym --locked XF86AudioLowerVolume exec "$SCRIPTS/volume.sh" 'decrease'
+    bindsym --locked XF86AudioMute        exec "$SCRIPTS/volume.sh" 'toggle-mute'
+
+    # Brightness
+    bindsym --locked XF86MonBrightnessUp   exec 'brightnessctl s +10%'
+    bindsym --locked XF86MonBrightnessDown exec 'brightnessctl s 10%-'
+
+    # Screenshot
+    bindsym --release Print       exec "$SCRIPTS/screenshot.sh" 'selection'
+    bindsym --release Shift+Print exec "$SCRIPTS/screenshot.sh" 'screen'
+
+    # Open explorer
+    bindsym XF86Explorer exec $explorer
+    bindsym $mod+Slash   exec $explorer
+
+    # Open default browser
+    bindsym $mod+n exec "$browser"
+
+
+#
+# Moving around:
+#
+    # Move your focus around
+    bindsym $mod+$left focus left
+    bindsym $mod+$down focus down
+    bindsym $mod+$up focus up
+    bindsym $mod+$right focus right
+    # or use $mod+[up|down|left|right]
+    bindsym $mod+Left focus left
+    bindsym $mod+Down focus down
+    bindsym $mod+Up focus up
+    bindsym $mod+Right focus right
+
+    # _move_ the focused window with the same, but add Shift
+    bindsym $mod+Shift+$left move left
+    bindsym $mod+Shift+$down move down
+    bindsym $mod+Shift+$up move up
+    bindsym $mod+Shift+$right move right
+    # ditto, with arrow keys
+    bindsym $mod+Shift+Left move left
+    bindsym $mod+Shift+Down move down
+    bindsym $mod+Shift+Up move up
+    bindsym $mod+Shift+Right move right
+
+
+#
+# Workspaces:
+#
+    # switch to workspace
+    bindsym $mod+i workspace prev_on_output
+    bindsym $mod+o workspace next_on_output
+    bindsym $mod+u workspace back_and_forth
+
+    bindsym $mod+Tab exec "$SCRIPTS/sway-switch-workspace.sh"
+
+    bindsym $mod+1 workspace $ws1
+    bindsym $mod+2 workspace $ws2
+    bindsym $mod+3 workspace $ws3
+    bindsym $mod+4 workspace $ws4
+    bindsym $mod+5 workspace $ws5
+    bindsym $mod+6 workspace $ws6
+    bindsym $mod+7 workspace $ws7
+    bindsym $mod+8 workspace $ws8
+    bindsym $mod+9 workspace $ws9
+    bindsym $mod+0 workspace $ws10
+    bindsym Alt+F1 workspace $ws1
+    bindsym Alt+F2 workspace $ws2
+    bindsym Alt+F3 workspace $ws3
+    bindsym Alt+F4 workspace $ws4
+    bindsym Alt+F5 workspace $ws5
+    bindsym Alt+F6 workspace $ws6
+    bindsym Alt+F7 workspace $ws7
+    bindsym Alt+F8 workspace $ws8
+    bindsym Alt+F9 workspace $ws9
+    bindsym Alt+F10 workspace $ws10
+
+    # move focused container to workspace
+    bindsym $mod+Shift+1 move container to workspace $ws1
+    bindsym $mod+Shift+2 move container to workspace $ws2
+    bindsym $mod+Shift+3 move container to workspace $ws3
+    bindsym $mod+Shift+4 move container to workspace $ws4
+    bindsym $mod+Shift+5 move container to workspace $ws5
+    bindsym $mod+Shift+6 move container to workspace $ws6
+    bindsym $mod+Shift+7 move container to workspace $ws7
+    bindsym $mod+Shift+8 move container to workspace $ws8
+    bindsym $mod+Shift+9 move container to workspace $ws9
+    bindsym $mod+Shift+0 move container to workspace $ws10
+
+#
+# Layout stuff:
+#
+    # You can "split" the current object of your focus with
+    # $mod+b or $mod+v, for horizontal and vertical splits
+    # respectively.
+    bindsym $mod+b splith
+    bindsym $mod+v splitv
+
+    # Switch the current container between different layout styles
+    bindsym $mod+s layout stacking
+    bindsym $mod+w layout tabbed
+    bindsym $mod+e layout toggle split
+
+    # Make the current focus fullscreen
+    bindsym $mod+f fullscreen
+
+    # Toggle the current focus between tiling and floating mode
+    bindsym $mod+Shift+space floating toggle
+
+    # Swap focus between the tiling area and the floating area
+    bindsym $mod+space focus mode_toggle
+
+    # move focus to the parent container
+    bindsym $mod+a focus parent
+
+    # Sticky focused window
+    bindsym $mod+Ctrl+s sticky toggle
+
+
+#
+# Scratchpad:
+#
+    # Sway has a "scratchpad", which is a bag of holding for windows.
+    # You can send windows there and get them back later.
+
+    # Move the currently focused window to the scratchpad
+    bindsym $mod+Shift+minus move scratchpad
+
+    # Show the next scratchpad window or hide the focused scratchpad window.
+    # If there are multiple scratchpad windows, this command cycles through them.
+    bindsym $mod+minus scratchpad show
+
+
+#
+# Resizing containers:
+#
+mode "resize" {
+    # left will shrink the containers width
+    # right will grow the containers width
+    # up will shrink the containers height
+    # down will grow the containers height
+    bindsym $left  resize shrink width  10px
+    bindsym Left   resize shrink width  10px
+    bindsym $down  resize grow   height 10px
+    bindsym Down   resize grow   height 10px
+    bindsym $up    resize shrink height 10px
+    bindsym Up     resize shrink height 10px
+    bindsym $right resize grow   width  10px
+    bindsym Right  resize grow   width  10px
+
+    # return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+r mode "default"
+}
+bindsym $mod+r mode "resize"
+
+#
+# Changing the gap between screens
+#
+mode "gaps" {
+    # Preset 1: Reset
+    bindsym 1 mode "default";\
+        gaps inner current set 0;\
+        gaps outer current set 0
+    # Preset 2: Inner 5; Outer 10
+    bindsym 2 mode "default";\
+        gaps inner current set 10;\
+        gaps outer current set 0
+
+    # Complete gap
+    bindsym Plus       gaps inner current plus 5
+    bindsym Underscore gaps inner current minus 5
+    bindsym Equal      gaps outer current plus 5
+    bindsym Minus      gaps outer current minus 5
+
+    # Individually increase the gap for each direction
+    bindsym $left  gaps left  current plus 5
+    bindsym $right gaps right current plus 5
+    bindsym $down  gaps down  current plus 5
+    bindsym $up    gaps up    current plus 5
+    bindsym Left   gaps left  current plus 5
+    bindsym Right  gaps right current plus 5
+    bindsym Down   gaps down  current plus 5
+    bindsym Up     gaps up    current plus 5
+    # Inverse
+    bindsym Shift+$left  gaps left  current minus 5
+    bindsym Shift+$right gaps right current minus 5
+    bindsym Shift+$down  gaps down  current minus 5
+    bindsym Shift+$up    gaps up    current minus 5
+    bindsym Shift+Left   gaps left  current minus 5
+    bindsym Shift+Right  gaps right current minus 5
+    bindsym Shift+Down   gaps down  current minus 5
+    bindsym Shift+Up     gaps up    current minus 5
+
+    # return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+g mode "default"
+}
+bindsym $mod+g mode "gaps"
+
+
+# Import sway-session into systemd
+exec systemctl --user import-environment
+exec systemctl --user start sway-session.target

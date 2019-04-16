@@ -1,0 +1,16 @@
+## Idle configuration
+# This will lock your screen after 600 seconds (10 minutes) of inactivity,
+# then turn off your displays after another 300 seconds (15 minutes total), and
+# turn your screens back on when resumed. It will also lock your screen before
+# your computer goes to sleep.
+exec swayidle -w \
+         timeout 600 'swaylock -f -c 000000' \
+         timeout 300 'swaymsg "output * dpms off"' \
+              resume 'swaymsg "output * dpms on"' \
+         before-sleep 'swaylock -f -c 000000'
+
+# Notification daemon
+exec mako
+exec waybar
+exec volnoti
+
