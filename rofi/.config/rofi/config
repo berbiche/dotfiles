@@ -1,0 +1,14 @@
+rofi.combi-modi: window,drun,run,ssh
+rofi.theme: /usr/share/rofi/themes/Pop-Dark.rasi
+#rofi.monitor: 1
+
+# Dmenu-like
+#rofi.lines: 1
+#rofi.line-margin: 0 
+#rofi.line-padding: 0
+#rofi.separator-style: none
+#rofi.font: DejaVu k
+#rofi.columns: 10
+#rofi.bw: 0
+#rofi.location: 1
+#rofi.width: 100
