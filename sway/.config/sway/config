@@ -17,7 +17,7 @@ set $right l
 set $term 'alacritty'
 set $menu 'rofi -show combi -combi drun,run,window'
 set $explorer "alacritty --class 'file-explorer' --title 'ranger' -e ranger ~"
-set $browser 'firefox-wayland'
+set $browser 'firefox'
 
 set $ws1  "1: Browsing"
 set $ws2  "2: School"
@@ -25,7 +25,7 @@ set $ws3  "3: Dev"
 set $ws4  "4: Sysadmin"
 set $ws5  "5: Games"
 set $ws6  "6: Videos"
-set $ws7  "7: "
+set $ws7  "7: social"
 set $ws8  "8: "
 set $ws9  "9: "
 set $ws10 "10: "
@@ -41,7 +41,8 @@ set $ws10 "10: "
 #
 workspace back_and_forth yes
 hide_edge_borders both
-#border 
+default_border pixel 3
+workspace_layout default
 floating_minimum_size 400 x 300
 # Drag floating windows by holding down $mod and left mouse button.
 # Resize them with right mouse button + $mod.
@@ -88,15 +89,16 @@ bindswitch --locked lid:on  "$SCRIPTS/allo.sh 'lid:on'; output $laptop enable"
 
     # Kill focused window
     bindsym $mod+Shift+d kill
-    bindsym --release button2 kill
+    #bindsym --release button2 kill
 
     # Start the launcher
     bindsym $mod+p exec $menu
+    bindsym Alt+Tab exec "rofi -show window"
     #bindsym $mod+Shift+p exec "$menu "
 
     # Lock
     bindsym $mod+Ctrl+l  exec swaylock -f -c 000000
-    bindcode 105+46 exec swaylock -f -c 000000
+    bindsym $mod+Backspace  exec swaylock -f -c 000000
 
     # Toggle border
     bindsym $mod+c border toggle
@@ -104,7 +106,7 @@ bindswitch --locked lid:on  "$SCRIPTS/allo.sh 'lid:on'; output $laptop enable"
     # Reload the configuration file
     bindsym $mod+Shift+c reload
 
-    # Exit sway (logs you out of your Wayland session)
+    # Exit sway (logs out of Wayland session)
     bindsym $mod+Shift+q exec swaynag -t warning -e bottom -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 
     # Restart sway
@@ -189,16 +191,16 @@ bindswitch --locked lid:on  "$SCRIPTS/allo.sh 'lid:on'; output $laptop enable"
     bindsym Alt+F10 workspace $ws10
 
     # move focused container to workspace
-    bindsym $mod+Shift+1 move container to workspace $ws1
-    bindsym $mod+Shift+2 move container to workspace $ws2
-    bindsym $mod+Shift+3 move container to workspace $ws3
-    bindsym $mod+Shift+4 move container to workspace $ws4
-    bindsym $mod+Shift+5 move container to workspace $ws5
-    bindsym $mod+Shift+6 move container to workspace $ws6
-    bindsym $mod+Shift+7 move container to workspace $ws7
-    bindsym $mod+Shift+8 move container to workspace $ws8
-    bindsym $mod+Shift+9 move container to workspace $ws9
-    bindsym $mod+Shift+0 move container to workspace $ws10
+    bindsym $mod+Shift+1 move container to workspace $ws1;  workspace $ws1
+    bindsym $mod+Shift+2 move container to workspace $ws2;  workspace $ws2
+    bindsym $mod+Shift+3 move container to workspace $ws3;  workspace $ws3
+    bindsym $mod+Shift+4 move container to workspace $ws4;  workspace $ws4
+    bindsym $mod+Shift+5 move container to workspace $ws5;  workspace $ws5
+    bindsym $mod+Shift+6 move container to workspace $ws6;  workspace $ws6
+    bindsym $mod+Shift+7 move container to workspace $ws7;  workspace $ws7
+    bindsym $mod+Shift+8 move container to workspace $ws8;  workspace $ws8
+    bindsym $mod+Shift+9 move container to workspace $ws9;  workspace $ws9
+    bindsym $mod+Shift+0 move container to workspace $ws10; workspace $ws10
 
 #
 # Layout stuff:
