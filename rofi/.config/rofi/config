@@ -1,5 +1,6 @@
 rofi.combi-modi: window,drun,run,ssh
 rofi.theme: /usr/share/rofi/themes/Pop-Dark.rasi
+rofi.show-icons: true
 #rofi.monitor: 1
 
 # Dmenu-like
