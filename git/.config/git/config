@@ -1,0 +1,10 @@
+[alias]
+	s = show
+	st = status
+	ch = checkout
+	b = branch
+	d = diff
+	unstage = rm --cached -r --
+	cm = commit
+	cmar = commit --amend --reuse-message HEAD
+	cma = oommit --amend
