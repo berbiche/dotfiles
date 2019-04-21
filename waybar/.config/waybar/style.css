@@ -7,7 +7,7 @@
 }
 
 window#waybar {
-    background: transparent;
+    background: rgba(0,0,0,0.6);
     color: white;
 }
 
@@ -49,7 +49,9 @@ window#waybar {
     border-bottom: 3px solid white;
 }
 
-#clock, #battery, #cpu, #memory, #network, #pulseaudio, #custom-spotify, #tray, #mode {
+#clock, #battery, #cpu, #memory, #network,
+#pulseaudio, #custom-spotify, #tray, #mode,
+#backlight, #idle_inhibitor {
     padding: 0 3px;
     margin: 0 2px;
 }
@@ -82,18 +84,6 @@ window#waybar {
     animation-timing-function: linear;
     animation-iteration-count: infinite;
     animation-direction: alternate;
-}
-
-#cpu {
-    margin-right: 3px;
-}
-
-#memory {
-    margin-right: 3px;
-}
-
-#network {
-    margin-right: 3px;
 }
 
 #network.disconnected {
