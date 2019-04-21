@@ -7,14 +7,9 @@ exec systemctl --user start sway-session.target
 # turn your screens back on when resumed. It will also lock your screen before
 # your computer goes to sleep.
 
-#exec swayidle -w \
-#         timeout 600 'swaylock -f -c 000000' \
-#         timeout 300 'swaymsg "output * dpms off"' \
-#              resume 'swaymsg "output * dpms on"' \
-#         before-sleep 'swaylock -f -c 000000'
-
 ### The following are now systemd units
 #exec mako     # Notification daemon
 #exec waybar   # Status bar
 #exec volnoti  # Volume notification
+#exec ~/scripts/idle.sh # Idle config
 

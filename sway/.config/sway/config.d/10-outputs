@@ -7,7 +7,6 @@ output eDP-1 {
     scale 2
     pos 0 0
     res 3840x2160
-    disable
 }
 
 output 'Unknown BenQ EW3270U 74J08749019' {

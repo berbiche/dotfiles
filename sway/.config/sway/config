@@ -14,10 +14,11 @@ set $down  j
 set $up    k
 set $right l
 
-set $term 'alacritty'
-set $menu 'rofi -show combi -combi drun,run,window'
+set $term     'alacritty'
+set $menu     'rofi -show combi -show-icons -p "start" -combi-modi drun,run'
 set $explorer "alacritty --class 'file-explorer' --title 'ranger' -e ranger ~"
-set $browser 'firefox'
+set $browser  'firefox'
+set $lock     'swaylock -f -c 000000'
 
 set $ws1  "1: Browsing"
 set $ws2  "2: School"
@@ -26,9 +27,9 @@ set $ws4  "4: Sysadmin"
 set $ws5  "5: Games"
 set $ws6  "6: Videos"
 set $ws7  "7: social"
-set $ws8  "8: "
-set $ws9  "9: "
-set $ws10 "10: "
+set $ws8  "8:"
+set $ws9  "9:"
+set $ws10 "10:"
 
 
 # Defaults
@@ -54,29 +55,15 @@ floating_modifier $mod normal
 #
 # Startup scripts
 #
-include "$CONFIG_DIR/config.d/00-startup"
-
-#
-# Output configuration
-#
-include "$CONFIG_DIR/config.d/10-outputs"
-
-#
-# Input configuration
-#
-include "$CONFIG_DIR/config.d/10-inputs"
-
-#
-# Window rules
-#
+include "$CONFIG_DIR/config.d/*"
 include "$CONFIG_DIR/window-rules.d/*"
-
 
 #
 # Laptop specific settings
 #
-bindswitch --locked lid:off "$SCRIPTS/allo.sh 'lid:off'; output $laptop disable"
-bindswitch --locked lid:on  "$SCRIPTS/allo.sh 'lid:on'; output $laptop enable"
+bindswitch --locked lid:off 'output "$laptop" disable'
+bindswitch --locked lid:on  'output "$laptop" enable'
+bindswitch --locked lid:toggle 'notify-send "lid:toggle"'
 
 
 ### Key bindings
@@ -85,20 +72,19 @@ bindswitch --locked lid:on  "$SCRIPTS/allo.sh 'lid:on'; output $laptop enable"
 #
     # Start a terminal
     bindsym $mod+Shift+Return exec $term
-    bindsym $mod+Return exec $term
+    bindsym $mod+Return       exec $term
 
     # Kill focused window
     bindsym $mod+Shift+d kill
     #bindsym --release button2 kill
 
     # Start the launcher
-    bindsym $mod+p exec $menu
-    bindsym Alt+Tab exec "rofi -show window"
-    #bindsym $mod+Shift+p exec "$menu "
+    bindsym $mod+p  exec $menu
+    bindsym Alt+Tab exec "rofi -show-icons -show window"
 
     # Lock
-    bindsym $mod+Ctrl+l  exec swaylock -f -c 000000
-    bindsym $mod+Backspace  exec swaylock -f -c 000000
+    bindsym $mod+Ctrl+l    exec $lock
+    bindsym $mod+Backspace exec $lock
 
     # Toggle border
     bindsym $mod+c border toggle
@@ -118,12 +104,13 @@ bindswitch --locked lid:on  "$SCRIPTS/allo.sh 'lid:on'; output $laptop enable"
     bindsym --locked XF86AudioMute        exec "$SCRIPTS/volume.sh" 'toggle-mute'
 
     # Brightness
-    bindsym --locked XF86MonBrightnessUp   exec 'brightnessctl s +10%'
-    bindsym --locked XF86MonBrightnessDown exec 'brightnessctl s 10%-'
+    bindsym --locked XF86MonBrightnessUp   exec 'brightnessctl s +5%'
+    bindsym --locked XF86MonBrightnessDown exec 'brightnessctl s 5%-'
 
     # Screenshot
     bindsym --release Print       exec "$SCRIPTS/screenshot.sh" 'selection'
     bindsym --release Shift+Print exec "$SCRIPTS/screenshot.sh" 'screen'
+    bindsym --release Ctrl+Print  exec "$SCRIPTS/screenshot.sh" 'everything'
 
     # Open explorer
     bindsym XF86Explorer exec $explorer
@@ -137,25 +124,25 @@ bindswitch --locked lid:on  "$SCRIPTS/allo.sh 'lid:on'; output $laptop enable"
 # Moving around:
 #
     # Move your focus around
-    bindsym $mod+$left focus left
-    bindsym $mod+$down focus down
-    bindsym $mod+$up focus up
+    bindsym $mod+$left  focus left
+    bindsym $mod+$down  focus down
+    bindsym $mod+$up    focus up
     bindsym $mod+$right focus right
     # or use $mod+[up|down|left|right]
-    bindsym $mod+Left focus left
-    bindsym $mod+Down focus down
-    bindsym $mod+Up focus up
+    bindsym $mod+Left  focus left
+    bindsym $mod+Down  focus down
+    bindsym $mod+Up    focus up
     bindsym $mod+Right focus right
 
     # _move_ the focused window with the same, but add Shift
-    bindsym $mod+Shift+$left move left
-    bindsym $mod+Shift+$down move down
-    bindsym $mod+Shift+$up move up
+    bindsym $mod+Shift+$left  move left
+    bindsym $mod+Shift+$down  move down
+    bindsym $mod+Shift+$up    move up
     bindsym $mod+Shift+$right move right
     # ditto, with arrow keys
-    bindsym $mod+Shift+Left move left
-    bindsym $mod+Shift+Down move down
-    bindsym $mod+Shift+Up move up
+    bindsym $mod+Shift+Left  move left
+    bindsym $mod+Shift+Down  move down
+    bindsym $mod+Shift+Up    move up
     bindsym $mod+Shift+Right move right
 
 
@@ -179,16 +166,6 @@ bindswitch --locked lid:on  "$SCRIPTS/allo.sh 'lid:on'; output $laptop enable"
     bindsym $mod+8 workspace $ws8
     bindsym $mod+9 workspace $ws9
     bindsym $mod+0 workspace $ws10
-    bindsym Alt+F1 workspace $ws1
-    bindsym Alt+F2 workspace $ws2
-    bindsym Alt+F3 workspace $ws3
-    bindsym Alt+F4 workspace $ws4
-    bindsym Alt+F5 workspace $ws5
-    bindsym Alt+F6 workspace $ws6
-    bindsym Alt+F7 workspace $ws7
-    bindsym Alt+F8 workspace $ws8
-    bindsym Alt+F9 workspace $ws9
-    bindsym Alt+F10 workspace $ws10
 
     # move focused container to workspace
     bindsym $mod+Shift+1 move container to workspace $ws1;  workspace $ws1
@@ -229,7 +206,7 @@ bindswitch --locked lid:on  "$SCRIPTS/allo.sh 'lid:on'; output $laptop enable"
     bindsym $mod+a focus parent
 
     # Sticky focused window
-    bindsym $mod+Ctrl+s sticky toggle
+    bindsym $mod+Shift+s sticky toggle
 
 
 #
@@ -315,7 +292,3 @@ mode "gaps" {
 }
 bindsym $mod+g mode "gaps"
 
-
-# Import sway-session into systemd
-exec systemctl --user import-environment
-exec systemctl --user start sway-session.target

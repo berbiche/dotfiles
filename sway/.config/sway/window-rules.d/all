@@ -2,3 +2,7 @@
 # Firefox
 for_window [class="Firefox"] inhibit_idle fullscreen
 for_window [app_id="firefox"] inhibit_idle fullscreen
+
+# Logout (oblogout)
+for_window [class="Oblogout"] float enable, fullscreen enable
+
