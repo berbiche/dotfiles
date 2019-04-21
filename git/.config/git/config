@@ -8,3 +8,4 @@
 	cm = commit
 	cmar = commit --amend --reuse-message HEAD
 	cma = oommit --amend
+	dc = diff --cached
