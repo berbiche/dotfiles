@@ -1,0 +1,14 @@
+[Unit]
+Description=Lightweight volume notification daemon
+PartOf=graphical-session.target
+Requisite=dbus.service
+After=dbus.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/volnoti
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=sway-session.target
