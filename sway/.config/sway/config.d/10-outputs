@@ -7,6 +7,7 @@ output eDP-1 {
     scale 2
     pos 0 0
     res 3840x2160
+    background "$HOME/Pictures/wallpaper/3840x2160.png" fill
 }
 
 output 'Unknown BenQ EW3270U 74J08749019' {
