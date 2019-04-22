@@ -7,5 +7,5 @@
 	unstage = rm --cached -r --
 	cm = commit
 	cmar = commit --amend --reuse-message HEAD
-	cma = oommit --amend
+	cma = commit --amend
 	dc = diff --cached
