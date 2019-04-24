@@ -6,7 +6,7 @@ After=dbus.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/volnoti
+ExecStart=/usr/bin/volnoti -n
 Restart=always
 RestartSec=5
 
