@@ -19,6 +19,7 @@ set $menu     'rofi -show combi -show-icons -p "start" -combi-modi drun,run'
 set $explorer "alacritty --class 'file-explorer' --title 'ranger' -e ranger ~"
 set $browser  'firefox'
 set $lock     'swaylock -f -c 000000'
+set $logout   'oblogout'
 
 set $ws1  "1: Browsing"
 set $ws2  "2: School"
@@ -41,10 +42,15 @@ set $ws10 "10:"
 # Basic settings
 #
 workspace back_and_forth yes
-hide_edge_borders both
+
+hide_edge_borders nogaps
+ 
 default_border pixel 3
+
 workspace_layout default
+
 floating_minimum_size 400 x 300
+
 # Drag floating windows by holding down $mod and left mouse button.
 # Resize them with right mouse button + $mod.
 # Despite the name, also works for non-floating windows.
@@ -63,7 +69,7 @@ include "$CONFIG_DIR/window-rules.d/*"
 #
 bindswitch --locked lid:off 'output "$laptop" disable'
 bindswitch --locked lid:on  'output "$laptop" enable'
-bindswitch --locked lid:toggle 'notify-send "lid:toggle"'
+#bindswitch --locked lid:toggle 'notify-send "lid:toggle"'
 
 
 ### Key bindings
@@ -83,8 +89,10 @@ bindswitch --locked lid:toggle 'notify-send "lid:toggle"'
     bindsym Alt+Tab exec "rofi -show-icons -show window"
 
     # Lock
-    bindsym $mod+Ctrl+l    exec $lock
-    bindsym $mod+Backspace exec $lock
+    bindsym $mod+Ctrl+l          exec $lock
+    bindsym $mod+Backspace       exec $lock
+    bindsym $mod+Ctrl+Backspace  exec $logout
+    bindsym $mod+Shift+Backspace exec $logout
 
     # Toggle border
     bindsym $mod+c border toggle

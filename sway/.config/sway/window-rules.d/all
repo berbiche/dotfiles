@@ -4,5 +4,7 @@ for_window [class="Firefox"] inhibit_idle fullscreen
 for_window [app_id="firefox"] inhibit_idle fullscreen
 
 # Logout (oblogout)
-for_window [class="Oblogout"] float enable, fullscreen enable
+for_window [class="Oblogout" title="Openbox Logout"] \
+	floating enable; \
+	resize set width 100 ppt;
 
