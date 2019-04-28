@@ -19,11 +19,9 @@ zstyle ':completion:*' accept-exact '*(N)'
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.zsh/cache
 zstyle ':completion:*' menu select
-HISTFILE=~/.zhistory
+
 HISTSIZE=10000
 SAVEHIST=5000
-#export EDITOR=/usr/bin/nano
-#export VISUAL=/usr/bin/nano
 WORDCHARS=${WORDCHARS//\/[&.;]}                                 # Don't consider certain characters part of the word
 
 
@@ -54,15 +52,9 @@ bindkey '^[[1;5C' forward-word                                  #
 bindkey '^H' backward-kill-word                                 # delete previous word with ctrl+backspace
 bindkey '^[[Z' undo                                             # Shift+tab undo last action
 
-## Alias section 
-alias cp="cp -i"                                                # Confirm before overwriting something
-alias df='df -h'                                                # Human-readable sizes
-alias free='free -m'                                            # Show sizes in MB
-#alias gitu='git add . && git commit && git push'
-
 # Theming section  
 autoload -U compinit colors zcalc
-compinit -d
+#compinit -d # already loaded
 colors
 
 # enable substitution for prompt
@@ -142,17 +134,6 @@ git_prompt_string() {
  #RPROMPT="%(?.%{$fg[green]%}✓ %{$reset_color%}.%{$fg[red]%}✗ %{$reset_color%})"
 
 
-# Color man pages
-export LESS_TERMCAP_mb=$'\E[01;32m'
-export LESS_TERMCAP_md=$'\E[01;32m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[01;47;34m'
-export LESS_TERMCAP_ue=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[01;36m'
-export LESS=-r
-
-
 ## Plugins section: Enable fish style features
 # Use syntax highlighting
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -172,26 +153,15 @@ ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 
 
-
-
-
-
 # MY THINGS
 . /usr/share/fzf/key-bindings.zsh
 . /usr/share/fzf/completion.zsh
 
-alias ls='ls --color=auto -h'
-alias la='ls -A'
-alias ll='ls -AFl'
-alias dh='du -h'
-alias df='df -h'
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
+# Powerline
+powerline-daemon -q
+. /usr/share/powerline/bindings/zsh/powerline.zsh
 
-#export TERM='alacritty'
-export COLORTERM='truecolor'
-export LESS="$LESS --quit-if-one-screen"
+. $ZDOTDIR/zaliases
 
 unsetopt SHARE_HISTORY
 unsetopt share_history

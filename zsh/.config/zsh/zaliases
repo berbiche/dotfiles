@@ -1,0 +1,13 @@
+#!/bin/zsh
+
+alias cp="cp -i"
+alias free='free -m'
+alias ls='ls --color=auto -h'
+alias la='ls -A'
+alias ll='ls -AFl'
+alias dh='du -h'
+alias df='df -h'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
