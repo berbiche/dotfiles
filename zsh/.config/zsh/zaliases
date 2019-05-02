@@ -11,3 +11,11 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
+alias sysu='systemctl --user'
+alias svim='sudoedit'
+
+alias zreload='source $ZDOTDIR/.zshenv; source $ZDOTDIR/.zshrc; source $ZDOTDIR/zaliases'
+alias zedit='$EDITOR $ZDOTDIR/.zshrc'
+alias zaliases='$EDITOR $ZDOTDIR/zaliases'
+alias zenv='$EDITOR $ZDOTDIR/.zshenv'
+

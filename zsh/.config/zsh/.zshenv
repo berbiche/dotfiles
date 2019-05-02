@@ -1,3 +1,4 @@
+#!/bin/zsh
 
 #export XDG_CONFIG_DIRS="/etc/xdg"
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -5,8 +6,10 @@ export XDG_CACHE_HOME="$HOME/.cache"
 #export XDG_DATA_DIRS="/usr/local/share:/usr/share"
 export XDG_DATA_HOME="$HOME/.local/share"
 
+# ZSH History file
 export HISTFILE="$XDG_CACHE_HOME/zsh/history"
 
+# QT WAYLAND
 export QT_QPA_PLATFORM=wayland
 export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
 
@@ -22,6 +25,7 @@ export LESS='-r --quit-if-one-screen'
 
 # 24-bit color
 export COLORTERM=truecolor
+export EDITOR=`which vim`
 
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 
