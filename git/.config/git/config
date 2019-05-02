@@ -4,8 +4,13 @@
 	ch = checkout
 	b = branch
 	d = diff
-	unstage = rm --cached -r --
+	unstage = reset HEAD
 	cm = commit
 	cmar = commit --amend --reuse-message HEAD
 	cma = commit --amend
 	dc = diff --cached
+	aliases = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
+	cmare = cmar --edit --verbose
+[user]
+	email = nicberbiche@gmail.com
+	name = Nicolas Berbiche
