@@ -5,7 +5,7 @@
     "primary": false,
     "transform": "90",
     "rect": {
-      "x": 8760,
+      "x": 4920,
       "y": 0,
       "width": 1080,
       "height": 1920
@@ -19,10 +19,10 @@
   "Unknown BenQ EW3270U 74J08749019": {
     "active": true,
     "scale": 1.0,
-    "primary": false,
+    "primary": true,
     "transform": "normal",
     "rect": {
-      "x": 4920,
+      "x": 1080,
       "y": 0,
       "width": 3840,
       "height": 2160
@@ -39,7 +39,7 @@
     "primary": false,
     "transform": "270",
     "rect": {
-      "x": 3840,
+      "x": 0,
       "y": 0,
       "width": 1080,
       "height": 1920
