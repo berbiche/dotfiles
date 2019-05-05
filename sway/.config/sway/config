@@ -33,27 +33,17 @@ set $ws9  "9:"
 set $ws10 "10:"
 
 
-# Defaults
-#include ~/.config/sway/security.d/*
-#include /etc/sway/security.d/*
-#include /etc/sway/config.d/*
 
 #
 # Basic settings
 #
-#workspace back_and_forth yes
 
 gaps inner 5
 smart_gaps on
 smart_borders no_gaps
 hide_edge_borders smart_no_gaps
 
-# title font monospace
-font "Ubuntu Mono Nerd Font"
-#for_window [title="."]\
-#  title_format '<span font-family="">%title</span>'
-
-#inhibit_idle fullscreen
+font pango:Open Sans 9
  
 default_border pixel 3
 default_floating_border pixel 1
@@ -148,7 +138,7 @@ bindsym $mod+Slash   exec $explorer
 bindsym $mod+n exec "$browser"
 
 # Focus spotify
-bindsym $mod+Ctrl+n [class="Spotify"] focus
+bindsym $mod+F12 [class="Spotify"] focus
 
 
 #
@@ -239,8 +229,8 @@ bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
-# Make the current focus fullscreen
-bindsym $mod+f fullscreen
+# Make the current focus fullscreen and inhibit idle while focused
+bindsym $mod+f fullscreen, inhibit_idle focus
 
 # Toggle the current focus between tiling and floating mode
 bindsym $mod+Shift+space floating toggle
@@ -337,4 +327,3 @@ mode "gaps" {
     bindsym $mod+g mode "default"
 }
 bindsym $mod+g mode "gaps"
-
