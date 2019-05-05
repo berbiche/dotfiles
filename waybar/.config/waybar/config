@@ -1,107 +1,150 @@
-{
+[
+  {
     "layer": "top",
     "position": "top",
+    "output": [
+      "eDP-1",
+      "DP-8"
+    ],
     "height": 30,
 
-    "modules-left": ["sway/workspaces", "sway/mode"],
-    "modules-center": ["sway/window"],
-    "modules-right": ["custom/spotify", "tray", "pulseaudio", "network", "cpu", "memory", "backlight", "idle_inhibitor", "battery", "clock"],
+    "modules-left": [
+      "sway/workspaces",
+      "sway/mode"
+    ],
+    "modules-center": [
+      "clock",
+      "battery"
+    ],
+    "modules-right": [
+      "custom/spotify",
+      "idle_inhibitor",
+      "pulseaudio",
+      "network",
+      "cpu",
+      "memory",
+      "backlight",
+      "tray"
+    ],
+
     // Modules configuration
     "sway/workspaces": {
-        "disable-scroll": true,
-        "all-outputs": false,
-        "format": "<span>{index}:{name} {icon}</span>",
-        "format-icons": {
-            "1: Browsing": "",
-            "3: Dev": "",
-            "4: Sysadmin": "",
-            "7: Social": "",
-	    "urgent": "",
-	    "focused": "",
-	    "default": ""
-        }
+      "disable-scroll": true,
+      "all-outputs": true,
+      "format": "<span>{index}:{name} {icon}</span>",
+      "format-icons": {
+        "1: Browsing": "",
+        "3: Dev": "",
+        "4: Sysadmin": "",
+        "7: Social": "",
+        "urgent": "",
+        "focused": "",
+        "default": ""
+      }
     },
     "sway/mode": {
-        "format": "<span style=\"italic\">{}</span>"
+      "format": "<span style=\"italic\">{}</span>",
+      "tooltip": false
     },
     "sway/window": {
-    	"max-length": 80,
-	"tooltip": false
+      "max-length": 120,
+      "tooltip": false
     },
     "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": "",
-            "deactivated": ""
-        }
+      "format": "inhib. {icon}",
+      "format-icons": {
+        "activated": "聯",
+        "deactivated": "輦"
+      },
+      "tooltip": false
     },
     "tray": {
-        "icon-size": 21,
-        "spacing": 10
+      "icon-size": 21,
+      "spacing": 10
     },
     "clock": {
-	"interval": 60,
-        "format": "{:%Y-%m-%d | %H:%M}",
-        "format-alt": "{:%Y-%m-%d}",
-	"tooltip": false
+      "interval": 60,
+      "format": "{:%Y-%m-%d | %H:%M}",
+      "format-alt": "{:%Y-%m-%d}",
+      "tooltip": false
     },
     "cpu": {
-        "format": "{usage:2}% ",
-	"tooltip": false
+      "format": "{usage:2}% ",
+      "tooltip": false
     },
     "memory": {
-        "format": "{:2}% ",
-	"tooltip": false
+      "format": "{:2}% ",
+      "tooltip": false
     },
     "backlight": {
-        "device": "intel_backlight",
-        "format": "{percent}% {icon}",
-        "format-icons": ["", ""],
-	"tooltip": false
+      "device": "intel_backlight",
+      "format": "{percent}% {icon}",
+      "format-icons": [
+        "ﯦ",
+        "ﯧ"
+      ],
+      "tooltip": false
     },
     "battery": {
-	"interval": 30,
-        "format": "{capacity}% {icon}",
-        "format-icons": ["", "", "", "", ""],
-        "states": {
-            "warning": 25,
-            "critical": 10
-        },
-	"tooltip": false
+      "interval": 30,
+      "format": "{capacity}% {icon}",
+      "format-icons": [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "states": {
+        "warning": 25,
+        "critical": 10
+      },
+      "tooltip": false
     },
     "network": {
-        // "interface": "wlp2s0", // (Optional) To force the use of this interface
-        "format-wifi": "{essid} {icon}",
-        "format-ethernet": "{ipaddr}/{cidr} {icon}",
-        "format-icons": {
-            "wifi": ["", "" ,""],
-            "ethernet": [""],
-            "disconnected": [""]
-        },
-	"tooltip": "{essid} {ipaddr}/{cidr}",
-	"on-click": "network-manager"
+      // "interface": "wlp2s0", // (Optional) To force the use of this interface
+      "format-wifi": "{essid} {icon}",
+      "format-ethernet": "{ipaddr}/{cidr} {icon}",
+      "format-icons": {
+        //"wifi": ["", "" ,""],
+        "wifi": [
+          ""
+        ],
+        "ethernet": [
+          ""
+        ],
+        "disconnected": [
+          ""
+        ]
+      },
+      "tooltip": "{essid} {ipaddr}/{cidr}",
+      "on-click": "network-manager"
     },
     "pulseaudio": {
-        "scroll-step": "10%",
-        "format": "{volume} {icon}",
-        "format-bluetooth": "{volume} {icon}",
-        "format-muted": "",
-        "format-icons": {
-            "headphones": "",
-            "handsfree": "",
-            "headset": "",
-            "phone": "",
-            "default": ["", "", "", ""]
-        },
-	"tooltip": false,
-        "on-click": "pavucontrol"
+      "scroll-step": "10%",
+      "format": "{volume} {icon}",
+      "format-bluetooth": "{volume} {icon}",
+      "format-muted": "婢",
+      "format-icons": {
+        "headphones": "",
+        "headset": "",
+        "phone": "",
+        "default": [
+          "",
+          "",
+          ""
+        ]
+      },
+      "tooltip": false,
+      "on-click": "pavucontrol"
     },
     "custom/spotify": {
-	"interval": 1,
-	"return-type": "json",
-	"exec": "$HOME/.config/waybar/modules/spotify.sh",
-	"exec-if": "pgrep -c spotify",
-	"escape": true,
-	"on-click": "playerctl play-pause --player=spotify"
+      "return-type": "json",
+      "exec": "$HOME/.config/waybar/modules/spotify.sh",
+      "exec-if": "pgrep -c spotify",
+      "escape": true,
+      "on-click": "swaymsg '[class=Spotify]' focus",
+      "on-click-right": "playerctl play-pause --player=spotify"
     }
-}
+  }
+]
