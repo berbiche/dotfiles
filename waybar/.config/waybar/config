@@ -4,20 +4,22 @@
     "position": "top",
     "output": [
       "eDP-1",
-      "DP-8"
+      "DP-7",
+      "DP-8",
+      "DP-9"
     ],
     "height": 30,
 
     "modules-left": [
       "sway/workspaces",
-      "sway/mode"
+      "sway/mode",
+      "custom/spotify"
     ],
     "modules-center": [
       "clock",
       "battery"
     ],
     "modules-right": [
-      "custom/spotify",
       "idle_inhibitor",
       "pulseaudio",
       "network",
@@ -140,10 +142,11 @@
     },
     "custom/spotify": {
       "return-type": "json",
+      "interval": 1,
       "exec": "$HOME/.config/waybar/modules/spotify.sh",
       "exec-if": "pgrep -c spotify",
       "escape": true,
-      "on-click": "swaymsg '[class=Spotify]' focus",
+      "on-click": "swaymsg -q '[class=Spotify] focus'",
       "on-click-right": "playerctl play-pause --player=spotify"
     }
   }
