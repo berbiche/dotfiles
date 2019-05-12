@@ -1,21 +1,48 @@
 #!/bin/zsh
 
-alias cp="cp -i"
 alias free='free -m'
-alias ls='ls --color=auto -h'
-alias la='ls -A'
-alias ll='ls -AFl'
-alias dh='du -h'
-alias df='df -h'
+
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
+alias ls='exa --color=auto --group-directories-first'
+alias la='ls --all'
+alias ll='ls --all --long --header --group'
+alias tree='ls --tree'
+
+alias cp='cp -iv'
+alias ln='ln -v'
+alias mkdir='mkdir -vp'
+alias mv='mv -iv'
+
+alias dh='du -h'
+alias df='df -h'
+
+alias su='sudo -E su -m'
+
 alias sysu='systemctl --user'
+alias jnsu='journalctl --user'
 alias svim='sudoedit'
+
+# Use ripgrep instead of grep
+alias grep='rg'
+# Use bat instead of cat
+alias cat='bat'
 
 alias zreload='source $ZDOTDIR/.zshenv; source $ZDOTDIR/.zshrc; source $ZDOTDIR/zaliases'
 alias zedit='$EDITOR $ZDOTDIR/.zshrc'
 alias zaliases='$EDITOR $ZDOTDIR/zaliases'
 alias zenv='$EDITOR $ZDOTDIR/.zshenv'
+
+# https://github.com/cjbassi/config
+function yay {
+  if [[ "$1" == "-S" ]]; then
+    command yay "$@" --needed --mflags "--nocheck"
+  elif [[ "$1" == "-R" ]]; then
+    command yay "$@" --recursive
+  else
+    command yay "$@"
+  fi
+}
 
