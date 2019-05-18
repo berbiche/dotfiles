@@ -11,6 +11,9 @@
 	dc = diff --cached
 	aliases = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
 	cmare = cmar --edit --verbose
+	latest = show HEAD --summary
 [user]
 	email = nicberbiche@gmail.com
 	name = Nicolas Berbiche
+[credential]
+	helper = /usr/lib/git-core/git-credential-libsecret
