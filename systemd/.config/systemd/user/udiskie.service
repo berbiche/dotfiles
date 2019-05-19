@@ -1,0 +1,14 @@
+[Unit]
+Description=Disks automounter
+Documentation=man:udiskie(8)
+PartOf=graphical-session.target
+#Requisite=udisks2.service
+#After=udisks2.service
+## Cannot depend on non-user service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/udiskie --use-udisks2 --no-automount --tray --appindicator --file-manager nautilus
+
+[Install]
+WantedBy=sway-session.target

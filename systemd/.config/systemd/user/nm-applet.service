@@ -1,0 +1,13 @@
+[Unit]
+Description=NetworkManaget applet
+PartOf=graphical-session.target
+Requisite=dbus.service
+After=dbus.service
+
+[Service]
+Type=simple
+ExecStart=nm-applet --indicator
+Restart=always
+
+[Install]
+WantedBy=sway-session.target

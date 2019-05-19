@@ -327,3 +327,8 @@ mode "gaps" {
     bindsym $mod+g mode "default"
 }
 bindsym $mod+g mode "gaps"
+
+# Use waybar as the bar
+bar {
+    swaybar_command waybar
+}
