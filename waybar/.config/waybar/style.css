@@ -53,7 +53,19 @@ window#waybar {
 #pulseaudio, #custom-spotify, #tray, #mode,
 #backlight, #idle_inhibitor {
     padding: 0 3px;
-    margin: 0 2px;
+    margin: 0 3px;
+}
+
+#network {
+    color: rgba(123, 65, 193, 1.0);
+}
+
+#pulseaudio {
+    color: rgba(216, 110, 4, 1.0);
+}
+
+#idle_inhibitor {
+    color: rgba(66, 244, 98, 1.0);
 }
 
 #clock {
@@ -73,12 +85,12 @@ window#waybar {
 @keyframes blink {
     to {
         background-color: #ffffff;
-        color: black;
+        color: red;
     }
 }
 
 #battery.critical:not(.charging) {
-    color: white;
+    color: black;
     animation-name: blink;
     animation-duration: 0.5s;
     animation-timing-function: linear;

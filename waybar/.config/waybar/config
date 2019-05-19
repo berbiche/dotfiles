@@ -33,7 +33,7 @@
     "sway/workspaces": {
       "disable-scroll": true,
       "all-outputs": true,
-      "format": "<span>{index}:{name} {icon}</span>",
+      "format": "<span>{index}: {icon}</span>",
       "format-icons": {
         "1: Browsing": "",
         "3: Dev": "",
@@ -53,7 +53,7 @@
       "tooltip": false
     },
     "idle_inhibitor": {
-      "format": "inhib. {icon}",
+      "format": "{icon}",
       "format-icons": {
         "activated": "聯",
         "deactivated": "輦"
@@ -71,16 +71,16 @@
       "tooltip": false
     },
     "cpu": {
-      "format": "{usage:2}% ",
+      "format": " {usage:2}%",
       "tooltip": false
     },
     "memory": {
-      "format": "{:2}% ",
+      "format": " {:2}%",
       "tooltip": false
     },
     "backlight": {
       "device": "intel_backlight",
-      "format": "{percent}% {icon}",
+      "format": "{icon} {percent:2}%",
       "format-icons": [
         "ﯦ",
         "ﯧ"
@@ -89,7 +89,7 @@
     },
     "battery": {
       "interval": 30,
-      "format": "{capacity}% {icon}",
+      "format": "{icon} {capacity:2}%",
       "format-icons": [
         "",
         "",
@@ -105,8 +105,8 @@
     },
     "network": {
       // "interface": "wlp2s0", // (Optional) To force the use of this interface
-      "format-wifi": "{essid} {icon}",
-      "format-ethernet": "{ipaddr}/{cidr} {icon}",
+      "format-wifi": "{icon} {ipaddr}/{essid}",
+      "format-ethernet": "{icon} {ipaddr}/{cidr}",
       "format-icons": {
         //"wifi": ["", "" ,""],
         "wifi": [
@@ -124,8 +124,8 @@
     },
     "pulseaudio": {
       "scroll-step": "10%",
-      "format": "{volume} {icon}",
-      "format-bluetooth": "{volume} {icon}",
+      "format": "{icon} {volume}",
+      "format-bluetooth": " {volume}",
       "format-muted": "婢",
       "format-icons": {
         "headphones": "",
@@ -143,7 +143,7 @@
     "custom/spotify": {
       "return-type": "json",
       "interval": 1,
-      "exec": "$HOME/.config/waybar/modules/spotify.sh",
+      "exec": "$HOME/scripts/spotify.sh",
       "exec-if": "pgrep -c spotify",
       "escape": true,
       "on-click": "swaymsg -q '[class=Spotify] focus'",
