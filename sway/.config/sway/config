@@ -108,7 +108,7 @@ bindsym $mod+Shift+Backspace exec $logout
 bindsym $mod+c border toggle
 
 # Reload the configuration file
-bindsym $mod+Shift+c reload
+bindsym $mod+Shift+c exec "$SCRIPTS/sway-reload.sh"
 
 # Exit sway (logs out of Wayland session)
 bindsym $mod+Shift+q exec swaynag -t warning -e bottom -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
