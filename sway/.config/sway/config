@@ -6,7 +6,7 @@
 set $CONFIG_DIR "$HOME/.config/sway"
 set $SCRIPTS    "$HOME/scripts"
 
-set $laptop 'eDP-1'
+set $OUTPUT-LAPTOP 'eDP-1'
 
 set $mod   Mod4
 set $left  h
@@ -14,12 +14,14 @@ set $down  j
 set $up    k
 set $right l
 
-set $term     'alacritty'
-set $menu     'rofi -show combi -show-icons -p "start" -combi-modi drun,run'
-set $explorer "alacritty --class 'file-explorer' --title 'ranger' -e ranger ~"
-set $browser  'firefox'
-set $lock     'swaylock -f -c 000000'
-set $logout   'oblogout'
+set $term         'alacritty'
+set $quake-term   "alacritty --class 'quake-term' --working-directory ~"
+set $menu         'rofi -show combi -show-icons -p "start" -combi-modi drun,run,ssh'
+set $explorer     "alacritty --class 'file-explorer' --title 'ranger' -e ranger ~"
+set $gui-explorer 'nautilus'
+set $browser      'firefox'
+set $lock         'swaylock -f -c 0f0f0ff0'
+set $logout       'oblogout'
 
 set $ws1  "1: Browsing"
 set $ws2  "2: School"
@@ -31,7 +33,13 @@ set $ws7  "7: social"
 set $ws8  "8:"
 set $ws9  "9:"
 set $ws10 "10:"
-
+set $ws11 "11:"
+set $ws12 "12:"
+set $ws13 "13:"
+set $ws14 "14:"
+set $ws15 "15:"
+set $ws16 "16:"
+set $ws17 "17:"
 
 
 #
@@ -41,15 +49,16 @@ set $ws10 "10:"
 gaps inner 5
 smart_gaps on
 smart_borders no_gaps
-hide_edge_borders smart_no_gaps
+hide_edge_borders --i3 smart_no_gaps
 
-font pango:Open Sans 9
- 
+#font Fira Sans 9, "Noto Color Emoji" 9
+font Fira Sans 9
+
 default_border pixel 3
 default_floating_border pixel 1
 
 workspace_layout default
-workspace_auto_back_and_forth yes
+workspace_auto_back_and_forth no
 
 # Drag floating windows by holding down $mod and left mouse button.
 # Resize them with right mouse button + $mod.
@@ -57,19 +66,12 @@ workspace_auto_back_and_forth yes
 # Change normal to inverse to use left mouse button for resizing and right
 # mouse button for dragging.
 floating_modifier $mod normal
-floating_minimum_size 400 x 300
+#floating_minimum_size 400 x 300
 
 
-
-
-#
-# Startup scripts
-#
+# Load user config
 include "$CONFIG_DIR/config.d/*"
 include "$CONFIG_DIR/window-rules.d/*"
-
-
-
 
 
 
@@ -77,9 +79,11 @@ include "$CONFIG_DIR/window-rules.d/*"
 #
 # Laptop specific settings
 #
-bindswitch --locked lid:off "output $laptop disable"
-bindswitch --locked lid:on  "output $laptop enable"
-#bindswitch --locked lid:toggle 'notify-send "lid:toggle"'
+#bindswitch --locked lid:off output $OUTPUT-LAPTOP disable
+bindswitch --locked lid:off noop
+bindswitch --locked lid:on  output $OUTPUT-LAPTOP enable
+#bindswitch --locked lid:toggle exec 'echo "$(date) lid:toggle" >> /tmp/sway-lid-toggle'
+bindsym --locked $mod+Shift+F12 output $OUTPUT-LAPTOP toggle
 
 
 ### Key bindings
@@ -99,10 +103,8 @@ bindsym $mod+p  exec $menu
 bindsym Alt+Tab exec "rofi -show-icons -show window"
 
 # Lock
-bindsym $mod+Ctrl+l          exec $lock
 bindsym $mod+Backspace       exec $lock
 bindsym $mod+Ctrl+Backspace  exec $logout
-bindsym $mod+Shift+Backspace exec $logout
 
 # Toggle border
 bindsym $mod+c border toggle
@@ -131,14 +133,20 @@ bindsym --release Shift+Print exec "$SCRIPTS/screenshot.sh" 'screen'
 bindsym --release Ctrl+Print  exec "$SCRIPTS/screenshot.sh" 'everything'
 
 # Open explorer
-bindsym XF86Explorer exec $explorer
-bindsym $mod+Slash   exec $explorer
+bindsym XF86Explorer     exec $gui-explorer
+bindsym $mod+Slash       exec $gui-explorer
+bindsym $mod+Shift+Slash exec $explorer
 
 # Open default browser
 bindsym $mod+n exec "$browser"
 
-# Focus spotify
-bindsym $mod+F12 [class="Spotify"] focus
+# MPRIS
+bindsym XF86AudioPause exec playerctl pause
+bindsym XF86AudioPlay  exec playerctl play
+
+# Toggle play/pause for the active mpris instance
+# Use pause-break to toggle
+bindsym Pause exec playerctl play-pause
 
 
 #
@@ -149,22 +157,18 @@ bindsym $mod+$left  focus left
 bindsym $mod+$down  focus down
 bindsym $mod+$up    focus up
 bindsym $mod+$right focus right
-# or use $mod+[up|down|left|right]
-bindsym $mod+Left  focus left
-bindsym $mod+Down  focus down
-bindsym $mod+Up    focus up
-bindsym $mod+Right focus right
 
-# _move_ the focused window with the same, but add Shift
+# Move the focused window
 bindsym $mod+Shift+$left  move left
 bindsym $mod+Shift+$down  move down
 bindsym $mod+Shift+$up    move up
 bindsym $mod+Shift+$right move right
-# ditto, with arrow keys
-bindsym $mod+Shift+Left  move left
-bindsym $mod+Shift+Down  move down
-bindsym $mod+Shift+Up    move up
-bindsym $mod+Shift+Right move right
+
+# Move to next monitor
+bindsym $mod+Ctrl+$left  move window to output left
+bindsym $mod+Ctrl+$down  move window to output down
+bindsym $mod+Ctrl+$up    move window to output up
+bindsym $mod+Ctrl+$right move window to output right
 
 
 #
@@ -175,6 +179,8 @@ bindsym $mod+i       workspace prev_on_output
 bindsym $mod+Shift+i workspace prev_on_output --create
 bindsym $mod+o       workspace next_on_output
 bindsym $mod+Shift+o workspace next_on_output --create
+
+#bindsym $mod+Ctrl+i move window to workspace
 
 bindsym $mod+u       workspace back_and_forth
 bindsym $mod+Shift+u move container to workspace back_and_forth
@@ -240,6 +246,8 @@ bindsym $mod+space focus mode_toggle
 
 # move focus to the parent container
 bindsym $mod+a focus parent
+# move focus to the child container
+bindsym $mod+z focus child
 
 # Sticky focused window
 bindsym $mod+Shift+s sticky toggle
@@ -258,6 +266,12 @@ bindsym $mod+Shift+minus move scratchpad
 # If there are multiple scratchpad windows, this command cycles through them.
 bindsym $mod+minus scratchpad show
 
+# Freeze mode for use in tools that need the mod4 key
+set $mode_freeze <b>Freeze</b> <small>Use $mod+Escape to leave</small
+mode --pango_markup "$mode_freeze" {
+  bindsym $mod+Escape mode default
+}
+bindsym $mod+Mod1+Escape mode "$mode_freeze"
 
 #
 # Resizing containers:
@@ -268,18 +282,17 @@ mode "resize" {
     # up will shrink the containers height
     # down will grow the containers height
     bindsym $left  resize shrink width  10px
-    bindsym Left   resize shrink width  10px
     bindsym $down  resize grow   height 10px
-    bindsym Down   resize grow   height 10px
     bindsym $up    resize shrink height 10px
-    bindsym Up     resize shrink height 10px
     bindsym $right resize grow   width  10px
-    bindsym Right  resize grow   width  10px
+    bindsym Shift+$left  resize shrink width  50px
+    bindsym Shift+$down  resize grow   height 50px
+    bindsym Shift+$up    resize shrink height 50px
+    bindsym Shift+$right resize grow   width  50px
 
     # return to default mode
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-    bindsym $mod+r mode "default"
+    bindsym Return mode default
+    bindsym Escape mode default
 }
 bindsym $mod+r mode "resize"
 
@@ -288,11 +301,11 @@ bindsym $mod+r mode "resize"
 #
 mode "gaps" {
     # Preset 1: Reset
-    bindsym 1 mode "default";\
+    bindsym 1 mode default;\
         gaps inner current set 0;\
         gaps outer current set 0
     # Preset 2: Inner 5; Outer 10
-    bindsym 2 mode "default";\
+    bindsym 2 mode default;\
         gaps inner current set 10;\
         gaps outer current set 0
 
@@ -307,26 +320,48 @@ mode "gaps" {
     bindsym $right gaps right current plus 5
     bindsym $down  gaps down  current plus 5
     bindsym $up    gaps up    current plus 5
-    bindsym Left   gaps left  current plus 5
-    bindsym Right  gaps right current plus 5
-    bindsym Down   gaps down  current plus 5
-    bindsym Up     gaps up    current plus 5
     # Inverse
     bindsym Shift+$left  gaps left  current minus 5
     bindsym Shift+$right gaps right current minus 5
     bindsym Shift+$down  gaps down  current minus 5
     bindsym Shift+$up    gaps up    current minus 5
-    bindsym Shift+Left   gaps left  current minus 5
-    bindsym Shift+Right  gaps right current minus 5
-    bindsym Shift+Down   gaps down  current minus 5
-    bindsym Shift+Up     gaps up    current minus 5
 
     # return to default mode
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-    bindsym $mod+g mode "default"
+    bindsym Return mode default
+    bindsym Escape mode default
 }
 bindsym $mod+g mode "gaps"
+
+
+# Move a specific window/container
+mode "move" {
+    bindsym $left  move left  5 px
+    bindsym $right move right 5 px
+    bindsym $up    move up    5 px
+    bindsym $down  move down  5 px
+
+    bindsym c move position center, mode default
+
+    # return to default mode
+    bindsym Return mode default
+    bindsym Escape mode default
+}
+bindsym $mod+m mode "move"
+
+
+# Focus a specific window
+mode "execute/focus" {
+    # Spotify
+    bindsym s [class="Spotify"] focus || exec spotify; mode default
+    # Lollypop (Gnome music player)
+    bindsym l [app_id="lollypop"] focus || exec lollypop; mode default
+
+    # return to default mode
+    bindsym Return mode default
+    bindsym Escape mode default
+}
+bindsym $mod+x mode "execute/focus"
+
 
 # Use waybar as the bar
 bar {
