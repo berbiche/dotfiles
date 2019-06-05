@@ -16,8 +16,9 @@ else
   eval "`fnm env --multi --shell=zsh --fnm-dir=\"$HOME/.cache/fnm\"`"
 fi
 
-if [ -f ~/.nvmrc ]; then
-  fnm use
+if [ -f ./.nvmrc ] || [ -f ~/.nvmrc ]; then
+  fnm use $(cat ./.nvmrc 2&>/dev/null || cat ~/.nvmrc 2&>/dev/null)
+  rehash
 fi
 
 # Powerline
