@@ -27,11 +27,14 @@ export LESS_TERMCAP_se=$'\E[0m'
 export LESS_TERMCAP_so=$'\E[01;47;34m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;36m'
-export LESS='-r --quit-if-one-screen'
+export LESS='--RAW-CONTROL-CHARS --quit-if-one-screen'
+
+# FZF config
+export FZF_DEFAULT_COMMAND='fd --follow --type f --exclude='"'.git'"' .'
+export FZF_DEFAULT_OPTS='--exact --cycle --layout=reverse'
 
 # 24-bit color
 export COLORTERM=truecolor
 export EDITOR=`which vim`
 
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$XDG_DATA_HOME/flatpak/exports/share:$PATH"
-
