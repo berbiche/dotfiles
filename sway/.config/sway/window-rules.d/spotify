@@ -2,6 +2,6 @@ for_window [class="Spotify" instance="spotify"] \
   mark --add "music-player"; \
   floating enable; \
   move to scratchpad; \
-  scratchpad show; \
+  [class="Spotify" instance="spotify"] focus; \
   sticky enable; \
   border normal;
