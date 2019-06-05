@@ -5,10 +5,13 @@ set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
       \,sm:block-blinkwait175-blinkoff150-blinkon175
 
 " Basics
+  syntax on
+  colorscheme monokai
+  set termguicolors
+
   set nocompatible
   set nohlsearch
   filetype plugin on
-  syntax on
   set listchars=tab:>-,trail:*
   set tabstop=2 softtabstop=2 shiftwidth=2
   set expandtab
