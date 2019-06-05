@@ -1,0 +1,17 @@
+# Google Drive filesystem FUSE
+# https://github.com/harababurel/gcsf
+[Unit]
+Description=Google Drive FUSE
+PartOf=multi-user.target
+After=local-fs.target network-online.target
+Wants=local-fs.target network-online.target
+
+[Service]
+Type=simple
+User=1000
+Group=1000
+ExecStart=/usr/bin/gcsf mount "%h/gdrive" -s 'nic.berbiche@gmail.com'
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
