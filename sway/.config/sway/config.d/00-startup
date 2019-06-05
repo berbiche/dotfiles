@@ -1,4 +1,9 @@
-exec systemctl --user import-environment
+exec systemctl --user import-environment SWAYSOCK
+exec systemctl --user import-environment DISPLAY
+# Import all environment variable in systemd user variables
+#exec dbus-update-activation-environment --systemd --all
+
+# Start systemd user services
 exec systemctl --user start sway-session.target
 
 ## Idle configuration
@@ -13,3 +18,15 @@ exec systemctl --user start sway-session.target
 #exec volnoti  # Volume notification
 #exec ~/scripts/idle.sh # Idle config
 
+#Social
+exec riot-desktop
+exec rocketchat-desktop
+exec dex ~/.config/autostart/*.desktop
+exec bitwarden-bin
+
+# gnome-authentication-agent
+exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+
+# KDE Connect
+exec /usr/lib/kdeconnectd
+exec kdeconnect-indicator
