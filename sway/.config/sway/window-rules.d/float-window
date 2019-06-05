@@ -1,0 +1,12 @@
+for_window [app_id="^launcher$"] \
+  floating enable; \
+  border none;
+
+for_window [app_id="blueman-manager"] \
+  floating enable; \
+  border none; \
+  scratchpad move; \
+  scratchpad show;
+
+for_window [app_id="org.gnome.Nautilus"] \
+  floating enable;
