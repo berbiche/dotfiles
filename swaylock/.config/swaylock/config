@@ -2,13 +2,19 @@
 
 color=000000
 
+# Integrated display
+image=eDP-1:/home/nicolas/Pictures/wallpaper/3840x2160.png
+
 # BenQ 4K
 #image="Unknown BenQ EW3270U 74J08749019":/home/nicolas/Pictures/wallpaper/3840x2160.png
-image=DP-5:/home/nicolas/Pictures/wallpaper/3840x2160.png
+image=DP-8:/home/nicolas/Pictures/wallpaper/3840x2160.png
+image=DP-7:/home/nicolas/Pictures/wallpaper/3840x2160.png
 
-# Dell 1K
+# 2 x Dell 1K
+#image=Dell Inc. DELL U2414H R9F1P55S45FL:/home/nicolas/Pictures/wallpaper/1080x1920.png
 #image="Dell Inc. DELL U2414H R9F1P55S45FL":/home/nicolas/Pictures/wallpaper/1080x1920.png
-image=DP-3:/home/nicolas/Pictures/wallpaper/1080x1920.png
+image=HDMI-A-2:/home/nicolas/Pictures/wallpaper/1080x1920.png
+image=DP-4:/home/nicolas/Pictures/wallpaper/1080x1920.png
 
 indicator-caps-lock
 show-keyboard-layout
