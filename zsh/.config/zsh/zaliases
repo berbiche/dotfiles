@@ -15,6 +15,7 @@ alias cp='cp -iv'
 alias ln='ln -v'
 alias mkdir='mkdir -vp'
 alias mv='mv -iv'
+alias rm='rm -I'
 
 alias dh='du -h'
 alias df='df -h'
@@ -24,6 +25,8 @@ alias su='sudo -E su -m'
 alias sysu='systemctl --user'
 alias jnsu='journalctl --user'
 alias svim='sudoedit'
+
+alias blkdiscard='(echo -n "Are you sure? "; read) && blkdiscard'
 
 # Use ripgrep instead of grep
 alias grep='rg'
