@@ -5,13 +5,14 @@
 	b = branch
 	d = diff
 	unstage = reset HEAD
-	cm = commit
-	cmar = commit --amend --reuse-message HEAD
-	cma = commit --amend
-	dc = diff --cached
-	aliases = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
+	cm = commit --verbose
+	cma = cm --amend
+	cmar = cma --reuse-message=HEAD
 	cmare = cmar --edit --verbose
+	dc = diff --cached
+	aliases = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ / | grep -v '^aliases' | sort
 	latest = show HEAD --summary
+	conf-edit = config --global --edit
 [user]
 	email = nicberbiche@gmail.com
 	name = Nicolas Berbiche
