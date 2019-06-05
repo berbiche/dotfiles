@@ -1,0 +1,5 @@
+# openconnect etsmtl.ca
+syslog
+protocol=anyconnect
+no-system-trust
+servercert="pin-sha256:iup0nya4YkNcQpQHPO1OPd2Scf2U7rOBVUbVrSYK1rA="
