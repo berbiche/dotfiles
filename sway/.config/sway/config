@@ -122,8 +122,8 @@ bindsym --locked XF86AudioLowerVolume exec "$SCRIPTS/volume.sh" 'decrease'
 bindsym --locked XF86AudioMute        exec "$SCRIPTS/volume.sh" 'toggle-mute'
 
 # Brightness
-bindsym --locked XF86MonBrightnessUp   exec 'brightnessctl s +5%'
-bindsym --locked XF86MonBrightnessDown exec 'brightnessctl s 5%-'
+bindsym --locked XF86MonBrightnessUp   exec 'brightnessctl set +10%'
+bindsym --locked XF86MonBrightnessDown exec 'brightnessctl --min-value=30 set 10%-'
 
 # Screenshot
 bindsym --release Print       exec "$SCRIPTS/screenshot.sh" 'selection'
