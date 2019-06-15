@@ -79,10 +79,8 @@ include "$CONFIG_DIR/window-rules.d/*"
 #
 # Laptop specific settings
 #
-#bindswitch --locked lid:off output $OUTPUT-LAPTOP disable
-bindswitch --locked lid:off noop
-bindswitch --locked lid:on  output $OUTPUT-LAPTOP enable
-#bindswitch --locked lid:toggle exec 'echo "$(date) lid:toggle" >> /tmp/sway-lid-toggle'
+bindswitch --locked lid:on  output $OUTPUT-LAPTOP disable
+bindswitch --locked lid:off output $OUTPUT-LAPTOP enable
 bindsym --locked $mod+Shift+F12 output $OUTPUT-LAPTOP toggle
 
 
