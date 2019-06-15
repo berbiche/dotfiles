@@ -8,7 +8,7 @@ After=dbus.service
 Type=simple
 ExecStart=/usr/bin/redshift -m wayland
 Restart=always
+RestartSec=5s
 
 [Install]
 WantedBy=sway-session.target
-
