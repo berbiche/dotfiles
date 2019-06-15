@@ -28,6 +28,7 @@ input "1008:3402:HP_USB_Keyboard" {
     repeat_delay 200
 }
 
+# iKBC new Poker II
 input "1241:521:USB-HID_Keyboard" {
     xkb_options "compose:ralt"
     xkb_layout "us"
@@ -35,4 +36,10 @@ input "1241:521:USB-HID_Keyboard" {
     repeat_delay 200
 }
 
-
+# Logitech (home) Wireless Keyboard
+input "1133:50484:Logitech_USB_Receiver" {
+    xkb_options "ctrl:swapcaps,compose:ralt"
+    xkb_layout "us"
+    repeat_rate 30
+    repeat_delay 200
+}
