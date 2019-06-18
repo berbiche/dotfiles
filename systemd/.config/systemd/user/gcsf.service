@@ -2,7 +2,7 @@
 # https://github.com/harababurel/gcsf
 [Unit]
 Description=Google Drive FUSE
-PartOf=multi-user.target
+PartOf=graphical-session.target
 After=local-fs.target network-online.target
 Wants=local-fs.target network-online.target
 
@@ -13,4 +13,4 @@ Restart=always
 RestartSec=5s
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=graphical-session.target sway-session.target
