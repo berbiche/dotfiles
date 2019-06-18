@@ -12,14 +12,16 @@ for_window [con_mark="_social.*"] \
 # Android Messages
 for_window [instance="crx_.*" class="Chromium" title="Messages.*"] \
 	mark "_social_messages"
+for_window [instance="messages"] \
+  mark "_social_messages"
 
 # Facebook Messenger
 for_window [instance="crx_.*" class="Chromium" title="Messenger"] \
 	mark "_social_messenger"
 
 # WhatsApp
-#for_window [instance="crx_.*" class="Chromium" title="WhatsApp"] \
-#	mark "_social_whatsapp"
+for_window [instance="crx_.*" class="Chromium" title="WhatsApp"] \
+	mark "_social_whatsapp"
 for_window [instance="whats-app-*" class="whats-app-*" title="WhatsApp"] \
 	mark "_social_whatsapp"
 
@@ -35,5 +37,6 @@ for_window [instance="riot" class="Riot"] \
 for_window [class="Rocket.Chat"] \
   mark "_social_rocket"
 
+# BitWarden
 for_window [class="Bitwarden"] \
   mark "_social_bitwarden"
