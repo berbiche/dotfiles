@@ -9,21 +9,24 @@ fi
 
 case $1 in
 "up")
+  USER_HOME=$(getent passwd ${SUDO_USER} | cut -d: -f6)
+
   # Tell pppd to run in the foreground and assign a pty instead of a tty
+  # And open a pppd on the remote end
   # We force ssh to use the askpass program specified
+  # <<unreleated note, but does $USER always work when used with SUDO?>>
   sudo /usr/sbin/pppd nodetach noauth silent nodeflate pty "
-      /usr/bin/env DISPLAY=:0 SSH_ASKPASS=/usr/lib/ssh/gnome-ssh-askpass2 \
-      /usr/bin/setsid \
-      /usr/bin/ssh -i '/home/nicolas/.ssh/automation' root@dozer.qt.rs /usr/sbin/pppd nodetach notty noauth" \
-    ipparam vpn '10.11.11.1:10.11.11.2' &
-  # Route the wireguard stuff through there
-  sudo ip route add 10.10.10.0/24 via 10.11.11.1
-  # Route my home LAN through there
-  sudo ip route add 192.168.0.0/24 via 10.11.11.1
-  fg
+      /usr/bin/sudo -u $SUDO_USER \
+      /usr/bin/ssh -i '$USER_HOME/.ssh/automation' root@dozer.qt.rs /usr/sbin/pppd nodetach notty noauth" \
+    ipparam vpn '10.11.11.1:10.11.11.2'
+          #/usr/bin/env DISPLAY=:0 SSH_ASKPASS=/usr/lib/ssh/gnome-ssh-askpass2 \
+      #/usr/bin/setsid \
   ;;
 "down")
-  sudo kill -9 $(ps -ax | awk '/pppd/ && !/vim/ { print $1 }')
+  process=$(ps -ax | awk '/pppd/ && !/vim/ { print $1 }')
+  if [[ ! -z process ]]; then
+    sudo kill -9 $process
+  fi
   sudo pkill "$(basename $0)"
   ;;
 *)
