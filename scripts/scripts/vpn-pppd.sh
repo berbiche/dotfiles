@@ -14,8 +14,7 @@ case $1 in
   # Tell pppd to run in the foreground and assign a pty instead of a tty
   # And open a pppd on the remote end
   # We force ssh to use the askpass program specified
-  # <<unreleated note, but does $USER always work when used with SUDO?>>
-  sudo /usr/sbin/pppd nodetach noauth silent nodeflate pty "
+  sudo /usr/sbin/pppd updetach noauth silent nodeflate pty "
       /usr/bin/sudo -u $SUDO_USER \
       /usr/bin/ssh -i '$USER_HOME/.ssh/automation' root@dozer.qt.rs /usr/sbin/pppd nodetach notty noauth" \
     ipparam vpn '10.11.11.1:10.11.11.2'
