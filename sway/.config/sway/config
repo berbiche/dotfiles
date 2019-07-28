@@ -14,14 +14,16 @@ set $down  j
 set $up    k
 set $right l
 
-set $term         'alacritty'
-set $quake-term   "alacritty --class 'quake-term' --working-directory ~"
-set $menu         'rofi -show combi -show-icons -p "start" -combi-modi drun,run,ssh'
-set $explorer     "alacritty --class 'file-explorer' --title 'ranger' -e ranger ~"
-set $gui-explorer 'nautilus'
-set $browser      'firefox'
-set $lock         'swaylock -f -c 0f0f0ff0'
-set $logout       'oblogout'
+set $term          'alacritty --working-directory ~'
+set $floating-term "alacritty --class 'floating-term' --working-directory ~"
+set $quake-term    "alacritty --class 'quake-term' --working-directory ~"
+set $menu          'rofi -show combi -show-icons -p "start" -combi-modi drun,run,ssh'
+set $explorer      "alacritty --class 'file-explorer' --title 'ranger' -e ranger ~"
+set $gui-explorer  'nautilus'
+set $browser       'firefox'
+set $alt-browser   'qutebrowser'
+set $lock          'swaylock -f -c 0f0f0ff0'
+set $logout        'oblogout'
 
 set $ws1  "1: Browsing"
 set $ws2  "2: School"
@@ -89,7 +91,7 @@ bindsym --locked $mod+Shift+F12 output $OUTPUT-LAPTOP toggle
 # Basics:
 #
 # Start a terminal
-bindsym $mod+Shift+Return exec $term
+bindsym $mod+Shift+Return exec $floating-term
 bindsym $mod+Return       exec $term
 
 # Kill focused window
@@ -136,15 +138,17 @@ bindsym $mod+Slash       exec $gui-explorer
 bindsym $mod+Shift+Slash exec $explorer
 
 # Open default browser
-bindsym $mod+n exec "$browser"
+bindsym $mod+n exec $browser
+# Open alternative browser
+bindsym $mod+shift+n exec $alt-browser
 
 # MPRIS
-bindsym XF86AudioPause exec playerctl pause
+bindsym --locked XF86AudioPause exec playerctl pause
 bindsym XF86AudioPlay  exec playerctl play
 
 # Toggle play/pause for the active mpris instance
 # Use pause-break to toggle
-bindsym Pause exec playerctl play-pause
+bindsym --locked Pause exec playerctl play-pause
 
 
 #
