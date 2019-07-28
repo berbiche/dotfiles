@@ -350,9 +350,18 @@ bindsym $mod+m mode "move"
 # Focus a specific window
 mode "execute/focus" {
     # Spotify
-    bindsym s [class="Spotify"] focus || exec spotify; mode default
+    bindsym s [class="Spotify"] focus; mode default
     # Lollypop (Gnome music player)
-    bindsym l [app_id="lollypop"] focus || exec lollypop; mode default
+    bindsym l [app_id="lollypop"] focus; mode default
+    # Thunderbird (email)
+    bindsym t [class="Thunderbird" instance="Mail"] focus; mode default
+    # Bitwarden
+    bindsym b [class="Bitwarden" instance="bitwarden"] focus; mode default
+
+    # Modify sway configuration in vim
+    bindsym e exec 'alacritty --class "sway-conf" --title "neovim: sway config" --no-live-config-reload --dimensions 80 40 --command vim ~/.config/sway/config'; \
+    [app_id="sway-conf"] floating enable; \
+    mode default
 
     # return to default mode
     bindsym Return mode default
