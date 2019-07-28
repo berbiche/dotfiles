@@ -7,8 +7,12 @@ set $OUTPUT-HOME-BENQ       'Unknown BenQ EW3270U 74J08749019'
 set $OUTPUT-HOME-DELL-LEFT  'Dell Inc. DELL U2414H R9F1P56N68VL'
 set $OUTPUT-HOME-DELL-RIGHT 'Dell Inc. DELL U2414H R9F1P55S45FL'
 
+output * {
+    background "$HOME/Pictures/wallpaper/3840x2160.png" fit
+}
+
 output eDP-1 {
-    scale 2
+    scale 1.5
     pos 0 0
     res 3840x2160
     background "$HOME/Pictures/wallpaper/3840x2160.png" fill
@@ -36,4 +40,3 @@ output $OUTPUT-HOME-DELL-LEFT {
     res 1920x1080
     background "$HOME/Pictures/wallpaper/1080x1920.png" fill
 }
-
