@@ -49,3 +49,5 @@ function yay {
   fi
 }
 
+# Starts a Docker container running an X11 server to play flash games
+alias flash="docker run -d --rm --name firefox-flash -p 127.0.0.1:10000:10000 beli/firefox-flash && env GDK_BACKEND=wayland xpra attach tcp:localhost:10000 --encoding=vp8 --quality=80"
