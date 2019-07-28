@@ -37,7 +37,7 @@ input "1241:521:USB-HID_Keyboard" {
 }
 
 # Logitech (home) Wireless Keyboard
-input "1133:50484:Logitech_USB_Receiver" {
+input "1133:16501:Logitech_Wireless_Keyboard_PID:4075" {
     xkb_options "ctrl:swapcaps,compose:ralt"
     xkb_layout "us"
     repeat_rate 30
