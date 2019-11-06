@@ -7,15 +7,17 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 
 alias ls='exa --color=auto --group-directories-first'
+alias lst='ls --tree'
 alias la='ls --all'
 alias ll='ls --all --long --header --group'
+alias llt='ll --tree'
 alias tree='ls --tree'
 
 alias cp='cp -iv'
 alias ln='ln -v'
 alias mkdir='mkdir -vp'
 alias mv='mv -iv'
-alias rm='rm -I'
+alias rm='rm -Iv'
 
 alias dh='du -h'
 alias df='df -h'
@@ -33,21 +35,7 @@ alias grep='rg'
 # Use bat instead of cat
 alias cat='bat'
 
-alias zreload='source $ZDOTDIR/.zshenv; source $ZDOTDIR/.zshrc; source $ZDOTDIR/zaliases'
+alias zreload='export ZSH_RELOADING_SHELL=1; source $ZDOTDIR/.zshenv; source $ZDOTDIR/.zshrc; source $ZDOTDIR/zaliases; unset ZSH_RELOADING_SHELL'
 alias zedit='$EDITOR $ZDOTDIR/.zshrc'
 alias zaliases='$EDITOR $ZDOTDIR/zaliases'
 alias zenv='$EDITOR $ZDOTDIR/.zshenv'
-
-# https://github.com/cjbassi/config
-function yay {
-  if [[ "$1" == "-S" ]]; then
-    command yay "$@" --needed --mflags "--nocheck"
-  elif [[ "$1" == "-R" ]]; then
-    command yay "$@" --recursive
-  else
-    command yay "$@"
-  fi
-}
-
-# Starts a Docker container running an X11 server to play flash games
-alias flash="docker run -d --rm --name firefox-flash -p 127.0.0.1:10000:10000 beli/firefox-flash && env GDK_BACKEND=wayland xpra attach tcp:localhost:10000 --encoding=vp8 --quality=80"
