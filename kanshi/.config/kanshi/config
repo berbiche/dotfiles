@@ -1,7 +1,20 @@
 {
-  output "Dell Inc. DELL U2414H R9F1P56N68VL" mode 1920x1080@60Hz position 0,0 transform 270
+  output "Dell Inc. DELL U2414H R9F1P55S45FL" mode 1920x1080@60Hz position 0,0 transform 270
   output "Unknown BenQ EW3270U 74J08749019" mode 3840x2160@60Hz position 1080,0
-  output "Dell Inc. DELL U2414H R9F1P55S45FL" mode 1920x1080@60Hz position 4920,0 transform 90
+  output "Dell Inc. DELL U2414H R9F1P56N68VL" mode 1920x1080@60Hz position 4920,0 transform 90
+  output eDP-1 disable
+}
+
+{
+
+  output "Dell Inc. DELL U2414H R9F1P55S45FL" mode 1920x1080@60Hz position 0,0 transform 270
+  output "Unknown BenQ EW3270U 74J08749019" mode 3840x2160@60Hz position 1080,0
+  output eDP-1 disable
+}
+
+{
+  output "Unknown BenQ EW3270U 74J08749019" mode 3840x2160@60Hz position 1080,0
+  output "Dell Inc. DELL U2414H R9F1P56N68VL" mode 1920x1080@60Hz position 4920,0 transform 90
   output eDP-1 disable
 }
 
@@ -11,8 +24,7 @@
 }
 
 {
-  output eDP-1 enable
-  output eDP-1 mode 3840x2160@60Hz position 0,0 scale 1.6
+  output eDP-1 mode 3840x2160@60Hz position 0,0 scale 1.5
 }
 
 {
