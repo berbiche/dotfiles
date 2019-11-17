@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Version=1.0
-Name=minetime
-Comment=minetimestartup script
-Exec=/opt/MineTime/minetime --hidden
-StartupNotify=false
-Terminal=false
-Hidden=true
