@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 INTEGRATED_PANEL='eDP-1'
 
 OUTPUTS=$(swaymsg -t get_outputs | jq 'map({active, name, make, model, serial})')
