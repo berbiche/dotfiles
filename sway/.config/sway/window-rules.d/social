@@ -7,7 +7,7 @@ workspace $ws7 output $OUTPUT-HOME-DELL-LEFT $OUTPUT-HOME-DELL-RIGHT $OUTPUT-HOM
 #assign [con_mark="social"] → output ""
 
 for_window [con_mark="_social.*"] \
-  move container to workspace number 7
+  move container to workspace $ws7
 
 # Android Messages
 for_window [instance="crx_.*" class="Chromium" title="Messages.*"] \
@@ -18,6 +18,8 @@ for_window [instance="messages"] \
 # Facebook Messenger
 for_window [instance="crx_.*" class="Chromium" title="Messenger"] \
 	mark "_social_messenger"
+for_window [instance="caprine" class="Caprine" title="Messenger"] \
+  mark "_social_messenger"
 
 # WhatsApp
 for_window [instance="crx_.*" class="Chromium" title="WhatsApp"] \

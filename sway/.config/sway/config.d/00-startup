@@ -6,17 +6,8 @@ exec systemctl --user import-environment DISPLAY
 # Start systemd user services
 exec systemctl --user start sway-session.target
 
-## Idle configuration
-# This will lock your screen after 600 seconds (10 minutes) of inactivity,
-# then turn off your displays after another 300 seconds (15 minutes total), and
-# turn your screens back on when resumed. It will also lock your screen before
-# your computer goes to sleep.
-
-### The following are now systemd units
-#exec mako     # Notification daemon
-#exec waybar   # Status bar
-#exec volnoti  # Volume notification
-#exec ~/scripts/idle.sh # Idle config
+#exec_always pkill kanshi; exec kanshi
+exec kanshi
 
 #Social
 exec riot-desktop
@@ -24,9 +15,3 @@ exec rocketchat-desktop
 exec dex ~/.config/autostart/*.desktop
 exec bitwarden-bin
 
-# gnome-authentication-agent
-exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-
-# KDE Connect
-exec /usr/lib/kdeconnectd
-exec kdeconnect-indicator

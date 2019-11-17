@@ -17,12 +17,13 @@ set $right l
 set $term          'alacritty --working-directory ~'
 set $floating-term "alacritty --class 'floating-term' --working-directory ~"
 set $quake-term    "alacritty --class 'quake-term' --working-directory ~"
-set $menu          'rofi -show combi -show-icons -p "start" -combi-modi drun,run,ssh'
+set $menu          'xfce4-appfinder --replace'
+#set $menu          'rofi -show combi -show-icons -p "start" -combi-modi drun,run,ssh'
 set $explorer      "alacritty --class 'file-explorer' --title 'ranger' -e ranger ~"
 set $gui-explorer  'nautilus'
-set $browser       'firefox'
+set $browser       'dex ~/.local/share/applications/firefox.desktop'
 set $alt-browser   'qutebrowser'
-set $lock          'swaylock -f -c 0f0f0ff0'
+set $lock          'swaylock -f -c 0f0f0ff0 -i ~/Pictures/wallpaper/3840x2160.png'
 set $logout        'oblogout'
 
 set $ws1  "1: Browsing"
@@ -100,6 +101,7 @@ bindsym $mod+Shift+d kill
 
 # Start the launcher
 bindsym $mod+p  exec $menu
+bindsym $mod+d  exec $menu
 bindsym Alt+Tab exec "rofi -show-icons -show window"
 
 # Lock
@@ -131,6 +133,10 @@ bindsym --locked XF86MonBrightnessDown exec 'brightnessctl --min-value=30 set 10
 bindsym --release Print       exec "$SCRIPTS/screenshot.sh" 'selection'
 bindsym --release Shift+Print exec "$SCRIPTS/screenshot.sh" 'screen'
 bindsym --release Ctrl+Print  exec "$SCRIPTS/screenshot.sh" 'everything'
+
+# Paste primary selection
+#bindsym --release ralt+backslash exec wl-paste --primary
+#bindsym --release shift+insert   exec wl-paste --primary
 
 # Open explorer
 bindsym XF86Explorer     exec $gui-explorer
@@ -174,13 +180,15 @@ bindsym $mod+Ctrl+$right move window to output right
 
 
 #
-# Workspaces:
+# Workspaces and output:
 #
 # switch to workspace
 bindsym $mod+i       workspace prev_on_output
-bindsym $mod+Shift+i workspace prev_on_output --create
 bindsym $mod+o       workspace next_on_output
-bindsym $mod+Shift+o workspace next_on_output --create
+
+# focus output
+bindsym $mod+Shift+i focus output left
+bindsym $mod+Shift+o focus output right
 
 #bindsym $mod+Ctrl+i move window to workspace
 
@@ -222,6 +230,11 @@ bindsym $mod+Ctrl+8  move container to workspace $ws8;  workspace $ws8
 bindsym $mod+Ctrl+9  move container to workspace $ws9;  workspace $ws9
 bindsym $mod+Ctrl+0  move container to workspace $ws10; workspace $ws10
 
+# Adapted from https://github.com/swaywm/sway/issues/
+# Move workspace to other screens
+bindsym $mod+Shift+w exec alacritty --class 'floating-term' --command bash -c "swaymsg -t get_outputs | jq -r '.[] | select(.active==true and .focused!=true) | [.name, .make, .model] | @tsv' | fzf --exit-0 --reverse --prompt='Move workspace to:' | awk '{print $1}' | xargs -r swaymsg move workspace to"
+# Move workspace to another screen
+bindsym $mod+Alt+w exec swaymsg -t get_outputs | jq 'map(select(.active==true and .focused!=true) | .name) | if length > 1 then error("more than one display matches query") else .[] end' | xargs --no-run-if-empty swaymsg move workspace to
 
 #
 # Layout stuff:
@@ -336,36 +349,45 @@ bindsym $mod+g mode "gaps"
 
 
 # Move a specific window/container
-mode "move" {
-    bindsym $left  move left  5 px
-    bindsym $right move right 5 px
-    bindsym $up    move up    5 px
-    bindsym $down  move down  5 px
-
-    bindsym c move position center, mode default
+mode "multimedia" {
+    bindsym left  exec playerctl previous; mode default
+    bindsym right exec playerctl next; mode default
+    bindsym up    exec playerctl play-pause; mode default
 
     # return to default mode
-    bindsym Return mode default
+    bindsym Return mode defaults
     bindsym Escape mode default
 }
-bindsym $mod+m mode "move"
+bindsym $mod+m mode "multimedia"
 
 
 # Focus a specific window
 mode "execute/focus" {
     # Spotify
     bindsym s [class="Spotify"] focus; mode default
+
+    bindsym r noop
+    # Riot
+    bindsym r+i [class="Riot"] focus; mode default
+    # RocketChat
+    bindsym r+c [class="Rocket.Chat" instance="rocket.chat"] focus; mode default
     # Lollypop (Gnome music player)
     bindsym l [app_id="lollypop"] focus; mode default
     # Thunderbird (email)
     bindsym t [class="Thunderbird" instance="Mail"] focus; mode default
     # Bitwarden
     bindsym b [class="Bitwarden" instance="bitwarden"] focus; mode default
+    # Messenger (Caprine)
+    bindsym m [class="Caprine" instance="caprine"] focus; mode default
 
     # Modify sway configuration in vim
-    bindsym e exec 'alacritty --class "sway-conf" --title "neovim: sway config" --no-live-config-reload --dimensions 80 40 --command vim ~/.config/sway/config'; \
-    [app_id="sway-conf"] floating enable; \
+    bindsym e exec 'alacritty --class "floating-term" --title "neovim: sway config" --no-live-config-reload --dimensions 80 40 --command vim ~/.config/sway/config'; \
     mode default
+
+
+    # Restart waybar
+    bindsym F12 exec 'systemctl --user is-active --quiet waybar.service && systemctl --user restart waybar.service'; \
+      mode default
 
     # return to default mode
     bindsym Return mode default
@@ -375,14 +397,16 @@ bindsym $mod+x mode "execute/focus"
 
 
 # Use waybar as the bar
-bar {
-    id main-top
-    output $OUTPUT-HOME-BENQ
-    # if not commented out, the output will be automatically
-    # enabled if specified here
-    #output eDP-1
-    swaybar_command waybar
-}
+#bar {
+#    id main-top
+#    output $OUTPUT-HOME-BENQ
+#    output "Dell Inc. DELL U3219Q F9WNWP2"
+#    output eDP-1
+#    # if not commented out, the output will be automatically
+#    # enabled if specified here
+#    #output eDP-1
+#    swaybar_command waybar
+#}
 
 bar {
     position top
