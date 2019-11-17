@@ -3,3 +3,4 @@ nvim/.config/nvim/.netrwhist
 git/
 .zcompdump*
 *.bak
+*.env
