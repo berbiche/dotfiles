@@ -40,5 +40,7 @@ if [ -n "${commands[fzf-share]}" ]; then
 fi
 
 if [ -z $ZSH_RELOADING_SHELL ]; then
-  echo $USER@$HOST  $(uname -srm) $(lsb_release -rcs)
+  echo $USER@$HOST  $(uname -srm) \
+    $(sed -n 's/^NAME=//p' /etc/os-release) \
+    $(sed -n 's/^VERSION=//p' /etc/os-release)
 fi
