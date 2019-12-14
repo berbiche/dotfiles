@@ -1,9 +1,10 @@
-# Intro
+# Dotfiles
 My configuration for the various tools I use.
 
 This configuration is suited for my Thiccpad T580.
 
-I use Sway on NixOS with the help of many scripts. I used to use Manjaro.
+I use Sway on NixOS on my laptop with the help of many scripts and I run Manjaro on my desktop.
+
 
 This repository lives under `$HOME/dotfiles` and I use [stow](https://www.gnu.org/software/stow/manual/stow.html)
 to manage my configuration (symlinks all files and folders).
@@ -45,6 +46,10 @@ export HISTFILE="$XDG_DATA_HOME/zsh/history"
 autoload -Uz compinit
 compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
 ```
+
+## Dependencies
+
+My configuration depends on many dependencies not currently listed here.
 
 ## Installation
 
