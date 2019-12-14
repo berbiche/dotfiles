@@ -55,16 +55,16 @@ My configuration depends on many dependencies not currently listed here.
 
 First, clone this repository.
 
-Then, _stow_ each folder you need., then run the following command
+Then, you can check the result of _stowing_ each folder you need with the following command:
 
 ```sh
 # ~/dotfiles on  master [⇡✘»!?]
 stow -nv --target=$HOME one_of_the_folders
 ```
 
-The _-n_ flag forbids Stow to make changes (useful with the _-v_ erbose flag.
+The _-n_ flag forbids Stow to make changes (useful with the _-v_ erbose flag).
 
-Once you are satisfied, you can run the command _for real_:
+Once you are satisfied, you can run the command for _real_:
 
 ```sh
 # ~/dotfiles on  master [⇡✘»!?]
