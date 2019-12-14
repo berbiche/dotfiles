@@ -4,6 +4,10 @@ set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
       \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
       \,sm:block-blinkwait175-blinkoff150-blinkon175
 
+au ColorScheme * hi Normal  ctermbg=none guibg=none
+au ColorScheme * hi NonText ctermbg=none guibg=none
+
+
 " Basics
   syntax on
   colorscheme monokai
@@ -32,3 +36,8 @@ set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 
 " Changes for specific file types
 
+call plug#begin()
+Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
+call plug#end()
+
+source $XDG_CONFIG_HOME/nvim/config/coc.vim
