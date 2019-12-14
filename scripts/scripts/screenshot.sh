@@ -36,6 +36,10 @@ main() {
       exit 1
       ;;
   esac
+
+  if [ $? -eq 0 ]; then
+    post_process
+  fi
 }
 
 create_dir() {
@@ -45,28 +49,34 @@ create_dir() {
 # $1: notification title
 notify() {
   # Only show if last exit code is a success
-  if [ $? -eq 0 ]; then
-    notify-send.sh --icon=mail-unread --app-name=mail "Screenshot: $1" "Saved to $output_file" --default-action "feh --scale-down --auto-zoom --draw-filename '$output_file'"
-  fi
+  notify-send.sh --icon=mail-unread --app-name=screenshot-tool \
+    "Screenshot" "Saved to $output_file and copied to clipboard" \
+    --default-action "feh --scale-down --auto-zoom --draw-filename '$output_file'"
+}
+
+copy_clipboard() {
+  wl-copy < "$output_file"
+}
+
+post_process() {
+  notify
+  copy_clipboard
 }
 
 print_selection() {
   create_dir
   grim -g "$(slurp)" "$output_file"
-  notify "selection"
 }
 
 print_active_screen() {
   create_dir
   local output=$(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name')
   grim -o $output "$output_file"
-  notify $output
 }
 
 print_everything() {
   create_dir
   grim -c "$output_file"
-  notify "entire desktop"
 }
 
 main "$1"
