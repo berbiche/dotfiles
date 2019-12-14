@@ -8,7 +8,7 @@
       "Dell Inc. DELL U3219Q F9WNWP2",
       "DP-2",
       "DP-4",
-      "DP-6",
+      "DP-5",
       "DP-1"
     ],
 
@@ -20,6 +20,7 @@
     "modules-center": [
       "clock",
       "battery"
+      // "temperature"
     ],
     "modules-right": [
       "idle_inhibitor",
@@ -34,13 +35,14 @@
     // Modules configuration
     "sway/workspaces": {
       "disable-scroll": true,
+
       "all-outputs": true,
-      "format": "<span>{index}: {icon}</span>",
+      "format": "<span>{index}</span><span>{icon}</span>",
       "format-icons": {
-        "1: Browsing": "",
-        "3: Dev": "",
-        "4: Sysadmin": "",
-        "7: Social": "",
+        "1: Browsing": "<span></span>",
+        "3: Dev": "<span></span>",
+        "4: Sysadmin": "<span></span>",
+        "7: Social": "<span></span>",
         "urgent": "",
         "focused": "",
         "default": ""
@@ -142,6 +144,12 @@
       "tooltip": false,
       "on-click": "pavucontrol"
     },
+    // "temperature": {
+    //   "hwmon-path": "/sys/class/hwmon/hwmon3/temp1_input",
+    //   // "format-icons": ["", "", "", "", ""],
+    //   "format": "{}"
+    // },
+
     // "custom/spotify": {
     //   "return-type": "json",
     //   "interval": 1,
