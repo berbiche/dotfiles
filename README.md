@@ -53,18 +53,28 @@ My configuration depends on many dependencies not currently listed here.
 
 ## Installation
 
-Clone this repository wherever, then run the following command
-at the root of the repository
-to check the changes that will be applied (and tweak whatever you need):
+First, clone this repository.
+
+Then, _stow_ each folder you need., then run the following command
 
 ```sh
 # ~/dotfiles on  master [⇡✘»!?]
-stow -nv --target=$HOME .
+stow -nv --target=$HOME one_of_the_folders
 ```
+
+The _-n_ flag forbids Stow to make changes (useful with the _-v_ erbose flag.
 
 Once you are satisfied, you can run the command _for real_:
 
 ```sh
 # ~/dotfiles on  master [⇡✘»!?]
-stow -v --target=$HOME .
+stow -v --target=$HOME one_of_the_folders
 ```
+
+If you want to link everything, you will need _fd_:
+
+```sh
+# ~/dotfiles on  master [⇡✘»!?]
+fd --max-depth 1 -t d -x stow -v -t $HOME
+```
+
