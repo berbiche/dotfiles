@@ -14,7 +14,13 @@ in
     
     Service = {
       Type = "simple";
-      Environment = ''"PATH=${pkgs.coreutils}/bin:${pkgs.swayidle}/bin:${pkgs.swaylock}/bin:${pkgs.sway}/bin"'';
+      Restart = "always";
+      RestartSec = "1sec";
+
+      # Dirty workaround a missing executable (which one??) `execve failed! No such file or directory`
+      Environment = ''"PATH=/run/current-system/sw/bin:$PATH"'';
+
+      #Environment = ''"PATH=${pkgs.coreutils}/bin:${pkgs.swayidle}/bin:${pkgs.swaylock}/bin:${pkgs.sway}/bin:${pkgs.dbus}/bin:${pkgs.xdg-dbus-proxy}/bin:$PATH"'';
       ExecStart = builtins.concatStringsSep " " [
         "${swayidle} -w"
           "timeout 300"  ''"${swaylock} -f"''
@@ -22,8 +28,6 @@ in
           "resume"       ''"${swaymsg} \"output * dpms on\""''
           "before-sleep" ''"${swaylock} -f"''
       ];
-      Restart = "always";
-      RestartSec = "1sec";
     };
 
     Install = {

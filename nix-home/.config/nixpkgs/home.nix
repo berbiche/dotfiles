@@ -1,6 +1,12 @@
 { config, pkgs, ... }:
 
+let
+  url = "https://github.com/colemickens/nixpkgs-wayland/archive/master.tar.gz";
+  waylandOverlay = (import (builtins.fetchTarball url));
+in
 {
+  nixpkgs.overlays = [ waylandOverlay ];
+
   imports = [
     ./systemd.nix
     ./k8s.nix
@@ -46,21 +52,38 @@
 
     # Git TUI
     tig
+
+    
+    # Programming tools
+    ###################
+    # Cloud services
+    travis
+    heroku
+    # Postman alternative
+    insomnia
   ];
 
 
   fonts.fontconfig.enable = true;
 
-  gtk.enable = true;
-  gtk.theme.name = "Adwaita";
-  gtk.theme.package = pkgs.gnome3.gnome_themes_standard;
-
-  xsession.enable = true;
-  xsession.windowManager.command = "sway";
-
   xdg.enable = true;
 
-  qt.platformTheme = "gnome";
+  gtk = {
+    enable = true;
+    iconTheme = {
+      name = "Adwaita";
+      package = pkgs.gnome3.adwaita-icon-theme;
+    };
+    theme = {
+      name = "Adwaita";
+      package = pkgs.gnome3.gnome_themes_standard;
+    };
+  };
+
+  qt = {
+    enable = true;
+    platformTheme = "gtk";
+  };
 
   services.blueman-applet.enable = true;
   services.gnome-keyring.enable = true;
