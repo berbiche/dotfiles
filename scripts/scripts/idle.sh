@@ -6,12 +6,12 @@
 # your computer goes to sleep.
 #set -x
 
-#swaylock=`command -v swaylock`
-#swayidle=`command -v swayidle`
-#swaymsg=`command -v swaymsg`
+swaylock=`command -v swaylock`
+swayidle=`command -v swayidle`
+swaymsg=`command -v swaymsg`
 
-swayidle -w \
-    timeout 300 "swaylock -f" \
-    timeout 600 "swaymsg 'output * dpms off'" \
-    resume "swaymsg 'output * dpms on'" \
-    before-sleep "swaylock -f"
+$swayidle -w \
+    timeout 300 "$swaylock -f" \
+    timeout 600 "$swaymsg 'output * dpms off'" \
+    resume "$swaymsg 'output * dpms on'" \
+    before-sleep "$swaylock -f"
