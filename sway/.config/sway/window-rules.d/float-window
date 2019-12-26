@@ -21,3 +21,6 @@ for_window [app_id="org.gnome.Nautilus"] \
 
 for_window [title="feh.*/Pictures/screenshots/.*"] \
   floating enable;
+
+for_window [app_id="firefox" title="Developer Tools*"] \
+  floating enable;

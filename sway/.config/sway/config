@@ -18,6 +18,7 @@ set $term          'alacritty --working-directory ~'
 set $floating-term "alacritty --class 'floating-term' --working-directory ~"
 set $quake-term    "alacritty --class 'quake-term' --working-directory ~"
 set $menu          'xfce4-appfinder --replace'
+set $menu-wofi     'wofi --fork --show drun,run'
 #set $menu          'rofi -show combi -show-icons -p "start" -combi-modi drun,run,ssh'
 set $explorer      "alacritty --class 'file-explorer' --title 'ranger' -e ranger ~"
 set $gui-explorer  'nautilus'
@@ -101,7 +102,7 @@ bindsym $mod+Shift+d kill
 
 # Start the launcher
 bindsym $mod+p  exec $menu
-bindsym $mod+d  exec $menu
+bindsym $mod+d  exec $menu-wofi
 bindsym Alt+Tab exec "rofi -show-icons -show window"
 
 # Lock
