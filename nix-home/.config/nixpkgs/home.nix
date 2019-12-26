@@ -49,6 +49,8 @@ in
     llvmPackages.bintools
     rustup
     python3
+    stack
+    gnumake
 
     # Git TUI
     tig
