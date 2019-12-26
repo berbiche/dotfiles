@@ -40,4 +40,4 @@ call plug#begin()
 Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
 call plug#end()
 
-source $XDG_CONFIG_HOME/nvim/config/coc.vim
+" source $XDG_CONFIG_HOME/nvim/config/coc.vim
