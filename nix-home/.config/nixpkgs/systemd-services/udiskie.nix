@@ -21,7 +21,7 @@ pkgs:
     };
 
     Install = {
-      # WantedBy = [ "graphical-session.target" ];
+      WantedBy = [ "sway-session.target" ];
     };
   };
 }

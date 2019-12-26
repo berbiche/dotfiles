@@ -6,7 +6,7 @@ pkgs:
       Documentation = "https://github.com/Alexays/Waybar/wiki";
       Requisite = [ "dbus.service" ];
       After = [ "dbus.service" ];
-      PartOf = [ "sway-session.target" ];
+      PartOf = [ "graphical-session.target" ];
     };
     
     Service = {
