@@ -1,7 +1,15 @@
 { config, pkgs, ... }:
 
 let
-  url = "https://github.com/colemickens/nixpkgs-wayland/archive/master.tar.gz";
+  rev = "57b7e1860a2f1d012f0f7193b310afb1622fad03";
+
+  url = rec {
+    # owner = "colemickens";
+    # repo = "nixpkgs-wayland";
+    # branch = "master";
+    url = "https://github.com/colemickens/nixpkgs-wayland/archive/${rev}.tar.gz";
+    sha256 = "18n6q2pzw25fk3crri4nhf3iyv3h16w17bbq4ampy8kdr3r56dgn";
+  };
   waylandOverlay = (import (builtins.fetchTarball url));
 in
 {
@@ -38,6 +46,7 @@ in
     plex-media-player
 
     vscode
+    jetbrains.idea-community
 
     # Entertainment
     youtube-dl
@@ -122,33 +131,33 @@ in
   };
 
   # 
-  programs.tmux = {
-    enable = true;
-    shortcut = "a";
-    terminal = "screen-256color";
+  # programs.tmux = {
+  #   enable = true;
+  #   shortcut = "a";
+  #   terminal = "screen-256color";
 
-    clock24 = true;
+  #   clock24 = true;
 
-    escapeTime = 0;
+  #   escapeTime = 0;
 
-    newSession = true;
-    secureSocket = true;
+  #   newSession = true;
+  #   secureSocket = true;
 
-    sensibleOnTop = true;
+  #   sensibleOnTop = true;
 
-    plugins = with pkgs; [
-      tmuxPlugins.cpu
-      {
-        plugin = tmuxPlugins.resurrect;
-        extraConfig = "set -g @resurrect-strategy-nvim 'session'";
-      }
-      {
-        plugin = tmuxPlugins.continuum;
-        extraConfig = ''
-          set -g @continuum-restore 'on'
-          set -g @continuum-save-interval '60' # minutes
-        '';
-      }
-    ];
-  };
+  #   plugins = with pkgs; [
+  #     tmuxPlugins.cpu
+  #     {
+  #       plugin = tmuxPlugins.resurrect;
+  #       extraConfig = "set -g @resurrect-strategy-nvim 'session'";
+  #     }
+  #     {
+  #       plugin = tmuxPlugins.continuum;
+  #       extraConfig = ''
+  #         set -g @continuum-restore 'on'
+  #         set -g @continuum-save-interval '60' # minutes
+  #       '';
+  #     }
+  #   ];
+  # };
 }
