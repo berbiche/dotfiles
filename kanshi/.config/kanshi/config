@@ -24,6 +24,11 @@
 }
 
 {
+  output "BenQ Corporation BenQ EW3270U 74J08749019" mode 3840x2160 position 0,0
+  output eDP-1 disable
+}
+
+{
   output eDP-1 mode 3840x2160@60Hz position 0,0 scale 1.5
 }
 
