@@ -28,14 +28,16 @@ in
   };
 
   home.packages = with pkgs; [
-    # bitwarden bitwarden-cli
-    #dex                                            # execute .desktop files
-    #jq                                             # cli to extract data out of json input
+    pavucontrol
+
+    bitwarden bitwarden-cli
+    jq                                             # cli to extract data out of json input
     #kanshi                                         # sway output management
-    # neovim
-    # neofetch
+    neovim
+    neofetch
 
     # 
+    dex                                            # execute .desktop files
     gnome3.gnome_themes_standard
     #gnome3.gnome_keyring
     gnome3.nautilus
@@ -55,14 +57,16 @@ in
     # Programming
     #rustc
     clang
-    llvmPackages.bintools
+    #llvmPackages.bintools
     rustup
     python3
     stack
     gnumake
+    powershell
 
-    # Git TUI
-    tig
+    # TUIs
+    tig            # GIT
+    ncdu           # File usage
 
     
     # Programming tools
