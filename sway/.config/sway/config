@@ -125,6 +125,7 @@ bindsym $mod+Shift+r exec swaynag -t warning -e bottom -m 'You pressed the resta
 bindsym --locked XF86AudioRaiseVolume exec "$SCRIPTS/volume.sh" 'increase'
 bindsym --locked XF86AudioLowerVolume exec "$SCRIPTS/volume.sh" 'decrease'
 bindsym --locked XF86AudioMute        exec "$SCRIPTS/volume.sh" 'toggle-mute'
+bindsym --locked XF86AudioMicMute     exec "$SCRIPTS/volume.sh" 'mic-mute'
 
 # Brightness
 bindsym --locked XF86MonBrightnessUp   exec 'brightnessctl set +10%'
