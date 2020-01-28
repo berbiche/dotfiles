@@ -4,3 +4,4 @@ height=400
 allow_images=false
 image_size=18
 prompt=Run program:
+insensitive=true
