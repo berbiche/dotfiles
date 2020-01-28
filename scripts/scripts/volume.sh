@@ -14,5 +14,10 @@ case "$1" in
     pamixer -t
     pamixer --get-mute && volnoti-show -m || volnoti-show `pamixer --get-volume`
     ;;
+  mic-mute)
+    pacmd list-sources | \
+      awk '/\* index:/ {print $3}' | \
+      xargs -I{} pactl set-source-mute {} toggle
+    ;;
 esac
 
