@@ -13,6 +13,8 @@ alias ll='ls --all --long --header --group'
 alias llt='ll --tree'
 alias tree='ls --tree'
 
+alias cdtemp='cd `mktemp -d`'
+
 alias cp='cp -iv'
 alias ln='ln -v'
 alias mkdir='mkdir -vp'
