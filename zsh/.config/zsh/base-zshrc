@@ -20,8 +20,8 @@ zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path $XDG_CACHE_HOME/zsh
 zstyle ':completion:*' menu select
 
-HISTSIZE=10000
-SAVEHIST=5000
+export HISTSIZE=1000000
+export SAVEHIST=$HISTSIZE
 WORDCHARS=${WORDCHARS//\/[&.;]}                                 # Don't consider certain characters part of the word
 
 
