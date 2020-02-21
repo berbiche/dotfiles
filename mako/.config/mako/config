@@ -1,7 +1,7 @@
 # Display in center
 anchor=top-center
 # Show on my BenQ output
-output=DP-7
+output=DP-1
 
 # Display icons
 icons=1
@@ -13,7 +13,12 @@ actions=1
 default-timeout=10000
 
 # Color settings
-background-color=#f4a742F0
-text-color=#000000
-border-color=#f4a742
+#background-color=#f4a742F0
+#text-color=#000000
+#border-color=#f4a742
 border-radius=5
+
+# Wofi styling
+background-color=#282C34
+text-color=#808080
+
