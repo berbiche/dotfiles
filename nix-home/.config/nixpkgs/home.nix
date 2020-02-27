@@ -76,6 +76,9 @@ in
     heroku
     # Postman alternative
     insomnia
+
+    # For those rare times
+    chromium
   ];
 
 
