@@ -14,8 +14,8 @@
 
     "modules-left": [
       "sway/workspaces",
-      "sway/mode",
-      "custom/spotify"
+      "sway/mode"
+      // "custom/spotify"
     ],
     "modules-center": [
       "clock",
