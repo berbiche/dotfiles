@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
 {
+  home.stateVersion = "19.09";
+
   imports = [
     ./systemd.nix
     ./k8s.nix
@@ -67,6 +69,10 @@
     # For those rare times
     chromium
   ];
+
+  # HomeManager config
+  manual.manpages.enable = true;
+  news.display = "silent";
 
 
   fonts.fontconfig.enable = true;
