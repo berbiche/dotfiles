@@ -6,6 +6,7 @@
   imports = [
     ./systemd.nix
     ./k8s.nix
+    ./gpg.nix
   ];
 
   # Let Home Manager install and manage itself.
