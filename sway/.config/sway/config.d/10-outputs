@@ -8,36 +8,9 @@ set $OUTPUT-HOME-DELL-RIGHT 'Dell Inc. DELL U2414H R9F1P56N68VL'
 set $OUTPUT-HOME-DELL-LEFT  'Dell Inc. DELL U2414H R9F1P55S45FL'
 
 output * {
-    background "$HOME/Pictures/wallpaper/3840x2160.png" fit
-}
-
-output $OUTPUT-HOME-DELL-RIGHT background "$HOME/Pictures/wallpaper/1080x1920.png" fill
-output $OUTPUT-HOME-DELL-LEFT  background "$HOME/Pictures/wallpaper/1080x1920.png" fill
-
-output eDP-1 {
-    scale 1.5
-    pos 0 0
-    res 3840x2160
     background "$HOME/Pictures/wallpaper/3840x2160.png" fill
 }
 
-#output $OUTPUT-HOME-BENQ {
-#    scale 1
-#    pos 4920 0
-#    res 3840x2160
-#    background "$HOME/Pictures/wallpaper/3840x2160.png" fill
-#}
-#
-#output $OUTPUT-HOME-DELL-RIGHT {
-#    scale 1
-#    transform 90
-#    pos 8760 0
-#    res 1920x1080
-#}
-#
-#output $OUTPUT-HOME-DELL-LEFT {
-#    scale 1
-#    transform 270
-#    pos 3840 0
-#    res 1920x1080
-#}
+#output $OUTPUT-HOME-DELL-RIGHT background "$HOME/Pictures/wallpaper/1080x1920.png" fill
+#output $OUTPUT-HOME-DELL-LEFT  background "$HOME/Pictures/wallpaper/1080x1920.png" fill
+
