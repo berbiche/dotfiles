@@ -19,7 +19,6 @@
     bitwarden bitwarden-cli
     jq                                             # cli to extract data out of json input
     #kanshi                                         # sway output management
-    neovim
     neofetch
 
     # 
@@ -32,6 +31,8 @@
     slack-term
     riot-desktop
     plex-media-player
+    spotify
+    pamixer
 
     vscode
     jetbrains.idea-community
@@ -103,13 +104,16 @@
   };
 
   # Preview directory content and find directory to `cd` to
-  programs.broot.enable = true;
+  programs.broot = {
+    enable = true;
+    enableZshIntegration = true;
+  };
 
   # Cool text editor
   #programs.kakoune.enable = true;
 
   # Advanced less
-  programs.lesspipe.enable = true;
+  programs.lesspipe.enable = false;
 
   # Text-editor
   programs.neovim = {
@@ -121,36 +125,6 @@
   # Program prompt
   programs.starship = {
     enable = true;
+    enableZshIntegration = true;
   };
-
-  # 
-  # programs.tmux = {
-  #   enable = true;
-  #   shortcut = "a";
-  #   terminal = "screen-256color";
-
-  #   clock24 = true;
-
-  #   escapeTime = 0;
-
-  #   newSession = true;
-  #   secureSocket = true;
-
-  #   sensibleOnTop = true;
-
-  #   plugins = with pkgs; [
-  #     tmuxPlugins.cpu
-  #     {
-  #       plugin = tmuxPlugins.resurrect;
-  #       extraConfig = "set -g @resurrect-strategy-nvim 'session'";
-  #     }
-  #     {
-  #       plugin = tmuxPlugins.continuum;
-  #       extraConfig = ''
-  #         set -g @continuum-restore 'on'
-  #         set -g @continuum-save-interval '60' # minutes
-  #       '';
-  #     }
-  #   ];
-  # };
 }

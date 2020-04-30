@@ -4,9 +4,9 @@ pkgs:
     Unit = {
       Description = "A lightweight Wayland notification daemon";
       Documentation = "man:mako(1)";
+      PartOf = [ "graphical-session.target" ];
       Requisite = [ "dbus.service" ];
       After = [ "dbus.service" ];
-      PartOf = [ "graphical-session.target" ];
     };
     
     Service = {

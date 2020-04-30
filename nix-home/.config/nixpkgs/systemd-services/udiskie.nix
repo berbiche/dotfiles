@@ -6,13 +6,14 @@ pkgs:
       Documentation = [ "man:udiskie(8)" ];
       PartOf= [ "graphical-session.target" ];
       Requisite = [ "dbus.service" ];
+      After = [ "dbus.service" ];
       StartLimitIntervalSec = 1;
     };
     
     Service = {
       Type = "simple";
       ExecStart = builtins.concatStringsSep " " [
-        ''"${pkgs.udiskie}/bin/udiskie"''
+        "${pkgs.udiskie}/bin/udiskie"
         "--use-udisks2" "--no-automount" "--tray"
         "--appindicator" "--file-manager" "nautilus"
       ];
