@@ -44,3 +44,6 @@ if [ -z $ZSH_RELOADING_SHELL ]; then
     $(sed -n 's/^NAME=//p' /etc/os-release) \
     $(sed -n 's/^VERSION=//p' /etc/os-release)
 fi
+
+source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+source "$XDG_CONFIG_HOME/broot/launcher/bash/br"
