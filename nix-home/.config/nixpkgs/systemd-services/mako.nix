@@ -5,14 +5,15 @@ pkgs:
       Description = "A lightweight Wayland notification daemon";
       Documentation = "man:mako(1)";
       PartOf = [ "graphical-session.target" ];
-      Requisite = [ "dbus.service" ];
-      After = [ "dbus.service" ];
+      After = [ "graphical-session.target" ];
     };
     
     Service = {
-      Type = "dbus";
-      BusName = "org.freedesktop.Notifications";
+      #Type = "dbus";
+      #BusName = "org.freedesktop.Notifications";
+      Type = "simple";
       ExecStart = "${pkgs.mako}/bin/mako";
+      ExecReload = "${pkgs.mako}/bin/makoctl reload";
       Restart = "always";
       RestartSec = "1sec";
     };

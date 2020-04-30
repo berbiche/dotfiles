@@ -10,8 +10,9 @@ pkgs:
     };
     
     Service = {
-      Type = "dbus";
-      BusName = "fr.arouillard.waybar";
+      #Type = "dbus";
+      #BusName = "fr.arouillard.waybar";
+      Type = "simple";
       ExecStart = "${pkgs.waybar}/bin/waybar";
       Restart = "always";
       RestartSec = "1sec";
