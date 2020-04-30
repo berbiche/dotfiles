@@ -4,6 +4,7 @@ color=000000
 
 # Integrated display
 image=eDP-1:/home/nicolas/Pictures/wallpaper/3840x2160.png
+image=DP-1:/home/nicolas/Pictures/wallpaper/3840x2160.png
 
 # BenQ 4K
 #image="Unknown BenQ EW3270U 74J08749019":/home/nicolas/Pictures/wallpaper/3840x2160.png
