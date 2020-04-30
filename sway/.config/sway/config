@@ -19,13 +19,15 @@ set $floating-term "alacritty --class 'floating-term' --working-directory ~"
 set $quake-term    "alacritty --class 'quake-term' --working-directory ~"
 set $menu          'xfce4-appfinder --replace'
 set $menu-wofi     'wofi --fork --show drun,run'
+#set $menu-wofi     'rofi -show combi -combi-modi drun,run'
 #set $menu          'rofi -show combi -show-icons -p "start" -combi-modi drun,run,ssh'
 set $explorer      "alacritty --class 'file-explorer' --title 'ranger' -e ranger ~"
 set $gui-explorer  'nautilus'
 set $browser       'dex ~/.local/share/applications/firefox.desktop'
 set $alt-browser   'qutebrowser'
 set $lock          'swaylock -f -c 0f0f0ff0 -i ~/Pictures/wallpaper/3840x2160.png'
-set $logout        'oblogout'
+set $logout        'wlogout'
+set $audiocontrol  'pavucontrol'
 
 set $ws1  "1: Browsing"
 set $ws2  "2: School"
@@ -352,13 +354,14 @@ bindsym $mod+g mode "gaps"
 
 # Move a specific window/container
 mode "multimedia" {
-    bindsym left  exec playerctl previous; mode default
-    bindsym right exec playerctl next; mode default
-    bindsym up    exec playerctl play-pause; mode default
+    bindsym left  exec playerctl previous;
+    bindsym right exec playerctl next;
+    bindsym up    exec playerctl play-pause;
 
     # return to default mode
-    bindsym Return mode defaults
+    bindsym Return mode default
     bindsym Escape mode default
+    bindsym $mod+m mode default
 }
 bindsym $mod+m mode "multimedia"
 
@@ -383,13 +386,16 @@ mode "execute/focus" {
     bindsym m [class="Caprine" instance="caprine"] focus; mode default
 
     # Modify sway configuration in vim
-    bindsym e exec 'alacritty --class "floating-term" --title "neovim: sway config" --no-live-config-reload --dimensions 80 40 --command vim ~/.config/sway/config'; \
+    bindsym e exec 'alacritty --class "floating-term" --title "neovim: sway config" --no-live-config-reload --dimensions 80 40 --command $EDITOR ~/.config/sway/config'; \
     mode default
 
 
     # Restart waybar
     bindsym F12 exec 'systemctl --user is-active --quiet waybar.service && systemctl --user restart waybar.service'; \
       mode default
+
+    # Launch volume controller
+    bindsym c exec $audiocontrol; mode default
 
     # return to default mode
     bindsym Return mode default
