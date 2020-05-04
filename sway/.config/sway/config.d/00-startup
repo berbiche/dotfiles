@@ -2,7 +2,7 @@
 #exec dbus-update-activation-environment --systemd --all
 
 # Start systemd user services
-exec systemctl --user start sway-session.target
+exec systemctl --user import-environment && systemctl --user start sway-session.target
 
 #exec_always pkill kanshi; exec kanshi
 exec kanshi
