@@ -4,7 +4,8 @@
 
 swaymsg -t get_tree |
   jq -r '.nodes[].nodes[] |
-    .nodes[],.floating_nodes[] |
+    recurse(.nodes[]?), recurse(.floating_nodes[]?) |
       select(.focused) |
         .rect |
         "\(.x),\(.y) \(.width)x\(.height)"'
+
