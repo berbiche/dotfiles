@@ -135,7 +135,7 @@ bindsym --locked XF86MonBrightnessDown exec 'brightnessctl --min-value=30 set 10
 
 # Screenshot
 bindsym --release Print       exec "$SCRIPTS/screenshot.sh" 'selection'
-bindsym --release Mod1+Print  exec "$SCRIPTS/screenshot.sh" 'selection'
+bindsym --release Mod1+Print  exec "$SCRIPTS/screenshot.sh" 'window'
 bindsym --release Shift+Print exec "$SCRIPTS/screenshot.sh" 'screen'
 bindsym --release Ctrl+Print  exec "$SCRIPTS/screenshot.sh" 'everything'
 
