@@ -14,6 +14,8 @@
 
   home.sessionVariables = {
     NIX_PAGER = "less --RAW-CONTROL-CHARS --quit-if-one-screen";
+    # Fix Firefox. See <https://mastransky.wordpress.com/2020/03/16/wayland-x11-how-to-run-firefox-in-mixed-environment/>
+    MOZ_DBUS_REMOTE = 1;
   };
 
   home.packages = with pkgs; [
@@ -23,6 +25,7 @@
     jq                                             # cli to extract data out of json input
     #kanshi                                         # sway output management
     neofetch
+    libnotify
 
     # 
     dex                                            # execute .desktop files
@@ -31,11 +34,10 @@
     gnome3.nautilus
     gnome3.networkmanager-openconnect
     gnome3.rhythmbox
-    slack-term
     riot-desktop
-    plex-media-player
     spotify
     pamixer
+    discord                                        # unfortunately
 
     vscode
     jetbrains.idea-community
@@ -45,12 +47,9 @@
     mpv-with-scripts
 
     # Programming
-    #rustc
-    clang
     #llvmPackages.bintools
-    rustup
+    clang
     python3
-    stack
     gnumake
     powershell
 
@@ -61,9 +60,6 @@
     
     # Programming tools
     ###################
-    # Cloud services
-    travis
-    heroku
     # Postman alternative
     insomnia
 
@@ -102,6 +98,10 @@
   services.kdeconnect.enable = true;
   services.kdeconnect.indicator = true;
   #services.network-manager-applet.enable = true;
+
+  # Run emacs as a service
+  services.emacs.enable = true;
+  programs.emacs.enable = true;
 
   #programs.zsh.ohMyZsh.theme = 'powerlevel10k/powerlevel10k';
   programs.zsh = {
