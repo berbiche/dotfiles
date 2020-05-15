@@ -18,8 +18,7 @@
       // "custom/spotify"
     ],
     "modules-center": [
-      "clock",
-      "battery"
+      "sway/window"
       // "temperature"
     ],
     "modules-right": [
@@ -29,7 +28,9 @@
       "cpu",
       "memory",
       "backlight",
-      "tray"
+      "tray",
+      "battery",
+      "clock"
     ],
 
     // Modules configuration
