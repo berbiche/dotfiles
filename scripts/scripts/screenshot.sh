@@ -8,18 +8,24 @@ Usage:
 
 Where:
   selection   take a screenshot of a range to be selected
+  window      take a screenshot of the currently focused window
   screen      take a screenshot of the active output
   everything  take a screenshot of the entire desktop \
 "
 
 output_file="$(xdg-user-dir PICTURES)/screenshots/$(date +'%Y')/$(date +'%m')/$(date +'%Y-%m-%d-%H.%M.%S').png"
 
+slurp="command slurp -d -s '#ff00001a' -c '#ff0000'"
+select_window="$(dirname "$0")/sway_select_window_geometry.sh"
 
 
 main() {
   case "$1" in
     selection)
       print_selection
+      ;;
+    window)
+      print_window
       ;;
     screen)
       print_active_screen
@@ -65,7 +71,13 @@ post_process() {
 
 print_selection() {
   create_dir
-  grim -g "$(slurp)" "$output_file"
+  eval "$slurp" | grim -g- "$output_file"
+}
+
+print_window() {
+  create_dir
+  local window=`$select_window`
+  grim -g "$window" "$output_file"
 }
 
 print_active_screen() {
