@@ -14,7 +14,7 @@ pkgs:
       Type = "simple";
       ExecStart = builtins.concatStringsSep " " [
         "${pkgs.udiskie}/bin/udiskie"
-        "--use-udisks2" "--no-automount" "--tray"
+        "--no-automount" "--tray"
         "--appindicator" "--file-manager" "nautilus"
       ];
       Restart = "on-failure";

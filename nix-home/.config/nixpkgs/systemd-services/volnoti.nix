@@ -9,9 +9,8 @@ pkgs:
     };
     
     Service = {
-      Type = "simple";
-      #Type = "dbus";
-      #BusName = "uk.ac.cam.db538.volume-notification";
+      Type = "dbus";
+      BusName = "uk.ac.cam.db538.volume-notification";
       ExecStart = "${pkgs.volnoti}/bin/volnoti -n";
       Restart = "on-failure";
       RestartSec = "1sec";
