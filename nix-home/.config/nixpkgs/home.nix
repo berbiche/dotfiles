@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  home.stateVersion = "19.09";
+  home.stateVersion = "20.09";
 
   imports = [
     ./systemd.nix
