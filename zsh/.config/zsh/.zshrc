@@ -1,31 +1,13 @@
-# source the base file
-. $ZDOTDIR/base-zshrc
+# Source the base file if $ZDOTDIR is within HOME
+if [[ "$(dirname "$ZDOTDIR")" == "$HOME"* ]]; then
+  . $ZDOTDIR/base-zshrc
+fi
 
-fpath=($fpath "${zdotdir}/.zfunctions")
-
-# fix gpg
-#export gpg_tty=$(tty)
-#gpg-connect-agent updatestartuptty /bye >/dev/null
-
-# source fzf
-#. /usr/share/fzf/key-bindings.zsh
-#. /usr/share/fzf/completion.zsh
-
-# source fnm (node version manager)
-#if [[ $(fnm --version) > 1.9.1 ]]; then
-#  eval "`fnm env --multi --shell=zsh --base-dir=\"$home/.cache/fnm\"`"
-#else
-#  eval "`fnm env --multi --shell=zsh --fnm-dir=\"$home/.cache/fnm\"`"
-#fi
-#
-#if [ -f ./.nvmrc ] || [ -f ~/.nvmrc ]; then
-#  fnm use $(cat ./.nvmrc 2&>/dev/null || cat ~/.nvmrc 2&>/dev/null)
-#  rehash
-#fi
+fpath=($fpath "${ZDOTDIR}/.zfunctions")
 
 eval "$(starship init zsh)"
 
-# Source aliases if ZDOTDIR is within home
+# Source aliases if $ZDOTDIR is within HOME
 if [[ "$(dirname "$ZDOTDIR")" == "$HOME"* ]]; then
   . $ZDOTDIR/.zshenv
   . $ZDOTDIR/zaliases
@@ -34,7 +16,6 @@ fi
 unsetopt SHARE_HISTORY
 unsetopt share_history
 
-# Created by newuser for 5.7.1
 if [ -n "${commands[fzf-share]}" ]; then
   source "$(fzf-share)/key-bindings.zsh"
 fi
