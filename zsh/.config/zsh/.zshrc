@@ -6,6 +6,7 @@ fi
 fpath=($fpath "${ZDOTDIR}/.zfunctions")
 
 eval "$(starship init zsh)"
+eval "$(direnv hook zsh)"
 
 # Source aliases if $ZDOTDIR is within HOME
 if [[ "$(dirname "$ZDOTDIR")" == "$HOME"* ]]; then

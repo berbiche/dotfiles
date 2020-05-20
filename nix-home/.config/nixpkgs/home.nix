@@ -39,6 +39,13 @@
     pamixer
     discord                                        # unfortunately
 
+    gnome3.gnome-boxes
+    virt-manager
+
+    # For those rare times
+    chromium
+
+    # Essentials
     vscode
     jetbrains.idea-community
 
@@ -52,6 +59,8 @@
     python3
     gnumake
     powershell
+    direnv
+    niv
 
     # TUIs
     tig            # GIT
@@ -62,9 +71,6 @@
     ###################
     # Postman alternative
     insomnia
-
-    # For those rare times
-    chromium
   ];
 
   # HomeManager config
@@ -93,6 +99,7 @@
     platformTheme = "gtk";
   };
 
+  services.lorri.enable = true;
   services.blueman-applet.enable = true;
   services.gnome-keyring.enable = true;
   services.kdeconnect.enable = true;
