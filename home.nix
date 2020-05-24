@@ -1,27 +1,28 @@
 { config, lib, pkgs, ... }:
 
 let
+  base-dir = ./. + "/home-manager";
+  overlays-dir = base-dir + "/overlays";
   overlays =
     let
-      o = lib.mapAttrs (n: _: import (toString ./. + "/overlays/${n}")) (builtins.readDir ./overlays);
-    in lib.attrValues o;
+      overlays = lib.mapAttrs (n: _: import (overlays-dir + "/${n}")) (builtins.readDir overlays-dir);
+    in lib.attrValues overlays;
 in
 {
   home.stateVersion = "20.09";
 
-  imports = [
+  imports = map (x: base-dir + "/${x}") [
     # ./config.nix
-    ./systemd.nix
-    ./k8s.nix
-    ./gpg.nix
-    ./programs.nix
+    "systemd.nix"
+    "k8s.nix"
+    "gpg.nix"
+    "programs.nix"
   ];
 
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.permittedInsecurePackages = [
-    "openssl-1.0.2u"
-  ];
+  nixpkgs.config = import ./config.nix;
+  xdg.configFile."nixpkgs/config.nix".source = ./config.nix;
   nixpkgs.overlays = overlays;
+  xdg.configFile."nixpkgs/overlays".source = overlays-dir;
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -70,7 +71,7 @@ in
 
   # Copy the scripts folder
   home.file."scripts" = {
-    source = ./scripts;
+    source = toString base-dir + "/scripts";
     recursive = false; # we want the folder symlinked, not its files
   };
 }
