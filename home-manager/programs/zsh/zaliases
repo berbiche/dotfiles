@@ -6,7 +6,7 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
-alias ls='exa --color=auto --group-directories-first'
+alias ls='exa --color=auto --group-directories-first --classify'
 alias lst='ls --tree'
 alias la='ls --all'
 alias ll='ls --all --long --header --group'
