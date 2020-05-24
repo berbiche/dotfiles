@@ -1,5 +1,3 @@
-#!/usr/bin/env zsh
-
 #export XDG_CONFIG_DIRS="/etc/xdg"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
@@ -40,5 +38,3 @@ export FZF_DEFAULT_OPTS='--exact --cycle --layout=reverse'
 export COLORTERM=truecolor
 # Editor as VIM
 export EDITOR='nvim'
-
-export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.cache/npm-packages/bin:$XDG_DATA_HOME/flatpak/exports/share:$HOME/.emacs.d/bin:$PATH"
