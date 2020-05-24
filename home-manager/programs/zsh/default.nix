@@ -1,15 +1,12 @@
 { config, lib, pkgs, ... }:
 
-let
-  zshDotDir = "${config.xdg.configHome}/zsh";
-in
 {
   #programs.zsh.ohMyZsh.theme = 'powerlevel10k/powerlevel10k';
   programs.zsh = {
     enable = true;
     # enableAutosuggestions = true;
     enableCompletion = true;
-    dotDir = zshDotDir;
+    dotDir = ".config/zsh";
     history.expireDuplicatesFirst = true;
     history.ignoreDups = false;
     history.path = "${config.xdg.cacheHome}/zsh/history";

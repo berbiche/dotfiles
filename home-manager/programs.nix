@@ -68,6 +68,11 @@ in
     enableZshIntegration = true;
   };
 
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
   # Advanced less
   programs.lesspipe.enable = false;
 
