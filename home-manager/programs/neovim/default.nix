@@ -23,7 +23,7 @@ let
   configFiles = toXDGConf tarballs;
 in
 # Merge Themes configuration
-(configFiles // {
+recursiveUpdate configFiles {
   # Text-editor
   programs.neovim = {
     enable = true;
@@ -32,4 +32,6 @@ in
     withNodeJs = true;
     extraConfig = lib.fileContents ./init.vim;
   };
-})
+
+  xdg.configFile."nvim/init.vim".source = ./init.vim;
+}
