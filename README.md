@@ -29,7 +29,7 @@ a graphical prompt to unlock my SSH keys.
 all packages (and binaries) specified in the configuration.
 
     ``` console
-    $ home-manager -f home-manager/home.nix switch
+    $ home-manager -f home.nix switch
     ```
 
     home-manager may warn about files already existing outside the "store".  
