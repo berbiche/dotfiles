@@ -1,0 +1,3 @@
+# -*- mode: conf-space -*-
+# Start kanshi after
+exec kanshi
