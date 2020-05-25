@@ -19,8 +19,8 @@ pkgs:
       RestartSec = "5sec";
     };
 
-    Install = {
-      WantedBy = [ "sway-session.target" ];
-    };
+    #Install = {
+    #  WantedBy = [ "sway-session.target" ];
+    #};
   };
 }
