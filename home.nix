@@ -7,17 +7,18 @@ let
     let
       overlays = lib.mapAttrs (n: _: import (overlays-dir + "/${n}")) (builtins.readDir overlays-dir);
     in lib.attrValues overlays;
-in
-{
-  home.stateVersion = "20.09";
-
-  imports = map (x: base-dir + "/${x}") [
+  base-imports = map (x: base-dir + "/${x}") [
     # ./config.nix
     "systemd.nix"
     "k8s.nix"
     "gpg.nix"
     "programs.nix"
   ];
+in
+{
+  home.stateVersion = "20.09";
+
+  imports = base-imports;
 
   nixpkgs.config = import ./config.nix;
   xdg.configFile."nixpkgs/config.nix".source = ./config.nix;
