@@ -48,7 +48,6 @@ in
     python3
     gnumake
     powershell
-    direnv
     niv
 
     # TUIs
@@ -78,6 +77,11 @@ in
 
   # Program prompt
   programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  programs.direnv = {
     enable = true;
     enableZshIntegration = true;
   };
