@@ -12,7 +12,7 @@
 --pager="less --quit-if-one-screen --RAW-CONTROl-CHARS"
 
 # Use C++ syntax (instead of C) for .h header files
---map-syntax h:cpp
+--map-syntax=h:cpp
 
 # Use "gitignore" highlighting for ".ignore" files
---map-syntax .ignore:.gitignore
+--map-syntax=.ignore:.gitignore
