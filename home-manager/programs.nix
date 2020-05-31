@@ -86,6 +86,12 @@ in
     enableZshIntegration = true;
   };
 
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
+    options = [ "--no-aliases" ];
+  };
+
   programs.swaylock = {
     enable = true;
     imageFolder = config.xdg.userDirs.pictures + "/wallpaper";
