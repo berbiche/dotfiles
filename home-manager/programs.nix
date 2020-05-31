@@ -85,4 +85,9 @@ in
     enable = true;
     enableZshIntegration = true;
   };
+
+  programs.swaylock = {
+    enable = true;
+    imageFolder = config.xdg.userDirs.pictures + "/wallpaper";
+  };
 }
