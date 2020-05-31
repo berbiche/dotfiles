@@ -17,6 +17,8 @@ let
 in
 {
   home.stateVersion = "20.09";
+  home.username = "nicolas";
+  home.homeDirectory = "/home/${config.home.username}";
 
   imports = base-imports;
 
@@ -27,6 +29,7 @@ in
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+  # programs.home-manager.path = "$HOME/dev/github.com/home-manager";
 
   home.sessionVariables = {
     NIX_PAGER = "less --RAW-CONTROL-CHARS --quit-if-one-screen";
@@ -72,7 +75,7 @@ in
 
   # Copy the scripts folder
   home.file."scripts" = {
-    source = toString base-dir + "/scripts";
+    source = toString (base-dir + "/scripts");
     recursive = false; # we want the folder symlinked, not its files
   };
 }
