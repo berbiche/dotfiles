@@ -15,7 +15,8 @@
 
     "modules-left": [
       "sway/workspaces",
-      "sway/mode"
+      "sway/mode",
+      "wlr/taskbar"
       // "custom/spotify"
     ],
     "modules-center": [
