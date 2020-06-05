@@ -10,7 +10,6 @@ let
   systemdFiles = attrValues (nixFilesIn ./systemd-services);
 in
 {
-  # #### mkMerge . map $ flip import pkgs $ [  ]
   systemd.user.services = lib.mkMerge (map (x: x pkgs) systemdFiles);
 
   #

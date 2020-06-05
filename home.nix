@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
+  username = "nicolas";
   base-dir = ./. + "/home-manager";
   overlays-dir = base-dir + "/overlays";
   overlays =
@@ -17,8 +18,8 @@ let
 in
 {
   home.stateVersion = "20.09";
-  home.username = "nicolas";
-  home.homeDirectory = "/home/${config.home.username}";
+  home.username = username;
+  home.homeDirectory = "/home/${username}";
 
   imports = base-imports;
 
@@ -42,7 +43,7 @@ in
   news.display = "silent";
 
   # XDG
-  fonts.fontconfig.enable = true;
+  fonts.fontconfig.enable = lib.mkDefault true;
   xdg.enable = true;
 
   gtk = {
