@@ -16,7 +16,7 @@ a graphical prompt to unlock my SSH keys.
 Building can be done at two level:
 
 - Rebuild only the user configuration with home-manager
-- Rebuild the entire systeme configuration
+- Rebuild the entire system configuration
 
 1. Clone this repository.
 
