@@ -1,13 +1,12 @@
 { config, lib, pkgs, ... }:
 
 let
-  username = "nicolas";
   base-dir = ./. + "/home-manager";
-  overlays-dir = base-dir + "/overlays";
-  overlays =
-    let
-      overlays = lib.mapAttrs (n: _: import (overlays-dir + "/${n}")) (builtins.readDir overlays-dir);
-    in lib.attrValues overlays;
+  # overlays-dir = ../overlays;
+  # overlays = lib.pipe (builtins.readDir overlays-dir) [
+  #   (lib.mapAttrs (n: _: import (overlays-dir + "/${n}")))
+  #   (lib.attrValues)
+  # ];
   base-imports = map (x: base-dir + "/${x}") [
     # ./config.nix
     "systemd.nix"
@@ -18,15 +17,14 @@ let
 in
 {
   home.stateVersion = "20.09";
-  home.username = username;
-  home.homeDirectory = "/home/${username}";
+  # home.username = config.username;
+  # home.homeDirectory = "/home/${config.username}";
 
-  imports = base-imports;
+  imports = base-imports ++ [ ../overlays ];
 
   nixpkgs.config = import ./config.nix;
   xdg.configFile."nixpkgs/config.nix".source = ./config.nix;
-  nixpkgs.overlays = overlays;
-  xdg.configFile."nixpkgs/overlays".source = overlays-dir;
+  xdg.configFile."nixpkgs/overlays".source = ../overlays;
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;

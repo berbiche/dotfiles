@@ -11,7 +11,12 @@ my configuration files and my packages.
 I use Gnome Keyring to manage my secrets (SSH and GPG passwords) and to have
 a graphical prompt to unlock my SSH keys.
 
-## Installation
+## Building
+
+Building can be done at two level:
+
+- Rebuild only the user configuration with home-manager
+- Rebuild the entire systeme configuration
 
 1. Clone this repository.
 
@@ -21,6 +26,8 @@ a graphical prompt to unlock my SSH keys.
     ```
 
 2. Install [Nix package manager](https://nixos.org) for your distribution if not using NixOS.
+
+### Rebuilding only the dotfiles with home-manager
 
 3. Install [home-manager](https://github.com/rycee/home-manager). Make sure `$HOME/.nix-profile/bin`
    is in your `$PATH` (it should normally).
@@ -37,31 +44,81 @@ all packages (and binaries) specified in the configuration.
     installing with `-b bak` where `bak` will be the extension suffixed to old files.  
     See home-manager manpage.
 
-## ZSH
+### Rebuilding the system configuration, including home-manager
 
-Many aliases are defined in my ZSH config that requires packages to be installed
-beforehand.
+Note that required hardward configuration has to be done before building any host under `hosts/` (formatting drives, setting up the bootloader, etc.).
 
-Most of the tools I use are written in Rust because I could hack on them if I
-ever needed to.
+1. Create the `hostname` file with the name of the host to build. The host should exist under `hosts/${hostname}.nix`
+   otherwise a compilation error will be reported.
+
+    Example:
+
+    ``` console
+    $ echo "thixxos" >> hostname
+    ```
+
+2. Add the necessary channels (TODO: automate)
+
+   ``` console
+   $ sudo nix-channel --add https://nixos.org/channels/nixos-unstable
+
+   $ sudo nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
+
+   $ sudo nix-channel --add https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz nixpkgs-mozilla
+
+   $ sudo nix-channel --add https://github.com/colemickens/nixpkgs-wayland/archive/master.tar.gz nixpkgs-wayland
+
+   $ sudo nix-channel --list
+   home-manager https://github.com/rycee/home-manager/archive/master.tar.gz
+   nixos https://nixos.org/channels/nixos-unstable
+   nixpkgs-mozilla https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz
+   nixpkgs-wayland https://github.com/colemickens/nixpkgs-wayland/archive/master.tar.gz
+
+   $ sudo nix-channel --update
+   ```
+
+3. Build the system
+
+   ``` console
+   $ sudo nixos-rebuild boot -I nixos-config=./configuration.nix
+   these derivations will be built:
+     /nix/store/6dvwa00nx2sx5idq8gg5pq5ym6s7ih0j-nixos-rebuild.drv
+   building '/nix/store/6dvwa00nx2sx5idq8gg5pq5ym6s7ih0j-nixos-rebuild.drv'...
+   building Nix...
+   building the system configuration... 
+   ```
+
+4. Reboot in the new system configuration
+
+   ``` console
+   $ shutdown -r now
+   ```
+
+## Updating
+
+Rebuild with the `--upgrade` switch:
+
+``` console
+$ sudo nixos-rebuild --upgrade -I nixos-config=./configuration.nix
+```
+
+The path to the `configuration.nix` can either be relative or absolute.
+
+## Configuration
+
+Most programs configuration live under `home-manager/programs`.
+
+### ZSH
+
+Many aliases are defined in my ZSH config that replaces default commands.
 
 - [exa](https://github.com/ogham/exa) (ls with --tree and other goodies)
 - [bat](https://github.com/sharkdp/bat) (cat with syntax highlighting and pagination)
 - [ripgrep](https://github.com/BurntSushi/ripgrep) (opiniated grep with defaults applied, claims to be faster than grep)
 - [ripgrep-all](https://github.com/phiresky/ripgrep-all) (grep inside PDFs, E-Books, zip, etc.)
-- [fd](https://github.com/sharkdp/fd) (find with a much more intuitive syntax to me)
+- [fd](https://github.com/sharkdp/fd) (find with a much more intuitive syntax to me though I use them interchangeably)
 - [tldr](https://github.com/tldr-pages/tldr) (super simple manpage consisting of examples)
-- [neofetch](https://github.com/dylanaraps/neofetch) (get system information)
-- [starship](https://github.com/starship/starship) (cool minimal shell prompt with git, nodejs, rust, go, etc. support)
+- [neofetch](https://github.com/dylanaraps/neofetch) (print system information to your terminal)
+- [starship](https://github.com/starship/starship) (cool shell prompt with git, nodejs, rust, go, etc. support)
 - [hexyl](https://sharkdp/hexyl) (cli hex viewer, an alternative to xxd)
-
-My ZSH configuration requires the following code in `/etc/zsh/zshenv` under Arch/Manjaro
-or in `/etc/zshenv.local` under NixOS:
-
-```zsh
-export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
-export XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
-export XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
-export ZDOTDIR=${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}
-```
 

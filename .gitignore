@@ -4,3 +4,4 @@ git/
 .zcompdump*
 *.bak
 *.env
+hostname
