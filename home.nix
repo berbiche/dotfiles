@@ -43,7 +43,7 @@ in
   news.display = "silent";
 
   # XDG
-  fonts.fontconfig.enable = lib.mkDefault true;
+  fonts.fontconfig.enable = lib.mkForce true;
   xdg.enable = true;
 
   gtk = {
