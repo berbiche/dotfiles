@@ -15,8 +15,9 @@ a graphical prompt to unlock my SSH keys.
 
 Building can be done at two level:
 
-- Rebuild only the user configuration with home-manager
 - Rebuild the entire system configuration
+- Rebuild only the user configuration with home-manager
+   - This requires changes to `home.nix` because home-manager works in "submodule mode" when used from the Nix config (with `<home-manager/nixos>`)
 
 1. Clone this repository.
 
@@ -26,23 +27,6 @@ Building can be done at two level:
     ```
 
 2. Install [Nix package manager](https://nixos.org) for your distribution if not using NixOS.
-
-### Rebuilding only the dotfiles with home-manager
-
-3. Install [home-manager](https://github.com/rycee/home-manager). Make sure `$HOME/.nix-profile/bin`
-   is in your `$PATH` (it should normally).
-
-4. Install the configuration, this will install and symlink all required files as well as fetch
-all packages (and binaries) specified in the configuration.
-
-    ``` console
-    $ home-manager -f home.nix switch
-    ```
-
-    home-manager may warn about files already existing outside the "store".  
-    You can supplement a parameter to home-manager to rename old files/directories when
-    installing with `-b bak` where `bak` will be the extension suffixed to old files.  
-    See home-manager manpage.
 
 ### Rebuilding the system configuration, including home-manager
 
@@ -93,6 +77,23 @@ Note that required hardward configuration has to be done before building any hos
    ``` console
    $ shutdown -r now
    ```
+
+### Rebuilding only the dotfiles with home-manager
+
+1. Install [home-manager](https://github.com/rycee/home-manager). Make sure `$HOME/.nix-profile/bin`
+   is in your `$PATH` (it should normally).
+
+2. Install the configuration, this will install and symlink all required files as well as fetch
+all packages (and binaries) specified in the configuration.
+
+    ``` console
+    $ home-manager -f home.nix switch
+    ```
+
+    home-manager may warn about files already existing outside the "store".  
+    You can supplement a parameter to home-manager to rename old files/directories when
+    installing with `-b bak` where `bak` will be the extension suffixed to old files.  
+    See home-manager manpage.
 
 ## Updating
 
