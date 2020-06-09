@@ -99,10 +99,12 @@ Note that required hardward configuration has to be done before building any hos
 Rebuild with the `--upgrade` switch:
 
 ``` console
-$ sudo nixos-rebuild --upgrade -I nixos-config=./configuration.nix
+$ sudo nixos-rebuild switch --upgrade -I nixos-config=./configuration.nix
 ```
 
 The path to the `configuration.nix` can either be relative or absolute.
+
+If a build has already been made then the `-I nixos-config=./configuration.nix` switch in unecessary as the `$NIX_PATH` environment variable has been changed for `nixos-config` to point to the initial installation folder.
 
 ## Configuration
 
