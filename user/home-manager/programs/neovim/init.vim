@@ -40,4 +40,5 @@ nnoremap <leader>n :set relativenumber!<CR>
 " Plugins
 call plug#begin()
 Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
+Plug 'LnL7/vim-nix'
 call plug#end()
