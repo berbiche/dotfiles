@@ -2,13 +2,7 @@
 
 let
   base-dir = ./. + "/home-manager";
-  # overlays-dir = ../overlays;
-  # overlays = lib.pipe (builtins.readDir overlays-dir) [
-  #   (lib.mapAttrs (n: _: import (overlays-dir + "/${n}")))
-  #   (lib.attrValues)
-  # ];
   base-imports = map (x: base-dir + "/${x}") [
-    # ./config.nix
     "systemd.nix"
     "k8s.nix"
     "gpg.nix"
@@ -20,7 +14,7 @@ in
   # home.username = config.username;
   # home.homeDirectory = "/home/${config.username}";
 
-  imports = base-imports ++ [ ../overlays ];
+  imports = base-imports ++ [ ../overlays.nix ];
 
   nixpkgs.config = import ./config.nix;
   xdg.configFile."nixpkgs/config.nix".source = ./config.nix;
@@ -78,3 +72,4 @@ in
     recursive = false; # we want the folder symlinked, not its files
   };
 }
+

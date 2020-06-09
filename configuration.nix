@@ -74,7 +74,7 @@ in
   imports =
     [ <nixpkgs/nixos/modules/hardware/all-firmware.nix>
       <home-manager/nixos>
-      ./overlays
+      ./overlays.nix
     ] ++ map (x: ./top-level + "/${x}") [
       "hardware-configuration.nix"
       "cachix.nix"
