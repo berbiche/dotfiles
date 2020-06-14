@@ -4,7 +4,6 @@ let
   base-dir = ./. + "/home-manager";
   base-imports = map (x: base-dir + "/${x}") [
     "systemd.nix"
-    "k8s.nix"
     "gpg.nix"
     "programs.nix"
   ];
