@@ -19,7 +19,6 @@ in
 
     #
     dex # execute .desktop files
-    gnome3.gnome_themes_standard
     gnome3.nautilus
     gnome3.networkmanager-openconnect
     gnome3.rhythmbox
