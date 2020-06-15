@@ -5,8 +5,7 @@ let
 in
 {
   dislocker = super.dislocker.overrideAttrs (old: rec {
-    name = "dislocker-${version}";
-    version = "${old.version}-${revision}";
+    version = "${old.version}-${builtins.substring 0 7 revision}";
     src = super.fetchFromGitHub {
       owner = "aorimn";
       repo = "dislocker";
