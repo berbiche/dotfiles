@@ -13,7 +13,7 @@ in
     [ <nixpkgs/nixos/modules/hardware/all-firmware.nix>
       <home-manager/nixos>
       ./overlays.nix
-    ] ++ map (x: ./top-level + "/${x}") [
+    ] ++ map (x: ./nixos + "/${x}") [
       "hardware-configuration.nix"
       "cachix.nix"
       "zsh.nix"
