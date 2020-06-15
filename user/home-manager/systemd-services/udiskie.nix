@@ -1,4 +1,5 @@
-pkgs:
+{ pkgs }:
+
 {
   udiskie = {
     Unit = {
@@ -9,7 +10,7 @@ pkgs:
       After = [ "dbus.service" ];
       StartLimitIntervalSec = 1;
     };
-    
+
     Service = {
       Type = "simple";
       ExecStart = builtins.concatStringsSep " " [

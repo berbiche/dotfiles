@@ -10,7 +10,7 @@ let
   systemdFiles = attrValues (nixFilesIn ./systemd-services);
 in
 {
-  systemd.user.services = lib.mkMerge (map (x: x pkgs) systemdFiles);
+  systemd.user.services = lib.mkMerge (map (x: x { inherit pkgs; }) systemdFiles);
 
   #
   systemd.user.tmpfiles.rules = lib.optionals (config.systemd.user.services ? clipboard)

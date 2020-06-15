@@ -1,4 +1,5 @@
-pkgs:
+{ pkgs }:
+
 {
   redshift = {
     Unit = {

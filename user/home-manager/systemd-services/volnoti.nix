@@ -1,4 +1,5 @@
-pkgs:
+{ pkgs }:
+
 {
   volnoti = {
     Unit = {
@@ -7,7 +8,7 @@ pkgs:
       After = [ "dbus.service" ];
       PartOf = [ "graphical-session.target" ];
     };
-    
+
     Service = {
       Type = "dbus";
       BusName = "uk.ac.cam.db538.volume-notification";

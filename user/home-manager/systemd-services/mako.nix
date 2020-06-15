@@ -1,4 +1,5 @@
-pkgs:
+{ pkgs }:
+
 {
   mako = {
     Unit = {
@@ -7,7 +8,7 @@ pkgs:
       PartOf = [ "graphical-session.target" ];
       After = [ "graphical-session.target" ];
     };
-    
+
     Service = {
       Type = "dbus";
       BusName = "org.freedesktop.Notifications";

@@ -1,4 +1,5 @@
-pkgs:
+{ pkgs }:
+
 {
   nm-applet = {
     Unit = {
@@ -6,7 +7,7 @@ pkgs:
       Documentation = "man:swayidle(1)";
       PartOf = [ "graphical-session.target" ];
     };
-    
+
     Service = {
       Type = "simple";
       ExecStart = "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator";
