@@ -7,10 +7,23 @@ let
   home-manager-configuration = ./user/home.nix;
 
   pwd = toString ./.;
+in
+{
+  imports =
+    [ <nixpkgs/nixos/modules/hardware/all-firmware.nix>
+      <home-manager/nixos>
+      ./overlays.nix
+    ] ++ map (x: ./top-level + "/${x}") [
+      "hardware-configuration.nix"
+      "cachix.nix"
+      "zsh.nix"
+      "graphical.nix"
+      "all-packages.nix"
+      "services.nix"
+      "host/${host}.nix"
+    ];
 
-  c = {
-    inherit username;
-
+  config = {
     # This value determines the NixOS release with which your system is to be
     # compatible, in order to avoid breaking some software such as database
     # servers. You should change this only after NixOS release notes say you
@@ -27,7 +40,7 @@ let
     };
 
     environment.systemPackages = [ pkgs.cachix ];
-    nix.trustedUsers = [ config.username "root" ];
+    nix.trustedUsers = [ username "root" ];
     # Define the nixos-config path to the current folder
     nix.nixPath =
       [
@@ -58,37 +71,15 @@ let
     };
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
-    users.users.${config.username} = {
+    users.users.${username} = {
       isNormalUser = true;
       shell = pkgs.zsh;
       uid = 1000;
-      group = config.username;
-      home = "/home/${config.username}";
+      group = username;
+      home = "/home/${username}";
       extraGroups = [ "wheel" "networkmanager" "input" "audio" "video" "docker" "vboxusers" ];
     };
-    home-manager.users.${config.username} = home-manager-configuration;
+    home-manager.users.${username} = home-manager-configuration;
     home-manager.useUserPackages = true;
   };
-in
-{
-  imports =
-    [ <nixpkgs/nixos/modules/hardware/all-firmware.nix>
-      <home-manager/nixos>
-      ./overlays.nix
-    ] ++ map (x: ./top-level + "/${x}") [
-      "hardware-configuration.nix"
-      "cachix.nix"
-      "zsh.nix"
-      "graphical.nix"
-      "all-packages.nix"
-      "services.nix"
-      "host/${host}.nix"
-    ];
-
-  options.username = lib.mkOption {
-    description = "The primary user username";
-    type = lib.types.str;
-  };
-
-  config = c;
 }
