@@ -10,8 +10,6 @@ let
 in
 {
   home.stateVersion = "20.09";
-  # home.username = config.username;
-  # home.homeDirectory = "/home/${config.username}";
 
   imports = base-imports ++ [ ../overlays.nix ];
 
@@ -41,7 +39,7 @@ in
     enable = true;
     iconTheme = {
       name = "Adwaita";
-      package = pkgs.gnome3.adwaita-icon-theme;
+      package = pkgs.gnome3.gnome-themes-extra;
     };
     theme = {
       name = "Adwaita";
