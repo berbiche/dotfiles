@@ -9,7 +9,7 @@
   nixpkgs.config.allowUnfree = true;
 
   boot.kernelParams = [ "amd_iommu=pt" "iommu=soft" "nordrand" ]
-    ++ [ "resume_offset=403456" ]; # Offset of the swapfile
+    ++ [ "resume_offset=63195136" ]; # Offset of the swapfile
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
