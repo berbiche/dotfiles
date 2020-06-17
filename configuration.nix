@@ -77,7 +77,7 @@ in
       uid = 1000;
       group = username;
       home = "/home/${username}";
-      extraGroups = [ "wheel" "networkmanager" "input" "audio" "video" "docker" "vboxusers" ];
+      extraGroups = [ "wheel" "networkmanager" "input" "audio" "video" "docker" "vboxusers" "dialout" ];
     };
     home-manager.users.${username} = home-manager-configuration;
     home-manager.useUserPackages = true;
