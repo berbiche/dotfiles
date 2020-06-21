@@ -15,6 +15,7 @@ in
 
   xdg.configFile."nixpkgs/config.nix".source = ./config.nix;
   xdg.configFile."nixpkgs/overlays".source = ../overlays;
+  xdg.configFile."nixpkgs/nix".source = ../nix;
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
