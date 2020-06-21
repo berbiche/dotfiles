@@ -1,7 +1,4 @@
 # Nothing at the moment
-nvim/.config/nvim/.netrwhist
-git/
-.zcompdump*
 *.bak
 *.env
 hostname

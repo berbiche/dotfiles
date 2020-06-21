@@ -1,4 +1,5 @@
-pkgs:
+{ pkgs }:
+
 {
   waybar = {
     Unit = {
@@ -8,7 +9,7 @@ pkgs:
       Requisite = [ "dbus.service" ];
       After = [ "dbus.service" ];
     };
-    
+
     Service = {
       Type = "dbus";
       BusName = "fr.arouillard.waybar";

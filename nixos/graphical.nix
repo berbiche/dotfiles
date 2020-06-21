@@ -1,8 +1,5 @@
 { config, lib, pkgs, ... }:
 
-let
-  packages = [ pkgs.playerctl pkgs.polkit pkgs.polkit_gnome ];
-in
 {
   imports = [
     ./graphical/sway.nix
@@ -11,24 +8,13 @@ in
     ./graphical/steam.nix
   ];
 
-  environment.systemPackages = packages;
+  environment.systemPackages = [ pkgs.playerctl pkgs.polkit pkgs.polkit_gnome ];
 
 
   services.xserver.enable = true;
   #services.xserver.tty = 1;
   services.xserver.displayManager.defaultSession = "sway";
 
-  services.xserver.useGlamor = true;
-  # services.xserver.displayManager.gdm.enable = true;
-  # services.xserver.displayManager.gdm.wayland = true;
-  services.xserver.displayManager.sddm = {
-    enable = false;
-    #theme = "chili";
-    autoLogin = {
-      enable = false;
-      user = "nicolas";
-    };
-  };
   services.xserver.displayManager.lightdm = {
     enable = true;
     #theme = "chili";
@@ -69,7 +55,7 @@ in
 
   nixpkgs.config.chromium = {
     enableWideVine = true;
-    useVaapi = true;
+    enableVaapi = true;
     enablePepperFlash = true;
   };
 
@@ -94,8 +80,8 @@ in
     ];
 
     fontconfig = {
-      enable = lib.mkForce true;
-      hinting.enable = true;
+      enable = true;
+      hinting.enable = false;
       cache32Bit = true;
     };
   };

@@ -1,0 +1,74 @@
+{
+    "home-manager": {
+        "branch": "master",
+        "description": "Manage a user environment using Nix",
+        "homepage": "https://rycee.gitlab.io/home-manager/",
+        "owner": "rycee",
+        "repo": "home-manager",
+        "rev": "1f174f668109765183f96b43d56ee24ab02c1c05",
+        "sha256": "06ba3nxkzva9q6dxzymyy62x75kf1qf7y8x711jwjravgda14bsq",
+        "type": "tarball",
+        "url": "https://github.com/rycee/home-manager/archive/1f174f668109765183f96b43d56ee24ab02c1c05.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "niv": {
+        "branch": "master",
+        "description": "Easy dependency management for Nix projects",
+        "homepage": "https://github.com/nmattia/niv",
+        "owner": "nmattia",
+        "repo": "niv",
+        "rev": "f73bf8d584148677b01859677a63191c31911eae",
+        "sha256": "0jlmrx633jvqrqlyhlzpvdrnim128gc81q5psz2lpp2af8p8q9qs",
+        "type": "tarball",
+        "url": "https://github.com/nmattia/niv/archive/f73bf8d584148677b01859677a63191c31911eae.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixops": {
+        "branch": "nixpkgs-network",
+        "description": "NixOps is a tool for deploying to NixOS machines in a network or cloud.",
+        "homepage": "https://nixos.org/nixops",
+        "owner": "adisbladis",
+        "repo": "nixops",
+        "rev": "ecbe11bf844d4a2d538cf1eeeeb2afd21686a019",
+        "sha256": "1kay0ks23ssw216k5j6xrsj25x48cqxc8chgjhmhvpdlkq9pgjnf",
+        "type": "tarball",
+        "url": "https://github.com/adisbladis/nixops/archive/ecbe11bf844d4a2d538cf1eeeeb2afd21686a019.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs": {
+        "branch": "nixpkgs-unstable",
+        "description": "A read-only mirror of NixOS/nixpkgs tracking the released channels. Send issues and PRs to",
+        "homepage": "https://github.com/NixOS/nixpkgs",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "a84cbb60f0296210be03c08d243670dd18a3f6eb",
+        "sha256": "04j07c98iy66hpzha7brz867dcl9lkflck43xvz09dfmlvqyzmiz",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/a84cbb60f0296210be03c08d243670dd18a3f6eb.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs-mozilla": {
+        "branch": "master",
+        "description": "mozilla related nixpkgs (extends nixos/nixpkgs repo)",
+        "homepage": null,
+        "owner": "mozilla",
+        "repo": "nixpkgs-mozilla",
+        "rev": "e912ed483e980dfb4666ae0ed17845c4220e5e7c",
+        "sha256": "08fvzb8w80bkkabc1iyhzd15f4sm7ra10jn32kfch5klgl0gj3j3",
+        "type": "tarball",
+        "url": "https://github.com/mozilla/nixpkgs-mozilla/archive/e912ed483e980dfb4666ae0ed17845c4220e5e7c.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs-wayland": {
+        "branch": "master",
+        "description": "Automated, pre-built packages for Wayland (sway/wlroots) tools for NixOS.",
+        "homepage": "",
+        "owner": "colemickens",
+        "repo": "nixpkgs-wayland",
+        "rev": "aa398e94315aa2c4f822135fa8f933322645baee",
+        "sha256": "1dls2qnn5xgarqcclz2vhxfy6cbdpsli8gq7alm49cnrkfchrjjv",
+        "type": "tarball",
+        "url": "https://github.com/colemickens/nixpkgs-wayland/archive/aa398e94315aa2c4f822135fa8f933322645baee.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+}

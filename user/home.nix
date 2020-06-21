@@ -11,15 +11,15 @@ in
 {
   home.stateVersion = "20.09";
 
-  imports = base-imports ++ [ ../overlays.nix ];
+  imports = base-imports;
 
-  nixpkgs.config = import ./config.nix;
   xdg.configFile."nixpkgs/config.nix".source = ./config.nix;
   xdg.configFile."nixpkgs/overlays".source = ../overlays;
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
   # programs.home-manager.path = "$HOME/dev/github.com/home-manager";
+  # programs.home-manager.path = <home-manager>;
 
   home.sessionVariables = {
     NIX_PAGER = "less --RAW-CONTROL-CHARS --quit-if-one-screen";
@@ -39,7 +39,8 @@ in
     enable = true;
     iconTheme = {
       name = "Adwaita";
-      package = pkgs.gnome3.gnome-themes-extra;
+      # Covered by the theme package below
+      # package = pkgs.gnome3.gnome-themes-extra;
     };
     theme = {
       name = "Adwaita";

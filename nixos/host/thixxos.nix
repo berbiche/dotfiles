@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports =
-    [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-    ];
+  hardware.enableRedistributableFirmware = true;
 
   boot.loader = {
     efi = {

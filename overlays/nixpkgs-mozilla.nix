@@ -1,5 +1,5 @@
 let
-  # revision = "master";
-  # mozilla-overlay = import (builtins.fetchTarball "https://github.com/mozilla/nixpkgs-mozilla/archive/${revision}.tar.gz");
+  sources = import ../nix/sources.nix;
+  nixpkgs-mozilla = import sources.nixpkgs-mozilla;
 in
-import <nixpkgs-mozilla>
+nixpkgs-mozilla

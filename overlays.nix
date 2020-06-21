@@ -1,13 +1,13 @@
-{ pkgs, lib, ... }:
-
-with lib;
+self: super:
 let
-  overlays-dir = ./overlays;
-  nix-files = pipe (builtins.readDir overlays-dir) [
-    (filterAttrs (f: v: v == "regular" && hasSuffix ".nix" f && f != "default.nix"))
-    (mapAttrsToList (f: _: import (overlays-dir + "/${f}")))
+  inherit (super) lib;
+  overlaysDir = ./overlays;
+  allOverlays = lib.pipe (builtins.readDir overlaysDir) [
+    (lib.filterAttrs (f: v: v == "regular" && lib.hasSuffix ".nix" f && f != "default.nix"))
+    (lib.mapAttrsToList (f: _: import (overlaysDir + "/${f}")))
   ];
+
+  # https://discourse.nixos.org/t/infinite-recursion-when-composing-overlays/7594/8
+  overlays = lib.foldl' lib.composeExtensions (_: _: { }) allOverlays;
 in
-{
-  nixpkgs.overlays = nix-files;
-}
+overlays self super

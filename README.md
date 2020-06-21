@@ -8,8 +8,7 @@ I use [Sway](https://swaywm.org) (a tiling window manager running on Wayland) on
 This repository lives under `$HOME/dotfiles` and I use [home-manager](https://github.com/rycee/home-manager) to manage
 my configuration files and my packages.
 
-I use Gnome Keyring to manage my secrets (SSH and GPG passwords) and to have
-a graphical prompt to unlock my SSH keys.
+I use Gnome Keyring to manage my secrets (SSH and GPG passwords) and to have a graphical prompt to unlock my SSH keys.
 
 ## Building
 

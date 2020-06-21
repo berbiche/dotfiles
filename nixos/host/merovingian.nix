@@ -1,14 +1,10 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports =
-    [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-    ];
-
   # Allow installing non-free packages
   nixpkgs.config.allowUnfree = true;
 
-  boot.kernelParams = [ "amd_iommu=pt" "iommu=soft" "nordrand" ]
+  boot.kernelParams = [ "amd_iommu=pt" "iommu=soft" ]
     ++ [ "resume_offset=63195136" ]; # Offset of the swapfile
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
@@ -17,7 +13,6 @@
   boot.extraModulePackages = [ ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  #boot.kernelPackages = pkgs.linuxPackages_5_5;
 
   # Boot loader settings
   # Resume device is the partition with the swapfile in this case
@@ -30,7 +25,6 @@
       canTouchEfiVariables = true;
       efiSysMountPoint = "/boot/efi";
     };
-    systemd-boot.enable = false;
     grub = {
       enable = true;
       version = 2;
@@ -57,6 +51,7 @@
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/6b8e779b-838a-433e-992c-e28ee70c7207";
       fsType = "ext4";
+      options = [ "noatime" "nodiratime" "discard" ];
     };
 
   fileSystems."/boot/efi" =
@@ -96,19 +91,9 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
 
   virtualisation.libvirtd.enable = true;
-  virtualisation.virtualbox = {
-    host.enable = false;
-    #host.enableExtensionPack = true;
-    host.headless = false;
-  };
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_CA.UTF-8";
   console.font = "Lat2-Terminus16";
   console.keyMap = "us";
-
-  #programs.java = {
-  #  enable = true;
-  #  package = pkgs.openjdk11;
-  #};
 }

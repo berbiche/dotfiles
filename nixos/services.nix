@@ -35,6 +35,8 @@
     ATTRS{idVendor}=="1038", ATTRS{idProduct}=="12AD", ENV{PULSE_PROFILE_SET}="steelseries-arctis-7-usb-audio.conf"
   '';
 
+  security.pam.services.gnome-keyring.enableGnomeKeyring = true;
+
   # Yubikey
   services.udev.packages = with pkgs; [ yubikey-personalization libu2f-host ];
   services.pcscd.enable = true;

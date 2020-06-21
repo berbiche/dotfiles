@@ -1,12 +1,17 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
 {
-  boot.loader.grub.extraEntries = lib.mkAfter ''
-    menuentry "Shutdown" {
-      halt
-    }
-    menuentry "Reboot" {
-      reboot
-    }
-  '';
+  config = lib.mkIf config.boot.loader.grub.enable {
+    boot.loader.grub.extraEntries = ''
+      menuentry "Shutdown" {
+        halt
+      }
+      menuentry "Reboot" {
+        reboot
+      }
+      menuentry "Bios" {
+        fwsetup
+      }
+    '';
+  };
 }

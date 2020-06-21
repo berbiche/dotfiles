@@ -4,8 +4,9 @@ with lib;
 with builtins;
 let
   # { "file": "path", "file2": "path" }
-  nixFilesIn = dir: mapAttrs (name: _: import (dir + "/${name}"))
-                            (filterAttrs (name: _: hasSuffix ".nix" name) (readDir dir));
+  nixFilesIn = dir:
+    mapAttrs (name: _: import (dir + "/${name}"))
+             (filterAttrs (name: _: hasSuffix ".nix" name) (readDir dir));
 
   systemdFiles = attrValues (nixFilesIn ./systemd-services);
 in
