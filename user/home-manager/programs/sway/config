@@ -257,6 +257,7 @@ bindsym $mod+e layout toggle split
 
 # Make the current focus fullscreen and inhibit idle while focused
 bindsym $mod+f fullscreen, inhibit_idle focus
+bindsym $mod+shift+f fullscreen global, inhibit_idle focus
 
 # Toggle the current focus between tiling and floating mode
 bindsym $mod+Shift+space floating toggle
