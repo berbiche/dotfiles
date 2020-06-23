@@ -63,35 +63,16 @@
     [ { device = "/dev/disk/by-uuid/4881627c-6d34-4add-bc3c-d3a0608370f6"; }
     ];
 
-  nix.maxJobs = lib.mkDefault 8;
+  nix.maxJobs = 6;
   powerManagement.enable = true;
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  powerManagement.cpuFreqGovernor = "powersave";
 
   # High-DPI console
-  i18n.consoleFont = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
+  console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
+  console.keyMap = "us";
+  i18n.defaultLocale = "en_CA.UTF-8";
 
-  #systemd.mounts = [
-  #  { description = "Games HDD";
-  #    what = "/dev/disk/by-uuid/207acdf3-d70a-424b-9e36-fa719639a068";
-  #    where = "/mnt/games";
-  #    type = "ext4";
-  #    options = "defaults";
-  #    wantedBy = ["multi-user.target"];
-  #  }
-  #  { description = "Games HDD automount";
-  #    where = "/mnt/games";
-  #    wantedBy = ["multi-user.target"];
-  #  }
-  #];
-} //
-{
-  i18n = {
-    consoleFont = "Lat2-Terminus16";
-    consoleKeyMap = "us";
-    defaultLocale = "en_CA.UTF-8";
-  };
-
-  networking.firewall.allowPing = false;
+  networking.firewall.allowPing = true;
   #networking.firewall.allowedTCPPorts = [ 8000 ];
 
   environment.systemPackages = [ pkgs.brightnessctl ];
