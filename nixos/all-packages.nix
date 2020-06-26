@@ -22,7 +22,6 @@
     traceroute telnet tcpdump whois dnsutils mtr
 
     neovim evince alacritty thunderbird libreoffice kitty
-    latest.firefox-nightly-bin
 
     docker-compose
   ];

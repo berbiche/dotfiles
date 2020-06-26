@@ -24,8 +24,6 @@ in
 
   home.sessionVariables = {
     NIX_PAGER = "less --RAW-CONTROL-CHARS --quit-if-one-screen";
-    # Fix Firefox. See <https://mastransky.wordpress.com/2020/03/16/wayland-x11-how-to-run-firefox-in-mixed-environment/>
-    MOZ_DBUS_REMOTE = 1;
   };
 
   # HomeManager config
