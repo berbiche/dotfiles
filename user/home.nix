@@ -27,12 +27,16 @@ in
   };
 
   # HomeManager config
+  # `man 5 home-configuration.nix`
   manual.manpages.enable = true;
-  news.display = "silent";
 
   # XDG
   fonts.fontconfig.enable = lib.mkForce true;
-  xdg.enable = true;
+  xdg =  {
+    enable = true;
+    mime.enable = true;
+    mimeApps.enable = true;
+  };
 
   gtk = {
     enable = true;
