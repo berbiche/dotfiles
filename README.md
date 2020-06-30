@@ -4,19 +4,18 @@ My configuration for the various tools I use.
 
 I use [Sway](https://swaywm.org) (a tiling window manager running on Wayland) on NixOS on both my laptop and my desktop.
 
-
 This repository lives under `$HOME/dotfiles` and I use [home-manager](https://github.com/rycee/home-manager) to manage
 my configuration files and my packages.
 
-I use Gnome Keyring to manage my secrets (SSH and GPG passwords) and to have a graphical prompt to unlock my SSH keys.
+I use Gnome Keyring to manage my secrets (SSH, GPG) and to have a graphical prompt to unlock my keys.
 
-## Building
+External dependencies are specified with [niv](https://github.com/nmattia/niv) in `niv/sources.json`.
 
-Building can be done at two level:
+**NOTE**  
+The building process is more complicated than it should be because nix currently
+lacks a declarative way to pin nixpkgs in the environment (instead of relying on the nixpkgs channel).
 
-- Rebuild the entire system configuration
-- Rebuild only the user configuration with home-manager
-   - This requires changes to `home.nix` because home-manager works in "submodule mode" when used from the Nix config (with `<home-manager/nixos>`)
+## Initial setup
 
 1. Clone this repository.
 
@@ -25,90 +24,65 @@ Building can be done at two level:
     $ cd dotfiles
     ```
 
-2. Install [Nix package manager](https://nixos.org) for your distribution if not using NixOS.
+2. Create an SSH keypair for your user to login as root locally.
 
-### Rebuilding the system configuration, including home-manager
+3. Add your generated keypair's public key to the root account authorized_keys.
 
-Note that required hardward configuration has to be done before building any host under `hosts/` (formatting drives, setting up the bootloader, etc.).
+4. Start a local SSH server allowing root login with an SSH key
 
-1. Create the `hostname` file with the name of the host to build. The host should exist under `hosts/${hostname}.nix`
-   otherwise a compilation error will be reported.
+## Building
 
-    Example:
+Building the system configuration is done using `nixops` because it allows a user to declaratively pin the nixpkgs version
+used in the build.
+
+1. Enter the nix-shell
 
     ``` console
-    $ echo "thixxos" >> hostname
+    $ nix-shell
+    [nix-shell] $ _
     ```
 
-2. Add the necessary channels (TODO: automate)
+2. Create the deployment with nixops
 
-   ``` console
-   $ sudo nix-channel --add https://nixos.org/channels/nixos-unstable
+    ``` console
+    [nix-shell] $ nixops create deployment.nix -d $NAME_OF_THE_DEPLOYMENT
+    ```
 
-   $ sudo nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
+3. Deploy
 
-   $ sudo nix-channel --add https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz nixpkgs-mozilla
-
-   $ sudo nix-channel --add https://github.com/colemickens/nixpkgs-wayland/archive/master.tar.gz nixpkgs-wayland
-
-   $ sudo nix-channel --list
-   home-manager https://github.com/rycee/home-manager/archive/master.tar.gz
-   nixos https://nixos.org/channels/nixos-unstable
-   nixpkgs-mozilla https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz
-   nixpkgs-wayland https://github.com/colemickens/nixpkgs-wayland/archive/master.tar.gz
-
-   $ sudo nix-channel --update
-   ```
-
-3. Build the system
-
-   ``` console
-   $ sudo nixos-rebuild boot -I nixos-config=./configuration.nix
-   these derivations will be built:
-     /nix/store/6dvwa00nx2sx5idq8gg5pq5ym6s7ih0j-nixos-rebuild.drv
-   building '/nix/store/6dvwa00nx2sx5idq8gg5pq5ym6s7ih0j-nixos-rebuild.drv'...
-   building Nix...
-   building the system configuration... 
-   ```
+    ``` console
+    [nix-shell] $ nixops deploy -d $NAME_OF_THE_DEPLOYMENT --boot --dry-run
+    ```
 
 4. Reboot in the new system configuration
 
-   ``` console
-   $ shutdown -r now
-   ```
-
-### Rebuilding only the dotfiles with home-manager
-
-1. Install [home-manager](https://github.com/rycee/home-manager). Make sure `$HOME/.nix-profile/bin`
-   is in your `$PATH` (it should normally).
-
-2. Install the configuration, this will install and symlink all required files as well as fetch
-all packages (and binaries) specified in the configuration.
-
     ``` console
-    $ home-manager -f home.nix switch
+    $ shutdown -r now
     ```
-
-    home-manager may warn about files already existing outside the "store".  
-    You can supplement a parameter to home-manager to rename old files/directories when
-    installing with `-b bak` where `bak` will be the extension suffixed to old files.  
-    See home-manager manpage.
 
 ## Updating
 
-Rebuild with the `--upgrade` switch:
+1. Update the dependencies:
 
-``` console
-$ sudo nixos-rebuild switch --upgrade -I nixos-config=./configuration.nix
-```
+    ``` console
+    $ nix-shell
+    [nix-shell]$ niv update
+    Updating all packages
+      Package: nixpkgs
+      ...
+    Done: Updating all packages
+    ```
 
-The path to the `configuration.nix` can either be relative or absolute.
+2. Then rebuild:
 
-If a build has already been made then the `-I nixos-config=./configuration.nix` switch in unecessary as the `$NIX_PATH` environment variable has been changed for `nixos-config` to point to the initial installation folder.
+    ```console
+    $ nix-shell
+    [nix-shell]$ nixops deploy -d $NAME_OF_YOUR_DEPLOYMENT
+    ```
 
 ## Configuration
 
-Most programs configuration live under `home-manager/programs`.
+Most programs configuration live under `user/home-manager/programs`.
 
 ### ZSH
 
