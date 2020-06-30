@@ -18,22 +18,22 @@ in
     "${sources.home-manager}/nixos"
   ];
 
-  options = with lib; with lib.types; {
+  options.my = with lib; {
     username = mkOption {
-      type = str;
+      type = types.str;
       description = "Primary user username";
       example = "nicolas";
       readOnly = true;
     };
 
     hostname = mkOption {
-      type = str;
+      type = types.str;
       description = "System hostname";
       readOnly = true;
     };
 
     userHomeConfiguration = mkOption {
-      type = either path str;
+      type = types.either types.path types.str;
       example = literalExample "./user/home.nix";
       description = "Path to the home-manager user configuration";
       readOnly = true;
@@ -61,7 +61,8 @@ in
       };
 
       environment.systemPackages = [ pkgs.cachix ];
-      nix.trustedUsers = [ "root" config.username ];
+      nix.trustedUsers = [ "root" config.my.username ];
+      nix.nixPath = [ ("nixpkgs=" + toString pkgs.path) ];
       # Define the nixos-config path to the current folder
       # nix.nixPath =
       #   [
@@ -70,7 +71,7 @@ in
       #     "/nix/var/nix/profiles/per-user/root/channels"
       #   ];
 
-      networking.hostName = config.hostname;
+      networking.hostName = config.my.hostname;
       networking.networkmanager.enable = true;
 
       # Virtualization
@@ -92,17 +93,17 @@ in
       };
 
       # Define a user account. Don't forget to set a password with ‘passwd’.
-      users.users.${config.username} = {
+      users.users.${config.my.username} = {
         isNormalUser = true;
         shell = pkgs.zsh;
         uid = 1000;
         group = config.username;
-        home = "/home/${config.username}";
+        home = "/home/${config.my.username}";
         extraGroups = [ "wheel" "networkmanager" "input" "audio" "video" "docker" "vboxusers" "dialout" ];
       };
 
       home-manager = {
-        users."${config.username}" = config.userHomeConfiguration;
+        users."${config.my.username}" = config.my.userHomeConfiguration;
         useUserPackages = true;
         useGlobalPkgs = true;
         verbose = true;

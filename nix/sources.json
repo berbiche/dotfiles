@@ -23,18 +23,6 @@
         "url": "https://github.com/nmattia/niv/archive/f73bf8d584148677b01859677a63191c31911eae.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
-    "nixops": {
-        "branch": "nixpkgs-network",
-        "description": "NixOps is a tool for deploying to NixOS machines in a network or cloud.",
-        "homepage": "https://nixos.org/nixops",
-        "owner": "adisbladis",
-        "repo": "nixops",
-        "rev": "ecbe11bf844d4a2d538cf1eeeeb2afd21686a019",
-        "sha256": "1kay0ks23ssw216k5j6xrsj25x48cqxc8chgjhmhvpdlkq9pgjnf",
-        "type": "tarball",
-        "url": "https://github.com/adisbladis/nixops/archive/ecbe11bf844d4a2d538cf1eeeeb2afd21686a019.tar.gz",
-        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
-    },
     "nixpkgs": {
         "branch": "nixpkgs-unstable",
         "description": "A read-only mirror of NixOS/nixpkgs tracking the released channels. Send issues and PRs to",
@@ -69,6 +57,18 @@
         "sha256": "0s3lxdi58ch4dwx09fvji4f46p7kig4jn1vh1rfixwxmph50znpc",
         "type": "tarball",
         "url": "https://github.com/colemickens/nixpkgs-wayland/archive/81928cb8b56dd5c6a6fafe7ae11646fac848a0be.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixus": {
+        "branch": "master",
+        "description": null,
+        "homepage": "",
+        "owner": "infinisil",
+        "repo": "nixus",
+        "rev": "7ea1a7806ebf3c98eab282a94a0f2bd337932f11",
+        "sha256": "0s6ykikdgk5z65xg4yksifin06vp6pkwr8b48rfj37n6cgfhqbsz",
+        "type": "tarball",
+        "url": "https://github.com/infinisil/nixus/archive/7ea1a7806ebf3c98eab282a94a0f2bd337932f11.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }

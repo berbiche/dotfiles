@@ -1,38 +1,43 @@
-{ username
-, hostname
-, hostConfiguration
-, userHomeConfiguration ? ./user/home.nix
-, homeManagerModule ? null
-}:
-
 let
-  sources = import ./nix/sources.nix;
-in
-{
-  network.description = "persephone";
-  network.enableRollback = true;
-  network.nixpkgs = sources.nixpkgs;
+  nix = import ./nix;
+  nixpkgs = nix.nixpkgs;
+  nixus = import nix.nixus;
 
-  merovingian =
+  overlays = [ (import ./overlays.nix) ];
+
+  hostConfiguration = ./nixos/host/merovingian.nix;
+in
+nixus ({ ... }: {
+  defaults = { name, ... }: {
+    inherit nixpkgs;
+    configuration = { lib, ... }: {
+      networking.hostName = lib.mkDefault name;
+      nixpkgs = import nixpkgs { inherit overlays; };
+    };
+  };
+
+  nodes.merovingian =
     { ... }:
     {
-      imports = [ ./configuration.nix hostConfiguration ];
+      host = "root@localhost";
+      configuration = {
+        imports = [ ./configuration.nix hostConfiguration ];
 
-      deployment.targetHost = "localhost";
-      deployment.privilegeEscalationCommand = [ "sudo" ];
+        my.username = "nicolas";
+        my.userHomeConfiguration = ./user/home.nix;
+        my.hostname = "merovingian";
 
-      inherit username userHomeConfiguration;
-      hostname = "merovingian";
-
-      # Mandatory for NixOps
-      services.openssh = {
-        enable = true;
-        permitRootLogin = "without-password";
-        passwordAuthentication = false;
-        listenAddresses = [ { addr = "127.0.0.1"; port = 22; } ];
+        # Mandatory for the deployment with NixOps/Nixus
+        services.openssh = {
+          enable = true;
+          permitRootLogin = "without-password";
+          passwordAuthentication = false;
+          listenAddresses = [ { addr = "127.0.0.1"; port = 22; } ];
+        };
+        users.mutableUsers = false;
+        users.users.root.openssh.authorizedKeys.keys = [
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICtEC0M+d90ew2Otfn/B/gDOJhv+uByid44uAtO4ZV9K"
+        ];
       };
-      users.users.root.openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICtEC0M+d90ew2Otfn/B/gDOJhv+uByid44uAtO4ZV9K"
-      ];
     };
-}
+})
