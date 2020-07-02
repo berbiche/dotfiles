@@ -8,11 +8,11 @@ let
   hostConfiguration = ./nixos/host/merovingian.nix;
 in
 nixus ({ ... }: {
-  defaults = { name, ... }: {
+  defaults = { ... }: {
     inherit nixpkgs;
     configuration = { lib, ... }: {
-      networking.hostName = lib.mkDefault name;
-      nixpkgs = import nixpkgs { inherit overlays; };
+      # Extract the revision number from nixpkgs
+      system.nixos.revision = builtins.substring 0 8 nixpkgs.rev;
     };
   };
 
@@ -32,9 +32,9 @@ nixus ({ ... }: {
           enable = true;
           permitRootLogin = "without-password";
           passwordAuthentication = false;
-          listenAddresses = [ { addr = "127.0.0.1"; port = 22; } ];
+          listenAddresses = [ { addr = "localhost"; port = 22; } ];
         };
-        users.mutableUsers = false;
+        # users.mutableUsers = false;
         users.users.root.openssh.authorizedKeys.keys = [
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICtEC0M+d90ew2Otfn/B/gDOJhv+uByid44uAtO4ZV9K"
         ];

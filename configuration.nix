@@ -5,16 +5,18 @@ let
   pwd = toString ./.;
   sources = import ./nix/sources.nix;
   overlay = import ./overlays.nix;
-in
-{
-  imports = (map (x: ./nixos + "/${x}") [
+
+  base-imports = map (x: ./nixos + "/${x}") [
     "hardware-configuration.nix"
-    # "cachix.nix"
+    "cachix.nix"
     "zsh.nix"
     "graphical.nix"
     "all-packages.nix"
     "services.nix"
-  ]) ++ [
+  ];
+in
+{
+  imports = base-imports ++ [
     "${sources.home-manager}/nixos"
   ];
 
@@ -41,73 +43,78 @@ in
   };
 
 
-  config = lib.mkMerge [
-    {
-      nixpkgs.overlays = [ overlay ];
+  config = {
+    nixpkgs.overlays = [ overlay ];
 
-      # This value determines the NixOS release with which your system is to be
-      # compatible, in order to avoid breaking some software such as database
-      # servers. You should change this only after NixOS release notes say you
-      # should.
-      system.stateVersion = "20.09"; # Did you read the comment?
+    # This value determines the NixOS release with which your system is to be
+    # compatible, in order to avoid breaking some software such as database
+    # servers. You should change this only after NixOS release notes say you
+    # should.
+    system.stateVersion = "20.09"; # Did you read the comment?
 
-      boot.cleanTmpDir = true;
+    boot.cleanTmpDir = true;
 
+
+    environment.systemPackages = [ pkgs.cachix ];
+    nix = {
+      allowedUsers = [ "@wheel" ];
+      trustedUsers = [ "root" config.my.username ];
+      nixPath = [ ("nixpkgs=" + toString pkgs.path) ];
       # Automatic GC of nix files
-      nix.gc = {
+      gc = {
         automatic = true;
         dates = "daily";
         options = "--delete-older-than 10d";
       };
+    };
+    # Define the nixos-config path to the current folder
+    # nix.nixPath =
+    #   [
+    #     "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
+    #     "nixos-config=${pwd}/configuration.nix"
+    #     "/nix/var/nix/profiles/per-user/root/channels"
+    #   ];
 
-      environment.systemPackages = [ pkgs.cachix ];
-      nix.trustedUsers = [ "root" config.my.username ];
-      nix.nixPath = [ ("nixpkgs=" + toString pkgs.path) ];
-      # Define the nixos-config path to the current folder
-      # nix.nixPath =
-      #   [
-      #     "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-      #     "nixos-config=${pwd}/configuration.nix"
-      #     "/nix/var/nix/profiles/per-user/root/channels"
-      #   ];
+    networking.hostName = config.my.hostname;
+    networking.networkmanager.enable = true;
 
-      networking.hostName = config.my.hostname;
-      networking.networkmanager.enable = true;
+    # Virtualization
+    virtualisation.docker.enable = true;
 
-      # Virtualization
-      virtualisation.docker.enable = true;
+    time.timeZone = "America/Montreal";
+    location.provider = "geoclue2";
 
-      time.timeZone = "America/Montreal";
-      location.provider = "geoclue2";
+    networking.firewall.enable = true;
+    networking.nameservers = [ "1.1.1.1" "8.8.8.8" "9.9.9.9" ];
 
-      networking.firewall.enable = true;
-      networking.nameservers = [ "1.1.1.1" "8.8.8.8" "9.9.9.9" ];
+    # Enable sound.
+    sound.enable = true;
+    hardware.pulseaudio = {
+      enable = true;
+      extraModules = [ pkgs.pulseaudio-modules-bt ];
+      package = pkgs.pulseaudioFull;
+      support32Bit = true;
+    };
 
-      # Enable sound.
-      sound.enable = true;
-      hardware.pulseaudio = {
-        enable = true;
-        extraModules = [ pkgs.pulseaudio-modules-bt ];
-        package = pkgs.pulseaudioFull;
-        support32Bit = true;
-      };
+    # Define a user account. Don't forget to set a password with ‘passwd’.
+    users.users.${config.my.username} = {
+      createHome = true;
+      isNormalUser = true;
+      shell = pkgs.zsh;
+      uid = 1000;
+      group = "${config.my.username}";
+      home = "/home/${config.my.username}";
+      extraGroups = [ "wheel" "networkmanager" "input" "audio" "video" "docker" "dialout" ];
+    };
+    users.groups.${config.my.username} = {
+      gid = 1000;
+    };
 
-      # Define a user account. Don't forget to set a password with ‘passwd’.
-      users.users.${config.my.username} = {
-        isNormalUser = true;
-        shell = pkgs.zsh;
-        uid = 1000;
-        group = config.username;
-        home = "/home/${config.my.username}";
-        extraGroups = [ "wheel" "networkmanager" "input" "audio" "video" "docker" "vboxusers" "dialout" ];
-      };
-
-      home-manager = {
-        users."${config.my.username}" = config.my.userHomeConfiguration;
-        useUserPackages = true;
-        useGlobalPkgs = true;
-        verbose = true;
-      };
-    }
-  ];
+    home-manager = {
+      users."${config.my.username}" = config.my.userHomeConfiguration;
+      useUserPackages = true;
+      useGlobalPkgs = true;
+      verbose = true;
+    };
+  };
 }
