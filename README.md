@@ -12,8 +12,8 @@ I use Gnome Keyring to manage my secrets (SSH, GPG) and to have a graphical prom
 External dependencies are specified with [niv](https://github.com/nmattia/niv) in `niv/sources.json`.
 
 **NOTE**  
-The building process is more complicated than it should be because nix currently
-lacks a declarative way to pin nixpkgs in the environment (instead of relying on the nixpkgs channel).
+The building process is more complicated than it should be because I haven't found a way to
+declarative pin nixpkgs in the environment (instead of relying on the nixpkgs channel).
 
 ## Initial setup
 
@@ -26,7 +26,8 @@ lacks a declarative way to pin nixpkgs in the environment (instead of relying on
 
 2. Create an SSH keypair for your user to login as root locally.
 
-3. Add your generated keypair's public key to the root account authorized_keys.
+3. Add your generated keypair's public key to the root account `authorized_keys`.  
+    The public key can be added to `/etc/ssh/authorized_keys.d/root` for instance.
 
 4. Start a local SSH server allowing root login with an SSH key
 
@@ -35,26 +36,19 @@ lacks a declarative way to pin nixpkgs in the environment (instead of relying on
 Building the system configuration is done using `nixops` because it allows a user to declaratively pin the nixpkgs version
 used in the build.
 
-1. Enter the nix-shell
-
-    ``` console
-    $ nix-shell
-    [nix-shell] $ _
-    ```
-
-2. Create the deployment with nixops
-
-    ``` console
-    [nix-shell] $ nixops create deployment.nix -d $NAME_OF_THE_DEPLOYMENT
-    ```
-
-3. Deploy
+1. Build the system
 
     ``` console
     [nix-shell] $ nixops deploy -d $NAME_OF_THE_DEPLOYMENT --boot --dry-run
     ```
 
-4. Reboot in the new system configuration
+2. Deploy (the active system configuration will be changed)
+
+    ``` console
+    $ ./result
+    ```
+
+3. Alternatively reboot the machine
 
     ``` console
     $ shutdown -r now
@@ -62,7 +56,7 @@ used in the build.
 
 ## Updating
 
-1. Update the dependencies:
+1. Update the dependencies
 
     ``` console
     $ nix-shell
@@ -73,11 +67,16 @@ used in the build.
     Done: Updating all packages
     ```
 
-2. Then rebuild:
+2. Rebuild
 
-    ```console
-    $ nix-shell
-    [nix-shell]$ nixops deploy -d $NAME_OF_YOUR_DEPLOYMENT
+    ``` console
+    $ nix-build deployment.nix
+    ```
+
+3. Activate the system configuration
+
+    ``` console
+    $ ./result
     ```
 
 ## Configuration
