@@ -6,13 +6,17 @@ let
   overlays = [ (import ./overlays.nix) ];
 
   hostConfiguration = ./nixos/host/merovingian.nix;
+
+  nixpkgsRev = builtins.substring 0 8 nixpkgs.rev;
 in
 nixus ({ ... }: {
   defaults = { ... }: {
     inherit nixpkgs;
     configuration = { lib, ... }: {
       # Extract the revision number from nixpkgs
-      system.nixos.revision = builtins.substring 0 8 nixpkgs.rev;
+      system.nixos.revision = nixpkgs.rev;
+      system.nixos.versionSuffix = ".${nixpkgsRev}";
+      system.nixos.tags = [ "with-nixus" ];
     };
   };
 
