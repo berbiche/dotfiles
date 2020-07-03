@@ -26,6 +26,8 @@
   };
 
   systemd.user.services.mako = {
+    # restartTriggers = [ config.xdg.configFile."mako/config" ];
+
     Unit = {
       Description = "A lightweight Wayland notification daemon";
       Documentation = "man:mako(1)";
