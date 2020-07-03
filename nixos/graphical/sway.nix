@@ -1,6 +1,13 @@
 { config, lib, pkgs, ... }:
 
 {
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
+    gtkUsePortal = true;
+  };
+  services.pipewire.enable = true;
+
   programs.sway = {
     enable = true;
 
@@ -53,29 +60,12 @@
       # Fix for some Java AWT applications (e.g. Android Studio),
       # use this if they aren't displayed properly:
       export _JAVA_AWT_WM_NONREPARENTING=1
-      # Fix "Firefox is already running, but not responding. To open..."
-      export MOZ_DBUS_REMOTE=1
-      export XDG_CURRENT_DESKTOP=sway
-      export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u)/bus"
 
-      systemctl --user import-environment
+      # Disable this as a test
+      # export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u)/bus"
+
+      # Second test
+      # systemctl --user import-environment
     '';
   };
-
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
-    gtkUsePortal = true;
-  };
-  services.pipewire.enable = true;
-
-  #programs.light.enable = true;
-
-  # environment.systemPackages = with pkgs; [
-  #   # other compositors/window-managers
-  #   bspwc    # Wayland compositor based on BSPWM
-  #   cage     # A Wayland kiosk (runs a single app fullscreen)
-  #   wayfire   # 3D wayland compositor
-  #   wf-config # wayfire config manager
-  # ];
 }
