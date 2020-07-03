@@ -28,6 +28,9 @@ set splitbelow splitright
 " Enable autocompletion
 set wildmode=longest,list,full
 
+" Live substitution
+set inccommand=nosplit
+
 " Disables automatic commenting on newline
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
