@@ -28,7 +28,6 @@
       swaybg
 
       gebaar-libinput  # libinput gestures utility
-      wtype            # xdotool, but for wayland
 
       grim
       slurp
@@ -50,6 +49,8 @@
 
       # TODO: more steps required to use this?
       xdg-desktop-portal-wlr # xdg-desktop-portal backend for wlroots
+
+      qt5.qtwayland
     ];
 
     extraSessionCommands = ''
@@ -61,11 +62,7 @@
       # use this if they aren't displayed properly:
       export _JAVA_AWT_WM_NONREPARENTING=1
 
-      # Disable this as a test
-      # export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u)/bus"
-
-      # Second test
-      # systemctl --user import-environment
+      export XDG_CURRENT_DESKTOP=sway
     '';
   };
 }
