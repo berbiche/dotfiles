@@ -15,7 +15,8 @@ in
     bitwarden bitwarden-cli
     jq                           # cli to extract data out of json input
     #kanshi                      # sway output management
-    libnotify
+    libnotify                    # `notify-send` notifications to test mako
+    hexyl
 
     #
     dex # execute .desktop files
