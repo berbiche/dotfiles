@@ -17,6 +17,9 @@ nixus ({ ... }: {
       system.nixos.revision = nixpkgs.rev;
       system.nixos.versionSuffix = ".${nixpkgsRev}";
       system.nixos.tags = [ "with-nixus" ];
+
+      # Allow installing non-free packages
+      nixpkgs.config.allowUnfree = lib.mkDefault true;
     };
   };
 
