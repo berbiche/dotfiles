@@ -10,15 +10,15 @@
 
     extraConfig = lib.mkMerge [
       {
-        push = { default = "current"; };
-        credential = { helper = "gnome-keyring"; };
-        merge = { tool = "vimdiff"; };
-        mergetool = { prompt = true; };
-        difftool = { prompt = false; };
-        diff = { tool = "vimdiff"; };
-        # [mergetool "vimdiff"]
+        push.default = "current";
+        credential.helper = "gnome-keyring";
+        merge.tool = "vimdiff";
+        mergetool.prompt = true;
+        difftool.prompt = false;
+        diff.tool = "vimdiff";
       }
       (lib.mkIf config.programs.neovim.enable {
+        # [mergetool "vimdiff"]
         "mergetool \"vimdiff\"" = {
           cmd = "${pkgs.neovim}/bin/nvim -d $LOCAL $REMOTE $MERGE -c 'wincmd w' -c 'wincmd J'";
         };
