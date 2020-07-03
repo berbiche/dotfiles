@@ -66,13 +66,11 @@ in
     enableZshIntegration = true;
   };
 
+  # ctrl-t, ctrl-r, kill <tab><tab>
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
   };
-
-  # Advanced less
-  programs.lesspipe.enable = false;
 
   # Program prompt
   programs.starship = {
@@ -88,7 +86,7 @@ in
   programs.zoxide = {
     enable = true;
     enableZshIntegration = true;
-    options = [ "--no-aliases" ];
+    # options = [ "--no-aliases" ];
   };
 
   programs.swaylock = {

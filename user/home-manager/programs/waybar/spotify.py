@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+#! /usr/bin/env nix-shell
+#! nix-shell -i python3 -p playerctl gtk3 python3.pkgs.pygobject3 gobject-introspection
 import gi
 gi.require_version('Playerctl', '2.0')
 
@@ -25,6 +26,7 @@ def on_metadata(player, metadata, manager):
 
 
 def init_player(name):
+    print(f'init_player({name})')
     player = Playerctl.Player.new_from_name(name)
     # player.connect('playback-status::playing', on_play, manager)
     player.connect('metadata', on_metadata, manager)
