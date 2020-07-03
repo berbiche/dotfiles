@@ -97,3 +97,8 @@ Many aliases are defined in my ZSH config that replaces default commands.
 - [starship](https://github.com/starship/starship) (cool shell prompt with git, nodejs, rust, go, etc. support)
 - [hexyl](https://sharkdp/hexyl) (cli hex viewer, an alternative to xxd)
 
+### TODOS
+
+Packages to add to my configuration:
+
+- <https://github.com/jtheoff/swappy> blocked by <https://github.com/NixOS/nixpkgs/pull/81116>
