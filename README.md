@@ -36,10 +36,10 @@ declarative pin nixpkgs in the environment (instead of relying on the nixpkgs ch
 Building the system configuration is done using `nixops` because it allows a user to declaratively pin the nixpkgs version
 used in the build.
 
-1. Build the system
+1. Build the system (in this case the `merovingian` host)
 
     ``` console
-    [nix-shell] $ nixops deploy -d $NAME_OF_THE_DEPLOYMENT --boot --dry-run
+    nix-build deployment.nix -A merovingian
     ```
 
 2. Deploy (the active system configuration will be changed)
@@ -67,10 +67,10 @@ used in the build.
     Done: Updating all packages
     ```
 
-2. Rebuild
+2. Rebuild (in this case the `merovingian` host)
 
     ``` console
-    $ nix-build deployment.nix
+    $ nix-build deployment.nix -A merovingian
     ```
 
 3. Activate the system configuration
