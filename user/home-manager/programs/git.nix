@@ -10,6 +10,7 @@
 
     extraConfig = lib.mkMerge [
       {
+        pull.ff = "only";
         push.default = "current";
         credential.helper = "gnome-keyring";
         merge.tool = "vimdiff";
