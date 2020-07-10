@@ -2,7 +2,7 @@
 
 let
   inherit (builtins) fetchTarball;
-  inherit (lib) attrNames foldl mapAttrs recursiveUpdate;
+  inherit (lib) mkMerge attrNames foldl mapAttrs mapAttrsToList recursiveUpdate;
   themes = {
     monokai = "https://github.com/sickill/vim-monokai/archive/master.tar.gz";
     anderson = "https://github.com/tlhr/anderson.vim/archive/master.tar.gz";
@@ -10,20 +10,13 @@ let
     gruvbox = "https://github.com/morhetz/gruvbox/archive/master.tar.gz";
   };
   tarballs = mapAttrs (_: b: fetchTarball b) themes;
-  # Maps a vim theme source to an XDG config file
-  toXDGConf = set:
-    let
-      toXDG = name: value:
-        { xdg.configFile."nvim/colors/${name}.vim".source = "${value}/colors/${name}.vim"; };
-    in
-      foldl (acc: name:
-        recursiveUpdate acc (toXDG name set.${name})
-      ) { } (attrNames set);
-  # Construct an attrset like: xdg.configFile."theme".source = drv/colors/"theme".vim
-  configFiles = toXDGConf tarballs;
+
+  toXDG = name: value:
+    { xdg.configFile."nvim/colors/${name}.vim".source = "${value}/colors/${name}.vim"; };
+  themeFiles = mapAttrsToList toXDG tarballs;
 in
 # Merge Themes configuration
-recursiveUpdate configFiles {
+mkMerge (themeFiles ++ [{
   # Text-editor
   programs.neovim = {
     enable = true;
@@ -81,4 +74,4 @@ recursiveUpdate configFiles {
       call plug#end()
     '';
   };
-}
+}])
