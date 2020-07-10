@@ -51,6 +51,7 @@
 
   home.activation.reloadMako = lib.hm.dag.entryAfter ["writeBoundary"] ''
     if systemctl --user is-active mako.service; then
+      echo "Reloading Mako"
       $DRY_RUN_CMD systemctl --user reload mako.service
     fi
   '';

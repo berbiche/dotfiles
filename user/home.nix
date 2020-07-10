@@ -34,8 +34,11 @@ in
   fonts.fontconfig.enable = lib.mkForce true;
   xdg =  {
     enable = true;
-    mime.enable = true;
-    mimeApps.enable = true;
+    mime.enable = false;
+    mimeApps.enable = false;
+    mimeApps.associations.added = {
+      "image/png" = "org.gnome.eog.desktop";
+    };
   };
 
   gtk = {

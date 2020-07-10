@@ -1,8 +1,0 @@
-# Workspace: video
-
-workspace $ws6 output $OUTPUT-HOME-BENQ $OUTPUT-LAPTOP
-
-for_window [instance="crx_.*" class="Chromium" title="Netflix.*"] \
-  move window to workspace $ws6; \
-  focus; \
-  inhibit_idle fullscreen;
