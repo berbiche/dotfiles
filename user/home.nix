@@ -1,17 +1,13 @@
 { config, lib, pkgs, ... }:
 
-let
-  base-dir = ./. + "/home-manager";
-  base-imports = map (x: base-dir + "/${x}") [
-    "systemd.nix"
-    "gpg.nix"
-    "programs.nix"
-  ];
-in
 {
   home.stateVersion = "20.09";
 
-  imports = base-imports;
+  imports = [
+    ./systemd.nix
+    ./gpg.nix
+    ./programs.nix
+  ];
 
   xdg.configFile."nixpkgs/config.nix".source = ./config.nix;
   xdg.configFile."nixpkgs/overlays".source = ../overlays;
@@ -32,14 +28,6 @@ in
 
   # XDG
   fonts.fontconfig.enable = lib.mkForce true;
-  xdg =  {
-    enable = true;
-    mime.enable = false;
-    mimeApps.enable = false;
-    mimeApps.associations.added = {
-      "image/png" = "org.gnome.eog.desktop";
-    };
-  };
 
   gtk = {
     enable = true;
@@ -72,7 +60,7 @@ in
 
   # Copy the scripts folder
   home.file."scripts" = {
-    source = toString (base-dir + "/scripts");
+    source = ./scripts;
     recursive = false; # we want the folder symlinked, not its files
   };
 }
