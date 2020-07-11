@@ -79,6 +79,8 @@ lib.mkOptionDefault {
     d = ''[class="discord"] focus; mode default'';
     # Emacs
     e = ''[class="Emacs"] focus; mode default'';
+    # Pavucontrol
+    c = "exec ${binaries.audiocontrol}; mode default";
 
     Return = "mode default";
     Escape = "mode default";
