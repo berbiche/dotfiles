@@ -33,7 +33,7 @@ declarative pin nixpkgs in the environment (instead of relying on the nixpkgs ch
 
 ## Building
 
-Building the system configuration is done using `nixops` because it allows a user to declaratively pin the nixpkgs version
+Building the system configuration is done using `nixus` because it allows a user to declaratively pin the nixpkgs version
 used in the build.
 
 1. Build the system (in this case the `merovingian` host)
