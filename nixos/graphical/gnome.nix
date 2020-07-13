@@ -30,7 +30,7 @@
     # Screenshot tool
     flameshot
   ];
-  
+
   environment.gnome3.excludePackages = with pkgs; [
     gnome-usage
     gnome3.accerciser

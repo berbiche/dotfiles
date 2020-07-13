@@ -20,12 +20,12 @@ let
 
   mkFloatingNoBorder = { criteria, extraCommands ? [] }: {
     inherit criteria;
-    command = mkCommand ([ "floating none" "border none" ] ++ extraCommands);
+    command = mkCommand ([ "floating enable" "border none" ] ++ extraCommands);
   };
 
   mkFloatingSticky = criteria: {
     inherit criteria;
-    command = "sticky enable;";
+    command = mkCommand [ "floating enable" "sticky enable" ];
   };
 
   mkInhibitFullscreen = criteria: {
@@ -213,8 +213,8 @@ let
           { instance = "xfce4-appfinder"; }
         ])
         (mkFloatingNoBorder {
-          extraCommands = [ "scratchpad move" "scratchpad show" ];
           criteria = { app_id = "blueman-manager"; };
+          extraCommands = [ "scratchpad move" "scratchpad show" ];
         })
         (map mkFloatingSticky [
           { app_id = "pavucontrol"; }

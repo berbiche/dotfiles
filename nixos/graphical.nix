@@ -3,8 +3,8 @@
 {
   imports = [
     ./graphical/sway.nix
-    ./graphical/gnome.nix
-    #./graphical/kde.nix
+    # ./graphical/gnome.nix
+    ./graphical/kde.nix
     ./graphical/steam.nix
   ];
 
@@ -17,13 +17,15 @@
 
   services.xserver.displayManager.lightdm = {
     enable = true;
-    #theme = "chili";
     autoLogin = {
-      enable = true;
-      user = "nicolas";
+      enable = false;
+      user = config.my.username;
       timeout = 5;
     };
-    greeters.enso.enable = true;
+    greeters.enso = {
+      enable = true;
+      blur = true;
+    };
   };
 
   services.xserver.libinput.enable = true;
@@ -64,25 +66,29 @@
     enableDefaultFonts = true;
 
     fonts = with pkgs; [
-      anonymousPro
-      google-fonts
-      inconsolata-nerdfont
-      liberation_ttf
       noto-fonts
+      noto-fonts-cjk
       noto-fonts-emoji
+      ubuntu_font_family
+      anonymousPro
+      source-code-pro
+      google-fonts
+      liberation_ttf
       nerdfonts
       hasklig
       powerline-fonts
-      source-code-pro
-      terminus-nerdfont
       ttf_bitstream_vera
-      ubuntu_font_family
     ];
 
     fontconfig = {
       enable = true;
       hinting.enable = false;
       cache32Bit = true;
+      defaultFonts = {
+        serif = [ "Ubuntu" ];
+        sansSerif = [ "Ubuntu" ];
+        monospace = [ "Ubuntu" ];
+      };
     };
   };
 
