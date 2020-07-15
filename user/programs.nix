@@ -23,6 +23,8 @@ in
     gnome3.nautilus
     gnome3.networkmanager-openconnect
     gnome3.rhythmbox
+    gnome3.eog
+    gnome3.seahorse
     signal-desktop
     riot-desktop
     spotify

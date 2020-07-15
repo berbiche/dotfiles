@@ -5,17 +5,15 @@ let
   firefox-package = pkgs.latest.firefox-bin;
   # firefox versions available in nixpkgs-mozilla are already wrapped
   wrappedFirefox = firefox-package.override {
-    desktopName = "Firefox Nightly";
+    desktopName = "Firefox";
     icon = "firefox";
     gdkWayland = true;
-    cfg = packageCfg;
-  };
-
-  packageCfg = {
-    # Chromecast support through a native extension
-    enableFXCastBridge = true;
-    # Browser extension to
-    enableBukubrow = true;
+    cfg = {
+      # Chromecast support through a native extension
+      enableFXCastBridge = true;
+      # Browser extension to manage bookmarks
+      enableBukubrow = true;
+    };
   };
 
   makeProfile = { id, settings ? null, default ? false }: {
@@ -166,11 +164,7 @@ in
     MOZ_ENABLE_WAYLAND = 1;
   };
 
-  # home.packages = let
-  #   buku = pkgs.buku.override {
-
-  #   };
-  # in [ buku ];
+  home.packages = [ pkgs.buku ];
 
   programs.firefox = {
     enable = true;

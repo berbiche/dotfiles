@@ -8,6 +8,10 @@
     # Show on my primary output
     output = "DP-1";
 
+    font = "Ubuntu 16";
+    width = 400 /*px*/;
+    height = 200 /*px*/;
+
     icons = true;
     markup = true;
     actions = true;

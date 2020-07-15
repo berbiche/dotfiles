@@ -192,10 +192,10 @@ let
           { title = "^Plex.*"; }
         ];
         # Social stuff
-        "\"${WS7}\"" = [
-          { con_mark = "_social.*"; }
-          { con_mark = "_music-player.*"; }
-        ];
+        #"\"${WS7}\"" = [
+        #  { con_mark = "_social.*"; }
+        #  { con_mark = "_music-player.*"; }
+        #];
       };
     }
     {
@@ -228,14 +228,19 @@ let
         (mkMarkSocial "bitwarden" { class = "Bitwarden"; })
         (mkMarkSocial "rocket" { class = "Rocket.Chat"; })
         (mkMarkSocial "caprine" { class = "Caprine"; })
+        # assing [con_mark] does not work! So we do it here with a for_window
+        (map (x: { command = "move to workspace number 7"; criteria = x; }) [
+          { con_mark = "_social.*"; }
+          { con_mark = "_music-player.*"; }
+        ])
       ];
     }
-    {
-      bars = [(mkSwaybar {
-        id = "secondary-top";
-        outputs = [ OUTPUT-HOME-DELL-RIGHT OUTPUT-HOME-DELL-LEFT ];
-      })];
-    }
+    # {
+    #   bars = [(mkSwaybar {
+    #     id = "secondary-top";
+    #     outputs = [ OUTPUT-HOME-DELL-RIGHT OUTPUT-HOME-DELL-LEFT ];
+    #   })];
+    # }
   ];
 in
 {

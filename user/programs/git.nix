@@ -5,8 +5,8 @@
     enable = true;
     package = pkgs.git;
 
-    userName = "Nicolas Berbiche";
-    userEmail = "nic.berbiche@gmail.com";
+    userName = config.my.identity.name;
+    userEmail = config.my.identity.email;
 
     extraConfig = lib.mkMerge [
       {

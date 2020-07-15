@@ -14,14 +14,13 @@
   services.xserver.enable = true;
   #services.xserver.tty = 1;
   services.xserver.displayManager.defaultSession = "sway";
-
+  services.xserver.displayManager.autoLogin = {
+    # Disabled until automatic unlock of my Gnome Keyring works
+    enable = false;
+    user = config.my.username;
+  };
   services.xserver.displayManager.lightdm = {
     enable = true;
-    autoLogin = {
-      enable = false;
-      user = config.my.username;
-      timeout = 5;
-    };
     greeters.enso = {
       enable = true;
       blur = true;
@@ -82,7 +81,7 @@
 
     fontconfig = {
       enable = true;
-      hinting.enable = false;
+      hinting.enable = true;
       cache32Bit = true;
       defaultFonts = {
         serif = [ "Ubuntu" ];
