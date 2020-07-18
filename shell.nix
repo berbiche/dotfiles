@@ -1,7 +1,3 @@
-let
-  sources = import ./nix;
-  pkgs = import sources.nixpkgs { };
-in
-pkgs.mkShell {
-  buildInputs = [ pkgs.niv ];
-}
+(import (fetchTarball https://github.com/edolstra/flake-compat/archive/master.tar.gz) {
+  src = builtins.fetchGit ./.;
+}).shellNix

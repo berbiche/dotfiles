@@ -3,9 +3,6 @@
 with builtins;
 let
   pwd = toString ./.;
-  sources = import ./nix/sources.nix;
-  overlay = import ./overlays.nix;
-
   base-imports = map (x: ./nixos + "/${x}") [
     "hardware-configuration.nix"
     "cachix.nix"
@@ -16,9 +13,7 @@ let
   ];
 in
 {
-  imports = base-imports ++ [
-    "${sources.home-manager}/nixos"
-  ];
+  imports = base-imports;
 
   options.my = with lib; {
     username = mkOption {
@@ -34,7 +29,7 @@ in
       readOnly = true;
     };
 
-    userHomeConfiguration = mkOption {
+    homeConfiguration = mkOption {
       type = types.either types.path types.str;
       example = literalExample "./user/home.nix";
       description = "Path to the home-manager user configuration";
@@ -44,8 +39,6 @@ in
 
 
   config = {
-    nixpkgs.overlays = [ overlay ];
-
     # This value determines the NixOS release with which your system is to be
     # compatible, in order to avoid breaking some software such as database
     # servers. You should change this only after NixOS release notes say you
@@ -67,13 +60,6 @@ in
         options = "--delete-older-than 10d";
       };
     };
-    # Define the nixos-config path to the current folder
-    # nix.nixPath =
-    #   [
-    #     "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-    #     "nixos-config=${pwd}/configuration.nix"
-    #     "/nix/var/nix/profiles/per-user/root/channels"
-    #   ];
 
     networking.hostName = config.my.hostname;
     networking.networkmanager.enable = true;
@@ -111,7 +97,7 @@ in
     };
 
     home-manager = {
-      users."${config.my.username}" = config.my.userHomeConfiguration;
+      users."${config.my.username}" = config.my.homeConfiguration;
       useUserPackages = true;
       useGlobalPkgs = true;
       verbose = true;
