@@ -33,13 +33,13 @@ in
 
     # Virtualization software
     gnome3.gnome-boxes
-    virt-manager
+    # virt-manager
 
     # For those rare times
     chromium
 
     # Essentials
-    vscode
+    vscodium
     jetbrains.idea-community
 
     # Entertainment
@@ -87,11 +87,12 @@ in
     enableZshIntegration = true;
   };
 
-  programs.zoxide = {
-    enable = true;
-    enableZshIntegration = true;
-    # options = [ "--no-aliases" ];
-  };
+  # Unavailable on bqv-flakes branch
+  #programs.zoxide = {
+  #  enable = true;
+  #  enableZshIntegration = true;
+  #  # options = [ "--no-aliases" ];
+  #};
 
   programs.swaylock = {
     enable = true;

@@ -69,7 +69,7 @@ let
     brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
     dex = "${pkgs.dex}/bin/dex";
     # Firefox from the overlay
-    firefox = "${pkgs.latest.firefox-bin}/bin/firefox";
+    firefox = "${pkgs.firefox}/bin/firefox";
     nautilus = "${pkgs.gnome3.nautilus}/bin/nautilus";
     pavucontrol = "${pkgs.pavucontrol}/bin/pavucontrol";
     playerctl = "${pkgs.playerctl}/bin/playerctl";

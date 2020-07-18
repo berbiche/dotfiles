@@ -7,8 +7,8 @@ let
     "hardware-configuration.nix"
     "cachix.nix"
     "zsh.nix"
-    "graphical.nix"
     "all-packages.nix"
+    "graphical.nix"
     "services.nix"
   ];
 in
@@ -52,7 +52,6 @@ in
     nix = {
       allowedUsers = [ "@wheel" ];
       trustedUsers = [ "root" config.my.username ];
-      nixPath = [ ("nixpkgs=" + toString pkgs.path) ];
       # Automatic GC of nix files
       gc = {
         automatic = true;
@@ -88,12 +87,9 @@ in
       isNormalUser = true;
       shell = pkgs.zsh;
       uid = 1000;
-      group = "${config.my.username}";
+      group = config.my.username;
       home = "/home/${config.my.username}";
       extraGroups = [ "wheel" "networkmanager" "input" "audio" "video" "docker" "dialout" ];
-    };
-    users.groups.${config.my.username} = {
-      gid = 1000;
     };
 
     home-manager = {

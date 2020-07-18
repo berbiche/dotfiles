@@ -1,22 +1,21 @@
-{ config, lib, pkgs, ... }:
+{ config, inputs, lib, pkgs, ... }:
 
 let
-  inherit (builtins) fetchTarball;
-  inherit (lib) mkMerge attrNames foldl mapAttrs mapAttrsToList recursiveUpdate;
+  # Infinite recursion :(
+  # themes = lib.filterAttrs (n: v: lib.hasPrefix "vim-theme" n) inputs;
   themes = {
-    monokai = "https://github.com/sickill/vim-monokai/archive/master.tar.gz";
-    anderson = "https://github.com/tlhr/anderson.vim/archive/master.tar.gz";
-    synthwave84 = "https://github.com/artanikin/vim-synthwave84/archive/master.tar.gz";
-    gruvbox = "https://github.com/morhetz/gruvbox/archive/master.tar.gz";
+    anderson = inputs.vim-theme-anderson;
+    gruvbox = inputs.vim-theme-gruvbox;
+    monokai = inputs.vim-theme-monokai;
+    synthwave84 = inputs.vim-theme-synthwave84;
   };
-  tarballs = mapAttrs (_: b: fetchTarball b) themes;
 
   toXDG = name: value:
     { xdg.configFile."nvim/colors/${name}.vim".source = "${value}/colors/${name}.vim"; };
-  themeFiles = mapAttrsToList toXDG tarballs;
+  themeFiles = lib.mapAttrsToList toXDG themes;
 in
 # Merge Themes configuration
-mkMerge (themeFiles ++ [{
+lib.mkMerge (themeFiles ++ [{
   # Text-editor
   programs.neovim = {
     enable = true;

@@ -2,7 +2,7 @@
 
 let
   # Requires the nixpkgs-mozilla overlay
-  firefox-package = pkgs.latest.firefox-bin;
+  firefox-package = pkgs.firefox;
   # firefox versions available in nixpkgs-mozilla are already wrapped
   wrappedFirefox = firefox-package.override {
     desktopName = "Firefox";

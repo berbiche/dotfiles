@@ -31,27 +31,21 @@ declarative pin nixpkgs in the environment (instead of relying on the nixpkgs ch
 
 4. Start a local SSH server allowing root login with an SSH key
 
+## First time build
+
+The executables (TODO)
+
 ## Building
 
 Building the system configuration is done using `nixus` because it allows a user to declaratively pin the nixpkgs version
 used in the build.
 
-1. Build the system (in this case the `merovingian` host)
+1. Enter the nix shell
+
+2. Build the system (in this case the `merovingian` host)
 
     ``` console
-    nix-build deployment.nix -A merovingian
-    ```
-
-2. Deploy (the active system configuration will be changed)
-
-    ``` console
-    $ ./result
-    ```
-
-3. Alternatively reboot the machine
-
-    ``` console
-    $ shutdown -r now
+    sudo --preserve-env=PATH --preserve-env=NIX_CONF_DIR env _NIXOS_REBUILD_REEXEC=1 nixos-rebuild switch --flake '.#merovingian'
     ```
 
 ## Updating
