@@ -7,7 +7,7 @@ let
   wrappedFirefox = firefox-package.override {
     desktopName = "Firefox";
     icon = "firefox";
-    gdkWayland = true;
+    forceWayland = true;
     cfg = {
       # Chromecast support through a native extension
       enableFXCastBridge = true;
@@ -169,7 +169,7 @@ in
   programs.firefox = {
     enable = true;
     package = wrappedFirefox;
-    enableAdobeFlash = true;
+    enableAdobeFlash = false;
 
     profiles = {
       # Import existing default

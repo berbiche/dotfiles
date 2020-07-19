@@ -27,6 +27,8 @@
     };
   };
 
+  services.gnome3.gnome-keyring.enable = true;
+
   services.xserver.libinput.enable = true;
   services.xserver.layout = "us";
 
@@ -57,7 +59,7 @@
   nixpkgs.config.chromium = {
     enableWideVine = true;
     enableVaapi = true;
-    enablePepperFlash = true;
+    enablePepperFlash = false;
   };
 
   fonts = {

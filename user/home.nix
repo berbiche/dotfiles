@@ -59,7 +59,8 @@
 
     services.lorri.enable = true;
     services.blueman-applet.enable = true;
-    services.gnome-keyring.enable = true;
+    # Use Gnome Keyring at the OS level
+    #services.gnome-keyring.enable = true;
     services.kdeconnect.enable = true;
     services.kdeconnect.indicator = true;
     #services.network-manager-applet.enable = true;
