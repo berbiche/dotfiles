@@ -27,11 +27,11 @@
     };
     grub = {
       enable = true;
-      version = 2;
       enableCryptodisk = true;
       useOSProber = true;
-      device = "nodev";
+      device = "/dev/nvme0n1";
       efiSupport = true;
+      efiInstallAsRemovable = false;
     };
   };
 
