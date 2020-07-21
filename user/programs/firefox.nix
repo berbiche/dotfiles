@@ -79,6 +79,9 @@ let
       "extensions.ui.extension.hidden" = false;
       "extensions.ui.locale.hidden" = false;
 
+      # Tabs settings
+      "browser.tabs.loadBookmarksInBackground" = true;
+
       # Privacy settings
       "privacy.trackingprotection.enabled" = true; # Most trackingprotection's settings are enabled by default
       "network.dns.disablePrefetch" = true;
@@ -173,17 +176,16 @@ in
     enableAdobeFlash = false;
 
     profiles = {
-      # Import existing default
-      default = {
-        id = 0;
-        isDefault = true;
-        path = "cn435xs5.default";
-      };
-      test1 = makeProfile { id = 1; };
-      test2 = makeProfile { id = 2; };
-      new-default = {
-        id = 4;
+      # Merged profiles
+      default = makeProfile { id = 0; default = true; };
+      # Import existing profiles
+      thixxos = {
+        id = 1;
         path = "i8mynnn3.default-1555270342176";
+      };
+      merovingian = {
+        id = 2;
+        path = "cn435xs5.default";
       };
     };
   };
