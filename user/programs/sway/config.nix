@@ -73,9 +73,10 @@ let
     nautilus = "${pkgs.gnome3.nautilus}/bin/nautilus";
     pavucontrol = "${pkgs.pavucontrol}/bin/pavucontrol";
     playerctl = "${pkgs.playerctl}/bin/playerctl";
-    riot-desktop = "${pkgs.riot-desktop}/bin/riot-desktop";
+    element-desktop = "${pkgs.element-desktop}/bin/element-desktop";
     spotify = "${pkgs.spotify}/bin/spotify";
     swaylock = "${pkgs.swaylock}/bin/swaylock";
+    waybar = "${pkgs.waybar}/bin/waybar";
     wl-paste = "${pkgs.wl-clipboard}/bin/wl-paste";
     wlogout = "${pkgs.wlogout}/bin/wlogout";
     wofi = "${pkgs.wofi}/bin/wofi";
@@ -163,10 +164,12 @@ let
       ];
 
       startup = [
-        { command = "${pkgs.riot-desktop}/bin/riot-desktop"; }
-        { command = "${pkgs.spotify}/bin/spotify"; }
-        { command = "${pkgs.dex}/bin/dex -a -s .config/autostart"; }
-        { command = "${pkgs.bitwarden}/bin/bitwarden"; }
+        { command = binaries.element-desktop; }
+        { command = binaries.spotify; }
+        { command = "${binaries.dex} -a -s .config/autostart"; }
+        { command = binaries.bitwarden; }
+        # Temporary
+        { command = binaries.waybar; }
       ];
     }
     {
