@@ -4,7 +4,10 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    master.url = "github:nixos/nixpkgs/master";
     home-manager.url = "github:rycee/home-manager/bqv-flakes";
+    # Nix build failure on current master
+    nix.url = "github:nixos/nix/a79b6ddaa5dd5960da845d1b8d3c80601cd918a4";
     #home-manager = {
     #  type = "github";
     #  ref = "module/waybar";
@@ -21,12 +24,16 @@
     vim-theme-gruvbox = { url = "github:morhetz/gruvbox"; flake = false; };
   };
 
-  outputs = { nixpkgs, nix, self, ... }@inputs: let
+  outputs = { nixpkgs, self, ... }@inputs: let
     inherit (nixpkgs) lib;
+
+    defaultSystem = "x86_64-linux";
 
     config = {
       allowUnfree = true;
     };
+
+    nix = inputs.nix.packages.${defaultSystem}.nix;
 
     mkConfig =
       { hostname
@@ -36,7 +43,7 @@
       , homeConfiguration ? ./user + "/${username}.nix"
       }:
         lib.nixosSystem rec {
-          system = "x86_64-linux";
+          system = defaultSystem;
           specialArgs = { inherit inputs; };
 
           pkgs = import nixpkgs {
@@ -44,7 +51,8 @@
             overlays = (lib.attrValues inputs.self.overlays) ++ [
               (import inputs.nixpkgs-mozilla)
               inputs.nixpkgs-wayland.overlay
-              ({ inputs = _: _: { inherit inputs; }; })
+              (_: _: { inherit inputs; })
+              (_: _: { inherit nix; })
             ];
           };
 
@@ -62,22 +70,35 @@
 
               # Pin nixpkgs
               nix.nixPath = [
-                "nixpkgs=${nixpkgs}"
+                "nixpkgs=${pkgs.path}"
                 "nixos-config=${toString ./flake.nix}"
                 "nixpkgs-overlays=${toString ./overlays}"
               ];
               nix.registry.self.flake = inputs.self;
-              nix.package = inputs.nix.packages.x86_64-linux.nix;
+              nix.package = nix;
               nix.extraOptions = ''
                 experimental-features = nix-command flakes
               '';
 
-
               my = {
-                inherit hostname username homeConfiguration;
+                inherit hostname username;
+              };
+
+              home-manager.users.${username} = { ... }: {
+                # Inject inputs
+                _module.args.inputs = inputs;
               };
             };
-          in [ defaults home-manager ];
+
+            user = { ... }: {
+              home-manager = {
+                users.${username} = homeConfiguration;
+                useUserPackages = true;
+                useGlobalPkgs = true;
+                verbose = true;
+              };
+            };
+          in [ defaults user home-manager ];
         };
   in {
     nixosConfigurations = {
@@ -91,12 +112,12 @@
     }) (lib.attrNames (builtins.readDir ./overlays)));
 
     devShell."x86_64-linux" = let
-      nixpkgs' = import nixpkgs { system = "x86_64-linux"; };
+      # Nix is broken on 2020-07-20 nixpkgs-unstable: https://github.com/NixOS/nix/issues/3815
+      # So we use the master branch
+      nixpkgs' = import inputs.master { system = defaultSystem; };
+      #nixpkgs' = import inputs.nixpkgs { system = defaultSystem; };
     in nixpkgs'.mkShell {
-      nativeBuildInputs = with nixpkgs'; [
-        nixFlakes
-        fish ripgrep fd
-      ];
+      nativeBuildInputs = with nixpkgs'; [ nixFlakes ];
 
       NIX_CONF_DIR = let
         current = nixpkgs'.lib.optionalString (builtins.pathExists /etc/nix/nix.conf)

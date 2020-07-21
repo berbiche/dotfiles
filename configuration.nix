@@ -48,7 +48,7 @@ in
     boot.cleanTmpDir = true;
 
 
-    environment.systemPackages = [ pkgs.cachix ];
+    # environment.systemPackages = [ pkgs.cachix ];
     nix = {
       allowedUsers = [ "@wheel" ];
       trustedUsers = [ "root" config.my.username ];
@@ -90,13 +90,6 @@ in
       group = config.my.username;
       home = "/home/${config.my.username}";
       extraGroups = [ "wheel" "networkmanager" "input" "audio" "video" "docker" "dialout" ];
-    };
-
-    home-manager = {
-      users."${config.my.username}" = config.my.homeConfiguration;
-      useUserPackages = true;
-      useGlobalPkgs = true;
-      verbose = true;
     };
   };
 }

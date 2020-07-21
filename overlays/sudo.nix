@@ -1,6 +1,6 @@
-self: super:
+final: prev:
 {
-  sudo = super.sudo.override {
+  sudo = prev.sudo.override {
     withInsults = true;
   };
 }
