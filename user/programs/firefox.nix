@@ -181,6 +181,10 @@ in
       };
       test1 = makeProfile { id = 1; };
       test2 = makeProfile { id = 2; };
+      new-default = {
+        id = 4;
+        path = "i8mynnn3.default-1555270342176";
+      };
     };
   };
 }
