@@ -36,10 +36,14 @@
       ch = "checkout";
       dc = "diff --cached";
       st = "status";
+      # Convenient aliases for committing
       cm = "commit --verbose";
       cma = "${cm} --amend";
       cmar = "${cma} --reuse-message=HEAD";
-      cmare = "${cmar} --edit --verbose";
+      # Yeah....
+      cmare = "${cmar} --edit";
+      cmarr = "${cmar} --date=\"$(date -R)\"";
+      cmarre = "${cmarr} --edit";
       # Pretty graph
       graph = "! git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'";
       # Shows the latest commit with more detail
