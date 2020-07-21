@@ -2,9 +2,13 @@
 
 let
   inherit (builtins) map attrNames readDir import;
+  inherit (lib) filterAttrs hasSuffix;
+
   # Import all programs under ./programs using their default.nix
-  customPrograms = map (p: ./. + "/programs/${p}") (attrNames (readDir ./programs));
-  #customPrograms = map (name: import (./. + "/programs/${name}") { config lib pkgs }) programs;
+  customPrograms = let
+    files = readDir ./programs;
+    filtered = filterAttrs (n: v: v == "directory" || (v == "regular" && hasSuffix ".nix" n));
+  in map (p: ./. + "/programs/${p}") (attrNames (filtered files));
 in
 {
   imports = customPrograms;
