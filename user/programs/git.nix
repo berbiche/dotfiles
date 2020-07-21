@@ -12,15 +12,16 @@
       {
         pull.ff = "only";
         push.default = "current";
-        credential.helper = "gnome-keyring";
         merge.tool = "vimdiff";
         mergetool.prompt = true;
         difftool.prompt = false;
         diff.tool = "vimdiff";
       }
+      (lib.mkIf config.services.gnome-keyring.enable {
+        credential.helper = "gnome-keyring";
+      })
       (lib.mkIf config.programs.neovim.enable {
-        # [mergetool "vimdiff"]
-        "mergetool \"vimdiff\"" = {
+        mergetool.vimdiff = {
           cmd = "${pkgs.neovim}/bin/nvim -d $LOCAL $REMOTE $MERGE -c 'wincmd w' -c 'wincmd J'";
         };
       })
@@ -42,8 +43,8 @@
       cmar = "${cma} --reuse-message=HEAD";
       # Yeah....
       cmare = "${cmar} --edit";
-      cmarr = "${cmar} --date=\"$(date -R)\"";
-      cmarre = "${cmarr} --edit";
+      cmard = "${cmar} --date=\"\$(date -R)\"";
+      cmarde = "${cmard} --edit";
       # Pretty graph
       graph = "! git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'";
       # Shows the latest commit with more detail
