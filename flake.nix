@@ -111,7 +111,7 @@
       value = import (./overlays + "/${name}");
     }) (lib.attrNames (builtins.readDir ./overlays)));
 
-    devShell."x86_64-linux" = let
+    devShell.${defaultSystem} = let
       # Nix is broken on 2020-07-20 nixpkgs-unstable: https://github.com/NixOS/nix/issues/3815
       # So we use the master branch
       nixpkgs' = import inputs.master { system = defaultSystem; };

@@ -46,6 +46,8 @@
   xdg = {
     icons.enable = true;
     portal.enable = true;
+    portal.extraPortals =
+      lib.mkIf (!config.services.xserver.desktopManager.gnome3.enable) [ pkgs.xdg-desktop-portal-gtk ];
     portal.gtkUsePortal = true;
   };
 
