@@ -11,10 +11,6 @@ I use Gnome Keyring to manage my secrets (SSH, GPG) and to have a graphical prom
 
 External dependencies are specified with [niv](https://github.com/nmattia/niv) in `niv/sources.json`.
 
-**NOTE**  
-The building process is more complicated than it should be because I haven't found a way to
-declarative pin nixpkgs in the environment (instead of relying on the nixpkgs channel).
-
 ## Initial setup
 
 1. Clone this repository.
@@ -24,28 +20,29 @@ declarative pin nixpkgs in the environment (instead of relying on the nixpkgs ch
     $ cd dotfiles
     ```
 
-2. Create an SSH keypair for your user to login as root locally.
+If you are already using Nix >= 2.4 and have `experimental-features = nix-command flakes` in your `/etc/nix/nix.conf`,
+then you won't need to do the next steps and can jump directly to building.
 
-3. Add your generated keypair's public key to the root account `authorized_keys`.  
-    The public key can be added to `/etc/ssh/authorized_keys.d/root` for instance.
+2. Enter the nix shell
 
-4. Start a local SSH server allowing root login with an SSH key
+    ``` console
+    $ nix-shell
+    ```
 
-## First time build
+3. Build the system (in this case the `merovingian` host)
 
-The executables (TODO)
+    ``` console
+    rebuild switch --flake '.#merovingian' -v
+    ```
 
 ## Building
 
-Building the system configuration is done using `nixus` because it allows a user to declaratively pin the nixpkgs version
-used in the build.
+If the new system configuration has been built once before, then you don't need to use the nix-shell
 
-1. Enter the nix shell
-
-2. Build the system (in this case the `merovingian` host)
+1. Rebuild the system (in this case the `merovingian` host)
 
     ``` console
-    sudo --preserve-env=PATH --preserve-env=NIX_CONF_DIR env _NIXOS_REBUILD_REEXEC=1 nixos-rebuild switch --flake '.#merovingian'
+    sudo nixos-rebuild switch --flake '.#merovingian' -v
     ```
 
 ## Updating
@@ -53,29 +50,18 @@ used in the build.
 1. Update the dependencies
 
     ``` console
-    $ nix-shell
-    [nix-shell]$ niv update
-    Updating all packages
-      Package: nixpkgs
-      ...
-    Done: Updating all packages
+    nix flakes update --recreate-lock-file
     ```
 
 2. Rebuild (in this case the `merovingian` host)
 
     ``` console
-    $ nix-build deployment.nix -A merovingian
-    ```
-
-3. Activate the system configuration
-
-    ``` console
-    $ ./result
+    $ sudo nixos-rebuild switch --flake . -v
     ```
 
 ## Configuration
 
-Most programs configuration live under `user/home-manager/programs`.
+Most programs configuration live under `user/programs`.
 
 ### ZSH
 
