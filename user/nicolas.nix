@@ -21,10 +21,6 @@
   config = {
     home.stateVersion = "20.09";
 
-    xdg.configFile."nixpkgs/config.nix".source = ./config.nix;
-    xdg.configFile."nixpkgs/overlays".source = ../overlays;
-    xdg.configFile."nixpkgs/nix".source = ../nix;
-
     my.identity.name = "Nicolas Berbiche";
     my.identity.email = "nic.berbiche@gmail.com";
 
@@ -64,6 +60,8 @@
     services.blueman-applet.enable = true;
     services.kdeconnect.enable = true;
     services.kdeconnect.indicator = true;
+    # The service file does not start the applet with libindicator
+    # So we use our own in systemd-services/nm-applet
     #services.network-manager-applet.enable = true;
 
     # Run emacs as a service
