@@ -29,7 +29,7 @@
       enable = true;
       enableCryptodisk = true;
       useOSProber = true;
-      device = "/dev/nvme0n1";
+      device = "nodev";
       efiSupport = true;
       efiInstallAsRemovable = false;
     };
