@@ -50,7 +50,7 @@ If the new system configuration has been built once before, then you don't need 
 1. Update the dependencies
 
     ``` console
-    nix flakes update --recreate-lock-file
+    nix flake update --recreate-lock-file
     ```
 
 2. Rebuild (in this case the `merovingian` host)
