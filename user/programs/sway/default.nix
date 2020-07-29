@@ -27,7 +27,7 @@
   wayland.windowManager.sway = {
     enable = true;
     # The package is the one from the nixpkgs-wayland overlay
-    package = lib.hiPrio pkgs.sway;
+    # package = lib.hiPrio pkgs.sway;
 
     # For the sway-session.target
     systemdIntegration = true;

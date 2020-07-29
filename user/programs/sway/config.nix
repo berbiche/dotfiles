@@ -76,7 +76,7 @@ let
     element-desktop = "${pkgs.element-desktop}/bin/element-desktop";
     spotify = "${pkgs.spotify}/bin/spotify";
     swaylock = "${pkgs.swaylock}/bin/swaylock";
-    waybar = "${pkgs.waybar}/bin/waybar";
+    swaymsg = "${config.wayland.windowManager.sway.package}/bin/swaymsg";
     wl-paste = "${pkgs.wl-clipboard}/bin/wl-paste";
     wlogout = "${pkgs.wlogout}/bin/wlogout";
     wofi = "${pkgs.wofi}/bin/wofi";
@@ -94,17 +94,11 @@ let
   WS9 = "9: random";
   WS10 = "10: random";
 
-  extraConfig = ''
-    set $ws1  "${WS1}"
-    set $ws2  "${WS2}"
-    set $ws3  "${WS3}"
-    set $ws4  "${WS4}"
-    set $ws5  "${WS5}"
-    set $ws6  "${WS6}"
-    set $ws7  "${WS7}"
-    set $ws8  "${WS8}"
-    set $ws9  "${WS9}"
-    set $ws10 "${WS10}"
+  extraConfig = let
+    makeCommand = (x: "exec ${binaries.swaymsg} rename workspace number ${x.name} to '${x.value}'");
+    workspaces = lib.imap1 (i: x: lib.nameValuePair (toString i) x) [ WS1 WS2 WS3 WS4 WS5 WS6 WS7 WS8 WS9 WS10 ];
+  in ''
+    ${lib.concatMapStringsSep "\n" (makeCommand) workspaces}
 
     hide_edge_borders --i3 smart_no_gaps
 
@@ -168,8 +162,6 @@ let
         { command = binaries.spotify; }
         { command = "${binaries.dex} -a -s .config/autostart"; }
         { command = binaries.bitwarden; }
-        # Temporary
-        { command = binaries.waybar; }
       ];
     }
     {
@@ -185,12 +177,12 @@ let
       # Hopefully the windows remain focused without needing to use the focus command
       assigns = {
         # Games related
-        "\"${WS5}\"" = [
+        "'${WS5}'" = [
           { instance = "Steam"; }
           { app_id = "lutris"; }
         ];
         # Movie related stuff
-        "\"${WS6}\"" = [
+        "'${WS6}'" = [
           { title = "^Netflix.*"; }
           { title = "^Plex.*"; }
         ];
@@ -227,7 +219,7 @@ let
           criteria = { class = "Spotify"; instance = "spotify"; };
           command = "mark --add _music-player.spotify";
         }
-        (mkMarkSocial "riot" { class = "Riot"; })
+        (mkMarkSocial "element" { class = "Element"; })
         (mkMarkSocial "bitwarden" { class = "Bitwarden"; })
         (mkMarkSocial "rocket" { class = "Rocket.Chat"; })
         (mkMarkSocial "caprine" { class = "Caprine"; })
