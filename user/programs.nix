@@ -30,7 +30,7 @@ in
     gnome3.eog
     gnome3.seahorse
     signal-desktop
-    riot-desktop
+    element-desktop
     spotify
     pamixer # control pulse audio volume in scripts
     discord # unfortunately

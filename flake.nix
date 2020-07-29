@@ -3,8 +3,8 @@
     "Nicolas Berbiche's poorly organized dotfiles and computer configuration";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    master.url = "github:nixos/nixpkgs/master";
+    # nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     home-manager.url = "github:rycee/home-manager/bqv-flakes";
     # Nix build failure on current master
     nix.url = "github:nixos/nix/a79b6ddaa5dd5960da845d1b8d3c80601cd918a4";
@@ -111,18 +111,13 @@
       value = import (./overlays + "/${name}");
     }) (lib.attrNames (builtins.readDir ./overlays)));
 
-    devShell.${defaultSystem} = let
-      # Nix is broken on 2020-07-20 nixpkgs-unstable: https://github.com/NixOS/nix/issues/3815
-      # So we use the master branch
-      nixpkgs' = import inputs.master { system = defaultSystem; };
-      #nixpkgs' = import inputs.nixpkgs { system = defaultSystem; };
-    in nixpkgs'.mkShell {
-      nativeBuildInputs = with nixpkgs'; [ nixFlakes ];
+    devShell.${defaultSystem} = nixpkgs.mkShell {
+      nativeBuildInputs = with nixpkgs; [ nixFlakes ];
 
       NIX_CONF_DIR = let
-        current = nixpkgs'.lib.optionalString (builtins.pathExists /etc/nix/nix.conf)
+        current = nixpkgs.lib.optionalString (builtins.pathExists /etc/nix/nix.conf)
           (builtins.readFile /etc/nix/nix.conf);
-        nixConf = nixpkgs'.writeTextDir "etc/nix.conf" ''
+        nixConf = nixpkgs.writeTextDir "etc/nix.conf" ''
           ${current}
           experimental-features = nix-command flakes
         '';
@@ -130,7 +125,9 @@
 
       shellHook = ''
         rebuild () {
-          sudo --preserve-env=PATH --preserve-env=NIX_CONF_DIR env _NIXOS_REBUILD_REEXEC=1 \
+          # _NIXOS_REBUILD_REEXEC is necessary to force nixos-rebuild to use the nix binary in $PATH
+          # otherwise the initial installation would fail
+          sudo --preserve-env=PATH --preserve-env=NIX_CONF_DIR _NIXOS_REBUILD_REEXEC=1 \
             nixos-rebuild "$@"
         }
       '';
