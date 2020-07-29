@@ -16,6 +16,7 @@
         mergetool.prompt = true;
         difftool.prompt = false;
         diff.tool = "vimdiff";
+        advice.addEmptyPathspec = false;
       }
       (lib.mkIf config.services.gnome-keyring.enable {
         credential.helper = "gnome-keyring";
