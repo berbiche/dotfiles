@@ -91,5 +91,6 @@ in
       home = "/home/${config.my.username}";
       extraGroups = [ "wheel" "networkmanager" "input" "audio" "video" "docker" "dialout" ];
     };
+    users.groups.${config.my.username} = { };
   };
 }
