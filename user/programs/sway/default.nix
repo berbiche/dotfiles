@@ -1,5 +1,8 @@
 { config, lib, pkgs, ... }:
 
+let
+  swayConfig = pkgs.callWithDefaults ./config.nix { inherit config; };
+in
 {
   home.packages = with pkgs; [
     brightnessctl
@@ -12,7 +15,6 @@
 
     waybar
     mako
-    volnoti
     kanshi
     wl-clipboard
     wdisplays
@@ -41,6 +43,8 @@
 
     xwayland = true;
 
+    inherit (swayConfig) config extraConfig;
+
     extraSessionCommands = ''
         export SDL_VIDEODRIVER=wayland
         # needs qt5.qtwayland in systemPackages
@@ -52,7 +56,7 @@
 
         export XDG_CURRENT_DESKTOP=sway
       '';
-  } // (pkgs.callWithDefaults ./config.nix { inherit config; });
+  };
 
   # Idle service
   systemd.user.services.sway-idle =
@@ -98,5 +102,26 @@
       RestartSec = 5;
     };
     Install.WantedBy = [ "sway-session.target" ];
+  };
+
+  systemd.user.services.volnoti = {
+    Unit = {
+      Description = "Lightweight volume notification daemon";
+      Requisite = [ "dbus.service" ];
+      After = [ "dbus.service" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+
+    Service = {
+      Type = "dbus";
+      BusName = "uk.ac.cam.db538.volume-notification";
+      ExecStart = "${pkgs.volnoti}/bin/volnoti -n";
+      Restart = "on-failure";
+      RestartSec = 1;
+    };
+
+    Install = {
+      WantedBy = [ "sway-session.target" ];
+    };
   };
 }
