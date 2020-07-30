@@ -14,8 +14,8 @@
       Type = "dbus";
       BusName = "fr.arouillard.waybar";
       ExecStart = "${pkgs.waybar}/bin/waybar";
-      Restart = "always";
-      RestartSec = "1sec";
+      Restart = "on-failure";
+      RestartSec = 1;
     };
 
     Install = {
