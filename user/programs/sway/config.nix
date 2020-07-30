@@ -95,10 +95,10 @@ let
   WS10 = "10: random";
 
   extraConfig = let
-    makeCommand = (x: "exec ${binaries.swaymsg} rename workspace number ${x.name} to '${x.value}'");
-    workspaces = lib.imap1 (i: x: lib.nameValuePair (toString i) x) [ WS1 WS2 WS3 WS4 WS5 WS6 WS7 WS8 WS9 WS10 ];
+    makeCommand = (i: x: "exec ${binaries.swaymsg} rename workspace number ${toString i} to '${x}'");
+    workspaces = [ WS1 WS2 WS3 WS4 WS5 WS6 WS7 WS8 WS9 WS10 ];
   in ''
-    ${lib.concatMapStringsSep "\n" (makeCommand) workspaces}
+    ${lib.concatImapStringsSep "\n" (makeCommand) workspaces}
 
     hide_edge_borders --i3 smart_no_gaps
 
