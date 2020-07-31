@@ -3,7 +3,6 @@
     "Nicolas Berbiche's poorly organized dotfiles and computer configuration";
 
   inputs = {
-    # nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     home-manager.url = "github:rycee/home-manager/bqv-flakes";
     # Nix build failure on current master
@@ -27,34 +26,32 @@
   outputs = { nixpkgs, self, ... }@inputs: let
     inherit (nixpkgs) lib;
 
-    defaultSystem = "x86_64-linux";
-
     config = {
       allowUnfree = true;
     };
 
-    nix = inputs.nix.packages.${defaultSystem}.nix;
+    platforms = [ "x86_64-linux" ];
+
+    forAllPlatforms = f: lib.genAttrs platforms (platform: f platform);
+
+    nixpkgsFor = forAllPlatforms (platform: import nixpkgs {
+      system = platform;
+      overlays = builtins.attrValues self.overlays;
+      inherit config;
+    });
 
     mkConfig =
-      { hostname
+      { platform
+      , hostname
       # Primary user's username (your username)
       , username
       , hostConfiguration ? ./host + "/${hostname}.nix"
       , homeConfiguration ? ./user + "/${username}.nix"
       }:
         lib.nixosSystem rec {
-          system = defaultSystem;
+          system = platform;
           specialArgs = { inherit inputs; };
-
-          pkgs = import nixpkgs {
-            inherit system config;
-            overlays = (lib.attrValues inputs.self.overlays) ++ [
-              (import inputs.nixpkgs-mozilla)
-              inputs.nixpkgs-wayland.overlay
-              (_: _: { inherit inputs; })
-              (_: _: { inherit nix; })
-            ];
-          };
+          pkgs = nixpkgsFor.${platform};
 
           modules = let
             # home-manager = "${inputs.home-manager}/nixos";
@@ -65,20 +62,28 @@
 
               system.nixos.tags = [ "with-flakes" ];
 
-              # Allow installing non-free packages by default
-              nixpkgs.config.allowUnfree = true;
-
-              # Pin nixpkgs
-              nix.nixPath = [
-                "nixpkgs=${pkgs.path}"
-                "nixos-config=${toString ./flake.nix}"
-                "nixpkgs-overlays=${toString ./overlays}"
-              ];
-              nix.registry.self.flake = inputs.self;
-              nix.package = nix;
-              nix.extraOptions = ''
-                experimental-features = nix-command flakes
-              '';
+              environment.systemPackages = [ pkgs.cachix ];
+              nix = {
+                allowedUsers = [ "@wheel" ];
+                trustedUsers = [ "root" "@wheel" ];
+                # Pin nixpkgs
+                nixPath = [
+                  "nixpkgs=${pkgs.path}"
+                  "nixos-config=${toString ./flake.nix}"
+                  "nixpkgs-overlays=${toString ./overlays}"
+                ];
+                registry.self.flake = inputs.self;
+                package = pkgs.nixFlakes;
+                extraOptions = ''
+                  experimental-features = nix-command flakes
+                '';
+                # Automatic GC of nix files
+                gc = {
+                  automatic = true;
+                  dates = "daily";
+                  options = "--delete-older-than 10d";
+                };
+              };
 
               my = {
                 inherit hostname username;
@@ -101,36 +106,45 @@
           in [ defaults user home-manager ];
         };
   in {
-    nixosConfigurations = {
-      merovingian = mkConfig { hostname = "merovingian"; username = "nicolas"; };
-      thixxos = mkConfig { hostname = "thixxos"; username = "nicolas"; };
+    packages = forAllPlatforms (platform: {
+      nixosConfigurations = {
+        merovingian = mkConfig { hostname = "merovingian"; username = "nicolas"; inherit platform; };
+        thixxos = mkConfig { hostname = "thixxos"; username = "nicolas"; inherit platform; };
+      };
+    });
+
+    overlays = let
+      overlayFiles = lib.listToAttrs (map (name: {
+        name = lib.removeSuffix ".nix" name;
+        value = import (./overlays + "/${name}");
+      }) (lib.attrNames (builtins.readDir ./overlays)));
+    in overlayFiles // {
+      nixpkgs-wayland = inputs.nixpkgs-wayland.overlay;
+      nixpkgs-mozilla = import inputs.nixpkgs-mozilla;
     };
 
-    overlays = lib.listToAttrs (map (name: {
-      name = lib.removeSuffix ".nix" name;
-      value = import (./overlays + "/${name}");
-    }) (lib.attrNames (builtins.readDir ./overlays)));
+    devShell = forAllPlatforms (platform: let
+        nixpkgs = nixpkgsFor.${platform};
+      in nixpkgs.mkShell {
+        nativeBuildInputs = with nixpkgs; [ git nixFlakes ];
 
-    devShell.${defaultSystem} = nixpkgs.mkShell {
-      nativeBuildInputs = with nixpkgs; [ nixFlakes ];
-
-      NIX_CONF_DIR = let
-        current = nixpkgs.lib.optionalString (builtins.pathExists /etc/nix/nix.conf)
+        NIX_CONF_DIR = let
+          current = nixpkgs.lib.optionalString (builtins.pathExists /etc/nix/nix.conf)
           (builtins.readFile /etc/nix/nix.conf);
-        nixConf = nixpkgs.writeTextDir "etc/nix.conf" ''
-          ${current}
-          experimental-features = nix-command flakes
-        '';
-      in "${nixConf}/etc";
+          nixConf = nixpkgs.writeTextDir "opt/nix.conf" ''
+            ${current}
+            experimental-features = nix-command flakes
+          '';
+        in "${nixConf}/opt";
 
-      shellHook = ''
-        rebuild () {
-          # _NIXOS_REBUILD_REEXEC is necessary to force nixos-rebuild to use the nix binary in $PATH
-          # otherwise the initial installation would fail
-          sudo --preserve-env=PATH --preserve-env=NIX_CONF_DIR _NIXOS_REBUILD_REEXEC=1 \
-            nixos-rebuild "$@"
-        }
-      '';
-    };
+        shellHook = ''
+          rebuild () {
+            # _NIXOS_REBUILD_REEXEC is necessary to force nixos-rebuild to use the nix binary in $PATH
+            # otherwise the initial installation would fail
+            sudo --preserve-env=PATH --preserve-env=NIX_CONF_DIR _NIXOS_REBUILD_REEXEC=1 \
+              nixos-rebuild "$@"
+          }
+        '';
+      });
   };
 }

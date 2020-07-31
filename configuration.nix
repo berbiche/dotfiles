@@ -47,19 +47,6 @@ in
 
     boot.cleanTmpDir = true;
 
-
-    # environment.systemPackages = [ pkgs.cachix ];
-    nix = {
-      allowedUsers = [ "@wheel" ];
-      trustedUsers = [ "root" config.my.username ];
-      # Automatic GC of nix files
-      gc = {
-        automatic = true;
-        dates = "daily";
-        options = "--delete-older-than 10d";
-      };
-    };
-
     networking.hostName = config.my.hostname;
     networking.networkmanager.enable = true;
 
