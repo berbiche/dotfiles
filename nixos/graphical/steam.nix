@@ -1,4 +1,6 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
+
+# https://github.com/NixOS/nixpkgs/pull/86480
 {
   environment.systemPackages = with pkgs; [
     (steam.override {
@@ -8,14 +10,8 @@
     })
   ];
 
+  hardware.opengl.enable = true;
   hardware.opengl.driSupport32Bit = true;
   hardware.opengl.extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
-  hardware.pulseaudio.support32Bit = true;
-
-  #security.pam.loginLimits = [{
-  #  domain = "*";
-  #  type = "hard";
-  #  item = "nofile";
-  #  value = "1048576";
-  #}];
+  hardware.pulseaudio.support32Bit = config.hardware.pulseaudio.enable;
 }

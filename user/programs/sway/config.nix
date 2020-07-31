@@ -46,7 +46,7 @@ let
   OUTPUT-LAPTOP = "eDP-1";
 
   # Sway variables
-  imageFolder = "${config.programs.swaylock.imageFolder}";
+  imageFolder = toString config.programs.swaylock.imageFolder;
 
   binaries = rec {
     terminal = "${alacritty} --working-directory ${config.home.homeDirectory}";
