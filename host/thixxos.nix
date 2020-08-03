@@ -2,6 +2,7 @@
 
 {
   hardware.enableRedistributableFirmware = true;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   boot.loader = {
     efi = {
