@@ -67,7 +67,6 @@ let
     alacritty = "${pkgs.alacritty}/bin/alacritty";
     bitwarden = "${pkgs.bitwarden}/bin/bitwarden";
     brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
-    dex = "${pkgs.dex}/bin/dex";
     # Firefox from the overlay
     firefox = "${pkgs.firefox}/bin/firefox";
     nautilus = "${pkgs.gnome3.nautilus}/bin/nautilus";
@@ -160,7 +159,6 @@ let
       startup = [
         { command = binaries.element-desktop; }
         { command = binaries.spotify; }
-        { command = "${binaries.dex} -a -s .config/autostart"; }
         { command = binaries.bitwarden; }
       ];
     }
