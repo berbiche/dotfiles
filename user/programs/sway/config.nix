@@ -164,6 +164,8 @@ let
         { command = binaries.element-desktop; }
         { command = binaries.spotify; }
         { command = binaries.bitwarden; }
+        # Kill Swaybar since the default configuration 
+        { always = true; command = "pkill swaybar"; }
       ];
     }
     {
