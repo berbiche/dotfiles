@@ -114,133 +114,122 @@ let
     seat seat0 xcursor_theme ${config.xsession.pointerCursor.name} ${toString config.xsession.pointerCursor.size}
   '';
 
-  swayConfig = lib.mkMerge [
-    {
-      inherit (binaries) terminal;
-      modifier = "Mod4";
-      floating.modifier = "Mod4";
-      menu = binaries.menu-wofi;
+  swayConfig = {
+    inherit (binaries) terminal;
+    modifier = "Mod4";
+    floating.modifier = "Mod4";
+    menu = binaries.menu-wofi;
 
-      fonts = [ "FontAwesome 9" "Fira Sans 9" ];
+    fonts = [ "FontAwesome 9" "Fira Sans 9" ];
 
-      focus.newWindow = "focus";
-      gaps = {
-        inner = 5;
-        smartGaps = true;
-        smartBorders = "no_gaps";
-        # Following option needs to be set in extraConfig
-        # window.hideEdgeBorders = "smart_no_gaps";
+    focus.newWindow = "focus";
+    gaps = {
+      inner = 5;
+      smartGaps = true;
+      smartBorders = "no_gaps";
+      # Following option needs to be set in extraConfig
+      # window.hideEdgeBorders = "smart_no_gaps";
+    };
+    window = {
+      titlebar = true;
+      border = 3;
+    };
+    floating = {
+      titlebar = true;
+      border = 1;
+    };
+    workspaceLayout = "default";
+    workspaceAutoBackAndForth = false;
+
+    output = {
+      "*" = { bg = "${imageFolder}/3840x2160.png center"; };
+      "eDP-1" = {
+        mode = "3840x2160@60Hz";
+        scale_filter = "smart";
+        scale = "2";
       };
-      window = {
-        titlebar = true;
-        border = 3;
-      };
-      floating = {
-        titlebar = true;
-        border = 1;
-      };
-      workspaceLayout = "default";
-      workspaceAutoBackAndForth = false;
+    };
 
-      output = {
-        "*" = { bg = "${imageFolder}/3840x2160.png center"; };
-        "eDP-1" = {
-          mode = "3840x2160@60Hz";
-          scale_filter = "smart";
-          scale = "2";
-        };
-      };
+    input = import ./inputs.nix;
 
-      input = import ./inputs.nix;
+    floating.criteria = [
+      { app_id = "floating-term"; }
+      { app_id = "org.gnome.Nautilus"; }
+      { title = "feh.*/Pictures/screenshots/.*"; }
+      { app_id = "firefox"; title = "Developer Tools"; }
+    ];
 
-      floating.criteria = [
-        { app_id = "floating-term"; }
-        { app_id = "org.gnome.Nautilus"; }
-        { title = "feh.*/Pictures/screenshots/.*"; }
-        { app_id = "firefox"; title = "Developer Tools"; }
+    startup = [
+      { command = binaries.element-desktop; }
+      { command = binaries.spotify; }
+      { command = binaries.bitwarden; }
+      # Kill Swaybar since the default configuration 
+      { always = true; command = "pkill swaybar"; }
+    ];
+
+    keybindings = pkgs.callWithDefaults ./keybindings.nix {
+      inherit config binaries;
+    };
+
+    modes = pkgs.callWithDefaults ./modes.nix {
+      inherit config binaries;
+    };
+
+    # Hopefully the windows remain focused without needing to use the focus command
+    assigns = {
+      # Games related
+      "'${WS5}'" = [
+        { instance = "Steam"; }
+        { app_id = "lutris"; }
       ];
-
-      startup = [
-        { command = binaries.element-desktop; }
-        { command = binaries.spotify; }
-        { command = binaries.bitwarden; }
-        # Kill Swaybar since the default configuration 
-        { always = true; command = "pkill swaybar"; }
+      # Movie related stuff
+      "'${WS6}'" = [
+        { title = "^Netflix.*"; }
+        { title = "^Plex.*"; }
       ];
-    }
-    {
-      keybindings = pkgs.callWithDefaults ./keybindings.nix {
-        inherit config binaries;
-      };
+      # Social stuff
+      #"\"${WS7}\"" = [
+      #  { con_mark = "_social.*"; }
+      #  { con_mark = "_music-player.*"; }
+      #];
+    };
 
-      modes = pkgs.callWithDefaults ./modes.nix {
-        inherit config binaries;
-      };
-    }
-    {
-      # Hopefully the windows remain focused without needing to use the focus command
-      assigns = {
-        # Games related
-        "'${WS5}'" = [
-          { instance = "Steam"; }
-          { app_id = "lutris"; }
-        ];
-        # Movie related stuff
-        "'${WS6}'" = [
-          { title = "^Netflix.*"; }
-          { title = "^Plex.*"; }
-        ];
-        # Social stuff
-        #"\"${WS7}\"" = [
-        #  { con_mark = "_social.*"; }
-        #  { con_mark = "_music-player.*"; }
-        #];
-      };
-    }
-    {
-      window.commands = lib.flatten [
-        (map mkInhibitFullscreen [
-          { class = "Firefox"; }
-          { app_id = "firefox"; }
-          { instance = "Steam"; }
-          { app_id = "lutris"; }
-          { title = "^Zoom Cloud.*"; }
-        ])
-        (map (x: mkFloatingNoBorder { criteria = x; }) [
-          { app_id = "^launcher$"; }
-          { app_id = "xfce4-appfinder"; }
-          { instance = "xfce4-appfinder"; }
-        ])
-        (mkFloatingNoBorder {
-          criteria = { app_id = "blueman-manager"; };
-          extraCommands = [ "scratchpad move" "scratchpad show" ];
-        })
-        (map mkFloatingSticky [
-          { app_id = "pavucontrol"; }
-          { app_id = "gnome-calendar"; }
-        ])
-        {
-          criteria = { class = "Spotify"; instance = "spotify"; };
-          command = "mark --add _music-player.spotify";
-        }
-        (mkMarkSocial "element" { class = "Element"; })
-        (mkMarkSocial "bitwarden" { class = "Bitwarden"; })
-        (mkMarkSocial "rocket" { class = "Rocket.Chat"; })
-        (mkMarkSocial "caprine" { class = "Caprine"; })
-        # assing [con_mark] does not work! So we do it here with a for_window
-        (map (x: { command = "move to workspace number 7"; criteria = x; }) [
-          { con_mark = "_social.*"; }
-          { con_mark = "_music-player.*"; }
-        ])
-      ];
-    }
-    # {
-    #   bars = [(mkSwaybar {
-    #     id = "secondary-top";
-    #     outputs = [ OUTPUT-HOME-DELL-RIGHT OUTPUT-HOME-DELL-LEFT ];
-    #   })];
-    # }
-  ];
+    window.commands = lib.flatten [
+      (map mkInhibitFullscreen [
+        { class = "Firefox"; }
+        { app_id = "firefox"; }
+        { instance = "Steam"; }
+        { app_id = "lutris"; }
+        { title = "^Zoom Cloud.*"; }
+      ])
+      (map (x: mkFloatingNoBorder { criteria = x; }) [
+        { app_id = "^launcher$"; }
+        { app_id = "xfce4-appfinder"; }
+        { instance = "xfce4-appfinder"; }
+      ])
+      (mkFloatingNoBorder {
+        criteria = { app_id = "blueman-manager"; };
+        extraCommands = [ "scratchpad move" "scratchpad show" ];
+      })
+      (map mkFloatingSticky [
+        { app_id = "pavucontrol"; }
+        { app_id = "gnome-calendar"; }
+      ])
+      {
+        criteria = { class = "Spotify"; instance = "spotify"; };
+        command = "mark --add _music-player.spotify";
+      }
+      (mkMarkSocial "element" { class = "Element"; })
+      (mkMarkSocial "bitwarden" { class = "Bitwarden"; })
+      (mkMarkSocial "rocket" { class = "Rocket.Chat"; })
+      (mkMarkSocial "caprine" { class = "Caprine"; })
+      # assing [con_mark] does not work! So we do it here with a for_window
+      (map (x: { command = "move to workspace number 7"; criteria = x; }) [
+        { con_mark = "_social.*"; }
+        { con_mark = "_music-player.*"; }
+      ])
+    ];
+  };
 in
 {
   inherit extraConfig;
