@@ -37,7 +37,7 @@
     nixpkgsFor = forAllPlatforms (platform: import nixpkgs {
       system = platform;
       overlays = builtins.attrValues self.overlays;
-      inherit config;
+      config.allowUnfree = true;
     });
 
     mkConfig =
@@ -63,6 +63,7 @@
               system.nixos.tags = [ "with-flakes" ];
 
               environment.systemPackages = [ pkgs.cachix ];
+              nixpkgs.config.allowUnfree = true;
               nix = {
                 allowedUsers = [ "@wheel" ];
                 trustedUsers = [ "root" "@wheel" ];
@@ -89,9 +90,22 @@
                 inherit hostname username;
               };
 
-              home-manager.users.${username} = { ... }: {
-                # Inject inputs
-                _module.args.inputs = inputs;
+              home-manager.users.${username} = { lib, ... }: {
+                config = {
+                  # Inject inputs
+                  _module.args.inputs = inputs;
+                };
+
+                options.my.identity = {
+                  name = lib.mkOption {
+                    type = lib.types.str;
+                    description = "Fullname";
+                  };
+                  email = lib.mkOption {
+                    type = lib.types.str;
+                    description = "Email";
+                  };
+                };
               };
             };
 
