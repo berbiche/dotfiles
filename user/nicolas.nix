@@ -46,11 +46,19 @@
         name = "Adwaita";
         package = pkgs.gnome3.gnome-themes-extra;
       };
+      gtk2.extraConfig = ''
+        gtk-cursor-theme-name="Adwaita"
+        gtk-cursor-theme-size="24"
+      '';
+      gtk3.extraConfig = {
+        "gtk-cursor-theme-name" = "Adwaita";
+        "gtk-cursor-theme-size" = 24;
+      };
     };
 
     qt = {
       enable = true;
-      platformTheme = "gtk";
+      platformTheme = "gnome";
     };
 
     # Passwords and stuff
