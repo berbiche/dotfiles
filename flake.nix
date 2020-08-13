@@ -69,7 +69,7 @@
                 # Pin nixpkgs
                 nixPath = [
                   "nixpkgs=${pkgs.path}"
-                  "nixos-config=${toString ./flake.nix}"
+                  "nixos-config=${toString ./configuration.nix}"
                   "nixpkgs-overlays=${toString ./overlays}"
                 ];
                 registry.self.flake = inputs.self;

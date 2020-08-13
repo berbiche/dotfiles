@@ -15,9 +15,8 @@ in
 
     # TERM = "alacritty";
 
-    dynamic_title = true;
-
     window = {
+      dynamic_title = true;
       dimensions = {
         columns = 0;
         lines = 0;
@@ -84,7 +83,7 @@ in
       };
     };
 
-    visual_bell = {
+    bell = {
       animation = "EaseOutExpo";
       duration = 2;
       color = "0xffffff";
@@ -94,8 +93,8 @@ in
 
     mouse_bindings = [
       { mouse = "Middle"; action = "PasteSelection"; }
-      { mouse = "4"; action = "PasteSelection"; }
-      { mouse = "5"; action = "Paste"; }
+      { mouse = 4; action = "PasteSelection"; }
+      { mouse = 5; action = "Paste"; }
     ];
 
     mouse = {
