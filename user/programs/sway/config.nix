@@ -111,7 +111,7 @@ let
     bindswitch --locked lid:off output ${OUTPUT-LAPTOP} enable
 
     # Set default cursor size
-    seat seat0 xcursor_theme ${config.xsession.pointerCursor.name} ${config.xsession.pointerCursor.size}
+    seat seat0 xcursor_theme ${config.xsession.pointerCursor.name} ${toString config.xsession.pointerCursor.size}
   '';
 
   swayConfig = lib.mkMerge [
