@@ -55,6 +55,11 @@
         "gtk-cursor-theme-size" = 24;
       };
     };
+    xsession.pointerCursor = {
+      package = pkgs.gnome3.gnome-themes-extra;
+      name = "Adwaita";
+      size = 24;
+    };
 
     qt = {
       enable = true;

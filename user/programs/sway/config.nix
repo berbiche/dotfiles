@@ -109,6 +109,9 @@ let
     # Enable/Disable the output when closing the lid (e.g. when using a dock)
     bindswitch --locked lid:on  output ${OUTPUT-LAPTOP} disable
     bindswitch --locked lid:off output ${OUTPUT-LAPTOP} enable
+
+    # Set default cursor size
+    seat seat0 xcursor_theme ${config.xsession.pointerCursor.name} ${config.xsession.pointerCursor.size}
   '';
 
   swayConfig = lib.mkMerge [
