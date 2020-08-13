@@ -39,10 +39,6 @@
     }
 
     {
-      output eDP-1 mode 3840x2160@60Hz position 0,0 scale 2.0
-    }
-
-    {
       output eDP-1 enable
       output * mode 1920x1080
     }

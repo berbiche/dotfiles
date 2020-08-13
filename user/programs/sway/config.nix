@@ -140,11 +140,12 @@ let
       workspaceAutoBackAndForth = false;
 
       output = {
-        "${OUTPUT-HOME-BENQ}" = { bg = "${imageFolder}/3840x2160.png center"; };
-        "${OUTPUT-HOME-DELL-RIGHT}" = { bg = "${imageFolder}/3840x2160.png center"; };
-        "${OUTPUT-HOME-DELL-LEFT}"  = { bg = "${imageFolder}/3840x2160.png center"; };
-        "${OUTPUT-HOME-DELL}" = { bg = "${imageFolder}/3840x2160.png center"; };
         "*" = { bg = "${imageFolder}/3840x2160.png center"; };
+        "eDP-1" = {
+          mode = "3840x2160@60Hz";
+          scale_filter = "smart";
+          scale = "2";
+        };
       };
 
       input = import ./inputs.nix;
