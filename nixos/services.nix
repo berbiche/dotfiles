@@ -20,8 +20,8 @@
   # networking.wireguard.enable = true;
 
   # Logitech
-  hardware.logitech.enable = true;
-  hardware.logitech.enableGraphical = false;
+  hardware.logitech.wireless.enable = true;
+  hardware.logitech.wireless.enableGraphical = true;
 
   # Forward journald logs to VTT 1
   services.journald.extraConfig = ''
