@@ -4,16 +4,9 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
-    home-manager.url = "github:rycee/home-manager/bqv-flakes";
     # Nix build failure on current master
     nix.url = "github:nixos/nix/a79b6ddaa5dd5960da845d1b8d3c80601cd918a4";
-    #home-manager = {
-    #  type = "github";
-    #  ref = "module/waybar";
-    #  owner = "berbiche";
-    #  repo = "home-manager";
-    #  flake = false;      
-    #};
+    home-manager = { url = "github:rycee/home-manager"; flake = false; };
     nixpkgs-mozilla = { url = "github:mozilla/nixpkgs-mozilla"; flake = false; };
     nixpkgs-wayland.url = "github:colemickens/nixpkgs-wayland";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
@@ -54,8 +47,8 @@
           pkgs = nixpkgsFor.${platform};
 
           modules = let
-            # home-manager = "${inputs.home-manager}/nixos";
-            inherit (inputs.home-manager.nixosModules) home-manager;
+            home-manager = "${inputs.home-manager}/nixos";
+            # inherit (inputs.home-manager.nixosModules) home-manager;
 
             defaults = { pkgs, ... }: {
               imports = [ ./configuration.nix hostConfiguration ];
