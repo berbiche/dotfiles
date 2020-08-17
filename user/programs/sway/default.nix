@@ -13,16 +13,9 @@ in
     slurp
     wf-recorder      # wayland screenrecorder
 
-    waybar
-    mako
-    kanshi
     wl-clipboard
     wdisplays
 
-    wofi
-
-    # TODO: more steps required to use this?
-    xdg-desktop-portal-wlr # xdg-desktop-portal backend for wlroots
     qt5.qtwayland
   ];
 
@@ -88,21 +81,6 @@ in
           WantedBy = [ "sway-session.target" ];
         };
       };
-
-  systemd.user.services.kanshi = {
-    Unit = {
-      Description = "Kanshi output autoconfig";
-      Documentation = "man:kanshi(1)";
-      PartOf = [ "graphical-session.target" ];
-    };
-    Service = {
-      Type = "simple";
-      ExecStart = "${pkgs.kanshi}/bin/kanshi";
-      Restart = "always";
-      RestartSec = 5;
-    };
-    Install.WantedBy = [ "sway-session.target" ];
-  };
 
   systemd.user.services.volnoti = {
     Unit = {

@@ -163,8 +163,9 @@ let
       { command = binaries.element-desktop; }
       { command = binaries.spotify; }
       { command = binaries.bitwarden; }
-      # Kill Swaybar since the default configuration 
-      { always = true; command = "pkill swaybar"; }
+      # Kill Swaybar until I figure out how to disable the default Swaybar config
+      # in home-manager's configuration
+      { always = true; command = "sleep 10 && pkill swaybar"; }
     ];
 
     keybindings = pkgs.callWithDefaults ./keybindings.nix {

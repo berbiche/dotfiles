@@ -6,10 +6,14 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     # Nix build failure on current master
     nix.url = "github:nixos/nix/a79b6ddaa5dd5960da845d1b8d3c80601cd918a4";
-    home-manager = { url = "github:rycee/home-manager"; flake = false; };
+    #home-manager = { url = "github:rycee/home-manager"; flake = false; };
+    home-manager = { url = "github:berbiche/home-manager/fix-kanshi-exec"; flake = false; };
     nixpkgs-mozilla = { url = "github:mozilla/nixpkgs-mozilla"; flake = false; };
-    nixpkgs-wayland.url = "github:colemickens/nixpkgs-wayland";
-    nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
+    nixpkgs-wayland = {
+      url = "github:colemickens/nixpkgs-wayland";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixpkgs-firefox-pipewire.url = "github:colemickens/nixpkgs/nixpkgs-firefox-pipewire";
     vim-theme-monokai = { url = "github:sickill/vim-monokai"; flake = false; };
     vim-theme-anderson = { url = "github:tlhr/anderson.vim"; flake = false; };
     vim-theme-synthwave84 = { url = "github:artanikin/vim-synthwave84"; flake = false; };
@@ -128,6 +132,15 @@
     in overlayFiles // {
       nixpkgs-wayland = inputs.nixpkgs-wayland.overlay;
       nixpkgs-mozilla = import inputs.nixpkgs-mozilla;
+      firefox-pipewire = (final: prev: {
+        firefox = let
+          pkgs = import inputs.nixpkgs-firefox-pipewire {
+            # How should I specify the system to use here?
+            system = lib.head platforms;
+            config.allowUnfree = true;
+          };
+        in pkgs.firefox;
+      });
     };
 
     devShell = forAllPlatforms (platform: let

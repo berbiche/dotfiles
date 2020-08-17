@@ -92,11 +92,11 @@ in
   };
 
   # Unavailable on bqv-flakes branch
-  #programs.zoxide = {
-  #  enable = true;
-  #  enableZshIntegration = true;
-  #  # options = [ "--no-aliases" ];
-  #};
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
+    # options = [ "--no-aliases" ];
+  };
 
   programs.swaylock = {
     enable = true;

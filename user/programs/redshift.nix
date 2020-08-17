@@ -2,7 +2,14 @@
 
 {
   # Requires nixpkgs-wayland overlay
-  home.packages = [ pkgs.redshift-wayland ];
+  services.redshift = {
+    enable = true;
+    package = pkgs.redshift-wayland;
+    # Some options cannot be configured through the command line (gamma-day, gamma-night, fade)
+    extraOptions = [ "-c ${config.xdg.configHome}/redshift/redshift.conf" ];
+    tray = true;
+    provider = "geoclue2";
+  };
 
   xdg.configFile."redshift/redshift.conf".text = ''
     [redshift]

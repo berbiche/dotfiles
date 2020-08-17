@@ -8,10 +8,13 @@ let
     mapAttrs (name: _: import (dir + "/${name}"))
              (filterAttrs (name: _: hasSuffix ".nix" name) (readDir dir));
 
-  systemdFiles = attrValues (nixFilesIn ./systemd-services);
+  systemdFiles = if builtins.pathExists ./systemd-services
+                 then attrValues (nixFilesIn ./systemd-services)
+                 else null;
 in
 {
-  systemd.user.services = lib.mkMerge (map (x: x { inherit pkgs; }) systemdFiles);
+  systemd.user.services = lib.mkIf (systemdFiles != null)
+    (lib.mkMerge (map (x: x { inherit pkgs; }) systemdFiles));
 
   #
   systemd.user.tmpfiles.rules = lib.optionals (config.systemd.user.services ? clipboard)

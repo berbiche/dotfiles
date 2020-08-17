@@ -1,7 +1,7 @@
-{ pkgs }:
+{ pkgs, ... }:
 
 {
-  udiskie = {
+  systemd.user.services.udiskie = {
     Unit = {
       Description = "Disks automounter";
       Documentation = [ "man:udiskie(8)" ];
@@ -13,16 +13,18 @@
 
     Service = {
       Type = "simple";
-      ExecStart = builtins.concatStringsSep " " [
-        "${pkgs.udiskie}/bin/udiskie"
-        "--no-automount" "--tray"
-        "--appindicator" "--file-manager" "nautilus"
-      ];
+      ExecStart = "${pkgs.udiskie}/bin/udiskie ${builtins.concatStringsSep " " [
+        "--no-automount"
+        "--tray"
+        "--appindicator"
+        "--file-manager" "nautilus"
+      ]}";
       Restart = "on-failure";
       RestartSec = "1sec";
     };
 
     Install = {
+      # No need on KDE/Gnome
       WantedBy = [ "sway-session.target" ];
     };
   };

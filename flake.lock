@@ -3,15 +3,16 @@
     "home-manager": {
       "flake": false,
       "locked": {
-        "lastModified": 1597446143,
-        "narHash": "sha256-LgPah55mNCBpr7H1i0Td7QJp+wcR903XO20KNLaiF48=",
-        "owner": "rycee",
+        "lastModified": 1597628620,
+        "narHash": "sha256-uEqyYJ9YSLr1J90SiamRz/GtW6bMnSS6eLxhmx/JKYI=",
+        "owner": "berbiche",
         "repo": "home-manager",
-        "rev": "a3dd580adc46628dd0c970037b6c87cff1251af5",
+        "rev": "4ef5a1772aa34fcf6dd1f62130242e614411a80a",
         "type": "github"
       },
       "original": {
-        "owner": "rycee",
+        "owner": "berbiche",
+        "ref": "fix-kanshi-exec",
         "repo": "home-manager",
         "type": "github"
       }
@@ -48,6 +49,22 @@
         "id": "nixpkgs",
         "ref": "nixos-20.03-small",
         "type": "indirect"
+      }
+    },
+    "nixpkgs-firefox-pipewire": {
+      "locked": {
+        "lastModified": 1597296896,
+        "narHash": "sha256-eNHb02lnlLeuXX7iyg1DCUuC9yjIlEZlxV1yInz3XPs=",
+        "owner": "colemickens",
+        "repo": "nixpkgs",
+        "rev": "3361764b74cd4129cf591f9fbf654db8f1eba135",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "ref": "nixpkgs-firefox-pipewire",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "nixpkgs-mozilla": {
@@ -107,6 +124,7 @@
         "home-manager": "home-manager",
         "nix": "nix",
         "nixpkgs": "nixpkgs_2",
+        "nixpkgs-firefox-pipewire": "nixpkgs-firefox-pipewire",
         "nixpkgs-mozilla": "nixpkgs-mozilla",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "vim-theme-anderson": "vim-theme-anderson",

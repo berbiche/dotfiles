@@ -17,6 +17,7 @@
         difftool.prompt = false;
         diff.tool = "vimdiff";
         advice.addEmptyPathspec = false;
+        diff.colorMoved = "default";
       }
       (lib.mkIf config.services.gnome-keyring.enable {
         credential.helper = "gnome-keyring";
@@ -44,7 +45,8 @@
       cmar = "${cma} --reuse-message=HEAD";
       # Yeah....
       cmare = "${cmar} --edit";
-      cmard = "${cmar} --date=\"\$(date -R)\"";
+      # Uhhhhhhh... nice
+      cmard = "${cmar} --date=format:relative:now";
       cmarde = "${cmard} --edit";
       # Pretty graph
       graph = "! git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'";
@@ -60,6 +62,11 @@
     };
 
     delta.enable = true;
-    delta.options = [ "--dark" ];
+    delta.options = {
+      line-numbers = true;
+      side-by-side = true;
+      whitespace-error-style = "22 reverse";
+      syntax-theme = "ansi-dark";
+    };
   };
 }

@@ -47,6 +47,7 @@
     name = "Adwaita";
     size = 24;
   };
+  xsession.preferStatusNotifierItems = true;
 
   qt = {
     enable = true;
@@ -60,9 +61,8 @@
   services.blueman-applet.enable = true;
   services.kdeconnect.enable = true;
   services.kdeconnect.indicator = true;
-  # The service file does not start the applet with libindicator
-  # So we use our own in systemd-services/nm-applet
-  #services.network-manager-applet.enable = true;
+  # Started with libindicator if `xsession.preferStatusNotifierItems = true`
+  services.network-manager-applet.enable = true;
 
   # Run emacs as a service
   services.emacs.enable = true;
