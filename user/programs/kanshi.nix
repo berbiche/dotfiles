@@ -66,7 +66,12 @@ in
       configs
       # All the same configurations with the laptop screen disabled when using the docking station
       (lib.mapAttrs' (n: v: lib.nameValuePair "${n}-disable-laptop" (genDisableLaptop v)) configs)
+      # Extra configurations
       {
+        lenovo-thinkpad.outputs = [
+          (displays.laptop // { position = "0,0"; })
+          (displays.lenovo // { position = "3840,800"; })
+        ];
         # This profile force enables the laptop screen for unknown configurations
         # This profile is the fallback configuration for the laptop (since it's specified last)
         zzz-fallback-laptop.outputs = [
