@@ -1,6 +1,13 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
+  imports = [
+    ./sway-config
+    ./waybar
+  ];
+
+  services.xserver.displayManager.defaultSession = "sway";
+
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs; [ xdg-desktop-portal-wlr xdg-desktop-portal-gtk ];
@@ -8,6 +15,8 @@
   };
   services.pipewire.enable = true;
 
+  # TODO: See if this is necessary to be used with home-manager's Sway configuration
+  # FIXME: Duplicate code
   programs.sway = {
     enable = true;
 
@@ -36,18 +45,15 @@
       waybar
       mako
       volnoti
-      kanshi
       wl-clipboard
       wdisplays
 
       # oblogout alternative
       wlogout
 
-
       wofi
       xfce.xfce4-appfinder
 
-      # TODO: more steps required to use this?
       xdg-desktop-portal-wlr # xdg-desktop-portal backend for wlroots
 
       qt5.qtwayland
@@ -64,5 +70,26 @@
 
       export XDG_CURRENT_DESKTOP=sway
     '';
+  };
+
+  home-manager.users.${config.my.username} = { ... }: {
+    imports = [
+      ./kanshi.nix
+      ./mako.nix
+      ./swaylock.nix
+      ./wlogout.nix
+      ./wofi.nix
+    ];
+
+    # Copy the scripts folder
+    home.file."scripts" = {
+      source = ../../scripts;
+      recursive = false; # we want the folder symlinked, not its files
+    };
+
+    programs.swaylock = {
+      enable = true;
+      imageFolder = config.xdg.userDirs.pictures + "/wallpaper";
+    };
   };
 }

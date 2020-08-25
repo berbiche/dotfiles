@@ -169,11 +169,13 @@ let
   };
 in
 {
-  programs.waybar = {
-    enable = true;
-    systemd.enable = true;
+  home-manager.users.${config.my.username} = { ... }: {
+    programs.waybar = {
+      enable = true;
+      systemd.enable = true;
 
-    #settings = [ config1 ];
-    #style = builtins.readFile ./style.css;
+      #settings = [ config1 ];
+      #style = builtins.readFile ./style.css;
+    };
   };
 }

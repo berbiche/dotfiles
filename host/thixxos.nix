@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
 {
+  imports = with profiles; [ core-linux graphical-linux programs sway ];
+
   hardware.enableRedistributableFirmware = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 

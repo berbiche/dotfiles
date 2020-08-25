@@ -6,7 +6,6 @@
     ./gpg.nix
     ./programs.nix
   ];
-  home.stateVersion = "20.09";
 
   my.identity.name = "Nicolas Berbiche";
   my.identity.email = "nic." + "berbiche" + "@" + "gmail" + ".com";
@@ -67,10 +66,4 @@
   # Run emacs as a service
   services.emacs.enable = true;
   programs.emacs.enable = true;
-
-  # Copy the scripts folder
-  home.file."scripts" = {
-    source = ./scripts;
-    recursive = false; # we want the folder symlinked, not its files
-  };
 }

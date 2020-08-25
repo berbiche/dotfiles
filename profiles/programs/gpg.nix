@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, stdenv, ... }:
 
 {
   home.packages = [ pkgs.gnupg ];
@@ -16,7 +16,7 @@
       default-preference-list SHA512,SHA384,SHA256,SHA224,AES256,AES192,AES,CAST5,3DES,BZIP2,ZIP,ZLIB,Uncompressed
     '';
   };
-  home.file."gnupg-agent" = {
+  home.file."gnupg-agent" = lib.mkIf stdenv.isLinux {
     target = ".gnupg/gpg-agent.conf";
     text = ''
       # Hacky gnome-keyring configuration

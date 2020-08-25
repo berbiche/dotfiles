@@ -2,8 +2,8 @@
 
 {
   imports = [
+    ./user.nix
     ./graphical/sway.nix
-    # ./graphical/gnome.nix
     ./graphical/kde.nix
     ./graphical/steam.nix
   ];
@@ -13,7 +13,6 @@
 
   services.xserver.enable = true;
   #services.xserver.tty = 1;
-  services.xserver.displayManager.defaultSession = "sway";
   services.xserver.displayManager.autoLogin = {
     # Disabled until automatic unlock of my Gnome Keyring works
     enable = false;
@@ -46,8 +45,6 @@
   xdg = {
     icons.enable = true;
     portal.enable = true;
-    portal.extraPortals =
-      lib.mkIf (!config.services.xserver.desktopManager.gnome3.enable) [ pkgs.xdg-desktop-portal-gtk ];
     portal.gtkUsePortal = true;
   };
 

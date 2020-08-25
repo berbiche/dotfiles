@@ -4,8 +4,9 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
-    # Nix build failure on current master
-    nix.url = "github:nixos/nix/a79b6ddaa5dd5960da845d1b8d3c80601cd918a4";
+    nix.url = "github:nixos/nix";
+    # nix-darwin.url = "github:berbiche/nix-darwin";
+    nix-darwin.url = "github:LnL7/nix-darwin/flakes";
     #home-manager = { url = "github:rycee/home-manager"; flake = false; };
     home-manager = { url = "github:berbiche/home-manager/fix-kanshi-exec"; flake = false; };
     nixpkgs-mozilla = { url = "github:mozilla/nixpkgs-mozilla"; flake = false; };
@@ -23,11 +24,7 @@
   outputs = { nixpkgs, self, ... }@inputs: let
     inherit (nixpkgs) lib;
 
-    config = {
-      allowUnfree = true;
-    };
-
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
 
     forAllPlatforms = f: lib.genAttrs platforms (platform: f platform);
 
@@ -37,6 +34,15 @@
       config.allowUnfree = true;
     });
 
+    # inherit (inputs.nix-darwin.darwin { 
+    #   system = "x86_64-darwin";
+    #   pkgs = nixpkgsFor."x86_64-darwin";
+    #   configuration = null;
+    #   useProvidedPkgs = true;
+    # }) darwinSystem;
+
+    darwinSystem = inputs.nix-darwin.lib.evalConfig {  };
+
     mkConfig =
       { platform
       , hostname
@@ -45,92 +51,116 @@
       , homeConfiguration ? ./user + "/${username}.nix"
       , extraModules ? [ ]
       }:
-        lib.nixosSystem rec {
+      let
+        home-manager = "${inputs.home-manager}/nixos";
+        # inherit (inputs.home-manager.nixosModules) home-manager;
+
+        users = { ... }: {
+          options.my = with lib; {
+            username = mkOption {
+              type = types.str;
+              description = "Primary user username";
+              example = "nicolas";
+              readOnly = true;
+            };
+          };
+        };
+
+        defaults = { pkgs, ... }: {
+          imports = [ hostConfiguration ];
+
+          system.nixos.tags = [ "with-flakes" ];
+
+          environment.systemPackages = [ pkgs.cachix ];
+          nixpkgs.config.allowUnfree = true;
+          nix = {
+            allowedUsers = [ "@wheel" ];
+            trustedUsers = [ "root" "@wheel" ];
+            # Pin nixpkgs
+            nixPath = [
+              "nixpkgs=${pkgs.path}"
+              "nixos-config=${toString hostConfiguration}"
+              "nixpkgs-overlays=${toString ./overlays}"
+            ];
+            registry.self.flake = inputs.self;
+            package = pkgs.nixFlakes;
+            extraOptions = ''
+              experimental-features = nix-command flakes
+            '';
+            # Automatic GC of nix files
+            gc = {
+              automatic = true;
+              dates = "daily";
+              options = "--delete-older-than 10d";
+            };
+          };
+
+          # My custom user settings
+          my = { inherit hostname username; };
+
+          home-manager.users.${username} = { lib, ... }: {
+            config = {
+              # Inject inputs
+              _module.args.inputs = inputs;
+              # Specify home-manager version compability
+              home.stateVersion = "20.09";
+            };
+
+            options.my.identity = {
+              name = lib.mkOption {
+                type = lib.types.str;
+                description = "Fullname";
+              };
+              email = lib.mkOption {
+                type = lib.types.str;
+                description = "Email";
+              };
+            };
+          };
+        };
+
+        user = { ... }: {
+          home-manager = {
+            users.${username} = homeConfiguration;
+            useUserPackages = true;
+            useGlobalPkgs = true;
+            verbose = true;
+          };
+        };
+      in [ defaults users user home-manager ] ++ extraModules;
+
+    mkLinuxConfig =
+      { platform, ... } @ args: let
+        modules = mkConfig args;
+      in
+        lib.nixosSystem {
+          inherit modules;
           system = platform;
           specialArgs = { inherit inputs; };
-          pkgs = nixpkgsFor.${platform};
+          nixpkgs = nixpkgsFor.${platform};
+        };
 
-          modules = let
-            home-manager = "${inputs.home-manager}/nixos";
-            # inherit (inputs.home-manager.nixosModules) home-manager;
-
-            defaults = { pkgs, ... }: {
-              imports = [ ./configuration.nix hostConfiguration ];
-
-              system.nixos.tags = [ "with-flakes" ];
-
-              environment.systemPackages = [ pkgs.cachix ];
-              nixpkgs.config.allowUnfree = true;
-              nix = {
-                allowedUsers = [ "@wheel" ];
-                trustedUsers = [ "root" "@wheel" ];
-                # Pin nixpkgs
-                nixPath = [
-                  "nixpkgs=${pkgs.path}"
-                  "nixos-config=${toString ./configuration.nix}"
-                  "nixpkgs-overlays=${toString ./overlays}"
-                ];
-                registry.self.flake = inputs.self;
-                package = pkgs.nixFlakes;
-                extraOptions = ''
-                  experimental-features = nix-command flakes
-                '';
-                # Automatic GC of nix files
-                gc = {
-                  automatic = true;
-                  dates = "daily";
-                  options = "--delete-older-than 10d";
-                };
-              };
-
-              my = {
-                inherit hostname username;
-              };
-
-              home-manager.users.${username} = { lib, ... }: {
-                config = {
-                  # Inject inputs
-                  _module.args.inputs = inputs;
-                };
-
-                options.my.identity = {
-                  name = lib.mkOption {
-                    type = lib.types.str;
-                    description = "Fullname";
-                  };
-                  email = lib.mkOption {
-                    type = lib.types.str;
-                    description = "Email";
-                  };
-                };
-              };
-            };
-
-            user = { ... }: {
-              home-manager = {
-                users.${username} = homeConfiguration;
-                useUserPackages = true;
-                useGlobalPkgs = true;
-                verbose = true;
-              };
-            };
-          in [ defaults user home-manager ] ++ extraModules;
+    mkDarwinConfig =
+      { platform, ... } @ args: let
+        modules = mkConfig args;
+      in
+        inputs.nix-darwin.lib.evalConfig {
+          configuration = { ... }: { imports = modules; };
+          inputs.nixpkgs = nixpkgs;
         };
   in {
-    packages.nixosConfigurations = {
-      merovingian = mkConfig { hostname = "merovingian"; username = "nicolas"; platform = "x86_64-linux"; };
-      thixxos = mkConfig { hostname = "thixxos"; username = "nicolas"; platform = "x86_64-linux"; };
-      macos = mkConfig {
+    nixosConfigurations = {
+      merovingian = mkLinuxConfig { hostname = "merovingian"; username = "nicolas"; platform = "x86_64-linux"; };
+      thixxos = mkLinuxConfig { hostname = "thixxos"; username = "nicolas"; platform = "x86_64-linux"; };
+    };
+
+    darwinConfigurations = {
+      pc335 = mkDarwinConfig {
         hostname = "PC335";
         username = "n.berbiche";
         platform = "x86_64-darwin";
-        # Import nix-darwin module options
-        extraModules = [({ inputs, pkgs, ... }: let
-          nixdarwin = pkgs.callPackage inputs.nix-darwin { configuration = null; };
-        in {
-	  inherit (nixdarwin) options;
-          nixpkgs.overlays = [ (_: _: nixdarwin.pkgs) ];
-        })];
+        hostConfiguration = ./host/macos.nix;
+        homeConfiguration = ./user/nicolas.nix;
       };
     };
 

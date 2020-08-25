@@ -1,8 +1,10 @@
 { config, lib, pkgs, ... }:
 
+let
+  profiles = import ../profiles;
+in
 {
-  # Allow installing non-free packages
-  nixpkgs.config.allowUnfree = true;
+  imports = with profiles; [ core-linux graphical-linux programs sway ];
 
   boot.kernelParams = [ "amd_iommu=pt" "iommu=soft" ]
     ++ [ "resume_offset=63195136" ]; # Offset of the swapfile
