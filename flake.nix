@@ -40,10 +40,10 @@
     mkConfig =
       { platform
       , hostname
-      # Primary user's username (your username)
       , username
       , hostConfiguration ? ./host + "/${hostname}.nix"
       , homeConfiguration ? ./user + "/${username}.nix"
+      , extraModules ? [ ]
       }:
         lib.nixosSystem rec {
           system = platform;
@@ -114,15 +114,25 @@
                 verbose = true;
               };
             };
-          in [ defaults user home-manager ];
+          in [ defaults user home-manager ] ++ extraModules;
         };
   in {
-    packages = forAllPlatforms (platform: {
-      nixosConfigurations = {
-        merovingian = mkConfig { hostname = "merovingian"; username = "nicolas"; inherit platform; };
-        thixxos = mkConfig { hostname = "thixxos"; username = "nicolas"; inherit platform; };
+    packages.nixosConfigurations = {
+      merovingian = mkConfig { hostname = "merovingian"; username = "nicolas"; platform = "x86_64-linux"; };
+      thixxos = mkConfig { hostname = "thixxos"; username = "nicolas"; platform = "x86_64-linux"; };
+      macos = mkConfig {
+        hostname = "PC335";
+        username = "n.berbiche";
+        platform = "x86_64-darwin";
+        # Import nix-darwin module options
+        extraModules = [({ inputs, pkgs, ... }: let
+          nixdarwin = pkgs.callPackage inputs.nix-darwin { configuration = null; };
+        in {
+	  inherit (nixdarwin) options;
+          nixpkgs.overlays = [ (_: _: nixdarwin.pkgs) ];
+        })];
       };
-    });
+    };
 
     overlays = let
       overlayFiles = lib.listToAttrs (map (name: {
