@@ -3,9 +3,17 @@
 let
   # Requires --impure build
   inherit (lib.systems.elaborate { system = builtins.currentSystem; }) isDarwin isLinux;
+
+  inherit (builtins) map attrNames readDir;
+  inherit (lib) filterAttrs hasSuffix;
+
+  configs = let
+    files = readDir ./.;
+    filtered = filterAttrs (n: v: n != "default.nix" && (v == "directory" || (v == "regular" && hasSuffix ".nix" n)));
+  in map (p: ./. + "/${p}") (attrNames (filtered files));
 in
 {
-  imports = [ ./zsh.nix ];
+  imports = configs;
 
   home-manager.users.${config.my.username} = { pkgs, ... }: {
     home.packages = with pkgs; [
