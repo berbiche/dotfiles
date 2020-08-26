@@ -146,10 +146,16 @@
     mkDarwinConfig =
       { platform, ... } @ args: let
         modules = mkConfig args;
-        darwinDefaults = { ... }: {
+        darwinDefaults = { pkgs, ... }: {
           imports = [ "${inputs.home-manager}/nix-darwin" ];
           home-manager.useUserPackages = true;
           nix.gc.user = args.username;
+          nix.nixPath = [
+            "nixpkgs=${pkgs.path}"
+            "nixos-config=${toString args.hostConfiguration}"
+            "nixpkgs-overlays=${toString ./overlays}"
+            "darwin=${inputs.nix-darwin}"
+          ];
         };
         result = inputs.nix-darwin.lib.evalConfig {
           configuration = { ... }: { imports = modules ++ [ darwinDefaults ]; };
@@ -206,6 +212,8 @@
         in "${nixConf}/opt";
 
         shellHook = ''
+          export NIX_PATH="$NIX_PATH:darwin=${inputs.nix-darwin}"
+
           rebuild () {
             # _NIXOS_REBUILD_REEXEC is necessary to force nixos-rebuild to use the nix binary in $PATH
             # otherwise the initial installation would fail
