@@ -24,5 +24,5 @@
       # Use "gitignore" highlighting for ".ignore" files
       --map-syntax=.ignore:.gitignore
     '';
-  }
+  };
 }

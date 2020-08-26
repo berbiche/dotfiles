@@ -41,7 +41,7 @@
     #   useProvidedPkgs = true;
     # }) darwinSystem;
 
-    darwinSystem = inputs.nix-darwin.lib.evalConfig {  };
+    darwinSystem = inputs.nix-darwin.lib.evalConfig { };
 
     mkConfig =
       { platform
@@ -65,6 +65,8 @@
 
         defaults = { pkgs, lib, stdenv, ... }: {
           imports = [ hostConfiguration userConfiguration ];
+          _module.args.inputs = inputs;
+
           nixpkgs.config.allowUnfree = true;
           nix = {
             # Pin nixpkgs

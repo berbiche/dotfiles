@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   inherit (lib.systems.elaborate { system = builtins.currentSystem; }) isDarwin isLinux;
@@ -30,7 +30,6 @@ lib.mkMerge [
         dotDir = ".config/zsh";
 
         history = {
-          enableCompletion = true;
           expireDuplicatesFirst = true;
           ignoreDups = true;
           ignoreSpace = true;
@@ -106,6 +105,7 @@ lib.mkMerge [
 
           # Migrate history from $XDG_CACHE_HOME to $XDG_DATA_HOME
           if [[ ${config.xdg.cacheHome}/zsh/history -nt ${config.xdg.dataHome}/zsh/history ]]; then
+            echo "Migrating ZSH history to \$XDG_DATA_HOME"
             [ -e ${config.xdg.dataHome}/zsh/history ] && mv ${config.xdg.dataHome}/zsh/history ${config.xdg.dataHome}/zsh/history.old
             mv ${config.xdg.cacheHome}/zsh/history ${config.xdg.dataHome}/zsh/history
           fi
