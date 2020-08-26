@@ -1,6 +1,9 @@
 { config, lib, pkgs, ... }:
 
 let
+  # Requires --impure build
+  inherit (lib.systems.elaborate { system = builtins.currentSystem; }) isDarwin isLinux;
+
   # Requires the nixpkgs-mozilla overlay
   firefox-package = pkgs.firefox;
   # firefox versions available in nixpkgs-mozilla are already wrapped
@@ -160,7 +163,7 @@ let
     } // (lib.optionalAttrs (settings != null) settings);
   };
 in
-{
+lib.optionalAttrs isLinux {
   # Fix Firefox. See <https://mastransky.wordpress.com/2020/03/16/wayland-x11-how-to-run-firefox-in-mixed-environment/>
   home.sessionVariables = {
     MOZ_DBUS_REMOTE = "1";

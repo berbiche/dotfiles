@@ -1,6 +1,10 @@
 { config, lib, pkgs, ... }:
 
-{
+let
+  # Requires an impure build
+  inherit (lib.systems.elaborate { system = builtins.currentSystem; }) isLinux;
+in
+lib.optionalAttrs isLinux {
   # Requires nixpkgs-wayland overlay
   services.redshift = {
     enable = true;

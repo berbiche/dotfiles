@@ -1,6 +1,10 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
-{
+let
+  # Requires an impure build
+  inherit (lib.systems.elaborate { system = builtins.currentSystem; }) isLinux;
+in
+lib.optionalAttrs isLinux {
   systemd.user.services.udiskie = {
     Unit = {
       Description = "Disks automounter";
