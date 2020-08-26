@@ -107,7 +107,14 @@
             };
           };
         };
-      in [ user defaults ] ++ extraModules;
+
+        home-config = { ... }: {
+          home-manager = {
+            users.${username} = homeConfiguration;
+            useUserPackages = lib.mkForce true;
+          };
+        };
+      in [ user defaults home-config ] ++ extraModules;
 
     mkLinuxConfig =
       { platform, ... } @ args: let
@@ -124,8 +131,6 @@
             gc.dates = "daily";
           };
           home-manager = {
-            users.${args.username} = args.homeConfiguration;
-            useUserPackages = true;
             useGlobalPkgs = true;
             verbose = true;
           };
@@ -143,10 +148,8 @@
         modules = mkConfig args;
         darwinDefaults = { ... }: {
           imports = [ "${inputs.home-manager}/nix-darwin" ];
-          home-manager = {
-            users.${args.username} = args.homeConfiguration;
-            useUserPackages = true;
-          };
+          home-manager.useUserPackages = true;
+          nix.gc.user = args.username;
         };
         result = inputs.nix-darwin.lib.evalConfig {
           configuration = { ... }: { imports = modules ++ [ darwinDefaults ]; };

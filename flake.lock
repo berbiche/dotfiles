@@ -19,11 +19,11 @@
     "home-manager": {
       "flake": false,
       "locked": {
-        "lastModified": 1597790955,
-        "narHash": "sha256-2lff3Z3o7cWwPJLbKFGJ8adIs16QxdwcVQxY2pIxRI4=",
+        "lastModified": 1598402035,
+        "narHash": "sha256-Otl1p1+CkJMSJ7nREjQVcMUBVTXoIh0SrN8Mc8XShq8=",
         "owner": "berbiche",
         "repo": "home-manager",
-        "rev": "d1a91d2bcbf362df9a6fd8b576a65d5616da3a36",
+        "rev": "fd8767af0ae49212629609cd40339832f6d3cf3e",
         "type": "github"
       },
       "original": {
