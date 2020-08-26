@@ -52,10 +52,7 @@
       , extraModules ? [ ]
       }:
       let
-        home-manager = "${inputs.home-manager}/nixos";
-        # inherit (inputs.home-manager.nixosModules) home-manager;
-
-        users = { ... }: {
+        user = { ... }: {
           options.my = with lib; {
             username = mkOption {
               type = types.str;
@@ -66,23 +63,16 @@
           };
         };
 
-        defaults = { pkgs, ... }: {
+        defaults = { pkgs, lib, stdenv, ... }: {
           imports = [ hostConfiguration ];
-
-          system.nixos.tags = [ "with-flakes" ];
-
-          environment.systemPackages = [ pkgs.cachix ];
           nixpkgs.config.allowUnfree = true;
           nix = {
-            allowedUsers = [ "@wheel" ];
-            trustedUsers = [ "root" "@wheel" ];
             # Pin nixpkgs
             nixPath = [
               "nixpkgs=${pkgs.path}"
               "nixos-config=${toString hostConfiguration}"
               "nixpkgs-overlays=${toString ./overlays}"
             ];
-            registry.self.flake = inputs.self;
             package = pkgs.nixFlakes;
             extraOptions = ''
               experimental-features = nix-command flakes
@@ -90,13 +80,12 @@
             # Automatic GC of nix files
             gc = {
               automatic = true;
-              dates = "daily";
               options = "--delete-older-than 10d";
             };
           };
 
           # My custom user settings
-          my = { inherit hostname username; };
+          my = { inherit username; };
 
           home-manager.users.${username} = { lib, ... }: {
             config = {
@@ -118,20 +107,29 @@
             };
           };
         };
+      in [ user defaults ] ++ extraModules;
 
-        user = { ... }: {
+    mkLinuxConfig =
+      { platform, ... } @ args: let
+        modules = mkConfig args;
+        linuxDefaults = { pkgs, lib, ... }: {
+          # Import home-manager/nixos version here
+          imports = [ ./cachix.nix "${inputs.home-manager}/nixos" ];
+          environment.systemPackages = [ pkgs.cachix ];
+          system.nixos.tags = [ "with-flakes" ];
+          nix = {
+            allowedUsers = [ "@wheel" ];
+            trustedUsers = [ "root" "@wheel" ];
+            registry.self.flake = inputs.self;
+            gc.dates = "daily";
+          };
           home-manager = {
-            users.${username} = homeConfiguration;
+            users.${args.username} = args.homeConfiguration;
             useUserPackages = true;
             useGlobalPkgs = true;
             verbose = true;
           };
         };
-      in [ defaults users user home-manager ] ++ extraModules;
-
-    mkLinuxConfig =
-      { platform, ... } @ args: let
-        modules = mkConfig args;
       in
         lib.nixosSystem {
           inherit modules;
@@ -143,11 +141,18 @@
     mkDarwinConfig =
       { platform, ... } @ args: let
         modules = mkConfig args;
-      in
-        inputs.nix-darwin.lib.evalConfig {
-          configuration = { ... }: { imports = modules; };
+        darwinDefaults = { ... }: {
+          imports = [ "${inputs.home-manager}/nix-darwin" ];
+          home-manager = {
+            users.${args.username} = args.homeConfiguration;
+            useUserPackages = true;
+          };
+        };
+        result = inputs.nix-darwin.lib.evalConfig {
+          configuration = { ... }: { imports = modules ++ [ darwinDefaults ]; };
           inputs.nixpkgs = nixpkgs;
         };
+      in result.system;
   in {
     nixosConfigurations = {
       merovingian = mkLinuxConfig { hostname = "merovingian"; username = "nicolas"; platform = "x86_64-linux"; };
