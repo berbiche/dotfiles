@@ -29,6 +29,8 @@
     #gnomeExtensions.no-title-bar
     # Screenshot tool
     flameshot
+    evince
+    gnome3.eog
   ];
 
   environment.gnome3.excludePackages = with pkgs; [

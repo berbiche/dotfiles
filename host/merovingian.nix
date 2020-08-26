@@ -4,7 +4,7 @@ let
   profiles = import ../profiles;
 in
 {
-  imports = lib.attrValues profiles;
+  imports = [ ((import ../profiles).default-linux) ]
 
   boot.kernelParams = [ "amd_iommu=pt" "iommu=soft" ]
     ++ [ "resume_offset=63195136" ]; # Offset of the swapfile

@@ -1,23 +1,12 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = [
-    ./user.nix
-    ./graphical/sway.nix
-    ./graphical/kde.nix
-    ./graphical/steam.nix
-  ];
+  imports = [ ./steam.nix ];
 
   environment.systemPackages = [ pkgs.playerctl pkgs.polkit pkgs.polkit_gnome ];
 
 
   services.xserver.enable = true;
-  #services.xserver.tty = 1;
-  services.xserver.displayManager.autoLogin = {
-    # Disabled until automatic unlock of my Gnome Keyring works
-    enable = false;
-    user = config.my.username;
-  };
   services.xserver.displayManager.lightdm = {
     enable = true;
     greeters.enso = {

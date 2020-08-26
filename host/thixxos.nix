@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = lib.attrValues profiles;
+  imports = [ ((import ../profiles).default-linux) ]
 
   hardware.enableRedistributableFirmware = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;

@@ -72,7 +72,7 @@
     '';
   };
 
-  home-manager.users.${config.my.username} = { ... }: {
+  home-manager.users.${config.my.username} = { config, pkgs, ... }: {
     imports = [
       ./kanshi.nix
       ./mako.nix
@@ -80,6 +80,15 @@
       ./wlogout.nix
       ./wofi.nix
     ];
+
+    home.packages = with pkgs; [
+      # Audio software
+      pavucontrol
+      pamixer # control pulse audio volume in scripts
+
+      libnotify # `notify-send` notifications to test mako
+      dex # execute .desktop files
+    ]
 
     # Copy the scripts folder
     home.file."scripts" = {
