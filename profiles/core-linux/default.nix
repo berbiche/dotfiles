@@ -3,7 +3,6 @@
 {
   imports = [
     ./boot.nix
-    ./zsh.nix
     ./services.nix
   ];
 

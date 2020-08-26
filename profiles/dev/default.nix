@@ -16,6 +16,11 @@ in
   imports = configs;
 
   home-manager.users.${config.my.username} = { pkgs, ... }: {
+    home.sessionVariables = {
+      EDITOR = "${config.programs.neovim.package}/bin/nvim";
+      LESS = "--RAW-CONTROL-CHARS --quit-if-one-screen";
+    };
+
     home.packages = with pkgs; [
       jq                           # cli to extract data out of json input
       hexyl
@@ -56,6 +61,13 @@ in
     programs.fzf = {
       enable = true;
       enableZshIntegration = true;
+      defaultCommand = ''${pkgs.fd}/bin/fd --follow --type f --exclude="'.git'" .'';
+      defaultOptions = [ "--exact" "--cycle" "--layout=reverse" ];
+      # enableFishIntegration = true;
+    };
+
+    programs.mcfly = {
+      enable = true;
       enableFishIntegration = true;
     };
 
@@ -63,7 +75,6 @@ in
     programs.starship = {
       enable = true;
       enableZshIntegration = true;
-      enableFishIntegration = true;
     };
 
     programs.direnv = {
