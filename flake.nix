@@ -48,7 +48,7 @@
       , hostname
       , username
       , hostConfiguration ? ./host + "/${hostname}.nix"
-      , homeConfiguration ? ./user + "/${username}.nix"
+      , userConfiguration ? ./user + "/${username}.nix"
       , extraModules ? [ ]
       }:
       let
@@ -64,7 +64,7 @@
         };
 
         defaults = { pkgs, lib, stdenv, ... }: {
-          imports = [ hostConfiguration ];
+          imports = [ hostConfiguration userConfiguration ];
           nixpkgs.config.allowUnfree = true;
           nix = {
             # Pin nixpkgs
@@ -107,14 +107,7 @@
             };
           };
         };
-
-        home-config = { ... }: {
-          home-manager = {
-            users.${username} = homeConfiguration;
-            useUserPackages = lib.mkForce true;
-          };
-        };
-      in [ user defaults home-config ] ++ extraModules;
+      in [ user defaults ] ++ extraModules;
 
     mkLinuxConfig =
       { platform, ... } @ args: let
@@ -131,6 +124,7 @@
             gc.dates = "daily";
           };
           home-manager = {
+            useUserPackages = true;
             useGlobalPkgs = true;
             verbose = true;
           };
@@ -164,8 +158,16 @@
       in result.system;
   in {
     nixosConfigurations = {
-      merovingian = mkLinuxConfig { hostname = "merovingian"; username = "nicolas"; platform = "x86_64-linux"; };
-      thixxos = mkLinuxConfig { hostname = "thixxos"; username = "nicolas"; platform = "x86_64-linux"; };
+      merovingian = mkLinuxConfig { 
+        hostname = "merovingian";
+        username = "nicolas";
+        platform = "x86_64-linux";
+      };
+      thixxos = mkLinuxConfig {
+        hostname = "thixxos";
+        username = "nicolas";
+        platform = "x86_64-linux";
+      };
     };
 
     darwinConfigurations = {
@@ -174,7 +176,7 @@
         username = "n.berbiche";
         platform = "x86_64-darwin";
         hostConfiguration = ./host/macos.nix;
-        homeConfiguration = ./user/nicolas.nix;
+        userConfiguration = ./user/nicolas.nix;
       };
     };
 
