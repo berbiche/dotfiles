@@ -22,6 +22,19 @@ in
       vimAlias = true;
       vimdiffAlias = true;
       withNodeJs = true;
+
+      plugins = with pkgs.vimPlugins; [
+        vim-nix
+        coc-nvim
+        coc-json
+        coc-markdownlint
+        coc-python
+        coc-html
+        coc-go
+        coc-explorer
+        coc-rust-analyzer
+      ];
+
       extraConfig = ''
         " Default settings
         set nocompatible
@@ -64,12 +77,6 @@ in
         nnoremap S :%s//g<Left><Left>
         nnoremap <leader>m :set number!<CR>
         nnoremap <leader>n :set relativenumber!<CR>
-
-        " Plugins
-        call plug#begin()
-        Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
-        Plug 'LnL7/vim-nix'
-        call plug#end()
       '';
     };
   }]);
