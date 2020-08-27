@@ -148,7 +148,6 @@
           nix.gc.user = args.username;
           nix.nixPath = [
             "nixpkgs=${pkgs.path}"
-            "nixos-config=${toString args.hostConfiguration}"
             "nixpkgs-overlays=${toString ./overlays}"
             "darwin=${inputs.nix-darwin}"
           ];

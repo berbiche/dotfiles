@@ -89,7 +89,7 @@ lib.mkMerge [
           # Speed up completions
           zstyle ':completion:*' accept-exact '*(N)'
           zstyle ':completion:*' use-cache on
-          mkdir -p "$(basename ${config.xdg.cacheHome}/zsh/completion-cache)"
+          mkdir -p "$(dirname ${config.xdg.cacheHome}/zsh/completion-cache)"
           zstyle ':completion:*' cache-path "${config.xdg.cacheHome}/zsh/completion-cache"
           zstyle ':completion:*' menu select
 
@@ -106,6 +106,7 @@ lib.mkMerge [
           # Migrate history from $XDG_CACHE_HOME to $XDG_DATA_HOME
           if [[ ${config.xdg.cacheHome}/zsh/history -nt ${config.xdg.dataHome}/zsh/history ]]; then
             echo "Migrating ZSH history to \$XDG_DATA_HOME"
+            mkdir -p $(dirname ${config.xdg.dataHome}/zsh/history)
             [ -e ${config.xdg.dataHome}/zsh/history ] && mv ${config.xdg.dataHome}/zsh/history ${config.xdg.dataHome}/zsh/history.old
             mv ${config.xdg.cacheHome}/zsh/history ${config.xdg.dataHome}/zsh/history
           fi
