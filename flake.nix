@@ -8,7 +8,8 @@
     # nix-darwin.url = "github:berbiche/nix-darwin";
     nix-darwin.url = "github:LnL7/nix-darwin/flakes";
     #home-manager = { url = "github:rycee/home-manager"; flake = false; };
-    home-manager = { url = "github:berbiche/home-manager/fix-kanshi-exec"; flake = false; };
+    # home-manager = { url = "github:berbiche/home-manager/fix-kanshi-exec"; flake = false; };
+    home-manager.url = "github:berbiche/home-manager/nix-darwin-improvements";
     nixpkgs-mozilla = { url = "github:mozilla/nixpkgs-mozilla"; flake = false; };
     nixpkgs-wayland = {
       url = "github:colemickens/nixpkgs-wayland";
@@ -34,15 +35,6 @@
       config.allowUnfree = true;
     });
 
-    # inherit (inputs.nix-darwin.darwin { 
-    #   system = "x86_64-darwin";
-    #   pkgs = nixpkgsFor."x86_64-darwin";
-    #   configuration = null;
-    #   useProvidedPkgs = true;
-    # }) darwinSystem;
-
-    darwinSystem = inputs.nix-darwin.lib.evalConfig { };
-
     mkConfig =
       { platform
       , hostname
@@ -64,7 +56,7 @@
         };
 
         defaults = { pkgs, lib, stdenv, ... }: {
-          imports = [ hostConfiguration userConfiguration ];
+          imports = [ hostConfiguration userConfiguration ./cachix.nix ];
           _module.args.inputs = inputs;
 
           nixpkgs.config.allowUnfree = true;
@@ -89,6 +81,12 @@
           # My custom user settings
           my = { inherit username; };
 
+
+          home-manager = {
+            useUserPackages = true;
+            useGlobalPkgs = true;
+            verbose = true;
+          };
           home-manager.users.${username} = { lib, ... }: {
             config = {
               # Inject inputs
@@ -116,7 +114,7 @@
         modules = mkConfig args;
         linuxDefaults = { pkgs, lib, ... }: {
           # Import home-manager/nixos version here
-          imports = [ ./cachix.nix "${inputs.home-manager}/nixos" ];
+          imports = [ inputs.home-manager.nixosModules.home-manager ];
           environment.systemPackages = [ pkgs.cachix ];
           system.nixos.tags = [ "with-flakes" ];
           nix = {
@@ -124,11 +122,6 @@
             trustedUsers = [ "root" "@wheel" ];
             registry.self.flake = inputs.self;
             gc.dates = "daily";
-          };
-          home-manager = {
-            useUserPackages = true;
-            useGlobalPkgs = true;
-            verbose = true;
           };
         };
       in
@@ -143,8 +136,7 @@
       { platform, ... } @ args: let
         modules = mkConfig args;
         darwinDefaults = { pkgs, ... }: {
-          imports = [ "${inputs.home-manager}/nix-darwin" ];
-          home-manager.useUserPackages = true;
+          imports = [ inputs.home-manager.darwinModules.home-manager ];
           nix.gc.user = args.username;
           nix.nixPath = [
             "nixpkgs=${pkgs.path}"

@@ -17,25 +17,27 @@
       }
     },
     "home-manager": {
-      "flake": false,
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
       "locked": {
-        "lastModified": 1598402035,
-        "narHash": "sha256-Otl1p1+CkJMSJ7nREjQVcMUBVTXoIh0SrN8Mc8XShq8=",
+        "lastModified": 1598622125,
+        "narHash": "sha256-utHjyfjT+fB7abFK1Hgcs+YtYq/+vQAb5kxC3STqGJA=",
         "owner": "berbiche",
         "repo": "home-manager",
-        "rev": "fd8767af0ae49212629609cd40339832f6d3cf3e",
+        "rev": "ee8e22710f48b0dd24eb8be86bead2fea54bcc83",
         "type": "github"
       },
       "original": {
         "owner": "berbiche",
-        "ref": "fix-kanshi-exec",
+        "ref": "nix-darwin-improvements",
         "repo": "home-manager",
         "type": "github"
       }
     },
     "nix": {
       "inputs": {
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs_2"
       },
       "locked": {
         "lastModified": 1598352458,
@@ -53,7 +55,7 @@
     },
     "nix-darwin": {
       "inputs": {
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_3"
       },
       "locked": {
         "lastModified": 1597677366,
@@ -72,16 +74,15 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1591633336,
-        "narHash": "sha256-oVXv4xAnDJB03LvZGbC72vSVlIbbJr8tpjEW5o/Fdek=",
+        "lastModified": 1598621357,
+        "narHash": "sha256-fHS8dWqAJN7iVGpyJpA6dltOPImwRinvS5jWntxugGo=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "70717a337f7ae4e486ba71a500367cad697e5f09",
+        "rev": "96d72aa48873dd69f9eddd5ac4a20c4209c72f9c",
         "type": "github"
       },
       "original": {
         "id": "nixpkgs",
-        "ref": "nixos-20.03-small",
         "type": "indirect"
       }
     },
@@ -140,6 +141,21 @@
     },
     "nixpkgs_2": {
       "locked": {
+        "lastModified": 1591633336,
+        "narHash": "sha256-oVXv4xAnDJB03LvZGbC72vSVlIbbJr8tpjEW5o/Fdek=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "70717a337f7ae4e486ba71a500367cad697e5f09",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-20.03-small",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
         "lastModified": 1598397221,
         "narHash": "sha256-Q5SSWfq43fo6WuaDTgpa9pM1Wp5NBTg9/gMyB/sM20Y=",
         "owner": "NixOS",
@@ -152,7 +168,7 @@
         "type": "indirect"
       }
     },
-    "nixpkgs_3": {
+    "nixpkgs_4": {
       "locked": {
         "lastModified": 1598255276,
         "narHash": "sha256-mkeZKAHnsfrnmmdRPw6yMegM0L2BFaxdhgxvVvaC5nA=",
@@ -173,7 +189,7 @@
         "home-manager": "home-manager",
         "nix": "nix",
         "nix-darwin": "nix-darwin",
-        "nixpkgs": "nixpkgs_3",
+        "nixpkgs": "nixpkgs_4",
         "nixpkgs-firefox-pipewire": "nixpkgs-firefox-pipewire",
         "nixpkgs-mozilla": "nixpkgs-mozilla",
         "nixpkgs-wayland": "nixpkgs-wayland",
