@@ -59,6 +59,8 @@
           imports = [ hostConfiguration userConfiguration ./cachix.nix ];
           _module.args.inputs = inputs;
 
+          environment.systemPackages = [ pkgs.cachix ];
+
           nixpkgs.config.allowUnfree = true;
           nix = {
             # Pin nixpkgs
@@ -80,7 +82,6 @@
 
           # My custom user settings
           my = { inherit username; };
-
 
           home-manager = {
             useUserPackages = true;
@@ -115,7 +116,6 @@
         linuxDefaults = { pkgs, lib, ... }: {
           # Import home-manager/nixos version here
           imports = [ inputs.home-manager.nixosModules.home-manager ];
-          environment.systemPackages = [ pkgs.cachix ];
           system.nixos.tags = [ "with-flakes" ];
           nix = {
             allowedUsers = [ "@wheel" ];
@@ -126,7 +126,7 @@
         };
       in
         lib.nixosSystem {
-          inherit modules;
+          modules = modules ++ [ linuxDefaults ];
           system = platform;
           specialArgs = { inherit inputs; };
           nixpkgs = nixpkgsFor.${platform};
