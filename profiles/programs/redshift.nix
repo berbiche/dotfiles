@@ -1,14 +1,13 @@
 { config, lib, pkgs, ... }:
 
 let
-  # Requires an impure build
-  inherit (lib.systems.elaborate { system = builtins.currentSystem; }) isLinux;
+  inherit (pkgs.stdenv.targetPlatform) isDarwin isLinux;
 in
-lib.optionalAttrs isLinux {
+lib.mkIf isLinux {
   # Requires nixpkgs-wayland overlay
   services.redshift = {
     enable = true;
-    package = pkgs.redshift-wayland;
+    package = pkgs.redshift;
     # Some options cannot be configured through the command line (gamma-day, gamma-night, fade)
     extraOptions = [ "-c ${config.xdg.configHome}/redshift/redshift.conf" ];
     tray = true;

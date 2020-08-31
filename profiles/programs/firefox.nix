@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  # Requires --impure build
-  inherit (lib.systems.elaborate { system = builtins.currentSystem; }) isDarwin isLinux;
+  inherit (pkgs.stdenv.targetPlatform) isDarwin isLinux;
 
   # Requires the nixpkgs-mozilla overlay
   firefox-package = pkgs.firefox;
@@ -10,7 +9,6 @@ let
   wrappedFirefox = firefox-package.override {
     desktopName = "Firefox";
     icon = "firefox";
-    forceWayland = true;
     cfg = {
       # Chromecast support through a native extension
       enableFXCastBridge = true;
@@ -163,7 +161,7 @@ let
     } // (lib.optionalAttrs (settings != null) settings);
   };
 in
-lib.optionalAttrs isLinux {
+lib.mkIf isLinux {
   # Fix Firefox. See <https://mastransky.wordpress.com/2020/03/16/wayland-x11-how-to-run-firefox-in-mixed-environment/>
   home.sessionVariables = {
     MOZ_DBUS_REMOTE = "1";

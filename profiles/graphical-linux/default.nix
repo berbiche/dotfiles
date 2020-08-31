@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = [ ./steam.nix ];
-
   environment.systemPackages = [ pkgs.playerctl pkgs.polkit pkgs.polkit_gnome ];
 
 

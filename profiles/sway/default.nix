@@ -88,7 +88,7 @@
 
       libnotify # `notify-send` notifications to test mako
       dex # execute .desktop files
-    ]
+    ];
 
     # Copy the scripts folder
     home.file."scripts" = {

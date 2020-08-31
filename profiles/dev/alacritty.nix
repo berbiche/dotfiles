@@ -1,9 +1,9 @@
 { config, pkgs, lib, ... }:
 
 let
-  inherit (lib.systems.elaborate { system = builtins.currentSystem; }) isDarwin isLinux;
+  inherit (pkgs.stdenv.targetPlatform) isDarwin isLinux;
   # defaultFont = "DejaVu Sans Mono";
-  defaultFont = if isDarwin then "SFMono" else "Iosevka";
+  # defaultFont = if isDarwin then "SFMono" else "Iosevka";
   defaultFontSize = 13.0;
 in
 {
@@ -41,7 +41,12 @@ in
         multiplier = 3;
       };
 
-      font = {
+      font = let
+        defaultFont = lib.mkMerge [
+          (lib.mkIf isDarwin "SFMono")
+          (lib.mkIf (!isDarwin) "Iosevka")
+        ];
+      in {
         size = defaultFontSize;
         normal.family = defaultFont;
         # normal.style = "Regular";

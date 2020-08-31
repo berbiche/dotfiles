@@ -1,8 +1,8 @@
-{ ... }:
+{ config, rootPath, ... }:
 
 {
-  home.users.${config.my.username} = { config, lib, pkgs, ... }: let
-    swayConfig = pkgs.callWithDefaults ./config.nix { inherit config; };
+  home-manager.users.${config.my.username} = { config, lib, pkgs, ... }: let
+    swayConfig = pkgs.callWithDefaults ./config.nix { inherit config rootPath; };
   in {
     home.packages = with pkgs; [
       brightnessctl

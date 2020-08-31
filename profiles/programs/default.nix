@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  # Requires --impure build
-  inherit (lib.systems.elaborate { system = builtins.currentSystem; }) isDarwin isLinux;
+  inherit (pkgs.stdenv.targetPlatform) isDarwin isLinux;
 
   inherit (builtins) map attrNames readDir;
   inherit (lib) filterAttrs hasSuffix;
@@ -17,19 +16,23 @@ in
   home-manager.users.${config.my.username} = {
     imports = customPrograms;
 
-    home.packages = with pkgs; [
-      ncdu
-      element-desktop
-      youtube-dl
-    ] ++ (lib.optionals isLinux [
-      bitwarden bitwarden-cli
-      spotify
-      signal-desktop
-      chromium
-      discord # unfortunately
-      libreoffice
-    ]) ++ (lib.optionals isDarwin [
-     
-    ]);
+    home.packages = with pkgs; lib.mkMerge [
+      [
+        ncdu
+        element-desktop
+        youtube-dl
+      ]
+      (lib.mkIf isLinux [
+        bitwarden bitwarden-cli
+        spotify
+        signal-desktop
+        chromium
+        discord # unfortunately
+        libreoffice
+      ])
+      (lib.mkIf isDarwin [
+       
+      ])
+    ];
   };
 }

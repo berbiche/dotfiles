@@ -1,9 +1,9 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib.systems.elaborate { system = builtins.currentSystem; }) isLinux;
+  inherit (pkgs.stdenv.targetPlatform) isDarwin isLinux;
 in
-lib.optionalAttrs isLinux {
+lib.mkIf isLinux {
   programs.mpv = {
     enable = true;
     scripts = [ pkgs.mpvScripts.mpris ];

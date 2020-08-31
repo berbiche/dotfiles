@@ -58,17 +58,12 @@
         defaults = { pkgs, lib, stdenv, ... }: {
           imports = [ hostConfiguration userConfiguration ./cachix.nix ];
           _module.args.inputs = inputs;
+          _module.args.rootPath = ./.;
 
           environment.systemPackages = [ pkgs.cachix ];
 
           nixpkgs.config.allowUnfree = true;
           nix = {
-            # Pin nixpkgs
-            nixPath = [
-              "nixpkgs=${pkgs.path}"
-              "nixos-config=${toString hostConfiguration}"
-              "nixpkgs-overlays=${toString ./overlays}"
-            ];
             package = pkgs.nixFlakes;
             extraOptions = ''
               experimental-features = nix-command flakes
@@ -92,6 +87,7 @@
             config = {
               # Inject inputs
               _module.args.inputs = inputs;
+              _module.args.rootPath = ./.;
               # Specify home-manager version compability
               home.stateVersion = "20.09";
             };
@@ -111,25 +107,37 @@
       in [ user defaults ] ++ extraModules;
 
     mkLinuxConfig =
-      { platform, ... } @ args: let
+      { platform, hostname, hostConfiguration ? ./host + "/${hostname}.nix", ... } @ args:
+      let
         modules = mkConfig args;
+
         linuxDefaults = { pkgs, lib, ... }: {
           # Import home-manager/nixos version here
           imports = [ inputs.home-manager.nixosModules.home-manager ];
           system.nixos.tags = [ "with-flakes" ];
           nix = {
+            # Pin nixpkgs
+            nixPath = [
+              "nixpkgs=${pkgs.path}"
+              "nixos-config=${toString hostConfiguration}"
+              "nixpkgs-overlays=${toString ./overlays}"
+            ];
             allowedUsers = [ "@wheel" ];
             trustedUsers = [ "root" "@wheel" ];
             registry.self.flake = inputs.self;
             gc.dates = "daily";
+
+            # Reduce IOnice and CPU niceness of the build daemon
+            daemonIONiceLevel = 3;
+            daemonNiceLevel = 10;
           };
         };
       in
         lib.nixosSystem {
-          modules = modules ++ [ linuxDefaults ];
+          modules = [ linuxDefaults ] ++ modules;
           system = platform;
           specialArgs = { inherit inputs; };
-          nixpkgs = nixpkgsFor.${platform};
+          pkgs = nixpkgsFor.${platform};
         };
 
     mkDarwinConfig =

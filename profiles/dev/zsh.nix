@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  inherit (lib.systems.elaborate { system = builtins.currentSystem; }) isDarwin isLinux;
+  inherit (pkgs.stdenv.targetPlatform) isDarwin isLinux;
 in
 lib.mkMerge [
   {
@@ -16,7 +16,7 @@ lib.mkMerge [
       '';
     };
   }
-  (lib.optionalAttrs isLinux {
+  (lib.mkIf isLinux {
     programs.zsh.syntaxHighlighting.enable = true;
   })
   {

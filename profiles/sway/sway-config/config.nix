@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, rootPath, ... }:
 
 let
   mkSwaybar = { outputs, id ? null }: {
@@ -169,7 +169,7 @@ let
     ];
 
     keybindings = pkgs.callWithDefaults ./keybindings.nix {
-      inherit config binaries;
+      inherit config binaries rootPath;
     };
 
     modes = pkgs.callWithDefaults ./modes.nix {

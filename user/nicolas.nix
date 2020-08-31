@@ -1,12 +1,12 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib.systems.elaborate { system = builtins.currentSystem; }) isDarwin isLinux;
+  inherit (pkgs.stdenv.targetPlatform) isDarwin isLinux;
 
   inherit (config.my) username;
 in
 lib.mkMerge [
-  (lib.optionalAttrs isLinux {
+  (lib.mkIf isLinux {
     users.users.${username} = {
       createHome = true;
       isNormalUser = true;

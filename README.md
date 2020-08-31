@@ -59,6 +59,15 @@ If the new system configuration has been built once before, then you don't need 
     $ sudo nixos-rebuild switch --flake . -v
     ```
 
+## Add a Cachix cache
+
+``` console
+$ cachix use <name> -d . -m nixos
+```
+
+The `-d` flag makes cachix operate on the current directory for its `cachix.nix` and `/cachix` folder
+while the `-m` flag forces cachix to only modify the two files mentionned before.
+
 ## Configuration
 
 Most programs configuration live under `user/programs`.

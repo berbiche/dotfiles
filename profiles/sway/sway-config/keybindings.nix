@@ -1,4 +1,4 @@
-{ config, pkgs, lib, binaries }:
+{ config, pkgs, lib, binaries, rootPath }:
 
 let
   inherit (config.wayland.windowManager.sway.config)
@@ -8,7 +8,7 @@ let
     up
     down;
 
-  getScript = name: ../../scripts + "/${name}";
+  getScript = name: rootPath + "/scripts/${name}";
   OUTPUT-LAPTOP = "eDP-1";
 in
 lib.mkOptionDefault {

@@ -1,10 +1,9 @@
 { pkgs, lib, ... }:
 
 let
-  # Requires an impure build
-  inherit (lib.systems.elaborate { system = builtins.currentSystem; }) isLinux;
+  inherit (pkgs.stdenv.targetPlatform) isDarwin isLinux;
 in
-lib.optionalAttrs isLinux {
+lib.mkIf isLinux {
   systemd.user.services.udiskie = {
     Unit = {
       Description = "Disks automounter";
