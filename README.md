@@ -32,7 +32,7 @@ then you won't need to do the next steps and can jump directly to building.
 3. Build the system (in this case the `merovingian` host)
 
     ``` console
-    rebuild switch --flake '.#merovingian' -v
+    $ rebuild switch --flake '.#merovingian' -v
     ```
 
 ## Building
@@ -42,7 +42,7 @@ If the new system configuration has been built once before, then you don't need 
 1. Rebuild the system (in this case the `merovingian` host)
 
     ``` console
-    sudo nixos-rebuild switch --flake '.#merovingian' -v
+    $ sudo nixos-rebuild switch --flake '.#merovingian' -v
     ```
 
 ## Updating
@@ -50,7 +50,7 @@ If the new system configuration has been built once before, then you don't need 
 1. Update the dependencies
 
     ``` console
-    nix flake update --recreate-lock-file
+    $ nix flake update --recreate-lock-file
     ```
 
 2. Rebuild (in this case the `merovingian` host)
@@ -67,6 +67,38 @@ $ cachix use <name> -d . -m nixos
 
 The `-d` flag makes cachix operate on the current directory for its `cachix.nix` and `/cachix` folder
 while the `-m` flag forces cachix to only modify the two files mentionned before.
+
+## Darwin
+
+Until nix-darwin is updated to have proper support for Flakes, the installation has to be done
+manually (or via a script).
+
+1. Build the configuration
+
+    ``` console
+    $ nix build '.#darwinConfigurations.${machine-name}' -v
+    ```
+
+2. Link the profile
+
+    ``` console
+    $ nix-env -p /nix/var/nix/profiles/system --set ./result
+    ```
+
+3. Activate the user configuration
+
+    ``` console
+    $ ./result/activate-user
+    ```
+
+4. Activate the system configuration
+
+    ``` console
+    $ sudo ./result/activate
+    ```
+
+The configuration is now active and linked.  
+You can purge your old configurations at anytime with `sudo nix-collect-garbage -d`.
 
 ## Configuration
 
