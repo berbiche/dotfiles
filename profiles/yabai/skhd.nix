@@ -60,7 +60,7 @@ in
     # Close focus window
     shift + ${mod} - d : ${window "--close"}
     # Toggle float
-    shift + ${mod} - space : ${window "--toggle float"}
+    ${mod} - space : ${window "--toggle float"}
     # Toggle sticky
     shift + ${mod} - s : ${window "--toggle sticky"}
     # Toggle fullscreen
