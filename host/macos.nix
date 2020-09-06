@@ -30,4 +30,52 @@ in
     isHidden = false;
     shell = pkgs.zsh;
   };
+
+  system.defaults.finder = {
+    AppleShowAllExtensions = true;
+    _FXShowPosixPathInTitle = true;
+    FXEnableExtensionChangeWarning = false;
+  };
+
+  system.defaults.dock = {
+    expose-group-by-app = true;
+    minimize-to-application = true;
+    mru-spaces = false;
+    orientation = "right";
+    show-recents = false;
+    tilesize = 48;
+  };
+
+  system.defaults.loginwindow = {
+    # SHOWFULLNAME = false;
+    GuestEnabled = false;
+    LoginwindowText = "Property of Nicolas Berbiche";
+    # DisableConsoleAccess = true;
+  };
+
+  system.defaults.NSGlobalDomain = {
+    AppleKeyboardUIMode = 3;
+    AppleShowAllExtensions = with config.system.defaults.finder;
+      if isNull AppleShowAllExtensions then false else AppleShowAllExtensions;
+    AppleShowScrollBars = "Always";
+    NSAutomaticCapitalizationEnabled = false;
+    NSAutomaticDashSubstitutionEnabled = false;
+    NSAutomaticPeriodSubstitutionEnabled = false;
+    NSAutomaticQuoteSubstitutionEnabled = false;
+    NSAutomaticSpellingCorrectionEnabled = false;
+    InitialKeyRepeat = 25;
+    KeyRepeat = 2;
+    "com.apple.keyboard.fnState" = true;
+    "com.apple.mouse.tapBehavior" = 1;
+  };
+
+  system.activationScripts.preUserActivation.text = ''
+    mkdir -p ~/Screenshots
+  '';
+  system.defaults.screencapture.location = "${config.users.users.${config.my.username}.home}/Screenshots";
+
+  system.defaults.trackpad = {
+    Clicking = true;
+    TrackpadRightClick = true;
+  };
 }

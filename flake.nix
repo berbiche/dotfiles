@@ -5,11 +5,8 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     nix.url = "github:nixos/nix";
-    # nix-darwin.url = "github:berbiche/nix-darwin";
     nix-darwin.url = "github:LnL7/nix-darwin/flakes";
-    #home-manager = { url = "github:rycee/home-manager"; flake = false; };
-    # home-manager = { url = "github:berbiche/home-manager/fix-kanshi-exec"; flake = false; };
-    home-manager.url = "github:berbiche/home-manager/nix-darwin-improvements";
+    home-manager.url= "github:rycee/home-manager";
     nixpkgs-mozilla = { url = "github:mozilla/nixpkgs-mozilla"; flake = false; };
     nixpkgs-wayland = {
       url = "github:colemickens/nixpkgs-wayland";
@@ -143,7 +140,8 @@
     mkDarwinConfig =
       { platform, ... } @ args: let
         modules = mkConfig args;
-        darwinDefaults = { pkgs, ... }: {
+
+        darwinDefaults = { config, pkgs, lib, ... }: {
           imports = [ inputs.home-manager.darwinModules.home-manager ];
           nix.gc.user = args.username;
           nix.nixPath = [
@@ -151,7 +149,16 @@
             "nixpkgs-overlays=${toString ./overlays}"
             "darwin=${inputs.nix-darwin}"
           ];
+          system.checks.verifyNixPath = false;
+          system.darwinVersion = lib.mkForce (
+            "darwin" + toString config.system.stateVersion + "." + inputs.nix-darwin.shortRev);
+          system.darwinRevision = inputs.nix-darwin.rev;
+          system.nixpkgsVersion =
+            "${inputs.nixpkgs.lastModifiedDate or inputs.nixpkgs.lastModified}.${inputs.nixpkgs.shortRev}";
+          system.nixpkgsRelease = lib.version;
+          system.nixpkgsRevision = inputs.nixpkgs.rev;
         };
+
         result = inputs.nix-darwin.lib.evalConfig {
           configuration = { ... }: { imports = modules ++ [ darwinDefaults ]; };
           inputs.nixpkgs = nixpkgs;
@@ -159,7 +166,7 @@
       in result.system;
   in {
     nixosConfigurations = {
-      merovingian = mkLinuxConfig { 
+      merovingian = mkLinuxConfig {
         hostname = "merovingian";
         username = "nicolas";
         platform = "x86_64-linux";
