@@ -42,6 +42,7 @@ in
       };
 
       font = let
+        # These settings don't get merged because settings == types.attrs
         defaultFont = lib.mkMerge [
           (lib.mkIf isDarwin "SFMono")
           (lib.mkIf (!isDarwin) "Iosevka")
