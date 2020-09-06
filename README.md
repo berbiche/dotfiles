@@ -79,10 +79,10 @@ manually (or via a script).
     $ nix build '.#darwinConfigurations.${machine-name}' -v
     ```
 
-2. Link the profile
+2. Activate the system configuration
 
     ``` console
-    $ nix-env -p /nix/var/nix/profiles/system --set ./result
+    $ sudo ./result/activate
     ```
 
 3. Activate the user configuration
@@ -91,13 +91,7 @@ manually (or via a script).
     $ ./result/activate-user
     ```
 
-4. Activate the system configuration
-
-    ``` console
-    $ sudo ./result/activate
-    ```
-
-The configuration is now active and linked.  
+The configuration is now active and linked.
 You can purge your old configurations at anytime with `sudo nix-collect-garbage -d`.
 
 ## Configuration
