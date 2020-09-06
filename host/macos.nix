@@ -5,7 +5,7 @@ let
   profiles = import ../profiles;
 in
 {
-  imports = with profiles; [ dev programs ];
+  imports = with profiles; [ dev programs yabai ];
 
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
