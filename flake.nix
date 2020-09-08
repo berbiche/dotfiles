@@ -59,6 +59,8 @@
 
           environment.systemPackages = [ pkgs.cachix ];
 
+          networking.hostName = lib.mkDefault hostname;
+
           nixpkgs.config.allowUnfree = true;
           nix = {
             package = pkgs.nixFlakes;
