@@ -1,7 +1,10 @@
 { config, lib, pkgs, ... }:
 
+let
+  profiles = import ../profiles;
+in
 {
-  imports = [ ((import ../profiles).default-linux) ]
+  imports = [ profiles.default-linux profiles.steam ];
 
   hardware.enableRedistributableFirmware = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
