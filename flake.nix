@@ -6,7 +6,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     nix.url = "github:nixos/nix";
     nix-darwin.url = "github:LnL7/nix-darwin/flakes";
-    home-manager.url= "github:rycee/home-manager";
+    home-manager.url= "github:berbiche/home-manager/replace-attrs-by-formats";
     nixpkgs-mozilla = { url = "github:mozilla/nixpkgs-mozilla"; flake = false; };
     nixpkgs-wayland = {
       url = "github:colemickens/nixpkgs-wayland";

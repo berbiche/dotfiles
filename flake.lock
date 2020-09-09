@@ -21,15 +21,16 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1599230742,
-        "narHash": "sha256-IdoGyv0Rigps3lGGmTXAwfLsqcrkX5L0AmJcFqy0MuQ=",
-        "owner": "rycee",
+        "lastModified": 1599691314,
+        "narHash": "sha256-juShPjX8tU4uRC3uHid3UVcwjRexRgihu7w+tMrYP5c=",
+        "owner": "berbiche",
         "repo": "home-manager",
-        "rev": "182454fe6b2342011ac3ae7c93cf5fb0ccd17bd7",
+        "rev": "66651313320d21dd9e4c1abbaf4eac9b3a42da84",
         "type": "github"
       },
       "original": {
-        "owner": "rycee",
+        "owner": "berbiche",
+        "ref": "replace-attrs-by-formats",
         "repo": "home-manager",
         "type": "github"
       }
