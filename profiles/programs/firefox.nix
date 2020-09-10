@@ -3,10 +3,8 @@
 let
   inherit (pkgs.stdenv.targetPlatform) isDarwin isLinux;
 
-  # Requires the nixpkgs-mozilla overlay
-  firefox-package = pkgs.firefox;
   # firefox versions available in nixpkgs-mozilla are already wrapped
-  wrappedFirefox = firefox-package.override {
+  wrappedFirefox = pkgs.firefox.override {
     desktopName = "Firefox";
     icon = "firefox";
     cfg = {
@@ -188,6 +186,7 @@ lib.mkIf isLinux {
         id = 2;
         path = "cn435xs5.default";
       };
+      job = makeProfile { id = 3; };
     };
   };
 }
