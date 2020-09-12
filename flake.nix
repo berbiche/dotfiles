@@ -3,7 +3,10 @@
     "Nicolas Berbiche's poorly organized dotfiles and computer configuration";
 
   inputs = {
+    # This input I update less frequently
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
+    # Input that I update everyday for specific packages
+    master.url = "github:nixos/nixpkgs/nixos-unstable-small";
     nix.url = "github:nixos/nix";
     nix-darwin.url = "github:LnL7/nix-darwin/flakes";
     home-manager.url= "github:berbiche/home-manager/replace-attrs-by-formats";
@@ -201,11 +204,16 @@
       firefox-pipewire = (final: prev: {
         firefox = let
           pkgs = import inputs.nixpkgs-firefox-pipewire {
-            # How should I specify the system to use here?
-            system = lib.head platforms;
+            inherit (final) system;
             config.allowUnfree = true;
           };
         in pkgs.firefox;
+      });
+      master = (final: prev: {
+        master = import inputs.master {
+          system = final.system;
+          config.allowUnfree = true;
+        };
       });
     };
 
