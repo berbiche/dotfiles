@@ -66,12 +66,6 @@ in
         enableFishIntegration = true;
       };
 
-      # Program prompt
-      programs.starship = {
-        enable = true;
-        enableZshIntegration = true;
-      };
-
       programs.direnv = {
         enable = true;
         enableZshIntegration = true;
