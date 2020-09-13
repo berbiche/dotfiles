@@ -62,7 +62,7 @@ in
       };
 
       programs.mcfly = {
-        enable = true;
+        enable = false;
         enableFishIntegration = true;
       };
 
