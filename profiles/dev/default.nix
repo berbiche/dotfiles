@@ -25,9 +25,6 @@ in
         jq                           # cli to extract data out of json input
         hexyl
 
-        # Essentials
-        vscodium
-
         # Programming
         clang
         python3
