@@ -21,9 +21,9 @@ in
         expireDuplicatesFirst = true;
         ignoreDups = true;
         ignoreSpace = true;
-        extended = true;
+        extended = false;
         path = "${config.xdg.dataHome}/zsh/history";
-        share = false;
+        share = true;
         size = 100000;
         save = 100000;
       };
@@ -52,14 +52,15 @@ in
         sysu    = "systemctl --user";
         jnsu    = "journalctl --user";
         svim    = "sudoedit";
-        zreload = "export ZSH_RELOADING_SHELL=1; source $ZDOTDIR/.zshenv; source $ZDOTDIR/.zshrc; unset ZSH_RELOADING_SHELL";
       };
 
-      profileExtra = ''
+      initExtra = ''
         setopt incappendhistory
         setopt histfindnodups
         setopt histreduceblanks
-        setopt histverify
+        unsetopt histignorealldups                                      # If a new command is a duplicate, do not remove the older one
+        setopt appendhistory                                            # Immediately append history instead of overwriting
+        setopt histverify                                               # When expanding the last command with !! or !?, do not execute, substitute instead
         setopt correct                                                  # Auto correct mistakes
         setopt extendedglob                                             # Extended globbing. Allows using regular expressions with *
         setopt nocaseglob                                               # Case insensitive globbing
@@ -67,9 +68,12 @@ in
         #setopt nocheckjobs                                              # Don't warn about running processes when exiting
         setopt numericglobsort                                          # Sort filenames numerically when it makes sense
         unsetopt nobeep                                                 # Enable beep
-        setopt appendhistory                                            # Immediately append history instead of overwriting
-        unsetopt histignorealldups                                      # If a new command is a duplicate, do not remove the older one
         setopt interactivecomments
+        setopt INTERACTIVE_COMMENTS
+
+        setopt listbeep                                                 # Beep on ambiguous completion
+        setopt listrowsfirst                                            # Order completions in row-form instead of column-form
+        setopt printexitvalue                                           # Print non-zero exit value in interactive prompts
 
         zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'       # Case insensitive tab completion
         zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"       # Colored completion (different colors for dirs/files/etc)
@@ -82,22 +86,10 @@ in
         zstyle ':completion:*' menu select
 
         WORDCHARS=''${WORDCHARS//\/[&.;]}                                 # Don't consider certain characters part of the word
-      '';
 
-      initExtra = ''
-        if [ -z $ZSH_RELOADING_SHELL - ]; then
-          echo $USER@$HOST  $(uname -srm) \
-            $(sed -n 's/^NAME=//p' /etc/os-release 2>/dev/null || printf "") \
-            $(sed -n 's/^VERSION=//p' /etc/os-release 2>/dev/null || printf "")
-        fi
-
-        # Migrate history from $XDG_CACHE_HOME to $XDG_DATA_HOME
-        if [[ ${config.xdg.cacheHome}/zsh/history -nt ${config.xdg.dataHome}/zsh/history ]]; then
-          echo "Migrating ZSH history to \$XDG_DATA_HOME"
-          mkdir -p $(dirname ${config.xdg.dataHome}/zsh/history)
-          [ -e ${config.xdg.dataHome}/zsh/history ] && mv ${config.xdg.dataHome}/zsh/history ${config.xdg.dataHome}/zsh/history.old
-          mv ${config.xdg.cacheHome}/zsh/history ${config.xdg.dataHome}/zsh/history
-        fi
+        # Fish-like completion (https://unix.stackexchange.com/a/467852)
+        zmodload zsh/complist
+        zstyle ':completion:*' menu yes select search
 
         ## Keybindings section
         bindkey -e
@@ -126,9 +118,47 @@ in
         bindkey '^H' backward-kill-word                                 # delete previous word with ctrl+backspace
         bindkey '^[[Z' undo                                             # Shift+tab undo last action
 
+        # Local history (taken from https://superuser.com/a/691603)
+        bindkey "''${key[Up]}"   up-line-or-local-history
+        bindkey "''${key[Down]}" down-line-or-local-history
+
+        # Global history on <C-Up>/<C-Down>
+        bindkey "^[[1;5A" up-line-or-history
+        bindkey "^[[1;5B" down-line-or-history
+
+        up-line-or-local-history() {
+            zle set-local-history 1
+            zle up-line-or-history
+            zle set-local-history 0
+        }
+        zle -N up-line-or-local-history
+        down-line-or-local-history() {
+            zle set-local-history 1
+            zle down-line-or-history
+            zle set-local-history 0
+        }
+        zle -N down-line-or-local-history
+
         # Theming section
         autoload -U colors
         colors
+
+        # ZSH_AUTOSUGGEST
+        ZSH_AUTOSUGGEST_COMPLETION_IGNORE="*/nix/store/*"
+
+
+
+        echo $USER@$HOST  $(uname -srm) \
+          $(sed -n 's/^NAME=//p' /etc/os-release 2>/dev/null || printf "") \
+          $(sed -n 's/^VERSION=//p' /etc/os-release 2>/dev/null || printf "")
+
+        # Migrate history from $XDG_CACHE_HOME to $XDG_DATA_HOME
+        if [[ ${config.xdg.cacheHome}/zsh/history -nt ${config.xdg.dataHome}/zsh/history ]]; then
+          echo "Migrating ZSH history to \$XDG_DATA_HOME"
+          mkdir -p $(dirname ${config.xdg.dataHome}/zsh/history)
+          [ -e ${config.xdg.dataHome}/zsh/history ] && mv ${config.xdg.dataHome}/zsh/history ${config.xdg.dataHome}/zsh/history.old
+          mv ${config.xdg.cacheHome}/zsh/history ${config.xdg.dataHome}/zsh/history
+        fi
       '';
     };
   };
