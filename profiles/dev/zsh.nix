@@ -68,12 +68,11 @@ in
         #setopt nocheckjobs                                              # Don't warn about running processes when exiting
         setopt numericglobsort                                          # Sort filenames numerically when it makes sense
         unsetopt nobeep                                                 # Enable beep
-        setopt interactivecomments
-        setopt INTERACTIVE_COMMENTS
+        setopt interactivecomments                                      # Allow using # in an interactive shell for comments
 
         setopt listbeep                                                 # Beep on ambiguous completion
         setopt listrowsfirst                                            # Order completions in row-form instead of column-form
-        setopt printexitvalue                                           # Print non-zero exit value in interactive prompts
+        #setopt printexitvalue                                           # Print non-zero exit value in interactive prompts
 
         zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'       # Case insensitive tab completion
         zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"       # Colored completion (different colors for dirs/files/etc)
@@ -83,13 +82,11 @@ in
         zstyle ':completion:*' use-cache on
         mkdir -p "$(dirname ${config.xdg.cacheHome}/zsh/completion-cache)"
         zstyle ':completion:*' cache-path "${config.xdg.cacheHome}/zsh/completion-cache"
-        zstyle ':completion:*' menu select
-
-        WORDCHARS=''${WORDCHARS//\/[&.;]}                                 # Don't consider certain characters part of the word
-
         # Fish-like completion (https://unix.stackexchange.com/a/467852)
         zmodload zsh/complist
         zstyle ':completion:*' menu yes select search
+
+        WORDCHARS=''${WORDCHARS//[\/&.;_-]}                                 # Don't consider certain characters part of the word
 
         ## Keybindings section
         bindkey -e
@@ -144,7 +141,7 @@ in
         colors
 
         # ZSH_AUTOSUGGEST
-        ZSH_AUTOSUGGEST_COMPLETION_IGNORE="*/nix/store/*"
+        ZSH_AUTOSUGGEST_COMPLETION_IGNORE="*/nix/store/*|rsync *|scp *|*/tmp/*"
 
 
 

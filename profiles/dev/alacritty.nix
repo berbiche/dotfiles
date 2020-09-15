@@ -93,7 +93,7 @@ in
 
       bell = {
         animation = "EaseOutExpo";
-        duration = 300;
+        duration = 200;
         color = "0xffffff";
       };
 
