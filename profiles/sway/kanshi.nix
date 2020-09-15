@@ -23,22 +23,22 @@ let
   configs = {
     lone-benq = {
       outputs = [ (displays.benq // { position = "0,0"; }) ];
-      exec = enable-benq-adaptive-sync;
+      # exec = enable-benq-adaptive-sync;
     };
 
     old-triple-dell = {
       outputs = [ benq-dell-1 benq-dell benq-dell-2 ];
-      exec = enable-benq-adaptive-sync;
+      # exec = enable-benq-adaptive-sync;
     };
 
     benq-dell-left = {
       outputs = [ benq-dell-1 benq-dell ];
-      exec = enable-benq-adaptive-sync;
+      # exec = enable-benq-adaptive-sync;
     };
 
     benq-dell-right = {
       outputs = [ benq-dell benq-dell-2 ];
-      exec = enable-benq-adaptive-sync;
+      # exec = enable-benq-adaptive-sync;
     };
 
     home-dell-lone.outputs = [ displays.dell-3 ];
@@ -53,8 +53,8 @@ let
         (displays.lenovo // { position = "0,800"; })
         (displays.benq // { position = "3840,0"; scale = 1.5; transform = "270"; })
       ];
-      exec = ''${pkgs.sway}/bin/swaymsg output '"${displays.lenovo.criteria}"' adaptive_sync on,''
-             + ''output '"${displays.benq.criteria}"' adaptive_sync on'';
+      # exec = ''${pkgs.sway}/bin/swaymsg output '"${displays.lenovo.criteria}"' adaptive_sync on,''
+      #        + ''output '"${displays.benq.criteria}"' adaptive_sync on'';
     };
   };
 in
