@@ -10,6 +10,7 @@ in
 rec {
   dev = mkProfile [ ./dev ];
   programs = mkProfile [ ./programs ];
+  ctf = mkProfile [ ./ctf ];
 
   # Linux only profiles
   core-linux = mkLinuxProfile [ ./core-linux ];
@@ -23,5 +24,5 @@ rec {
   yabai = mkDarwinProfile [ ./yabai ];
 
   # Pseudo profile
-  default-linux = mkLinuxProfile [ core-linux dev graphical-linux kde programs sway ];
+  default-linux = mkLinuxProfile [ core-linux dev graphical-linux kde programs sway ctf ];
 }
