@@ -18,6 +18,19 @@ lib.mkIf isLinux {
   # Requires nixpkgs-wayland overlay
   home.packages = [ pkgs.gammastep ];
 
+  systemd.user.services.gammastep = {
+    Unit = {
+      Description = "Display colour temperature adjustment";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = "${pkgs.gammastep}/bin/gammastep-indicator";
+      Restart = "on-failure";
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
+
   xdg.configFile."gammastep/config.ini".text = ''
     [general]
     temp-day=6500
