@@ -57,8 +57,11 @@
         aliases = "! git config --get-regexp '^alias\\.' | sed -e 's/^alias\\.//' -e 's/\\ /\\ =\\ /' | grep -v '^aliases' | sort";
         # Quick view of all recents commits for stand-ups
         oneline = "log --pretty=oneline";
-        activity = "! git for-each-ref --sort=-committerdate refs/heads/"
-                  + "--format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'";
+        activity = "! git for-each-ref --sort=-committerdate refs/heads/ "
+                  + "--format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - "
+                  + "%(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - "
+                  + "%(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'";
+
         squash-all = ''!f(){ git reset $(git commit-tree HEAD^{tree} -m "''${1:-A new start}");};f'';
       };
 
