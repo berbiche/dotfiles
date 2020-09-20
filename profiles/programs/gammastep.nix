@@ -6,7 +6,8 @@ in
 lib.mkIf isLinux {
   # Requires nixpkgs-wayland overlay
   services.redshift = {
-    enable = true;
+    enable = false;
+    # 
     package = pkgs.redshift;
     # Some options cannot be configured through the command line (gamma-day, gamma-night, fade)
     extraOptions = [ "-c ${config.xdg.configHome}/redshift/redshift.conf" ];
@@ -14,8 +15,11 @@ lib.mkIf isLinux {
     provider = "geoclue2";
   };
 
-  xdg.configFile."redshift/redshift.conf".text = ''
-    [redshift]
+  # Requires nixpkgs-wayland overlay
+  home.packages = [ pkgs.gammastep ];
+
+  xdg.configFile."gammastep/config.ini".text = ''
+    [general]
     temp-day=6500
     temp-night=4000
 
