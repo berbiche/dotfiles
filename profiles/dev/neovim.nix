@@ -16,6 +16,8 @@ let
 in
 {
   home-manager.users.${config.my.username} = { ... }: lib.mkMerge (themeFiles ++ [{
+    home.packages = [ pkgs.fzf ];
+
     programs.neovim = {
       enable = true;
       viAlias = true;
@@ -33,6 +35,17 @@ in
         coc-go
         coc-explorer
         coc-rust-analyzer
+        # Rainbow paranthesis, brackets
+        rainbow
+        # Statusbar
+        vim-airline
+        vim-airline-themes
+        # File lookup
+        fzf-vim
+        # File tree
+        defx-nvim
+        # Show key completion
+        vim-which-key
       ];
 
       extraConfig = ''
@@ -40,7 +53,8 @@ in
         set nocompatible
         set nobackup
 
-        let mapleader=","
+        let g:mapleader = "\<Space>"
+        let g:maplocalleader = ','
 
         " Colors/Theme
         set termguicolors
@@ -50,10 +64,10 @@ in
         au ColorScheme * hi Normal  ctermbg=none guibg=none
         au ColorScheme * hi NonText ctermbg=none guibg=none
 
-
         " Basics
         syntax on
         colorscheme monokai
+        let g:airline_theme = 'bubblegum'
 
         set nohlsearch
         filetype plugin on
@@ -77,6 +91,20 @@ in
         nnoremap S :%s//g<Left><Left>
         nnoremap <leader>m :set number!<CR>
         nnoremap <leader>n :set relativenumber!<CR>
+
+        nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+
+
+        " Enable rainbow paranthesis globally
+        let g:rainbow_active = 1
+
+        " Display all buffers when only one tab is open
+        let g:airline#extensions#tabline#enabled = 1
+
+
+        autocmd! FileType which_key
+        autocmd  FileType which_key set laststatus=0 noshowmode noruler
+          \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
       '';
     };
   }]);
