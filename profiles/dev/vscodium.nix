@@ -30,16 +30,54 @@ let
   });
 in
 {
-  home-manager.users.${config.my.username} = {
+  home-manager.users.${config.my.username} = { config, ... }: {
     home.packages = [ vscodium ];
 
     programs.vscode = {
-      enable = false;
+      enable = true;
       package = vscodium;
 
-      extensions = [
-
+      extensions = with pkgs.vscode-extensions; [
+        # "firefox-devtools.vscode-firefox-debug"
+        # "editorconfig.editorconfig"
+        # "pgourlain.erlang"
+        # "redhat.java"
+        # "arrterian.nix-env-selector"
+        bbenoist.Nix
+        redhat.vscode-yaml
+        ms-vscode-remote.remote-ssh
+        ms-python.python
+        ms-kubernetes-tools.vscode-kubernetes-tools 
+        vscodevim.vim
+        llvm-org.lldb-vscode
       ];
+
+      userSettings = {
+        "editor.cursorSmoothCaretAnimation" = true;
+        "editor.fontFamily" = "'Source Code Pro', 'Anonymous Pro', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'";
+        "editor.fontSize" = 15;
+        "editor.smoothScrolling" = true;
+        "editor.stablePeek" = true;
+        "explorer.autoReveal" = false;
+        "extensions.autoCheckUpdates" = false;
+        "git.suggestSmartCommit" = false;
+        "search.collapseResults" = "alwaysCollapse";
+        "update.mode" = "none";
+        "window.menuBarVisibility" = "toggle";
+        "window.restoreWindows" = "none";
+        "workbench.activityBar.visible" = false;
+        "workbench.colorTheme" = "Monokai";
+        "workbench.editor.highlightModifiedTabs" = true;
+        "workbench.editor.showTabs" = true;
+        "workbench.editor.tabCloseButton" = "off";
+        "workbench.editor.untitled.labelFormat" = "name";
+        "workbench.list.smoothScrolling" = true;
+        "window.title" = "\${activeEditorShort}\${separator}\${rootName}\${separator}\${appName}";
+
+        # Extension settings
+        "java.semanticHighlighting.enabled" = true;
+        "vscode-neovim.neovimExecutablePaths.linux" = "${config.programs.neovim.finalPackage}";
+      };
 
       keybindings = [
 
