@@ -46,6 +46,8 @@ in
         defx-nvim
         # Show key completion
         vim-which-key
+        # Buffer
+        vim-buffergator
       ];
 
       extraConfig = ''
