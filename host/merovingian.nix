@@ -81,8 +81,10 @@ in
   hardware.opengl.enable = true;
   hardware.opengl.driSupport = true;
 
-  environment.systemPackages = with pkgs; [
-    dislocker
+  hardware.opengl.extraPackages = with pkgs; [
+    rocm-opencl-icd
+    rocm-runtime
+    amdvlk
   ];
 
   networking.firewall.allowPing = true;
