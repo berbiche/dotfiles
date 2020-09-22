@@ -2,16 +2,32 @@
   "nodes": {
     "cachix": {
       "locked": {
-        "lastModified": 1597850840,
-        "narHash": "sha256-OYlhqSfeq0oSSrsbYr4t2kQFtBWy/1+iZGSx3jjVUnE=",
+        "lastModified": 1599903709,
+        "narHash": "sha256-tinVKY7zRdSXmVOp7BAulNtIb2iP5nvNp5UAxihKXNI=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "fc966732c89f9485a1ea1a0f86b2a1bb97db862c",
+        "rev": "252bfe0107587d40092057f338e9ffcf7bbd90cb",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
         "ref": "nixos-20.03",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "cmpkgs": {
+      "locked": {
+        "lastModified": 1600303256,
+        "narHash": "sha256-JR18La/InF0yLzMI7MnW2uXLgPKqs3YvIccuh7oWIKM=",
+        "owner": "colemickens",
+        "repo": "nixpkgs",
+        "rev": "5e5c6bf02e9afb83b8eb4bfc0570bdc54c62205a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "colemickens",
+        "ref": "cmpkgs",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -102,22 +118,6 @@
         "type": "indirect"
       }
     },
-    "nixpkgs-firefox-pipewire": {
-      "locked": {
-        "lastModified": 1598381271,
-        "narHash": "sha256-FX4I8Ljfrm8nVNetkRsLX7PyUQ4fbuEWMqc+A5r6Rtg=",
-        "owner": "colemickens",
-        "repo": "nixpkgs",
-        "rev": "e3c95ab7b9e3f10754f54b92c22a7b1780be0aff",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "ref": "nixpkgs-firefox-pipewire",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-mozilla": {
       "flake": false,
       "locked": {
@@ -137,16 +137,17 @@
     "nixpkgs-wayland": {
       "inputs": {
         "cachix": "cachix",
+        "cmpkgs": "cmpkgs",
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1598803562,
-        "narHash": "sha256-+LJrE/P4qqCTtsBHPoQ5PFGvrTdpf3FtUl/8odd4XYc=",
+        "lastModified": 1600711508,
+        "narHash": "sha256-326n8lvv1mXBIH11MRoM3wp5+iRBmb/+hsLbKEqSR9M=",
         "owner": "colemickens",
         "repo": "nixpkgs-wayland",
-        "rev": "ff215997988dead8fdbde11653db8a5e25a704b1",
+        "rev": "5be4e9f117809ce5a6ef62a80f4b2da38388315b",
         "type": "github"
       },
       "original": {
@@ -186,11 +187,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1598255276,
-        "narHash": "sha256-mkeZKAHnsfrnmmdRPw6yMegM0L2BFaxdhgxvVvaC5nA=",
+        "lastModified": 1600644339,
+        "narHash": "sha256-3vP/6ZSPT3U/eGdJ3c4QGHT2/jPsnayuST2UmwF2daY=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "27ff76db67ed179a7b52239c28408b6a47f75066",
+        "rev": "0b67d9e87aea54ea13b4f5031a5b58676834ff4a",
         "type": "github"
       },
       "original": {
@@ -207,7 +208,6 @@
         "nix": "nix",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs_4",
-        "nixpkgs-firefox-pipewire": "nixpkgs-firefox-pipewire",
         "nixpkgs-mozilla": "nixpkgs-mozilla",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "vim-theme-anderson": "vim-theme-anderson",

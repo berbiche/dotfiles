@@ -15,7 +15,6 @@
       url = "github:colemickens/nixpkgs-wayland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixpkgs-firefox-pipewire.url = "github:colemickens/nixpkgs/nixpkgs-firefox-pipewire";
     vim-theme-monokai = { url = "github:sickill/vim-monokai"; flake = false; };
     vim-theme-anderson = { url = "github:tlhr/anderson.vim"; flake = false; };
     vim-theme-synthwave84 = { url = "github:artanikin/vim-synthwave84"; flake = false; };
@@ -201,14 +200,6 @@
     in overlayFiles // {
       nixpkgs-wayland = inputs.nixpkgs-wayland.overlay;
       nixpkgs-mozilla = import inputs.nixpkgs-mozilla;
-      firefox-pipewire = (final: prev: {
-        firefox = let
-          pkgs = import inputs.nixpkgs-firefox-pipewire {
-            inherit (final) system;
-            config.allowUnfree = true;
-          };
-        in pkgs.firefox;
-      });
       master = (final: prev: {
         master = import inputs.master {
           system = final.system;
