@@ -17,6 +17,7 @@ rec {
   graphical-linux = mkLinuxProfile [ ./graphical-linux ];
   kde = mkLinuxProfile [ ./kde ];
   gnome = mkLinuxProfile [ ./gnome ];
+  xfce = mkLinuxProfile [ ./xfce ];
   sway = mkLinuxProfile [ ./sway ];
   steam = mkLinuxProfile [ ./steam ];
 
@@ -24,5 +25,5 @@ rec {
   yabai = mkDarwinProfile [ ./yabai ];
 
   # Pseudo profile
-  default-linux = mkLinuxProfile [ core-linux dev graphical-linux kde programs sway ctf ];
+  default-linux = mkLinuxProfile [ core-linux dev graphical-linux xfce programs sway ctf ];
 }
