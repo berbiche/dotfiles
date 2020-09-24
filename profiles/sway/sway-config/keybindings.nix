@@ -39,10 +39,12 @@ lib.mkOptionDefault {
   "--release Shift+Insert" = "exec '${binaries.wl-paste} --primary'";
 
   # Volume stuff
-  "--locked XF86AudioRaiseVolume" = "exec ${getScript "volume.sh"} 'increase'";
-  "--locked XF86AudioLowerVolume" = "exec ${getScript "volume.sh"} 'decrease'";
-  "--locked XF86AudioMute"        = "exec ${getScript "volume.sh"} 'toggle-mute'";
-  "--locked XF86AudioMicMute"     = "exec ${getScript "volume.sh"} 'mic-mute'";
+  "--locked XF86AudioRaiseVolume"  = "exec ${getScript "volume.sh"} 'increase'";
+  "--locked XF86AudioLowerVolume"  = "exec ${getScript "volume.sh"} 'decrease'";
+  "--locked XF86AudioMute"         = "exec ${getScript "volume.sh"} 'toggle-mute'";
+  "--locked XF86AudioMicMute"      = "exec ${getScript "volume.sh"} 'mic-mute'";
+  "--locked ${modifier}+Backslash" = "exec ${getScript "volume.sh"} 'mic-mute'";
+  "--locked Scroll_Lock"           = "exec ${getScript "volume.sh"} 'mic-mute'";
 
   # Brightness
   "--locked XF86MonBrightnessUp"   = "exec '${binaries.brightnessctl} set +10%'";
