@@ -82,6 +82,8 @@
           };
         };
 
+    systemd.user.services.waybar.Install.WantedBy = [ "sway-session.target" ];
+
     systemd.user.services.volnoti = {
       Unit = {
         Description = "Lightweight volume notification daemon";

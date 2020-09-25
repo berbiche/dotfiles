@@ -55,13 +55,14 @@ let
     browser = "${pkgs.writeScriptBin "firefox" ''
       export MOZ_DBUS_REMOTE=1
       export MOZ_ENABLE_WAYLAND=1
-      ${firefox}
+      ${firefox} "$@"
     ''}/bin/firefox";
     browser-private = "${browser} --private-window";
+    browser-work-profile = "${browser} -P work";
     lock = "${swaylock} -f -c 0f0f0ff0 -i ${imageFolder}/3840x2160.png";
     logout-menu = "${wlogout}";
     audiocontrol = "${pavucontrol}";
-    menu = "${xfce4-appfinder} --replace";
+    menu = "${nwggrid} -n 10 -fp -b 121212E0";
     menu-wofi = "${wofi} --fork --show drun,run";
 
     alacritty = "${pkgs.alacritty}/bin/alacritty";
@@ -73,6 +74,8 @@ let
     pavucontrol = "${pkgs.pavucontrol}/bin/pavucontrol";
     playerctl = "${pkgs.playerctl}/bin/playerctl";
     element-desktop = "${pkgs.element-desktop}/bin/element-desktop";
+    nwggrid = "${pkgs.nwg-launchers}/bin/nwggrid";
+    nwgbar = "${pkgs.nwg-launchers}/bin/nwgbar";
     spotify = "${pkgs.spotify}/bin/spotify";
     swaylock = "${pkgs.swaylock}/bin/swaylock";
     swaymsg = "${config.wayland.windowManager.sway.package}/bin/swaymsg";
@@ -93,8 +96,10 @@ let
   WS9 = "9: random";
   WS10 = "10: random";
 
+  workspaces = { inherit WS1 WS2 WS3 WS4 WS5 WS6 WS7 WS8 WS9 WS10; };
+
   extraConfig = let
-    makeCommand = (i: x: "exec ${binaries.swaymsg} rename workspace number ${toString i} to '${x}'");
+    makeCommand = (i: x: "exec_always ${binaries.swaymsg} rename workspace number ${toString i} to '${x}'");
     workspaces = [ WS1 WS2 WS3 WS4 WS5 WS6 WS7 WS8 WS9 WS10 ];
   in ''
     ${lib.concatImapStringsSep "\n" (makeCommand) workspaces}
@@ -104,7 +109,7 @@ let
     # Set default workspace outputs
     workspace "${WS5}" output "${OUTPUT-HOME-DELL}" "${OUTPUT-HOME-BENQ}" "${OUTPUT-LAPTOP}"
     workspace "${WS6}" output "${OUTPUT-HOME-DELL}" "${OUTPUT-HOME-BENQ}" "${OUTPUT-LAPTOP}"
-    workspace "${WS7}" output "${OUTPUT-HOME-DELL-RIGHT}" "${OUTPUT-HOME-DELL-LEFT}"
+    workspace "${WS7}" output "${OUTPUT-HOME-DELL-RIGHT}" "${OUTPUT-HOME-DELL-LEFT}" "${OUTPUT-HOME-BENQ}"
 
     # Enable/Disable the output when closing the lid (e.g. when using a dock)
     bindswitch --locked lid:on  output ${OUTPUT-LAPTOP} disable
@@ -169,7 +174,7 @@ let
     ];
 
     keybindings = pkgs.callWithDefaults ./keybindings.nix {
-      inherit config binaries rootPath;
+      inherit config binaries rootPath workspaces;
     };
 
     modes = pkgs.callWithDefaults ./modes.nix {
@@ -189,7 +194,7 @@ let
         { title = "^Plex.*"; }
       ];
       # Social stuff
-      #"\"${WS7}\"" = [
+      #"'${WS7}'" = [
       #  { con_mark = "_social.*"; }
       #  { con_mark = "_music-player.*"; }
       #];

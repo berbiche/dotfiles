@@ -1,4 +1,4 @@
-{ config, pkgs, lib, binaries, rootPath }:
+{ config, pkgs, lib, binaries, rootPath, workspaces }:
 
 let
   inherit (config.wayland.windowManager.sway.config)
@@ -8,10 +8,21 @@ let
     up
     down;
 
+  ws = lib.mapAttrs (_: lib.escapeShellArg) workspaces;
+
   getScript = name: rootPath + "/scripts/${name}";
   OUTPUT-LAPTOP = "eDP-1";
+
+  # Sway's poor default to repeat the action continuously is dumb
+  makeNoRepeat = lib.mapAttrs' (n: v:
+    lib.nameValuePair
+      (if v ? repeat then n else "--no-repeat ${n}")
+      (v.repeat or v)
+  );
+  # Marks a keybinding as being repeatable (holding the key will trigger the action continuously)
+  makeRepeatable = n: { repeat = n; };
 in
-lib.mkOptionDefault {
+lib.mkOptionDefault (makeNoRepeat {
   # Some defaults from Sway are included for the sake of self documentation
   "${modifier}+Return"       = "exec ${binaries.terminal}";
   "${modifier}+Shift+Return" = "exec ${binaries.floating-term}";
@@ -39,20 +50,20 @@ lib.mkOptionDefault {
   "--release Shift+Insert" = "exec '${binaries.wl-paste} --primary'";
 
   # Volume stuff
-  "--locked XF86AudioRaiseVolume"  = "exec ${getScript "volume.sh"} 'increase'";
-  "--locked XF86AudioLowerVolume"  = "exec ${getScript "volume.sh"} 'decrease'";
-  "--locked XF86AudioMute"         = "exec ${getScript "volume.sh"} 'toggle-mute'";
-  "--locked XF86AudioMicMute"      = "exec ${getScript "volume.sh"} 'mic-mute'";
-  "--locked ${modifier}+Backslash" = "exec ${getScript "volume.sh"} 'mic-mute'";
-  "--locked Scroll_Lock"           = "exec ${getScript "volume.sh"} 'mic-mute'";
+  "--locked XF86AudioRaiseVolume"  = makeRepeatable "exec ${getScript "volume.sh"} 'increase'";
+  "--locked XF86AudioLowerVolume"  = makeRepeatable "exec ${getScript "volume.sh"} 'decrease'";
+  "--locked XF86AudioMute"         = makeRepeatable "exec ${getScript "volume.sh"} 'toggle-mute'";
+  "--locked XF86AudioMicMute"      = makeRepeatable "exec ${getScript "volume.sh"} 'mic-mute'";
+  "--locked ${modifier}+Backslash" = makeRepeatable "exec ${getScript "volume.sh"} 'mic-mute'";
+  "--locked Scroll_Lock"           = makeRepeatable "exec ${getScript "volume.sh"} 'mic-mute'";
 
   # Brightness
-  "--locked XF86MonBrightnessUp"   = "exec '${binaries.brightnessctl} set +10%'";
-  "--locked XF86MonBrightnessDown" = "exec '${binaries.brightnessctl} --min-value=30 set 10%-'";
+  "--locked XF86MonBrightnessUp"   = makeRepeatable "exec '${binaries.brightnessctl} set +10%'";
+  "--locked XF86MonBrightnessDown" = makeRepeatable "exec '${binaries.brightnessctl} --min-value=30 set 10%-'";
 
   # Screenshot
   "--release Print"       = "exec ${getScript "screenshot.sh"} 'selection'";
-  "--release Alt+Print"  = "exec ${getScript "screenshot.sh"} 'window'";
+  "--release Alt+Print"   = "exec ${getScript "screenshot.sh"} 'window'";
   "--release Shift+Print" = "exec ${getScript "screenshot.sh"} 'screen'";
   "--release Ctrl+Print"  = "exec ${getScript "screenshot.sh"} 'everything'";
 
@@ -79,16 +90,16 @@ lib.mkOptionDefault {
 
   # Multiple monitors command
   # Switch to workspace
-  "${modifier}+i" = "workspace prev_on_output";
-  "${modifier}+o" = "workspace next_on_output";
+  "${modifier}+i" = makeRepeatable "workspace prev_on_output";
+  "${modifier}+o" = makeRepeatable "workspace next_on_output";
   # Focus output
-  "${modifier}+Shift+i" = "focus output left";
-  "${modifier}+Shift+o" = "focus output right";
+  "${modifier}+Shift+i" = makeRepeatable "focus output left";
+  "${modifier}+Shift+o" = makeRepeatable "focus output right";
   # Move to workspace
   "${modifier}+Ctrl+i" = "move window to workspace prev_on_output";
   "${modifier}+Ctrl+o" = "move window to workspace next_on_output";
   # Switch focus on workspaces
-  "${modifier}+u"       = "workspace back_and_forth";
+  "${modifier}+u"       = makeRepeatable "workspace back_and_forth";
   "${modifier}+Shift+u" = "move container to workspace back_and_forth";
 
   # Move workspace to other screens
@@ -103,8 +114,17 @@ lib.mkOptionDefault {
   "${modifier}+z"       = "focus child";
   "${modifier}+Shift+s" = "sticky toggle";
 
-  # Add 10th workspace
-  "${modifier}+0"       = "workspace number 10";
+  # Sway pick-ups the workspace names with "workspace ${name}"...
+  "${modifier}+1"       = "workspace ${ws.WS1}";
+  "${modifier}+2"       = "workspace ${ws.WS2}";
+  "${modifier}+3"       = "workspace ${ws.WS3}";
+  "${modifier}+4"       = "workspace ${ws.WS4}";
+  "${modifier}+5"       = "workspace ${ws.WS5}";
+  "${modifier}+6"       = "workspace ${ws.WS6}";
+  "${modifier}+7"       = "workspace ${ws.WS7}";
+  "${modifier}+8"       = "workspace ${ws.WS8}";
+  "${modifier}+9"       = "workspace ${ws.WS9}";
+  "${modifier}+0"       = "workspace ${ws.WS10}";
   "${modifier}+Shift+0" = "move container to workspace number 10";
   # Move container and focus
   "${modifier}+Ctrl+1"  = "move container to workspace number 1;  workspace number 1";
@@ -117,4 +137,4 @@ lib.mkOptionDefault {
   "${modifier}+Ctrl+8"  = "move container to workspace number 8;  workspace number 8";
   "${modifier}+Ctrl+9"  = "move container to workspace number 9;  workspace number 9";
   "${modifier}+Ctrl+0"  = "move container to workspace number 10; workspace number 10";
-}
+})
