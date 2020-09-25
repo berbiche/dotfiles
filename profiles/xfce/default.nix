@@ -8,7 +8,9 @@
     enableXfwm = true;
   };
 
-  home-manager.users.${config.my.username} = { config, ... }: {
+  home-manager.users.${config.my.username} = { config, pkgs, ... }: {
+    home.packages = with pkgs; [ caffeine-ng ];
+
     programs.autorandr.enable = false;
     programs.autorandr.profiles = {
 

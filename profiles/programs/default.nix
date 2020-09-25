@@ -20,6 +20,8 @@ in
       [
         ncdu
         element-desktop
+        fractal
+        nwg-launchers
         youtube-dl
       ]
       (lib.mkIf isLinux [
