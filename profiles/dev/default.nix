@@ -35,7 +35,7 @@ in
         wget curl aria
         lsof
         nmap telnet tcpdump dnsutils mtr
-        git rsync
+        gitFull rsync
         exa fd fzf ripgrep hexyl tree bc bat
         htop ctop ytop
         alacritty

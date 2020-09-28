@@ -10,7 +10,7 @@
     {
       programs.git = {
         enable = true;
-        package = pkgs.git;
+        package = pkgs.gitFull;
 
         userName = config.my.identity.name;
         userEmail = config.my.identity.email;
