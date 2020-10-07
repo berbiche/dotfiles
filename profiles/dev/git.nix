@@ -17,6 +17,7 @@
 
         extraConfig = lib.mkMerge [
           {
+            user.useConfigOnly = true;
             pull.ff = "only";
             push.default = "current";
             merge.tool = "vimdiff";
@@ -25,11 +26,22 @@
             diff.tool = "vimdiff";
             advice.addEmptyPathspec = false;
             diff.colorMoved = "default";
+            log.showSignature = true;
+
+            status.showStash = true;
+
+            # Allows `git fetch upstream master:master` if current checkout branch is master
+            # See `man git-config
+            receive.denyCurrentBranch = "updateInstead";
           }
           (lib.mkIf config.programs.neovim.enable {
             mergetool.vimdiff = {
               cmd = "${pkgs.neovim}/bin/nvim -d $LOCAL $REMOTE $MERGE -c 'wincmd w' -c 'wincmd J'";
             };
+          })
+          (lib.mkIf (config.my.identity.gpgSigningKey != null) {
+            tag.gpgSign = true;
+            user.signingKey = config.my.identity.gpgSigningKey;
           })
         ];
 

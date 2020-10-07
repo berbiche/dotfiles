@@ -7,8 +7,8 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     # Input that I update everyday for specific packages
     master.url = "github:nixos/nixpkgs/nixos-unstable-small";
-    nix.url = "github:nixos/nix";
     nix-darwin.url = "github:LnL7/nix-darwin/flakes";
+    #home-manager.url= "github:berbiche/home-manager/sway-check-config-at-build-time";
     home-manager.url= "github:berbiche/home-manager/replace-attrs-by-formats";
     nixpkgs-mozilla = { url = "github:mozilla/nixpkgs-mozilla"; flake = false; };
     nixpkgs-wayland = {
@@ -101,6 +101,11 @@
               email = lib.mkOption {
                 type = lib.types.str;
                 description = "Email";
+              };
+              gpgSigningKey = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
+                default = null;
+                description = "Primary GPG signing key";
               };
             };
           };

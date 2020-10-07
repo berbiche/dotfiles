@@ -70,8 +70,11 @@ lib.mkMerge [
 
   {
     home-manager.users.${username} = { ... }: {
-      my.identity.name = "Nicolas Berbiche";
-      my.identity.email = "nic." + "berbiche" + "@" + "gmail" + ".com";
+      my.identity = {
+        name = "Nicolas Berbiche";
+        email = "nic.berbiche" + "@gmail.com";
+        gpgSigningKey = "B461292445C6E696";
+      };
 
       home.sessionVariables = {
         NIX_PAGER = "less --RAW-CONTROL-CHARS --quit-if-one-screen";
