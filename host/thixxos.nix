@@ -92,4 +92,6 @@ in
       intel-media-driver
     ];
   };
+
+  services.printing.drivers = [ pkgs.hplip ];
 }
