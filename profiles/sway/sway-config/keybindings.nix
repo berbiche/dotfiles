@@ -10,7 +10,7 @@ let
 
   ws = lib.mapAttrs (_: lib.escapeShellArg) workspaces;
 
-  getScript = name: rootPath + "/scripts/${name}";
+  getScript = name: "${config.home.file."scripts".source}/${name}";
   OUTPUT-LAPTOP = "eDP-1";
 
   # Sway's poor default to repeat the action continuously is dumb

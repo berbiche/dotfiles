@@ -91,10 +91,12 @@
     ];
 
     # Copy the scripts folder
-    home.file."scripts" = {
-      source = ../../scripts;
-      recursive = false; # we want the folder symlinked, not its files
-    };
+    home.file."scripts".source = "${
+      # For the patchShebang phase
+      pkgs.runCommandLocal "sway-scripts" {} ''
+        cp -T -r ${./scripts} $out
+      ''
+    }";
 
     programs.swaylock = {
       enable = true;

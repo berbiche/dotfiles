@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 case "$1" in
   increase)
     pamixer --unmute
@@ -15,9 +15,9 @@ case "$1" in
     pamixer --get-mute && volnoti-show -m || volnoti-show `pamixer --get-volume`
     ;;
   mic-mute)
-    pacmd list-sources | \
-      awk '/\* index:/ {print $3}' | \
-      xargs -I{} pactl set-source-mute {} toggle
+    pactl set-source-mute '@DEFAULT_SOURCE@' toggle
     ;;
+  *)
+    echo "Usage: $0 {increase|decrease|toggle-mute|mic-mute}"
+    exit 1
 esac
-
