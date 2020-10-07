@@ -4,7 +4,7 @@
   home-manager.users.${config.my.username} = {
     home.packages = with pkgs; [
       wireshark
-      ghidra-bin-with-go
+      ghidra-bin
       gdb
       pwndbg
       burpsuite
@@ -12,6 +12,9 @@
       volatility
       p7zip
       patchelf
+      shellcheck
+      python3Packages.binwalk
+      p7zip
     ];
   };
 }

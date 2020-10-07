@@ -8,6 +8,7 @@
       # Audio software
       pavucontrol
       pamixer # control pulse audio volume in scripts
+      playerctl # control MPRIS players
 
       libnotify # `notify-send` notifications to test mako
       dex # execute .desktop files
@@ -22,6 +23,8 @@
       # Virtualization software
       gnome3.gnome-boxes
       # virt-manager
+
+      ffmpeg
     ];
 
 

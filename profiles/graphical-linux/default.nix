@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  environment.systemPackages = [ pkgs.playerctl pkgs.polkit pkgs.polkit_gnome ];
-
+  imports = [ ./user.nix ];
 
   services.xserver.enable = true;
   services.xserver.displayManager.lightdm = {
@@ -13,7 +12,10 @@
     };
   };
 
+  # To use the gnome-keyring and have it act as the ssh-agent
   services.gnome3.gnome-keyring.enable = true;
+  programs.seahorse.enable = true;
+  environment.systemPackages = with pkgs; [ polkit polkit_gnome ];
 
   services.xserver.libinput.enable = true;
   services.xserver.layout = "us";
@@ -24,7 +26,6 @@
     driSupport32Bit = true;
     extraPackages = with pkgs; [ libva ];
   };
-
 
   security.polkit.enable = true;
 
