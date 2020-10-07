@@ -4,7 +4,7 @@
   # Not much to put here right now
   services.xserver.desktopManager.xfce = {
     enable = true;
-    noDesktop = true;
+    noDesktop = false;
     enableXfwm = true;
   };
 
