@@ -15,8 +15,6 @@
   };
   services.pipewire.enable = true;
 
-  # TODO: See if this is necessary to be used with home-manager's Sway configuration
-  # FIXME: Duplicate code
   programs.sway = {
     enable = true;
 
@@ -27,37 +25,7 @@
       base = true;
     };
 
-    extraPackages = with pkgs; [
-      xwayland
-
-      brightnessctl
-
-      swayidle
-      swaylock
-      swaybg
-
-      gebaar-libinput  # libinput gestures utility
-
-      grim
-      slurp
-      wf-recorder      # wayland screenrecorder
-
-      waybar
-      mako
-      volnoti
-      wl-clipboard
-      wdisplays
-
-      # oblogout alternative
-      wlogout
-
-      wofi
-      xfce.xfce4-appfinder
-
-      xdg-desktop-portal-wlr # xdg-desktop-portal backend for wlroots
-
-      qt5.qtwayland
-    ];
+    extraPackages = with pkgs; [ qt5.qtwayland ];
 
     extraSessionCommands = ''
       export SDL_VIDEODRIVER=wayland

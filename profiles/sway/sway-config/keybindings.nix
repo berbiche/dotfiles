@@ -22,7 +22,7 @@ let
   # Marks a keybinding as being repeatable (holding the key will trigger the action continuously)
   makeRepeatable = n: { repeat = n; };
 in
-lib.mkOptionDefault (makeNoRepeat {
+lib.mkOptionDefault ((makeNoRepeat {
   # Some defaults from Sway are included for the sake of self documentation
   "${modifier}+Return"       = "exec ${binaries.terminal}";
   "${modifier}+Shift+Return" = "exec ${binaries.floating-term}";
@@ -125,16 +125,59 @@ lib.mkOptionDefault (makeNoRepeat {
   "${modifier}+8"       = "workspace ${ws.WS8}";
   "${modifier}+9"       = "workspace ${ws.WS9}";
   "${modifier}+0"       = "workspace ${ws.WS10}";
-  "${modifier}+Shift+0" = "move container to workspace number 10";
+  "${modifier}+Shift+1" = "move container to workspace ${ws.WS1}";
+  "${modifier}+Shift+2" = "move container to workspace ${ws.WS2}";
+  "${modifier}+Shift+3" = "move container to workspace ${ws.WS3}";
+  "${modifier}+Shift+4" = "move container to workspace ${ws.WS4}";
+  "${modifier}+Shift+5" = "move container to workspace ${ws.WS5}";
+  "${modifier}+Shift+6" = "move container to workspace ${ws.WS6}";
+  "${modifier}+Shift+7" = "move container to workspace ${ws.WS7}";
+  "${modifier}+Shift+8" = "move container to workspace ${ws.WS8}";
+  "${modifier}+Shift+9" = "move container to workspace ${ws.WS9}";
+  "${modifier}+Shift+0" = "move container to workspace ${ws.WS10}";
   # Move container and focus
-  "${modifier}+Ctrl+1"  = "move container to workspace number 1;  workspace number 1";
-  "${modifier}+Ctrl+2"  = "move container to workspace number 2;  workspace number 2";
-  "${modifier}+Ctrl+3"  = "move container to workspace number 3;  workspace number 3";
-  "${modifier}+Ctrl+4"  = "move container to workspace number 4;  workspace number 4";
-  "${modifier}+Ctrl+5"  = "move container to workspace number 5;  workspace number 5";
-  "${modifier}+Ctrl+6"  = "move container to workspace number 6;  workspace number 6";
-  "${modifier}+Ctrl+7"  = "move container to workspace number 7;  workspace number 7";
-  "${modifier}+Ctrl+8"  = "move container to workspace number 8;  workspace number 8";
-  "${modifier}+Ctrl+9"  = "move container to workspace number 9;  workspace number 9";
-  "${modifier}+Ctrl+0"  = "move container to workspace number 10; workspace number 10";
+  "${modifier}+Ctrl+1"  = "move container to workspace ${ws.WS1};  workspace number 1";
+  "${modifier}+Ctrl+2"  = "move container to workspace ${ws.WS2};  workspace number 2";
+  "${modifier}+Ctrl+3"  = "move container to workspace ${ws.WS3};  workspace number 3";
+  "${modifier}+Ctrl+4"  = "move container to workspace ${ws.WS4};  workspace number 4";
+  "${modifier}+Ctrl+5"  = "move container to workspace ${ws.WS5};  workspace number 5";
+  "${modifier}+Ctrl+6"  = "move container to workspace ${ws.WS6};  workspace number 6";
+  "${modifier}+Ctrl+7"  = "move container to workspace ${ws.WS7};  workspace number 7";
+  "${modifier}+Ctrl+8"  = "move container to workspace ${ws.WS8};  workspace number 8";
+  "${modifier}+Ctrl+9"  = "move container to workspace ${ws.WS9};  workspace number 9";
+  "${modifier}+Ctrl+0"  = "move container to workspace ${ws.WS10}; workspace number 10";
+})
+# Remove default keybindings
+// {
+  "${modifier}+Enter" = null;
+  "${modifier}+1" = null;
+  "${modifier}+2" = null;
+  "${modifier}+3" = null;
+  "${modifier}+4" = null;
+  "${modifier}+5" = null;
+  "${modifier}+6" = null;
+  "${modifier}+7" = null;
+  "${modifier}+8" = null;
+  "${modifier}+9" = null;
+  "${modifier}+0" = null;
+  "${modifier}+Shift+1" = null;
+  "${modifier}+Shift+2" = null;
+  "${modifier}+Shift+3" = null;
+  "${modifier}+Shift+4" = null;
+  "${modifier}+Shift+5" = null;
+  "${modifier}+Shift+6" = null;
+  "${modifier}+Shift+7" = null;
+  "${modifier}+Shift+8" = null;
+  "${modifier}+Shift+9" = null;
+  "${modifier}+Shift+0" = null;
+  "${modifier}+Ctrl+1" = null;
+  "${modifier}+Ctrl+2" = null;
+  "${modifier}+Ctrl+3" = null;
+  "${modifier}+Ctrl+4" = null;
+  "${modifier}+Ctrl+5" = null;
+  "${modifier}+Ctrl+6" = null;
+  "${modifier}+Ctrl+7" = null;
+  "${modifier}+Ctrl+8" = null;
+  "${modifier}+Ctrl+9" = null;
+  "${modifier}+Ctrl+0" = null;
 })

@@ -1,4 +1,5 @@
 { config, lib, pkgs, rootPath, ... }:
+# rootPath is a custom input injected in Flake.nix
 
 let
   mkSwaybar = { outputs, id ? null }: {
@@ -78,7 +79,8 @@ let
     nwgbar = "${pkgs.nwg-launchers}/bin/nwgbar";
     spotify = "${pkgs.spotify}/bin/spotify";
     swaylock = "${pkgs.swaylock}/bin/swaylock";
-    swaymsg = "${config.wayland.windowManager.sway.package}/bin/swaymsg";
+    # swaymsg = "${config.wayland.windowManager.sway.package}/bin/swaymsg";
+    swaymsg = "${pkgs.sway}/bin/swaymsg";
     wl-paste = "${pkgs.wl-clipboard}/bin/wl-paste";
     wlogout = "${pkgs.wlogout}/bin/wlogout";
     wofi = "${pkgs.wofi}/bin/wofi";
@@ -235,6 +237,8 @@ let
         { con_mark = "_music-player.*"; }
       ])
     ];
+
+    bars = lib.mkForce [];
   };
 in
 {
