@@ -1,8 +1,6 @@
 { config, pkgs, lib, ... }:
 
 let
-  inherit (pkgs.stdenv.targetPlatform) isDarwin isLinux;
-
   inherit (builtins) map attrNames readDir;
   inherit (lib) filterAttrs hasSuffix;
 
@@ -14,75 +12,72 @@ in
 {
   imports = configs;
 
-  home-manager.users.${config.my.username} = { config, pkgs, ... }: lib.mkMerge [
-    ({
-      home.sessionVariables = {
-        EDITOR = "${config.programs.neovim.package}/bin/nvim";
-        LESS = "--RAW-CONTROL-CHARS --quit-if-one-screen";
-      };
+  home-manager.users.${config.my.username} = { config, pkgs, ... }: {
+    home.sessionVariables = {
+      EDITOR = "${config.programs.neovim.package}/bin/nvim";
+      LESS = "--RAW-CONTROL-CHARS --quit-if-one-screen";
+      CARGO_HOME = "${config.xdg.cacheHome}/cargo";
+      DOCKER_CONFIG = "${config.xdg.configHome}/docker";
+      M2_HOME = "${config.xdg.cacheHome}/maven";
+    };
 
-      home.packages = with pkgs; [
-        jq                           # cli to extract data out of json input
-        hexyl
+    home.packages = with pkgs; [
+      # cli to extract data out of json input
+      jq
 
-        # Programming
-        clang
-        python3
-        gnumake
-        powershell
-        tig
+      # Programming
+      clang
+      python3
+      gnumake
+      powershell
+      tig
 
-        wget curl aria
-        lsof
-        nmap telnet tcpdump dnsutils mtr
-        gitFull rsync
-        exa fd fzf ripgrep hexyl tree bc bat
-        htop ctop ytop
-        alacritty
-        docker-compose
-      ];
+      wget curl aria
+      lsof
+      nmap telnet tcpdump dnsutils mtr
+      gitFull rsync
+      exa fd fzf ripgrep hexyl tree bc bat
+      procs sd dust tokei bandwhich
+      htop ctop
+      docker-compose
+    ] ++ lib.optionals pkgs.stdenv.isLinux [
+      bottom
+      jetbrains.idea-community
+      insomnia
+    ];
 
-      # Preview directory content and find directory to `cd` to
-      programs.broot = {
-        enable = true;
-        enableZshIntegration = true;
-        enableFishIntegration = true;
-      };
+    # Preview directory content and find directory to `cd` to
+    programs.broot = {
+      enable = true;
+      enableZshIntegration = true;
+      enableFishIntegration = true;
+    };
 
-      # ctrl-t, ctrl-r, kill <tab><tab>
-      programs.fzf = {
-        enable = true;
-        enableZshIntegration = true;
-        defaultCommand = ''${pkgs.fd}/bin/fd --follow --type f --exclude="'.git'" .'';
-        defaultOptions = [ "--exact" "--cycle" "--layout=reverse" ];
-        # enableFishIntegration = true;
-      };
+    # ctrl-t, ctrl-r, kill <tab><tab>
+    programs.fzf = {
+      enable = true;
+      enableZshIntegration = true;
+      defaultCommand = ''${pkgs.fd}/bin/fd --follow --type f --exclude="'.git'" .'';
+      defaultOptions = [ "--exact" "--cycle" "--layout=reverse" ];
+      # enableFishIntegration = true;
+    };
 
-      programs.mcfly = {
-        enable = false;
-        enableFishIntegration = true;
-      };
+    programs.mcfly = {
+      enable = false;
+      enableFishIntegration = true;
+    };
 
-      programs.direnv = {
-        enable = true;
-        enableZshIntegration = true;
-        enableFishIntegration = true;
-      };
+    programs.direnv = {
+      enable = true;
+      enableZshIntegration = true;
+      enableFishIntegration = true;
+    };
 
-      programs.zoxide = {
-        enable = true;
-        enableZshIntegration = true;
-        enableFishIntegration = true;
-      };
-    })
-
-    (lib.mkIf isLinux {
-      home.packages = with pkgs; [
-        # These packages do not build on Darwin
-        jetbrains.idea-community
-        insomnia
-      ];
-    })
-  ];
+    programs.zoxide = {
+      enable = true;
+      enableZshIntegration = true;
+      enableFishIntegration = true;
+    };
+  };
 }
 
