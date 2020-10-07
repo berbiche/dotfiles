@@ -7,57 +7,59 @@
       enableZshIntegration = true;
 
       settings = {
-        add_newline = true;
-        prompt_order = [
-          "username"
-          "hostname"
-          "kubernetes"
-          "git_branch"
-          "git_commit"
-          "git_state"
-          "git_status"
-          "hg_branch"
-          "docker_context"
-          "package"
-          "dotnet"
-          "elixir"
-          "elm"
-          "erlang"
-          "golang"
-          "haskell"
-          "java"
-          "julia"
-          "nodejs"
-          "ocaml"
-          "php"
-          "purescript"
-          "python"
-          "ruby"
-          "rust"
-          "terraform"
-          "zig"
-          "nix_shell"
-          "conda"
-          "memory_usage"
-          "aws"
-          "env_var"
-          "crystal"
-          "cmd_duration"
-          "custom"
-          "line_break"
-          "jobs"
-          "battery"
-          "directory"
-          "time"
-          "character"
+        add_newline = false;
+        format = lib.concatStrings [
+          "$username@$hostname"
+          # "$kubernetes"
+          "$git_branch"
+          "$git_commit"
+          "$git_state"
+          "$git_status"
+          # "$hg_branch"
+          "$docker_context"
+          "$package"
+          # "dotnet"
+          "$elixir"
+          # "elm"
+          "$erlang"
+          "$golang"
+          "$haskell"
+          "$java"
+          # "julia"
+          "$nodejs"
+          # "ocaml"
+          # "php"
+          # "purescript"
+          "$python"
+          # "ruby"
+          "$rust"
+          "$terraform"
+          # "zig"
+          "$nix_shell"
+          # "conda"
+          # "memory_usage"
+          # "aws"
+          # "gcloud"
+          # "env_var"
+          # "crystal"
+          "$cmd_duration"
+          # "custom"
+          "$line_break"
+          "$jobs"
+          "$directory"
+          "$time"
+          "$status"
+          "$character"
         ];
 
-        character.symbol = "$";
+        character = {
+          error_symbol = ''[\$](bold red)'';
+          success_symbol = ''[\$](bold green)'';
+        };
 
         cmd_duration.disable = true;
 
         directory = {
-          prefix = "";
           truncation_length = 1;
           truncate_to_repo = false;
           fish_style_pwd_dir_length = 1;
@@ -65,8 +67,7 @@
 
         hostname = {
           ssh_only = false;
-          prefix = "<";
-          suffix = ">";
+          format = "<[$hostname]($style)> ";
         };
 
         line_break.disabled = false;
@@ -80,13 +81,14 @@
 
         time = {
           disabled = false;
-          format = "%H:%M";
-          prefix = "";
+          time_format = "%H:%M";
+          format = "[\\[$time\\]]($style) ";
         };
 
         username = {
           disabled = false;
           show_always = true;
+          format = "[$user]($style)";
         };
       };
     };
