@@ -10,7 +10,8 @@ let
   vscodium = pkgs.vscodium.overrideAttrs(old: {
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ pkgs.jq ];
     installPhase = old.installPhase or "" + ''
-      FILE=$out/lib/vscode/resources/app/product.json
+      #FILE=$out/lib/vscode/resources/app/product.json
+      FILE=$(find $out -name 'product.json' -print -quit)
       mv $FILE .
       echo "Patching product.json"
       jq <product.json >$FILE '
@@ -43,12 +44,14 @@ in
         # "pgourlain.erlang"
         # "redhat.java"
         # "arrterian.nix-env-selector"
+
         bbenoist.Nix
         redhat.vscode-yaml
         ms-vscode-remote.remote-ssh
-        ms-python.python
         ms-kubernetes-tools.vscode-kubernetes-tools 
         vscodevim.vim
+      ] ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
+        ms-python.python
         llvm-org.lldb-vscode
       ];
 

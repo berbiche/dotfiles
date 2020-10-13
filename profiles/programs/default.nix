@@ -20,11 +20,11 @@ in
       [
         ncdu
         element-desktop
-        fractal
-        nwg-launchers
         youtube-dl
       ]
       (lib.mkIf isLinux [
+        fractal
+        nwg-launchers
         bitwarden bitwarden-cli
         spotify
         signal-desktop

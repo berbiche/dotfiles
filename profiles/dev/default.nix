@@ -34,14 +34,13 @@ in
 
       wget curl aria
       lsof
-      nmap telnet tcpdump dnsutils mtr
       gitFull rsync
+      nmap telnet tcpdump dnsutils mtr
       exa fd fzf ripgrep hexyl tree bc bat
-      procs sd dust tokei bandwhich
+      procs sd dust tokei bandwhich bottom
       htop ctop
       docker-compose
     ] ++ lib.optionals pkgs.stdenv.isLinux [
-      bottom
       jetbrains.idea-community
       insomnia
     ];

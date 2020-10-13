@@ -100,6 +100,22 @@
         "type": "indirect"
       }
     },
+    "nixpkgs-darwin": {
+      "locked": {
+        "lastModified": 1602051038,
+        "narHash": "sha256-bx7xwZ/MsLUMZ62Bh2c5jO2SpR9lAkL/ssyhsag5ESo=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "41c0f49681009ceb57a65b7cd7d4e6d605df712c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-mozilla": {
       "flake": false,
       "locked": {
@@ -174,6 +190,7 @@
         "master": "master",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs_3",
+        "nixpkgs-darwin": "nixpkgs-darwin",
         "nixpkgs-mozilla": "nixpkgs-mozilla",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "vim-theme-anderson": "vim-theme-anderson",

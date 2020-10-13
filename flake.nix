@@ -5,6 +5,7 @@
   inputs = {
     # This input I update less frequently
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
+    nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     # Input that I update everyday for specific packages
     master.url = "github:nixos/nixpkgs/nixos-unstable-small";
     nix-darwin.url = "github:LnL7/nix-darwin/flakes";
@@ -35,8 +36,7 @@
     });
 
     mkConfig =
-      { platform
-      , hostname
+      { hostname
       , username
       , hostConfiguration ? ./host + "/${hostname}.nix"
       , userConfiguration ? ./user + "/${username}.nix"
@@ -115,7 +115,7 @@
     mkLinuxConfig =
       { platform, hostname, hostConfiguration ? ./host + "/${hostname}.nix", ... } @ args:
       let
-        modules = mkConfig args;
+        modules = mkConfig (removeAttrs args [ "platform" ]);
 
         linuxDefaults = { pkgs, lib, ... }: {
           # Import home-manager/nixos version here
@@ -146,9 +146,9 @@
           pkgs = nixpkgsFor.${platform};
         };
 
-    mkDarwinConfig =
-      { platform, ... } @ args: let
-        modules = mkConfig args;
+    mkDarwinConfig = args: let
+
+        modules = mkConfig (removeAttrs args [ "platform" ]);
 
         darwinDefaults = { config, pkgs, lib, ... }: {
           imports = [ inputs.home-manager.darwinModules.home-manager ];
@@ -170,7 +170,7 @@
 
         result = inputs.nix-darwin.lib.evalConfig {
           configuration = { ... }: { imports = modules ++ [ darwinDefaults ]; };
-          inputs.nixpkgs = nixpkgs;
+          inputs.nixpkgs = inputs.nixpkgs-darwin;
         };
       in result.system;
   in {
