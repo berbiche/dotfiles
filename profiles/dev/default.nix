@@ -27,6 +27,8 @@ in
     home.packages = with pkgs; [
       # cli to extract data out of json input
       jq
+      # interactive tool to write pipelines
+      pipr
 
       # Programming
       clang
@@ -36,13 +38,14 @@ in
       tig
 
       wget curl aria
-      lsof
+      lsof iotop
       gitFull rsync
-      nmap telnet tcpdump dnsutils mtr
+      nmap telnet tcpdump dnsutils mtr bandwhich
       exa fd fzf ripgrep hexyl tree bc bat
-      procs sd dust tokei bandwhich bottom hyperfine
+      procs sd du-dust tokei manix bottom hyperfine
       htop ctop
       docker-compose
+      onefetch
     ] ++ lib.optionals pkgs.stdenv.isLinux [
       jetbrains.idea-community
       insomnia
