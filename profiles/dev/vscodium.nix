@@ -59,6 +59,7 @@ in
         "editor.cursorSmoothCaretAnimation" = true;
         "editor.fontFamily" = "'Source Code Pro', 'Anonymous Pro', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'";
         "editor.fontSize" = 15;
+        "editor.rulers" = [ 80 100 120 ];
         "editor.smoothScrolling" = true;
         "editor.stablePeek" = true;
         "explorer.autoReveal" = false;
@@ -68,14 +69,14 @@ in
         "update.mode" = "none";
         "window.menuBarVisibility" = "toggle";
         "window.restoreWindows" = "none";
+        "window.title" = "\${activeEditorShort}\${separator}\${rootName}\${separator}\${appName}";
         "workbench.activityBar.visible" = false;
-        "workbench.colorTheme" = "Monokai";
+        "workbench.colorTheme" = "Monokai Dimmed";
         "workbench.editor.highlightModifiedTabs" = true;
         "workbench.editor.showTabs" = true;
         "workbench.editor.tabCloseButton" = "off";
         "workbench.editor.untitled.labelFormat" = "name";
         "workbench.list.smoothScrolling" = true;
-        "window.title" = "\${activeEditorShort}\${separator}\${rootName}\${separator}\${appName}";
 
         # Extension settings
         "java.semanticHighlighting.enabled" = true;
