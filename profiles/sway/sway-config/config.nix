@@ -59,7 +59,7 @@ let
       ${firefox} "$@"
     ''}/bin/firefox";
     browser-private = "${browser} --private-window";
-    browser-work-profile = "${browser} -P work";
+    browser-work-profile = "${browser} -P job";
     lock = "${swaylock} -f -c 0f0f0ff0 -i ${imageFolder}/3840x2160.png";
     logout-menu = "${wlogout}";
     audiocontrol = "${pavucontrol}";
