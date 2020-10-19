@@ -144,6 +144,10 @@ in
         ZSH_AUTOSUGGEST_COMPLETION_IGNORE="*/nix/store/*|rsync *|scp *|*/tmp/*"
 
 
+        ## VERY IMPORTANT!!!!
+        unset RPS1 RPROMPT
+
+
 
         echo $USER@$HOST  $(uname -srm) \
           $(sed -n 's/^NAME=//p' /etc/os-release 2>/dev/null || printf "") \
