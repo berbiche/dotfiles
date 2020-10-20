@@ -1,7 +1,7 @@
 { config, ... }:
 
 {
-  home-manager.users.${config.my.username} = { config, lib, pkgs, ... }:
+  my.home = { config, lib, pkgs, ... }:
   lib.mkMerge [
     (lib.mkIf config.services.gnome-keyring.enable {
       home.packages = [ pkgs.gnome3.seahorse ];

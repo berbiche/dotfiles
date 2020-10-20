@@ -11,7 +11,7 @@
 { config, ... }:
 
 {
-  home-manager.users.${config.my.username} = { config, lib, pkgs, ... }: {
+  my.home = { config, lib, pkgs, ... }: {
     imports = [
       ./home-wallutils.nix
       ./home-xidlehook.nix

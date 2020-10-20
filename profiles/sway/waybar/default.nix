@@ -169,7 +169,7 @@ let
   };
 in
 {
-  home-manager.users.${config.my.username} = { ... }: {
+  my.home = { ... }: {
     programs.waybar = {
       enable = true;
       systemd.enable = true;

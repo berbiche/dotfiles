@@ -1,7 +1,7 @@
 { config, ... }:
 
 {
-  home-manager.users.${config.my.username} = { config, pkgs, ... }: {
+  my.home = { config, pkgs, ... }: {
     imports = [ ./systemd.nix ];
 
     home.packages = with pkgs; [

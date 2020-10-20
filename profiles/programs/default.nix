@@ -13,7 +13,7 @@ let
   in map (p: ./. + "/${p}") (attrNames (filtered files));
 in
 {
-  home-manager.users.${config.my.username} = {
+  my.home = {
     imports = customPrograms;
 
     home.packages = with pkgs; lib.mkMerge [

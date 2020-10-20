@@ -31,7 +31,7 @@ let
   });
 in
 {
-  home-manager.users.${config.my.username} = { config, ... }: {
+  my.home = { config, ... }: {
     home.packages = [ vscodium ];
 
     programs.vscode = {

@@ -12,7 +12,7 @@ in
 {
   imports = configs;
 
-  home-manager.users.${config.my.username} = { config, pkgs, ... }: {
+  my.home = { config, pkgs, ... }: {
     home.sessionVariables = {
       EDITOR = "${config.programs.neovim.package}/bin/nvim";
       LESS = "--RAW-CONTROL-CHARS --quit-if-one-screen";

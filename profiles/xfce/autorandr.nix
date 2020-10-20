@@ -8,7 +8,7 @@ in
 {
   services.autorandr.enable = true;
 
-  home-manager.users.${config.my.username} = { config, pkgs, ... }: {
+  my.home = { config, pkgs, ... }: {
     programs.autorandr = {
       enable = true;
 

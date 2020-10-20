@@ -19,7 +19,7 @@ lib.mkMerge [
     };
     users.groups.${username} = { };
 
-    home-manager.users.${username} = { pkgs, ... }: {
+    my.home = { pkgs, ... }: {
       gtk = {
         enable = true;
         iconTheme = {
@@ -69,7 +69,7 @@ lib.mkMerge [
   # </isLinux>
 
   {
-    home-manager.users.${username} = { ... }: {
+    my.home = { ... }: {
       my.identity = {
         name = "Nicolas Berbiche";
         email = "nic.berbiche" + "@gmail.com";

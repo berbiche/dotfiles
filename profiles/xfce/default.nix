@@ -34,7 +34,7 @@
       "xkb"
     ]);
 
-  home-manager.users.${config.my.username} = { pkgs, ... }:
+  my.home = { pkgs, ... }:
    {
     home.packages = with pkgs; [ caffeine-ng xclip ];
 

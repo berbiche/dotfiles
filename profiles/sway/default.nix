@@ -40,7 +40,7 @@
     '';
   };
 
-  home-manager.users.${config.my.username} = { config, pkgs, lib, ... }: {
+  my.home = { config, pkgs, lib, ... }: {
     imports = [
       ./kanshi.nix
       ./mako.nix

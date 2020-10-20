@@ -7,7 +7,7 @@ let
   defaultFontSize = 13.0;
 in
 {
-  home-manager.users.${config.my.username} = { ... }: {
+  my.home = { ... }: {
     programs.alacritty.enable = true;
     programs.alacritty.settings = {
       # Any items in the `env` entry below will be added as

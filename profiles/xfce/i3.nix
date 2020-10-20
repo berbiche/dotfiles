@@ -6,7 +6,7 @@
     package = pkgs.i3-gaps;
   };
 
-  home-manager.users.${config.my.username} = { config, ... }:
+  my.home = { config, ... }:
     let
       mod = config.xsession.windowManager.i3.config.modifier;
 

@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  home-manager.users.${config.my.username} = { ... }: {
+  my.home = { ... }: {
     home.packages = [ pkgs.bat ];
 
     xdg.configFile."bat/config".text = ''

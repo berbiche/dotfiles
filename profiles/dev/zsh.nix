@@ -10,7 +10,7 @@ in
     enableCompletion = true;
   };
 
-  home-manager.users.${config.my.username} = { config, lib, pkgs, ... }: {
+  my.home = { config, lib, pkgs, ... }: {
     programs.zsh = {
       enable = true;
       enableAutosuggestions = true;

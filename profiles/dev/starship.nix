@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  home-manager.users.${config.my.username} = { ... }: {
+  my.home = { ... }: {
     programs.starship = {
       enable = true;
       enableZshIntegration = true;

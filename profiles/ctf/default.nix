@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 {
-  home-manager.users.${config.my.username} = {
+  my.home = {
     home.packages = with pkgs; [
       wireshark
       ghidra-bin

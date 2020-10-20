@@ -15,7 +15,7 @@ let
   themeFiles = lib.mapAttrsToList toXDG themes;
 in
 {
-  home-manager.users.${config.my.username} = { ... }: lib.mkMerge (themeFiles ++ [{
+  my.home = { ... }: lib.mkMerge (themeFiles ++ [{
     home.packages = [ pkgs.fzf ];
 
     programs.neovim = {
