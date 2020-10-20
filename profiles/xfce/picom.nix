@@ -32,5 +32,7 @@
         use-ewmh-active-win = true
       '';
     };
+
+    systemd.user.services.picom.Install.WantedBy = lib.mkForce [ "x11-session.target" ];
   };
 }
