@@ -44,8 +44,8 @@ let
     home-dell-lone.outputs = [ displays.dell-3 ];
 
     home-dell.outputs = [
-      displays.dell-3
-      (displays.dell-2 // { position = "3840,0"; transform = "270"; })
+      (displays.dell-3 // { position = "1080,0"; })
+      (displays.dell-2 // { transform = "90"; })
     ];
 
     lenovo-benq = {
