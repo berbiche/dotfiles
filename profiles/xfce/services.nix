@@ -43,7 +43,7 @@
       Service = {
         Type = "dbus";
         BusName = "org.freedesktop.Notifications";
-        ExecStart = "${pkgs.xfce.xfce4-notifyd}/bin/xfce4-notifyd";
+        ExecStart = "${pkgs.xfce.xfce4-notifyd}/lib/xfce4/notifyd/xfce4-notifyd";
       };
       Install.WantedBy = [ "x11-session.target" ];
     };
