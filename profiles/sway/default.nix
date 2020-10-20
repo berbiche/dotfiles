@@ -40,7 +40,7 @@
     '';
   };
 
-  home-manager.users.${config.my.username} = { config, pkgs, ... }: {
+  home-manager.users.${config.my.username} = { config, pkgs, lib, ... }: {
     imports = [
       ./kanshi.nix
       ./mako.nix
@@ -57,6 +57,14 @@
       libnotify # `notify-send` notifications to test mako
       dex # execute .desktop files
     ];
+
+    systemd.user.targets.wayland-session.Unit = {
+      Description = "Wayland compositor session";
+      Documentation = [ "man:systemd.special(7)" ];
+      BindsTo = [ "graphical-session.target" ];
+      Wants = [ "graphical-session-pre.target" ];
+      After = [ "graphical-session-pre.target" ];
+    };
 
     # Copy the scripts folder
     home.file."scripts".source = "${

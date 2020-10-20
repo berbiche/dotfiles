@@ -31,36 +31,41 @@
       inherit (swayConfig) config extraConfig;
     };
 
+    systemd.user.targets.sway-session.Unit = {
+      Description = "sway compositor session";
+      Documentation = [ "man:systemd.special(7)" ];
+      BindsTo = lib.mkForce [ "wayland-session.target" ];
+      Wants = lib.mkForce [ "wayland-session.target" ];
+      After = lib.mkForce [ "wayland-session.target" ];
+    };
+
     # Idle service
     systemd.user.services.sway-idle =
       let
         swaylock = "${pkgs.swaylock}/bin/swaylock";
         swayidle = "${pkgs.swayidle}/bin/swayidle";
         swaymsg  = "${pkgs.sway}/bin/swaymsg";
-      in
-        {
-          Unit = {
-            Description = "Idle manager for Wayland";
-            Documentation = "man:swayidle(1)";
-            PartOf = [ "graphical-session.target" ];
-          };
-
-          Service = {
-            Type = "simple";
-            Restart = "always";
-            RestartSec = "1sec";
-            ExecStart = ''
-              ${swayidle} -w \
-                  timeout 300  "${swaylock} -f" \
-                  timeout 600  "${swaymsg} 'output * dpms off'" \
-                  resume       "${swaymsg} 'output * dpms on'" \
-                  before-sleep "${swaylock} -f"
-            '';
-          };
-          Install = {
-            WantedBy = [ "sway-session.target" ];
-          };
+      in {
+        Unit = {
+          Description = "Idle manager for Wayland";
+          Documentation = "man:swayidle(1)";
+          PartOf = [ "wayland-session.target" ];
         };
+
+        Service = {
+          Type = "simple";
+          Restart = "always";
+          RestartSec = "1sec";
+          ExecStart = ''
+            ${swayidle} -w \
+                timeout 300  "${swaylock} -f" \
+                timeout 600  "${swaymsg} 'output * dpms off'" \
+                resume       "${swaymsg} 'output * dpms on'" \
+                before-sleep "${swaylock} -f"
+          '';
+        };
+        Install.WantedBy = [ "sway-session.target" ];
+      };
 
     systemd.user.services.waybar.Install.WantedBy = [ "sway-session.target" ];
 
@@ -69,7 +74,7 @@
         Description = "Lightweight volume notification daemon";
         Requisite = [ "dbus.service" ];
         After = [ "dbus.service" ];
-        PartOf = [ "graphical-session.target" ];
+        PartOf = [ "wayland-session.target" ];
       };
 
       Service = {
@@ -80,9 +85,7 @@
         RestartSec = 1;
       };
 
-      Install = {
-        WantedBy = [ "sway-session.target" ];
-      };
+      Install.WantedBy = [ "sway-session.target" ];
     };
   };
 }

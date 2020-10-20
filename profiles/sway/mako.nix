@@ -35,8 +35,7 @@
     Unit = {
       Description = "A lightweight Wayland notification daemon";
       Documentation = "man:mako(1)";
-      PartOf = [ "graphical-session.target" ];
-      After = [ "graphical-session.target" ];
+      PartOf = [ "wayland-session.target" ];
     };
 
     Service = {
@@ -54,7 +53,7 @@
   };
 
   home.activation.reloadMako = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    if systemctl --user is-active mako.service; then
+    if systemctl --user is-active mako.service wayland-session.target; then
       echo "Reloading Mako"
       $DRY_RUN_CMD systemctl --user reload mako.service
     fi
