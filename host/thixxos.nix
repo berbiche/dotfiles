@@ -86,6 +86,7 @@ in
   hardware.opengl = {
     enable = true;
     extraPackages = with pkgs; [
+      intel-compute-runtime
       vaapiIntel
       vaapiVdpau
       libvdpau-va-gl
@@ -94,4 +95,12 @@ in
   };
 
   services.printing.drivers = [ pkgs.hplip ];
+
+  # X11 fixes for the tearing and low performance
+  services.xserver.useGlamor = true;
+  services.xserver.videoDrivers = lib.mkForce [ "modesettings" ];
+  services.xserver.deviceSection = ''
+    Option "DRI" "3"
+    Option "TearFree" "true"
+  '';
 }
