@@ -49,7 +49,7 @@
   };
 
   fonts = {
-    enableFontDir = true;
+    fontDir.enable = true;
     enableDefaultFonts = true;
 
     fonts = with pkgs; [
