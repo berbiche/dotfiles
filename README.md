@@ -2,14 +2,15 @@
 
 My configuration for the various tools I use.
 
+**This README needs a thorough rewrite.**
+**All instructions are out-of-date.**
+
 I use [Sway](https://swaywm.org) (a tiling window manager running on Wayland) on NixOS on both my laptop and my desktop.
 
 This repository lives under `$HOME/dotfiles` and I use [home-manager](https://github.com/rycee/home-manager) to manage
 my configuration files and my packages.
 
 I use Gnome Keyring to manage my secrets (SSH, GPG) and to have a graphical prompt to unlock my keys.
-
-External dependencies are specified with [niv](https://github.com/nmattia/niv) in `niv/sources.json`.
 
 ## Initial setup
 
