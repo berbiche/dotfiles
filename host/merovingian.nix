@@ -9,12 +9,15 @@ in
   boot.kernelParams = [ "amd_iommu=pt" "iommu=soft" ]
     ++ [ "resume_offset=63195136" ]; # Offset of the swapfile
 
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  # high-resolution display
+  hardware.video.hidpi.enable = lib.mkDefault true;
 
   # Boot loader settings
   # Resume device is the partition with the swapfile in this case
