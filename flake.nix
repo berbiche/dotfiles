@@ -22,7 +22,7 @@
     vim-theme-gruvbox = { url = "github:morhetz/gruvbox"; flake = false; };
   };
 
-  outputs = { nixpkgs, self, ... }@inputs: let
+  outputs = inputs @ { nixpkgs, self, ... }: let
     inherit (nixpkgs) lib;
 
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
@@ -43,23 +43,6 @@
       , extraModules ? [ ]
       }:
       let
-        user = { config, options, lib, ... }: {
-          options.my = with lib; {
-            username = mkOption {
-              type = types.str;
-              description = "Primary user username";
-              example = "nicolas";
-              readOnly = true;
-            };
-            home = mkOption {
-              type = options.home-manager.users.type.functor.wrapped;
-            };
-          };
-          config = {
-            home-manager.users.${config.my.username} = lib.mkAliasDefinitions options.my.home;
-          };
-        };
-
         defaults = { pkgs, lib, stdenv, ... }: {
           imports = [ hostConfiguration userConfiguration ./cachix.nix ./lib.nix ];
           _module.args.inputs = inputs;
@@ -98,25 +81,9 @@
               # Specify home-manager version compability
               home.stateVersion = "20.09";
             };
-
-            options.my.identity = {
-              name = lib.mkOption {
-                type = lib.types.str;
-                description = "Fullname";
-              };
-              email = lib.mkOption {
-                type = lib.types.str;
-                description = "Email";
-              };
-              gpgSigningKey = lib.mkOption {
-                type = lib.types.nullOr lib.types.str;
-                default = null;
-                description = "Primary GPG signing key";
-              };
-            };
           };
         };
-      in [ user defaults ] ++ extraModules;
+      in [ ./module.nix defaults ] ++ extraModules;
 
     mkLinuxConfig =
       { platform, hostname, hostConfiguration ? ./host + "/${hostname}.nix", ... } @ args:
@@ -152,8 +119,8 @@
           pkgs = nixpkgsFor.${platform};
         };
 
-    mkDarwinConfig = args: let
-
+    mkDarwinConfig = args:
+      let
         modules = mkConfig (removeAttrs args [ "platform" ]);
 
         darwinDefaults = { config, pkgs, lib, ... }: {
@@ -227,11 +194,11 @@
         NIX_CONF_DIR = let
           current = nixpkgs.lib.optionalString (builtins.pathExists /etc/nix/nix.conf)
           (builtins.readFile /etc/nix/nix.conf);
-          nixConf = nixpkgs.writeTextDir "opt/nix.conf" ''
+          nixConf = nixpkgs.writeTextDir "etc/nix.conf" ''
             ${current}
             experimental-features = nix-command flakes
           '';
-        in "${nixConf}/opt";
+        in "${nixConf}/etc";
 
         shellHook = ''
           export NIX_PATH="$NIX_PATH:darwin=${inputs.nix-darwin}"
