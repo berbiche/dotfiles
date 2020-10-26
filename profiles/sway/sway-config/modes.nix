@@ -1,6 +1,7 @@
 { config, pkgs, lib, binaries }:
 
 let
+  inherit (config.lib.my) getScript;
   inherit (config.wayland.windowManager.sway.config)
     modifier
     left

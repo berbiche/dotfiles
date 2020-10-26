@@ -2,6 +2,8 @@
 # rootPath is a custom input injected in Flake.nix
 
 let
+  inherit (config.lib.my) callWithDefaults;
+
   mkSwaybar = { outputs, id ? null }: {
     id = id;
     position = "top";
@@ -175,11 +177,11 @@ let
       { always = true; command = "sleep 10 && pkill swaybar"; }
     ];
 
-    keybindings = pkgs.callWithDefaults ./keybindings.nix {
+    keybindings = callWithDefaults ./keybindings.nix {
       inherit config binaries rootPath workspaces;
     };
 
-    modes = pkgs.callWithDefaults ./modes.nix {
+    modes = callWithDefaults ./modes.nix {
       inherit config binaries;
     };
 

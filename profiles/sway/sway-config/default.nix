@@ -2,7 +2,7 @@
 
 {
   my.home = { config, lib, pkgs, ... }: let
-    swayConfig = pkgs.callWithDefaults ./config.nix { inherit config rootPath; };
+    swayConfig = config.lib.my.callWithDefaults ./config.nix { inherit config rootPath; };
   in {
     home.packages = with pkgs; [
       xdg-desktop-portal-wlr

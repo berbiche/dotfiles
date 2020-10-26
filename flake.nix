@@ -61,7 +61,7 @@
         };
 
         defaults = { pkgs, lib, stdenv, ... }: {
-          imports = [ hostConfiguration userConfiguration ./cachix.nix ];
+          imports = [ hostConfiguration userConfiguration ./cachix.nix ./lib.nix ];
           _module.args.inputs = inputs;
           _module.args.rootPath = ./.;
 
@@ -90,7 +90,7 @@
             useGlobalPkgs = true;
             verbose = true;
           };
-          home-manager.users.${username} = { lib, ... }: {
+          my.home = { lib, ... }: {
             config = {
               # Inject inputs
               _module.args.inputs = inputs;
