@@ -64,6 +64,8 @@ lib.mkMerge [
 
       # Run emacs as a service
       services.emacs.enable = true;
+      # Makes the desktop file `exec = emacsclient`
+      services.emacs.client.enable = true;
     };
   })
   # </isLinux>
