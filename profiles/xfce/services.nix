@@ -24,9 +24,12 @@
       temperature.day = 6500;
       temperature.night = 4000;
     };
-    systemd.user.services.redshift.Unit = {
-      PartOf = lib.mkForce [ "x11-session.target" ];
-      After = lib.mkForce [ "x11-session.target" ];
+    systemd.user.services.redshift = {
+      Unit = {
+        PartOf = lib.mkForce [ "x11-session.target" ];
+        After = lib.mkForce [ "x11-session.target" ];
+      };
+      Install.WantedBy = lib.mkForce [ "x11-session.target" ];
     };
 
     services.flameshot.enable = false;
