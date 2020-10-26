@@ -3,12 +3,27 @@
 let
   swaymsg = "${pkgs.sway}/bin/swaymsg";
 
-  displays = {
-    benq = { criteria = "BenQ Corporation BenQ EW3270U 74J08749019"; mode = "3840x2160@60Hz"; };
-    dell-1 = { criteria = "Dell Inc. DELL U2414H R9F1P55S45FL"; mode = "1920x1080@60Hz"; };
-    dell-2 = { criteria = "Dell Inc. DELL U2414H R9F1P56N68VL"; mode = "1920x1080@60Hz"; };
-    dell-3 = { criteria = "Dell Inc. DELL U3219Q F9WNWP2"; mode = "3840x2160@60Hz"; };
-    lenovo = { criteria = "Lenovo Group Limited LEN P44w-10 0x00007747"; mode = "3840x1200@144Hz"; };
+  displays = lib.mapAttrs (_: v: v // { position = "0,0"; status = "enable"; }) {
+    benq = {
+      criteria = "BenQ Corporation BenQ EW3270U 74J08749019";
+      mode = "3840x2160@60Hz";
+    };
+    dell-1 = {
+      criteria = "Dell Inc. DELL U2414H R9F1P55S45FL";
+      mode = "1920x1080@60Hz";
+    };
+    dell-2 = {
+      criteria = "Dell Inc. DELL U2414H R9F1P56N68VL";
+      mode = "1920x1080@60Hz";
+    };
+    dell-3 = {
+      criteria = "Dell Inc. DELL U3219Q F9WNWP2";
+      mode = "3840x2160@60Hz";
+    };
+    lenovo = {
+      criteria = "Lenovo Group Limited LEN P44w-10 0x00007747";
+      mode = "3840x1200@144Hz";
+    };
     laptop = { criteria = "eDP-1"; };
   };
 
