@@ -55,11 +55,11 @@ let
     terminal = "${alacritty} --working-directory ${config.home.homeDirectory}";
     floating-term = "${terminal} --class='floating-term'";
     explorer = "${nautilus}";
-    browser = "${pkgs.writeScriptBin "firefox" ''
+    browser = pkgs.writeScript "firefox" ''
       export MOZ_DBUS_REMOTE=1
       export MOZ_ENABLE_WAYLAND=1
       ${firefox} "$@"
-    ''}/bin/firefox";
+    '';
     browser-private = "${browser} --private-window";
     browser-work-profile = "${browser} -P job";
     lock = "${swaylock} -f -c 0f0f0ff0 -i ${imageFolder}/3840x2160.png";

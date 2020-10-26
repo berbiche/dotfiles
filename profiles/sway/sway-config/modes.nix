@@ -54,10 +54,16 @@ lib.mkOptionDefault {
     Escape = "mode default";
   };
 
-  multimedia = {
+  multimedia = rec {
     Left  = "exec ${binaries.playerctl} previous";
     Right = "exec ${binaries.playerctl} next";
     Up    = "exec ${binaries.playerctl} play-pause";
+
+    Backslash = "exec ${getScript "volume.sh"} 'mic-mute";
+    n   = Backslash;
+    m   = "exec ${getScript "volume.sh"} 'toggle-mute'";
+    "." = "exec ${getScript "volume.sh"} 'decrease'";
+    "," = "exec ${getScript "volume.sh"} 'increase'";
 
     Return = "mode default";
     Escape = "mode default";
