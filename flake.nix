@@ -11,6 +11,7 @@
     nix-darwin.url = "github:LnL7/nix-darwin/flakes";
     #home-manager.url= "github:berbiche/home-manager/sway-check-config-at-build-time";
     home-manager.url= "github:berbiche/home-manager/replace-attrs-by-formats";
+    nur.url = "github:nix-community/nur";
     nixpkgs-mozilla = { url = "github:mozilla/nixpkgs-mozilla"; flake = false; };
     nixpkgs-wayland = {
       url = "github:colemickens/nixpkgs-wayland";
@@ -178,6 +179,7 @@
     in overlayFiles // {
       nixpkgs-wayland = inputs.nixpkgs-wayland.overlay;
       nixpkgs-mozilla = import inputs.nixpkgs-mozilla;
+      nur = inputs.nur.overlay;
       master = (final: prev: {
         master = import inputs.master {
           system = final.system;

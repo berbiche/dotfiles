@@ -184,6 +184,21 @@
         "type": "github"
       }
     },
+    "nur": {
+      "locked": {
+        "lastModified": 1603760278,
+        "narHash": "sha256-5+2N5wXHMW6ezmQZpztezfwDp70B5FaHzRbahd0h50g=",
+        "owner": "nix-community",
+        "repo": "nur",
+        "rev": "2e85f304b8ef3f6bf3faf83e93ea306b211a987a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nur",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
@@ -193,6 +208,7 @@
         "nixpkgs-darwin": "nixpkgs-darwin",
         "nixpkgs-mozilla": "nixpkgs-mozilla",
         "nixpkgs-wayland": "nixpkgs-wayland",
+        "nur": "nur",
         "vim-theme-anderson": "vim-theme-anderson",
         "vim-theme-gruvbox": "vim-theme-gruvbox",
         "vim-theme-monokai": "vim-theme-monokai",
