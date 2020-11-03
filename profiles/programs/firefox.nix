@@ -44,6 +44,12 @@ let
       "media.gmp-widevinecdm.visible" = true;
       "media.gmp-widevinecdm.enabled" = true;
 
+      # Enable WebRTC VA-API decoding support
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1646329
+      "media.ffmpeg.vaapi.enabled" = true;
+      "media.ffmpeg.low-latency.enabled" = true;
+      "media.navigator.mediadatadecoder_vpx_enable" = true;
+
       # UI settings
       "browser.uidensity" = 1;
       "browser.tabs.drawInTitlebar" = true;
