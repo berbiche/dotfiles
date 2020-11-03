@@ -7,14 +7,17 @@ in
   imports = [ profiles.default-linux profiles.steam ];
 
   boot.kernelParams = [ "amd_iommu=pt" "iommu=soft" ]
-    ++ [ "resume_offset=63195136" ]; # Offset of the swapfile
+    ++ [ "resume_offset=81659904" ]; # Offset of the swapfile
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
-
   boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  boot.kernel.sysctl = {
+    "vm.swappiness" = 10;
+  };
 
   # high-resolution display
   hardware.video.hidpi.enable = lib.mkDefault true;
@@ -73,7 +76,7 @@ in
   swapDevices = [{
     device = "/swapfile";
     #priority = 0;
-    size = 16384;
+    size = 32768;
   }];
 
   nix.maxJobs = lib.mkDefault 16;
@@ -97,7 +100,11 @@ in
   networking.firewall.allowedTCPPorts = [ 1716 8010 21027 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
 
-  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd = {
+    enable = true;
+    qemuPackage = pkgs.qemu_kvm;
+  };
+  environment.systemPackages = with pkgs; [ vagrant ];
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_CA.UTF-8";
