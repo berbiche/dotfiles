@@ -33,25 +33,29 @@ in
       };
 
       shellAliases = rec {
-        ".."   = "cd ..";
-        ls      = "${pkgs.exa}/bin/exa --color=auto --group-directories-first --classify";
-        lst     = "${ls} --tree";
-        la      = "${ls} --all";
-        ll      = "${ls} --all --long --header --group";
-        llt     = "${ll} --tree";
-        tree    = "${ls} --tree";
-        cdtemp  = "cd `mktemp -d`";
-        cp      = "cp -iv";
-        ln      = "ln -v";
-        mkdir   = "mkdir -vp";
-        mv      = "mv -iv";
-        rm      = "rm -Iv";
-        dh      = "du -h";
-        df      = "df -h";
-        su      = "sudo -E su -m";
-        sysu    = "systemctl --user";
-        jnsu    = "journalctl --user";
-        svim    = "sudoedit";
+        ".."      = "cd ..";
+        "..."     = "cd ../..";
+        "...."    = "cd ../../..";
+        "....."   = "cd ../../../..";
+        ls        = "${pkgs.exa}/bin/exa --color=auto --group-directories-first --classify";
+        lst       = "${ls} --tree";
+        la        = "${ls} --all";
+        ll        = "${ls} --all --long --header --group";
+        llt       = "${ll} --tree";
+        tree      = "${ls} --tree";
+        cdtemp    = "cd `mktemp -d`";
+        cp        = "cp -iv";
+        ln        = "ln -v";
+        mkdir     = "mkdir -vp";
+        mv        = "mv -iv";
+        rm        = "rm -Iv";
+        dh        = "du -h";
+        df        = "df -h";
+        su        = "sudo -E su -m";
+        systemctl = "command systemctl --no-pager --full";
+        sysu      = "${systemctl} --user";
+        jnsu      = "journalctl --user";
+        svim      = "sudoedit";
       };
 
       initExtra = ''
@@ -116,8 +120,8 @@ in
         bindkey '^[[Z' undo                                             # Shift+tab undo last action
 
         # Local history (taken from https://superuser.com/a/691603)
-        bindkey "''${key[Up]}"   up-line-or-local-history
-        bindkey "''${key[Down]}" down-line-or-local-history
+        bindkey "^[OA"   up-line-or-local-history
+        bindkey "^[OB" down-line-or-local-history
 
         # Global history on <C-Up>/<C-Down>
         bindkey "^[[1;5A" up-line-or-history
