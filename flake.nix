@@ -8,10 +8,10 @@
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     # Input that I update everyday for specific packages
     master.url = "github:nixos/nixpkgs/nixos-unstable-small";
-    nix-darwin.url = "github:LnL7/nix-darwin/flakes";
+    nix-darwin.url = "github:LnL7/nix-darwin";
     #home-manager.url= "github:berbiche/home-manager/sway-check-config-at-build-time";
     home-manager.url= "github:berbiche/home-manager/replace-attrs-by-formats";
-    nur.url = "github:nix-community/nur";
+    nur = { url = "github:nix-community/nur"; flake = false; };
     nixpkgs-mozilla = { url = "github:mozilla/nixpkgs-mozilla"; flake = false; };
     nixpkgs-wayland = {
       url = "github:colemickens/nixpkgs-wayland";
@@ -179,13 +179,19 @@
     in overlayFiles // {
       nixpkgs-wayland = inputs.nixpkgs-wayland.overlay;
       nixpkgs-mozilla = import inputs.nixpkgs-mozilla;
-      nur = inputs.nur.overlay;
-      master = (final: prev: {
+      # nur = inputs.nur.overlay;
+      nur = final: prev: {
+        nur = import inputs.nur { nurpkgs = final; pkgs = final; };
+      };
+      my-nur = final: _prev: {
+        my-nur = final.nur.repos.berbiche;
+      };
+      master = final: prev: {
         master = import inputs.master {
           system = final.system;
           config.allowUnfree = true;
         };
-      });
+      };
     };
 
     devShell = forAllPlatforms (platform: let
