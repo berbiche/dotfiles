@@ -29,9 +29,18 @@
 
     extraSessionCommands = ''
       export SDL_VIDEODRIVER=wayland
+
       # needs qt5.qtwayland in systemPackages
+      #export QT_QPA_PLATFORM=wayland-egl
       export QT_QPA_PLATFORM=wayland
       export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
+      # Renders obs-studio unusable
+      #export QT_WAYLAND_FORCE_DPI=physical
+
+      # Enlightenment and stuff?
+      export ELM_ENGINE=wayland_egl
+      export ECORE_EVAS_ENGINE=wayland_egl
+
       # Fix for some Java AWT applications (e.g. Android Studio),
       # use this if they aren't displayed properly:
       export _JAVA_AWT_WM_NONREPARENTING=1
@@ -47,6 +56,7 @@
       ./swaylock.nix
       ./wlogout.nix
       ./wofi.nix
+      ./gammastep.nix
     ];
 
     home.packages = with pkgs; [

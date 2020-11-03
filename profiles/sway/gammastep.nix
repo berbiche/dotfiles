@@ -4,23 +4,14 @@ let
   inherit (pkgs.stdenv.targetPlatform) isDarwin isLinux;
 in
 lib.mkIf isLinux {
-  #services.redshift = {
-  #  enable = false;
-  #  package = pkgs.redshift;
-  #  # Some options cannot be configured through the command line (gamma-day, gamma-night, fade)
-  #  extraOptions = [ "-c ${config.xdg.configHome}/redshift/redshift.conf" ];
-  #  tray = true;
-  #  provider = "geoclue2";
-  #};
-
   # Requires nixpkgs-wayland overlay
   home.packages = [ pkgs.gammastep ];
 
   systemd.user.services.gammastep = {
     Unit = {
       Description = "Display colour temperature adjustment";
-      PartOf = [ "wayland-session.target" ];
-      After = [ "wayland-session.target" ];
+      PartOf = [ "graphical-session.target" ];
+      X-Restart-Triggers = [ "${config.xdg.configFile."gammastep/config.ini".source}" ];
     };
     Service = {
       ExecStart = "${pkgs.gammastep}/bin/gammastep-indicator";
@@ -33,14 +24,13 @@ lib.mkIf isLinux {
     [general]
     temp-day=6500
     temp-night=4000
-
     fade=1
-
     gamma-day=0.8:0.7:0.8
     gamma-night=0.6
-
-    location-provider=geoclue2
-
+    location-provider=manual
     adjustment-method=wayland
+    [manual]
+    lat=45.50
+    lon=-73.56
   '';
 }
