@@ -4,7 +4,7 @@ let
   profiles = import ../profiles;
 in
 {
-  imports = [ profiles.default-linux profiles.steam ];
+  imports = [ profiles.default-linux profiles.steam profiles.obs ];
 
   boot.kernelParams = [ "amd_iommu=pt" "iommu=soft" ]
     ++ [ "resume_offset=81659904" ]; # Offset of the swapfile

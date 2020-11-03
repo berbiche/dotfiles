@@ -14,16 +14,17 @@ rec {
 
   # Linux only profiles
   core-linux = mkLinuxProfile [ ./core-linux ];
+  gnome = mkLinuxProfile [ ./gnome ];
   graphical-linux = mkLinuxProfile [ ./graphical-linux ];
   kde = mkLinuxProfile [ ./kde ];
-  gnome = mkLinuxProfile [ ./gnome ];
-  xfce = mkLinuxProfile [ ./xfce ];
-  sway = mkLinuxProfile [ ./sway ];
+  obs = mkLinuxProfile [ ./obs ];
   steam = mkLinuxProfile [ ./steam ];
+  sway = mkLinuxProfile [ ./sway ];
+  xfce = mkLinuxProfile [ ./xfce ];
 
   # MacOS only profiles
   yabai = mkDarwinProfile [ ./yabai ];
 
-  # Pseudo profile
+  # Pseudo profiles
   default-linux = mkLinuxProfile [ core-linux dev graphical-linux xfce programs sway ctf ];
 }
