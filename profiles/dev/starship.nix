@@ -9,7 +9,7 @@
       settings = {
         add_newline = false;
         format = lib.concatStrings [
-          "$username@$hostname"
+          "$username::<$hostname> "
           # "$kubernetes"
           "$git_branch"
           "$git_commit"
@@ -67,7 +67,7 @@
 
         hostname = {
           ssh_only = false;
-          format = "<[$hostname]($style)> ";
+          format = "[$hostname]($style)";
         };
 
         line_break.disabled = false;
