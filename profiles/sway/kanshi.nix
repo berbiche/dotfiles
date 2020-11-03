@@ -96,4 +96,8 @@ in
       }
     ];
   };
+
+  systemd.user.services.kanshi = {
+    Install.WantedBy = lib.mkForce [ "sway-session.target" ];
+  };
 }

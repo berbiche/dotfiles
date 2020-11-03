@@ -31,14 +31,6 @@
       inherit (swayConfig) config extraConfig;
     };
 
-    systemd.user.targets.sway-session.Unit = {
-      Description = "sway compositor session";
-      Documentation = [ "man:systemd.special(7)" ];
-      BindsTo = lib.mkForce [ "wayland-session.target" ];
-      Wants = lib.mkForce [ "wayland-session.target" ];
-      After = lib.mkForce [ "wayland-session.target" ];
-    };
-
     # Idle service
     systemd.user.services.sway-idle =
       let
@@ -49,7 +41,7 @@
         Unit = {
           Description = "Idle manager for Wayland";
           Documentation = "man:swayidle(1)";
-          PartOf = [ "wayland-session.target" ];
+          PartOf = [ "graphical-session.target" ];
         };
 
         Service = {
@@ -67,14 +59,16 @@
         Install.WantedBy = [ "sway-session.target" ];
       };
 
-    systemd.user.services.waybar.Install.WantedBy = [ "sway-session.target" ];
+    systemd.user.services.waybar = {
+      Install.WantedBy = lib.mkForce [ "wayland-session.target" ];
+    };
 
     systemd.user.services.volnoti = {
       Unit = {
         Description = "Lightweight volume notification daemon";
         Requisite = [ "dbus.service" ];
         After = [ "dbus.service" ];
-        PartOf = [ "wayland-session.target" ];
+        PartOf = [ "graphical-session.target" ];
       };
 
       Service = {
@@ -85,7 +79,7 @@
         RestartSec = 1;
       };
 
-      Install.WantedBy = [ "sway-session.target" ];
+      Install.WantedBy = [ "wayland-session.target" ];
     };
   };
 }

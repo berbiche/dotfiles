@@ -30,12 +30,11 @@
   };
 
   systemd.user.services.mako = {
-    # restartTriggers = [ config.xdg.configFile."mako/config" ];
-
     Unit = {
       Description = "A lightweight Wayland notification daemon";
       Documentation = "man:mako(1)";
-      PartOf = [ "wayland-session.target" ];
+      PartOf = [ "graphical-session.target" ];
+      X-Restart-Triggers = [ "${config.xdg.configFile."mako/config".source}" ];
     };
 
     Service = {
@@ -47,15 +46,6 @@
       RestartSec = "1sec";
     };
 
-    Install = {
-      WantedBy = [ "sway-session.target" ];
-    };
+    Install.WantedBy = [ "wayland-session.target" ];
   };
-
-  home.activation.reloadMako = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    if systemctl --user is-active mako.service wayland-session.target; then
-      echo "Reloading Mako"
-      $DRY_RUN_CMD systemctl --user reload mako.service
-    fi
-  '';
 }

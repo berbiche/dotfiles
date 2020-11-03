@@ -66,6 +66,14 @@
       After = [ "graphical-session-pre.target" ];
     };
 
+    systemd.user.targets.sway-session.Unit = {
+      Description = "sway compositor session";
+      Documentation = [ "man:systemd.special(7)" ];
+      BindsTo = lib.mkForce [ "wayland-session.target" ];
+      Wants = lib.mkForce [ "wayland-session.target" ];
+      After = lib.mkForce [ "wayland-session.target" ];
+    };
+
     # Copy the scripts folder
     home.file."scripts".source = "${
       # For the patchShebang phase
