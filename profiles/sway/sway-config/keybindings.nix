@@ -28,6 +28,7 @@ lib.mkOptionDefault ((makeNoRepeat {
   "${modifier}+Return"       = "exec ${binaries.terminal}";
   "${modifier}+Shift+Return" = "exec ${binaries.floating-term}";
   "${modifier}+p"            = "exec ${binaries.menu}";
+  "${modifier}+Semicolon"    = "exec ${binaries.emacsclient}";
 
   "${modifier}+Shift+d" = "kill";
   "${modifier}+Shift+c" = "exec ${getScript "sway-reload.sh"}";
@@ -76,6 +77,7 @@ lib.mkOptionDefault ((makeNoRepeat {
   # Browser
   "${modifier}+n"       = "exec ${binaries.browser}";
   "${modifier}+Shift+n" = "exec ${binaries.browser-private}";
+  "${modifier}+Ctrl+n"  = "exec ${binaries.browser-work-profile}";
 
   # MPRIS
   "--locked XF86AudioPause" = "exec ${binaries.playerctl} pause";
@@ -113,6 +115,7 @@ lib.mkOptionDefault ((makeNoRepeat {
   "${modifier}+Shift+f" = "fullscreen global, inhibit_idle focus";
 
   "${modifier}+z"       = "focus child";
+  "${modifier}+Shift+z" = "focus parent";
   "${modifier}+Shift+s" = "sticky toggle";
 
   # Sway pick-ups the workspace names with "workspace ${name}"...

@@ -71,6 +71,7 @@ let
     alacritty = "${pkgs.alacritty}/bin/alacritty";
     bitwarden = "${pkgs.bitwarden}/bin/bitwarden";
     brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
+    emacsclient = "${pkgs.emacs}/bin/emacsclient -c";
     # Firefox from the overlay
     firefox = "${pkgs.firefox}/bin/firefox";
     nautilus = "${pkgs.gnome3.nautilus}/bin/nautilus";
@@ -89,20 +90,20 @@ let
     xfce4-appfinder = "${pkgs.xfce.xfce4-appfinder}/bin/xfce4-appfinder";
   };
 
-  WS1 = "1: browsing";
-  WS2 = "2: school";
-  WS3 = "3: dev";
-  WS4 = "4: sysadmin";
-  WS5 = "5: gaming";
-  WS6 = "6: movie";
-  WS7 = "7: social";
-  WS8 = "8: random";
-  WS9 = "9: random";
-  WS10 = "10: random";
+  workspaces = {
+    WS1 = "1: browsing";
+    WS2 = "2: school";
+    WS3 = "3: dev";
+    WS4 = "4: sysadmin";
+    WS5 = "5: gaming";
+    WS6 = "6: movie";
+    WS7 = "7: social";
+    WS8 = "8: random";
+    WS9 = "9: random";
+    WS10 = "10: random";
+  };
 
-  workspaces = { inherit WS1 WS2 WS3 WS4 WS5 WS6 WS7 WS8 WS9 WS10; };
-
-  extraConfig = let
+  extraConfig = with workspaces; let
     makeCommand = (i: x: "exec_always ${binaries.swaymsg} rename workspace number ${toString i} to '${x}'");
     workspaces = [ WS1 WS2 WS3 WS4 WS5 WS6 WS7 WS8 WS9 WS10 ];
   in ''
@@ -123,7 +124,7 @@ let
     seat seat0 xcursor_theme ${config.xsession.pointerCursor.name} ${toString config.xsession.pointerCursor.size}
   '';
 
-  swayConfig = {
+  swayConfig = with workspaces; {
     inherit (binaries) terminal;
     modifier = "Mod4";
     floating.modifier = "Mod4";
