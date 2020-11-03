@@ -77,8 +77,12 @@
     # Copy the scripts folder
     home.file."scripts".source = "${
       # For the patchShebang phase
-      pkgs.runCommandLocal "sway-scripts" {} ''
-        cp -T -r ${./scripts} $out
+      pkgs.runCommandLocal "sway-scripts" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
+        cp --no-preserve=mode -T -r ${./scripts} $out
+        chmod +x $out/*
+        for i in $out/*; do
+          wrapProgram $i --prefix PATH : "${lib.makeBinPath (with pkgs; [ jq ])}"
+        done
       ''
     }";
 
