@@ -52,7 +52,8 @@
   my.home = { config, pkgs, lib, ... }: {
     imports = [
       ./kanshi.nix
-      ./mako.nix
+      # ./mako.nix
+      ./linux-notification-center.nix
       ./swaylock.nix
       ./wlogout.nix
       ./wofi.nix
