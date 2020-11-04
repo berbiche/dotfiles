@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.programs.deadd-notification-center;
 
-  generator = pkgs.formats.toml { };
+  generator = pkgs.formats.ini { };
 in
 {
   options.programs.deadd-notification-center = {
@@ -13,8 +13,8 @@ in
 
     package = mkOption {
       type = types.package;
-      # default = (import ../../default.nix { inherit pkgs; }).deadd-notification-center;
-      # defaultText = "pkgs.deadd-notification-center";
+      default = pkgs.deadd-notification-center;
+      defaultText = "pkgs.deadd-notification-center";
       description = ''
         Package to use. Binary is expected to be called "deadd-notification-center".
       '';
