@@ -53,6 +53,7 @@
     imports = [
       ./kanshi.nix
       # ./mako.nix
+      ./udiskie.nix
       ./linux-notification-center.nix
       ./swaylock.nix
       ./wlogout.nix
