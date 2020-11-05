@@ -109,9 +109,8 @@ in
         " Disables automatic commenting on newline
         autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-        nnoremap <leader>s :set spell!<CR>
+        nnoremap <leader>si :set spell!<CR>
         nnoremap <leader>l :set list!<CR>
-        nnoremap S :%s//g<Left><Left>
         nnoremap <leader>S :%s//g<Left><Left>
         nnoremap <leader>m :set number!<CR>
         nnoremap <leader>n :set relativenumber!<CR>
@@ -122,7 +121,8 @@ in
         let g:fzf_command_prefix = 'Fzf'
         let g:fzf_buffers_jump = 1
         nnoremap <C-t> :FzfFiles!
-        nnoremap <leader><space> :FzfFiles!<CR>
+        nnoremap <leader><space> :FzfFiles<CR>
+        nnoremap <leader>. :FzfFiles %:p:h<CR>
 
 
         " Insert line above
@@ -139,6 +139,7 @@ in
         vmap <silent> <leader>; gc
         " Buffer management
         autocmd VimEnter * silent! nunmap <leader>b
+        nnoremap <leader>b, <C-^>
         nnoremap <leader>bi :BuffergatorOpen<CR>
         nnoremap <leader>bc :BuffergatorClose<CR>
         nnoremap <leader>bd :bd<CR>
@@ -148,8 +149,10 @@ in
         nnoremap <leader>bs :FzfBuffers<CR>
         " Window management
         nnoremap <leader>w <C-w>
-        " Other
-        nnoremap <leader>ss :FzfLines<CR>
+
+        " Finding things
+        nnoremap <leader>ss :FzfBLines<CR>
+        nnoremap <leader>sp :FzfRg<CR>
 
         " Git
         nnoremap <silent> <leader>gg :Gstatus<CR>
