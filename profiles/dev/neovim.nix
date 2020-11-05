@@ -10,6 +10,17 @@ let
     synthwave84 = inputs.vim-theme-synthwave84;
   };
 
+  # https://github.com/neovim/neovim/issues/12587
+  vim-fix-cursor-hold = pkgs.vimUtils.buildVimPlugin {
+    name = "FixCursorHold.nvim";
+    src = pkgs.fetchFromGitHub {
+      owner = "antoinemadec";
+      repo = "FixCursorHold.nvim";
+      rev = "d932d56b844f6ea917d3f7c04ff6871158954bc0";
+      hash = "sha256-Kqk3ZdWXCR7uqE9GJ+zaDMs0SeP/0/8bTxdoDiRnRTo=";
+    };
+  };
+
   toXDG = name: value:
     { xdg.configFile."nvim/colors/${name}.vim".source = "${value}/colors/${name}.vim"; };
   themeFiles = lib.mapAttrsToList toXDG themes;
@@ -26,21 +37,26 @@ in
       withNodeJs = true;
 
       plugins = with pkgs.vimPlugins; [
+        vim-fix-cursor-hold
         sensible
         commentary
         vim-indent-guides
         # Language
         vim-nix
+        vim-addon-nix
         polyglot
+        ale
         # LSP
-        coc-nvim
+        coc-explorer
+        coc-go
+        coc-html
         coc-json
         coc-markdownlint
+        coc-nvim
         coc-python
-        coc-html
-        coc-go
-        coc-explorer
         coc-rust-analyzer
+        # coc-sh
+        coc-vimlsp
         # Git
         fugitive
         # Shows symbol with LSP
@@ -60,12 +76,18 @@ in
         vim-buffergator
         #
         # vim-indent-object
+        #
+        # Gutter with  mode
+        vim-signify
       ];
 
       extraConfig = ''
         " Default settings
         set nocompatible
         set nobackup
+        " Yup, I live on the edge
+        set noswapfile
+        set updatetime=100
 
         let g:mapleader = "\<Space>"
         let g:maplocalleader = ','
