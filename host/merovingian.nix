@@ -19,6 +19,11 @@ in
     "vm.swappiness" = 10;
   };
 
+  # Disable HDMI/DisplayPort audio with amdgpu
+  environment.etc."modprobe.d/custom-amdgpu.conf".text = ''
+    options amdgpu audio=0
+  '';
+
   # high-resolution display
   hardware.video.hidpi.enable = lib.mkDefault true;
 
