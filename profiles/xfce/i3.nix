@@ -38,11 +38,20 @@
         nwgbar = "${pkgs.nwg-launchers}/bin/nwgbar";
         spotify = "${pkgs.spotify}/bin/spotify";
         xfce4-appfinder = "${pkgs.xfce.xfce4-appfinder}/bin/xfce4-appfinder";
+        xfce4-clipman = "${pkgs.xfce.xfce4-clipman-plugin}/bin/xfce4-clipman";
+        xfce4-popup-clipman = "${pkgs.xfce.xfce4-clipman-plugin}/bin/xfce4-popup-clipman";
 
-        fixXkeyboard = "${pkgs.writeScriptBin "fix-x-keyboard" ''
+        fixXkeyboard = pkgs.writeScript "fix-x-keyboard" ''
           xset r rate 200 30
           setxkbmap -layout us -option ctrl:swapcaps,compose:ralt
-        ''}/bin/fix-x-keyboard";
+        '';
+        disableCompositing = pkgs.writeScript "disable-xfce-compositing" ''
+          xfconf-query -c xfwm4 -p /general/use_compositing -s false
+        '';
+        startX11SessionTarget = pkgs.writeScript "start-x11-session-target" ''
+          systemctl --user import-environment
+          systemctl --user start x11-session.target
+        '';
       };
     in {
       xsession.windowManager.i3 = {
@@ -51,7 +60,7 @@
         config = rec {
           modifier = "Mod4";
           floating.modifier = modifier;
-          fonts = [ "DejaVu Sans Mono, FontAwesome 6" ];
+          fonts = [ "pango:DejaVu Sans Mono, FontAwesome 10" ];
 
           terminal = binaries.terminal;
           menu = binaries.xfce4-appfinder;
@@ -59,7 +68,7 @@
           bars = [ ];
 
           gaps = {
-            inner = 6;
+            inner = 10;
             smartGaps = true;
             smartBorders = "on";
           };
@@ -80,36 +89,36 @@
             ];
           };
 
-          startup = [
-            { command = "xfconf-query -c xfwm4 -p /general/use_compositing -s false"; always = true; notification = false; }
-            { command = binaries.panel; notification = false; }
-            { command = binaries.fixXkeyboard; notification = false; }
-            {
-              command = ''
-                exec "systemctl --user import-environment; systemctl --user start x11-session.target"
-              '';
-              notification = false;
-            }
-          ];
+          startup =
+            map (v: v // { 
+              command = if v ? command then "${v.command}" else null;
+              notification = v.notification or false;
+            }) [
+              { command = binaries.disableCompositing; always = true; }
+              { command = binaries.panel; }
+              { command = binaries.fixXkeyboard; }
+              { command = binaries.startX11SessionTarget; }
+            ];
 
           keybindings = lib.mkOptionDefault {
             "${mod}+Shift+q" = "exec ${binaries.logout}";
             "${mod}+Shift+e" = null;
             "${mod}+Shift+d" = "kill";
+            "${mod}+d" = "exec ${binaries.launcher}";
 
             "${mod}+Backspace" = "exec ${binaries.locker}";
-            "${mod}+Shift+Backspace" = "exec ${binaries.logout}";
+            "${mod}+Ctrl+Backspace" = "exec ${binaries.logout}";
 
             "${mod}+Shift+Return" = "exec ${binaries.floating-term}";
             "${mod}+p" = "exec ${binaries.menu}";
             "${mod}+n" = "exec ${binaries.browser}";
-            "${mod}+Mod1+n" = "exec ${binaries.browser-work-profile}";
+            "${mod}+Ctrl+n"  = "exec ${binaries.browser-work-profile}";
             "${mod}+Shift+n" = "exec ${binaries.browser-private}";
-            "${mod}+d" = "exec ${binaries.launcher}";
 
-            "${mod}+z" = "focus child";
+            "${mod}+z"       = "focus child";
+            "${mod}+Shift+Z" = "focus parent";
             "${mod}+Shift+minus" = "move to scratchpad";
-            "${mod}+minus" = "scratchpad show";
+            "${mod}+minus"       = "scratchpad show";
 
             "${mod}+h" = "focus left";
             "${mod}+j" = "focus down";
@@ -140,6 +149,9 @@
             "Shift+Print" = "exec ${binaries.screenshot} -f";
             # "Shift+Print" = "exec ${binaries.screenshot} screen";
             "Control+Print" = "exec ${binaries.screenshot}";
+
+            # Paste a specific clipboard item
+            "Shift+Insert" = "exec ${binaries.xfce4-popup-clipman}";
           };
         };
       };
