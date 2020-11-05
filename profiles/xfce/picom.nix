@@ -6,9 +6,9 @@
       enable = true;
       backend = "glx";
       experimentalBackends = true;
-      vSync = true;
+      vSync = false;
       fade = true;
-      shadow = true;
+      shadow = false;
       # These were copied from some website (which one ??)
       shadowExclude = [
         "window_type *= 'menu'"
