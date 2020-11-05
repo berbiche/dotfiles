@@ -19,15 +19,16 @@
   };
   # Important: xfce4-panel must be added as a systemPackage otherwise all defaults modules/plugins
   # are unavailable
-  environment.systemPackages = with pkgs; [ lightlocker xfce.xfce4-panel ]
+  environment.systemPackages = with pkgs; [ lightlocker xfce.xfce4-panel xfce.xfce4-notifyd ]
     ++ (map (x: pkgs.xfce."xfce4-${x}-plugin") [
       "battery"
       "clipman"
       "datetime"
-      "namebar"
       "dockbarx"
       "embed"
       "hardware-monitor"
+      "namebar"
+      "pulseaudio"
       "weather"
       "whiskermenu"
       "windowck"

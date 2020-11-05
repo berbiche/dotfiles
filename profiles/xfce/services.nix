@@ -20,23 +20,19 @@
       temperature.night = 4000;
     };
     systemd.user.services.redshift = {
-      Unit = {
-        PartOf = lib.mkForce [ "x11-session.target" ];
-        After = lib.mkForce [ "x11-session.target" ];
-      };
-      Install.WantedBy = lib.mkForce [ "x11-session.target" ];
+      Install.WantedBy = mkForce [ "x11-session.target" ];
     };
 
     services.flameshot.enable = false;
-    systemd.user.services.flameshot = lib.mkIf config.services.flameshot.enable {
-      Unit.PartOf = lib.mkForce [ "x11-session.target" ];
-      Install.WantedBy = lib.mkForce [ "x11-session.target" ];
+    systemd.user.services.flameshot = mkIf config.services.flameshot.enable {
+      Install.WantedBy = mkForce [ "x11-session.target" ];
     };
 
     systemd.user.services.xfce4-notifyd = {
       Unit = {
         Description = "XFCE notification service";
-        PartOf = [ "x11-session.target" ];
+        PartOf = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
       };
       Service = {
         Type = "dbus";
@@ -52,7 +48,7 @@
         buildInputs = old.buildInputs or [] ++ [ pkgs.makeWrapper ];
         postInstall = old.postInstall or "" + ''
           for f in $out/bin/*; do
-            wrapProgram $f --prefix PATH : ${lib.makeBinPath [ pkgs.feh ]} \
+            wrapProgram $f --prefix PATH : ${makeBinPath [ pkgs.feh ]} \
               --set GDM_SESSION "i3" \
               --set XDG_SESSION_DESKTOP "i3" \
               --set DESKTOP_SESSION "i3"
@@ -62,6 +58,9 @@
       timed.enable = true;
       timed.theme = "${pkgs.gnome3.gnome-backgrounds}/share/backgrounds/gnome/adwaita-timed.xml";
     };
+    systemd.user.services.wallutils = {
+      Install.WantedBy = mkForce [ "x11-session.target" ];
+    };
 
     services.xidlehook = {
       enable = true;
@@ -70,6 +69,9 @@
         delay = 60 * 15;
         command = "${pkgs.lightlocker}/bin/light-locker-command -l";
       }];
+    };
+    systemd.user.services.xidlehook = {
+      Install.WantedBy = mkForce [ "x11-session.target" ];
     };
   };
 }
