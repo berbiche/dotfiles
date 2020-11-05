@@ -15,7 +15,7 @@ let
   };
 in
 {
-  lib = myLib;
+  lib.my = myLib;
   my.home = { config, ... }:  {
     lib.my = myLib // {
       getScript = name: "${config.home.file."scripts".source}/${name}";

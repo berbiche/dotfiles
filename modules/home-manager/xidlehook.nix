@@ -7,7 +7,6 @@ with lib;
 
 let
   cfg = config.services.xidlehook;
-  defaultSystemdTarget = "x11-session.target";
 
   notEmpty = list: filter (x: x != "" && x != null) (flatten list);
 
@@ -129,12 +128,13 @@ in
       Unit = {
         Description = "xidlehook service";
         PartOf = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
       };
       Service = {
         Type = if cfg.once then "oneshot" else "simple";
         ExecStart = "${script}";
       };
-      Install.WantedBy = [ defaultSystemdTarget ];
+      Install.WantedBy = [ "graphical-session.target" ];
     };
 
     ## TODO

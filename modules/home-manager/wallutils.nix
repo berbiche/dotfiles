@@ -1,13 +1,9 @@
-#
-# Wrapper around wallutils for home-manager
-#
 { config, lib, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.wallutils;
-  defaultSystemdTarget = "x11-session.target";
 
   modeOption = mkOption {
     type = types.either (types.enum [ "stretch" "center" "tile" "scale" ]) types.str;
@@ -97,19 +93,21 @@ in
       Unit = {
         Description = "Wallutils timed wallpaper service";
         PartOf = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
       };
       Service = {
         Type = "simple";
         Environment = "PATH=${config.home.profileDirectory}/bin";
         ExecStart = "${cfg.package}/bin/settimed --mode ${cfg.timed.mode} ${cfg.timed.theme}";
       };
-      Install.WantedBy = [ defaultSystemdTarget ];
+      Install.WantedBy = [ "graphical-session.target" ];
     };
 
     systemd.user.services.wallutils-static = mkIf cfg.static.enable {
       Unit = {
         Description = "Wallutils static wallpaper service";
         PartOf = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
       };
       Service = {
         Type = "oneshot";
@@ -121,7 +119,7 @@ in
           "${cfg.static.image}"
         ];
       };
-      Install.WantedBy = [ defaultSystemdTarget ];
+      Install.WantedBy = [ "graphical-session.target" ];
     };
   };
 }

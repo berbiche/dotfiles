@@ -8,8 +8,6 @@ let
   '';
 in
 {
-  imports = [ ../../modules/deadd-notification-center.nix ];
-
   programs.deadd-notification-center = {
     enable = true;
     systemd.enable = true;

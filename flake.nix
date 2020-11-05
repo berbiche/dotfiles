@@ -74,7 +74,7 @@
             useGlobalPkgs = true;
             verbose = true;
           };
-          my.home = { lib, ... }: {
+          my.home = {
             config = {
               # Inject inputs
               _module.args.inputs = inputs;

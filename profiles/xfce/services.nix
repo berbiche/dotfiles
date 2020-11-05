@@ -8,15 +8,10 @@
 # - wallutils: background rotation
 # - xidlehook: idle management daemon for X11
 #
-{ config, ... }:
+{ ... }:
 
 {
-  my.home = { config, lib, pkgs, ... }: {
-    imports = [
-      ./home-wallutils.nix
-      ./home-xidlehook.nix
-    ];
-
+  my.home = { config, lib, pkgs, ... }: with lib; {
     services.redshift = {
       enable = true;
       tray = true;

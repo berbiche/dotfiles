@@ -1,7 +1,21 @@
 { config, options, lib, ... }:
 
+with lib;
+
+let
+  filesInDir = directory:
+    let
+      files = builtins.readDir directory;
+      filteredFiles = filterAttrs (n: v: hasSuffix "nix" n && n != "default.nix") files;
+      toPath = map (x: directory + "/${x}");
+    in
+    assert builtins.isPath directory;
+    toPath (attrNames filteredFiles);
+in
 {
-  options.my = with lib; {
+  imports = filesInDir ./modules;
+
+  options.my = {
     username = mkOption {
       type = types.str;
       description = "Primary user username";
@@ -14,21 +28,27 @@
   };
 
   config = {
-    home-manager.users.${config.my.username} = lib.mkAliasDefinitions options.my.home;
-    my.home.options.my.identity = {
-      name = lib.mkOption {
-        type = lib.types.str;
-        description = "Fullname";
-      };
-      email = lib.mkOption {
-        type = lib.types.str;
-        description = "Email";
-      };
-      gpgSigningKey = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = null;
-        description = "Primary GPG signing key";
+    home-manager.users.${config.my.username} = mkAliasDefinitions options.my.home;
+
+    my.home = { ... }:  {
+      imports = filesInDir ./modules/home-manager;
+
+      options.my.identity = {
+        name = mkOption {
+          type = types.str;
+          description = "Fullname";
+        };
+        email = mkOption {
+          type = types.str;
+          description = "Email";
+        };
+        gpgSigningKey = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = "Primary GPG signing key";
+        };
       };
     };
   };
+
 }

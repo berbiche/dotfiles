@@ -55,6 +55,7 @@ in
       Unit = {
         Description = "Deadd Notification Center";
         PartOf = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
         X-Restart-Triggers = [ "${config.xdg.configFile."deadd/deadd.conf".source}" ];
       };
       Service = {
