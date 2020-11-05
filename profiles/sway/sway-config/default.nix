@@ -42,6 +42,7 @@
           Description = "Idle manager for Wayland";
           Documentation = "man:swayidle(1)";
           PartOf = [ "graphical-session.target" ];
+          After = [ "graphical-session.target" ];
         };
 
         Service = {
@@ -60,15 +61,14 @@
       };
 
     systemd.user.services.waybar = {
-      Install.WantedBy = lib.mkForce [ "wayland-session.target" ];
+      Install.WantedBy = lib.mkForce [ "sway-session.target" ];
     };
 
     systemd.user.services.volnoti = {
       Unit = {
         Description = "Lightweight volume notification daemon";
-        Requisite = [ "dbus.service" ];
-        After = [ "dbus.service" ];
         PartOf = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
       };
 
       Service = {
@@ -79,7 +79,7 @@
         RestartSec = 1;
       };
 
-      Install.WantedBy = [ "wayland-session.target" ];
+      Install.WantedBy = [ "sway-session.target" ];
     };
   };
 }

@@ -11,6 +11,7 @@ lib.mkIf isLinux {
     Unit = {
       Description = "Display colour temperature adjustment";
       PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
       X-Restart-Triggers = [ "${config.xdg.configFile."gammastep/config.ini".source}" ];
     };
     Service = {

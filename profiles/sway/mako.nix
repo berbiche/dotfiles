@@ -34,6 +34,7 @@
       Description = "A lightweight Wayland notification daemon";
       Documentation = "man:mako(1)";
       PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
       X-Restart-Triggers = [ "${config.xdg.configFile."mako/config".source}" ];
     };
 
