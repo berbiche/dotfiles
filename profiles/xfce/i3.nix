@@ -117,7 +117,7 @@
             "${mod}+Ctrl+n"  = "exec ${binaries.browser-work-profile}";
             "${mod}+Shift+n" = "exec ${binaries.browser-private}";
 
-            "${mod}+Semicolon" = "exec ${binaries.emacsclient}";
+            "${mod}+semicolon" = "exec ${binaries.emacsclient}";
 
             "${mod}+a"       = null;
             "${mod}+z"       = "focus child";
