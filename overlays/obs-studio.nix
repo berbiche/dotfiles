@@ -7,7 +7,7 @@ let
   versionFlag = "-DOBS_VERSION_OVERRIDE";
 in
 {
-  obs-studio = prev.obs-studio.overrideAttrs (old:
+  obs-studio = prev.obs-studio/*-dmabuf*/.overrideAttrs (old:
     let
       cmakeFlags = old.cmakeFlags or [ ];
       hasFixedVersion = any (hasPrefix versionFlag) cmakeFlags;

@@ -140,15 +140,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1604023422,
-        "narHash": "sha256-BPJXhOka0fv4zrVSjR8fmFB1g9cu1OsIYtnzoe3DSRQ=",
-        "owner": "colemickens",
+        "lastModified": 1604638154,
+        "narHash": "sha256-oipaDq6mLetVEGOARM+VgEULrNY/vU8vq9n4RRIP9Nk=",
+        "owner": "berbiche",
         "repo": "nixpkgs-wayland",
-        "rev": "2e53c5f530d91f1b680ba59248c228f9e0441306",
+        "rev": "17989e25f49a0d63e721dffd716475bd1595a019",
         "type": "github"
       },
       "original": {
-        "owner": "colemickens",
+        "owner": "berbiche",
+        "ref": "obs-xdg-portal",
         "repo": "nixpkgs-wayland",
         "type": "github"
       }

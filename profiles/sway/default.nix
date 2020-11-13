@@ -25,7 +25,7 @@
       base = true;
     };
 
-    extraPackages = with pkgs; [ qt5.qtwayland ];
+    extraPackages = with pkgs; [ qt5.qtwayland my-nur.waylock ];
 
     extraSessionCommands = ''
       export SDL_VIDEODRIVER=wayland
@@ -46,8 +46,14 @@
       export _JAVA_AWT_WM_NONREPARENTING=1
 
       export XDG_CURRENT_DESKTOP=sway
+
+      # TODO: remove once gnome-keyring exports SSH_AUTH_SOCK correctly
+      export SSH_AUTH_SOCK=''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/keyring/ssh
     '';
   };
+
+  # Doesn't work
+  security.pam.services.waylock = {};
 
   my.home = { config, pkgs, lib, ... }: {
     imports = [
@@ -59,15 +65,6 @@
       ./wlogout.nix
       ./wofi.nix
       ./gammastep.nix
-    ];
-
-    home.packages = with pkgs; [
-      # Audio software
-      pavucontrol
-      pamixer # control pulse audio volume in scripts
-
-      libnotify # `notify-send` notifications to test mako
-      dex # execute .desktop files
     ];
 
     systemd.user.targets.wayland-session.Unit = {
@@ -87,13 +84,17 @@
     };
 
     # Copy the scripts folder
-    home.file."scripts".source = "${
+    home.file."scripts".source = let
+      path = lib.makeBinPath (with pkgs; [
+        jq pamixer
+      ]);
+    in "${
       # For the patchShebang phase
       pkgs.runCommandLocal "sway-scripts" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
-        cp --no-preserve=mode -T -r ${./scripts} $out
+        cp --no-preserve=mode -T -r "${./scripts}" $out
         chmod +x $out/*
         for i in $out/*; do
-          wrapProgram $i --prefix PATH : "${lib.makeBinPath (with pkgs; [ jq ])}"
+          wrapProgram $i --prefix PATH : ${path}
         done
       ''
     }";

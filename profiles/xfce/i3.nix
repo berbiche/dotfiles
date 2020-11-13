@@ -29,6 +29,7 @@
         alacritty = "${pkgs.alacritty}/bin/alacritty";
         bitwarden = "${pkgs.bitwarden}/bin/bitwarden";
         brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
+        emacsclient = "${config.programs.emacs.finalPackage}/bin/emacsclient -c";
         firefox = "${pkgs.firefox}/bin/firefox";
         nautilus = "${pkgs.gnome3.nautilus}/bin/nautilus";
         pavucontrol = "${pkgs.pavucontrol}/bin/pavucontrol";
@@ -41,19 +42,20 @@
         xfce4-clipman = "${pkgs.xfce.xfce4-clipman-plugin}/bin/xfce4-clipman";
         xfce4-popup-clipman = "${pkgs.xfce.xfce4-clipman-plugin}/bin/xfce4-popup-clipman";
 
-        fixXkeyboard = pkgs.writeScript "fix-x-keyboard" ''
+        fixXkeyboard = pkgs.writeShellScript "fix-x-keyboard" ''
           xset r rate 200 30
-          setxkbmap -layout us -option ctrl:swapcaps,compose:ralt
+          # setxkbmap -layout us -option ctrl:swapcaps,compose:ralt
         '';
-        disableCompositing = pkgs.writeScript "disable-xfce-compositing" ''
+        disableCompositing = pkgs.writeShellScript "disable-xfce-compositing" ''
           xfconf-query -c xfwm4 -p /general/use_compositing -s false
         '';
-        startX11SessionTarget = pkgs.writeScript "start-x11-session-target" ''
+        startX11SessionTarget = pkgs.writeShellScript "start-x11-session-target" ''
           systemctl --user import-environment
           systemctl --user start x11-session.target
         '';
       };
     in {
+      home.packages = with pkgs; [ playerctl ];
       xsession.windowManager.i3 = {
         enable = true;
 
@@ -106,8 +108,8 @@
             "${mod}+Shift+d" = "kill";
             "${mod}+d" = "exec ${binaries.launcher}";
 
-            "${mod}+Backspace" = "exec ${binaries.locker}";
-            "${mod}+Ctrl+Backspace" = "exec ${binaries.logout}";
+            "${mod}+BackSpace" = "exec ${binaries.locker}";
+            "${mod}+Ctrl+BackSpace" = "exec ${binaries.logout}";
 
             "${mod}+Shift+Return" = "exec ${binaries.floating-term}";
             "${mod}+p" = "exec ${binaries.menu}";
@@ -115,6 +117,9 @@
             "${mod}+Ctrl+n"  = "exec ${binaries.browser-work-profile}";
             "${mod}+Shift+n" = "exec ${binaries.browser-private}";
 
+            "${mod}+Semicolon" = "exec ${binaries.emacsclient}";
+
+            "${mod}+a"       = null;
             "${mod}+z"       = "focus child";
             "${mod}+Shift+Z" = "focus parent";
             "${mod}+Shift+minus" = "move to scratchpad";

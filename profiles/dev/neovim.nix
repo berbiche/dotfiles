@@ -43,7 +43,7 @@ in
         vim-indent-guides
         # Language
         vim-nix
-        vim-addon-nix
+        #vim-addon-nix
         polyglot
         ale
         # LSP
@@ -161,14 +161,13 @@ in
         vmap <silent> <leader>; gc
         " Buffer management
         autocmd VimEnter * silent! nunmap <leader>b
+        nnoremap <leader>, <C-^>
         nnoremap <leader>b, <C-^>
-        nnoremap <leader>bi :BuffergatorOpen<CR>
-        nnoremap <leader>bc :BuffergatorClose<CR>
         nnoremap <leader>bd :bd<CR>
         nnoremap <leader>bn :bnext<CR>
         nnoremap <leader>bN :enew<CR>
         nnoremap <leader>bp :bprevious<CR>
-        nnoremap <leader>bs :FzfBuffers<CR>
+        nnoremap <leader>bi :FzfBuffers<CR>
         " Window management
         nnoremap <leader>w <C-w>
 

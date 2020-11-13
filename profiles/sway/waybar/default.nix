@@ -177,5 +177,9 @@ in
       #settings = [ config1 ];
       #style = builtins.readFile ./style.css;
     };
+
+    systemd.user.services.waybar = {
+      Install.WantedBy = lib.mkForce [ "sway-session.target" ];
+    };
   };
 }

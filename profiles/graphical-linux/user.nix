@@ -5,33 +5,29 @@
     imports = [ ./systemd.nix ];
 
     home.packages = with pkgs; [
-      # Audio software
-      pavucontrol
-      pamixer # control pulse audio volume in scripts
+      pavucontrol # Audio software
       playerctl # control MPRIS players
-
       libnotify # `notify-send` notifications to test mako
       dex # execute .desktop files
 
+      ffmpeg
+
       # Programs
-      gnome3.nautilus
-      gnome3.networkmanager-openconnect
-      gnome3.rhythmbox
-      gnome3.eog
-      gnome3.seahorse
+      gnome3.nautilus # Gnome file manager
+      gnome3.networkmanager-openconnect # OpenConnect plugin for NetworkManager
+      gnome3.rhythmbox # Gnome music player
+      gnome3.eog # Gnome image viewer
+      gnome3.seahorse # Gnome Keyring secret management
 
       # Virtualization software
       gnome3.gnome-boxes
       # virt-manager
-
-      ffmpeg
     ];
 
 
     # XDG configuration
     xdg =  {
       enable = true;
-      mime.enable = false;
       mimeApps.enable = true;
 
       mimeApps.defaultApplications = {
