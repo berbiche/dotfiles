@@ -61,11 +61,6 @@ lib.mkMerge [
       services.kdeconnect.indicator = true;
       # Started with libindicator if `xsession.preferStatusNotifierItems = true`
       services.network-manager-applet.enable = true;
-
-      # Run emacs as a service
-      services.emacs.enable = true;
-      # Makes the desktop file `exec = emacsclient`
-      services.emacs.client.enable = true;
     };
   })
   # </isLinux>
