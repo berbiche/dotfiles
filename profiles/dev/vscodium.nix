@@ -1,6 +1,12 @@
 { config, lib, pkgs, ... }:
 
 let
+  buildVs = ref:
+    pkgs.vscode-utils.buildVscodeMarketplaceExtension {
+      mktplcRef = builtins.removeAttrs ref [ "license" ];
+      meta = lib.optionalAttrs (ref.license or null != null) { inherit (ref) license; };
+    };
+
   # Replaces VSCodium's open-vsx with Microsoft's extension gallery
   # This is temporary
   extensionsGallery = builtins.toJSON {
@@ -29,6 +35,46 @@ let
       fi
     '';
   });
+
+  my-vscode-packages = {
+    editorconfig = buildVs {
+      name = "editorconfig";
+      publisher = "editorconfig";
+      version = "0.15.1";
+      sha256 = "TaovxmPt+PLsdkWDpUgLx+vRE+QRwcCtoAFZFWxLIaM=";
+    };
+    erlang = buildVs {
+      name = "erlang";
+      publisher = "pgourlain";
+      version = "0.6.5";
+      sha256 = "B5xLx6pI2jL7zMmeP+NqmXZ0HNkTLSxHlf9YcOD0RvM=";
+    };
+    firefox-dev-tools = buildVs {
+      name = "vscode-firefox-debug";
+      publisher = "firefox-devtools";
+      version = "2.9.1";
+      sha256 = "ryAAgXeqwHVYpUVlBTJDxyIXwdakA0ZnVYyKNk36Ifc=";
+    };
+    java = buildVs {
+      name = "java";
+      publisher = "redhat";
+      version = "0.70.0";
+      sha256 = "U1314bagDJO2houMyffq76qvaOdriEbR3npjugnzILg=";
+    };
+    java-debugger = buildVs {
+      name = "vscode-java-debug";
+      publisher = "vscjava";
+      version = "0.29.0";
+      sha256 = "xOPbJyXAqoEsKIBjkCqhguufbh+wZRgOM1MJ6t0p/4Q=";
+    };
+    nix-env-selector = buildVs {
+      name = "nix-env-selector";
+      publisher = "arrterian";
+      version = "0.1.2";
+      sha256 = "aTNxr1saUaN9I82UYCDsQvH9UBWjue/BSnUmMQOnsdg=";
+    };
+  };
+
 in
 {
   my.home = { config, ... }: {
@@ -39,21 +85,21 @@ in
       package = vscodium;
 
       extensions = with pkgs.vscode-extensions; [
-        # "firefox-devtools.vscode-firefox-debug"
-        # "editorconfig.editorconfig"
-        # "pgourlain.erlang"
-        # "redhat.java"
-        # "arrterian.nix-env-selector"
-
         bbenoist.Nix
         redhat.vscode-yaml
         ms-vscode-remote.remote-ssh
-        ms-kubernetes-tools.vscode-kubernetes-tools 
+        ms-kubernetes-tools.vscode-kubernetes-tools
+        ms-vsliveshare.vsliveshare
+        ms-vscode-remote.remote-ssh
         vscodevim.vim
-      ] ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
+        xaver.clang-format
+        WakaTime.vscode-wakatime
+      ]
+      ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
         ms-python.python
         llvm-org.lldb-vscode
-      ];
+      ]
+      ++ lib.attrValues my-vscode-packages;
 
       userSettings = {
         "editor.cursorSmoothCaretAnimation" = true;
@@ -67,6 +113,7 @@ in
         "git.suggestSmartCommit" = false;
         "search.collapseResults" = "alwaysCollapse";
         "update.mode" = "none";
+        "update.channel" = "none";
         "window.menuBarVisibility" = "toggle";
         "window.restoreWindows" = "none";
         "window.title" = "\${activeEditorShort}\${separator}\${rootName}\${separator}\${appName}";
@@ -81,6 +128,9 @@ in
         # Extension settings
         "java.semanticHighlighting.enabled" = true;
         "vscode-neovim.neovimExecutablePaths.linux" = "${config.programs.neovim.finalPackage}";
+
+        # Language settings
+        "[nix]"."editor.tabSize" = 2;
       };
 
       keybindings = [
