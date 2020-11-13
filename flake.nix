@@ -12,6 +12,8 @@
     #home-manager.url= "github:berbiche/home-manager/sway-check-config-at-build-time";
     home-manager.url= "github:berbiche/home-manager/replace-attrs-by-formats";
     nur = { url = "github:nix-community/nur"; flake = false; };
+    doom-emacs.url = "github:vlaci/nix-doom-emacs";
+    emacs-pgtk-nativecomp.url = "github:berbiche/emacs-pgtk-nativecomp-overlay/master-2";
     nixpkgs-mozilla = { url = "github:mozilla/nixpkgs-mozilla"; flake = false; };
     nixpkgs-wayland = {
       url = "github:berbiche/nixpkgs-wayland/obs-xdg-portal";
@@ -179,6 +181,9 @@
     in overlayFiles // {
       nixpkgs-wayland = inputs.nixpkgs-wayland.overlay;
       nixpkgs-mozilla = import inputs.nixpkgs-mozilla;
+      emacsPgtk = final: prev: {
+        emacsGccPgtk = inputs.emacs-pgtk-nativecomp.packages.${final.system}.emacsGccPgtk;
+      };
       # nur = inputs.nur.overlay;
       nur = final: prev: {
         nur = import inputs.nur { nurpkgs = final; pkgs = final; };
