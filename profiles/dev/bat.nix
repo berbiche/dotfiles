@@ -23,6 +23,9 @@
 
       # Use "gitignore" highlighting for ".ignore" files
       --map-syntax=.ignore:.gitignore
+
+      # Use JSON highlighting for flake.lock
+      --map-syntax=flake.lock:JSON
     '';
   };
 }
