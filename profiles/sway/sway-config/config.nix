@@ -71,7 +71,7 @@ let
     alacritty = "${pkgs.alacritty}/bin/alacritty";
     bitwarden = "${pkgs.bitwarden}/bin/bitwarden";
     brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
-    emacsclient = "${pkgs.emacs}/bin/emacsclient -c";
+    emacsclient = "${config.programs.emacs.finalPackage}/bin/emacsclient -c";
     # Firefox from the overlay
     firefox = "${pkgs.firefox}/bin/firefox";
     nautilus = "${pkgs.gnome3.nautilus}/bin/nautilus";
