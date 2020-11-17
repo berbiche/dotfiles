@@ -1,32 +1,24 @@
 { config, inputs, lib, pkgs, ... }:
 
 let
-  # Infinite recursion :(
-  # themes = lib.filterAttrs (n: v: lib.hasPrefix "vim-theme" n) inputs;
-  themes = {
+  toPlugin = n: v: pkgs.vimUtils.buildVimPluginFrom2Nix { name = n; src = v; };
+
+  myPlugins = lib.mapAttrsToList toPlugin {
     anderson = inputs.vim-theme-anderson;
     gruvbox = inputs.vim-theme-gruvbox;
     monokai = inputs.vim-theme-monokai;
     synthwave84 = inputs.vim-theme-synthwave84;
-  };
-
-  # https://github.com/neovim/neovim/issues/12587
-  vim-fix-cursor-hold = pkgs.vimUtils.buildVimPlugin {
-    name = "FixCursorHold.nvim";
-    src = pkgs.fetchFromGitHub {
+    # https://github.com/neovim/neovim/issues/12587
+    "FixCursorHold.nvim" = pkgs.fetchFromGitHub {
       owner = "antoinemadec";
       repo = "FixCursorHold.nvim";
       rev = "d932d56b844f6ea917d3f7c04ff6871158954bc0";
       hash = "sha256-Kqk3ZdWXCR7uqE9GJ+zaDMs0SeP/0/8bTxdoDiRnRTo=";
     };
   };
-
-  toXDG = name: value:
-    { xdg.configFile."nvim/colors/${name}.vim".source = "${value}/colors/${name}.vim"; };
-  themeFiles = lib.mapAttrsToList toXDG themes;
 in
 {
-  my.home = { ... }: lib.mkMerge (themeFiles ++ [{
+  my.home = {
     home.packages = [ pkgs.fzf ];
 
     programs.neovim = {
@@ -36,8 +28,7 @@ in
       vimdiffAlias = true;
       withNodeJs = true;
 
-      plugins = with pkgs.vimPlugins; [
-        vim-fix-cursor-hold
+      plugins = myPlugins ++ (with pkgs.vimPlugins; [
         sensible
         commentary
         vim-indent-guides
@@ -79,7 +70,7 @@ in
         #
         # Gutter with  mode
         vim-signify
-      ];
+      ]);
 
       extraConfig = ''
         " Default settings
@@ -102,7 +93,7 @@ in
 
         " Basics
         syntax on
-        colorscheme monokai
+        colorscheme gruvbox
         let g:airline_theme = 'bubblegum'
 
         set hidden      " Allows hidden buffer
@@ -207,5 +198,5 @@ in
         au FileType gitcommit setlocal tw=68 colorcolumn=69 spell
       '';
     };
-  }]);
+  };
 }
