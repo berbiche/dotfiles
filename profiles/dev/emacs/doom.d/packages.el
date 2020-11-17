@@ -9,3 +9,4 @@
 (package! base16-theme)
 (package! k8s-mode)
 (package! ivy-posframe)
+(package! ox-reveal)
