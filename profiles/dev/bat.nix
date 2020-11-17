@@ -8,6 +8,9 @@
       # Set the theme to "TwoDark"
       --theme="TwoDark"
 
+      # Never wrap, the terminal handles it
+      --wrap="never"
+
       # Show line numbers, Git modifications and file header (but no grid)
       --style="numbers,changes,header"
 
