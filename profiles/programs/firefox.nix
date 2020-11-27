@@ -152,6 +152,10 @@ let
       "app.normandy.enabled" = false;
       "app.normandy.api_url" = "";
       "app.shield.optoutstudies.enabled" = true;
+      "experiments.activeExperiment" = false;
+      "experiments.enabled" = false;
+      "experiments.supported" = false;
+      "extensions.pocket.enabled" = false;
 
       # Extra security settings
       # 0=don't allow sub-resources to open HTTP authentication credentials dialogs
