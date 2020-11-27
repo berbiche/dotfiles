@@ -58,9 +58,9 @@
       timed.enable = true;
       timed.theme = "${pkgs.gnome3.gnome-backgrounds}/share/backgrounds/gnome/adwaita-timed.xml";
     };
-    systemd.user.services.wallutils = {
-      Install.WantedBy = mkForce [ "x11-session.target" ];
-    };
+
+    systemd.user.services.wallutils.Install.WantedBy = mkForce [ "x11-session.target" ];
+    systemd.user.services.wallutils-timed.Install.WantedBy = mkForce [ "x11-session.target" ];
 
     services.xidlehook = {
       enable = true;
