@@ -4,16 +4,17 @@ let
   profiles = import ../profiles;
 in
 {
-  imports = [ profiles.default-linux profiles.steam profiles.obs ];
+  imports = [ profiles.default-linux profiles.steam profiles.obs profiles.gnome ];
 
   boot.kernelParams = [ "amd_iommu=pt" "iommu=soft" ]
     ++ [ "resume_offset=81659904" ]; # Offset of the swapfile
 
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
   boot.kernelPackages = pkgs.linuxPackages_zen;
+  #boot.kernelPackages = pkgs.linuxPackages_latest;
 
   boot.kernel.sysctl = {
     "vm.swappiness" = 10;
@@ -22,6 +23,8 @@ in
   # Disable HDMI/DisplayPort audio with amdgpu
   environment.etc."modprobe.d/custom-amdgpu.conf".text = ''
     options amdgpu audio=0
+    # 10-bit colors lack hw accel on Chromium, and glitches with Mesa/Vulkan
+    # options amdgpu deep_color=1
   '';
 
   # high-resolution display
@@ -31,7 +34,7 @@ in
   # Resume device is the partition with the swapfile in this case
   boot.resumeDevice = "/dev/mapper/cryptroot";
   # Show Nixos logo while loading
-  boot.plymouth.enable = true;
+  boot.plymouth.enable = false;
   boot.loader = {
     timeout = null;
     efi = {
@@ -39,14 +42,22 @@ in
       efiSysMountPoint = "/boot/efi";
     };
     grub = {
-      enable = true;
+      enable = false;
       enableCryptodisk = true;
       useOSProber = true;
       device = "nodev";
       efiSupport = true;
       efiInstallAsRemovable = false;
     };
+    systemd-boot = {
+      enable = true;
+      # My disk is encrypted :)
+      editor = true;
+      consoleMode = "auto";
+      configurationLimit = null;
+    };
   };
+
 
   boot.initrd.luks.devices."cryptroot" = {
     device = "/dev/disk/by-uuid/136355f2-8296-489d-a311-818fd958100e";
