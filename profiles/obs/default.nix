@@ -9,6 +9,11 @@
 
   my.home.programs.obs-studio = {
     enable = true;
-    plugins = with pkgs; [ obs-wlrobs obs-v4l2sink /*obs-xdg-portal*/ ];
+    plugins = with pkgs; [
+      obs-wlrobs
+      obs-v4l2sink
+      /*obs-xdg-portal*/
+      obs-move-transition
+    ];
   };
 }
