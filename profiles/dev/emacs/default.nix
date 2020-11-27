@@ -2,6 +2,18 @@
 
 let
   inherit (pkgs.stdenv) isDarwin isLinux;
+
+  # overrides = eself: esuper: rec {
+  #   auctex = esuper.auctex.overrideAttrs (old: {
+  #     src = pkgs.fetchurl {
+  #       # The generated url is wrong, it needs a ".lz"
+  #       url = "https://elpa.gnu.org/packages/auctex-${old.version}.tar.lz";
+  #       sha256 = old.src.outputHash;
+  #     };
+  #   });
+  #   # elpaPackages.auctex = auctex;
+  # };
+  overrides = eself: esuper: { };
 in
 lib.mkMerge [
   {
@@ -13,8 +25,17 @@ lib.mkMerge [
         programs.doom-emacs = {
           enable = true;
           doomPrivateDir = ./doom.d;
-          # emacsPackage = pkgs.emacsGccPgtk;
-          emacsPackage = pkgs.emacs-pgtk;
+          emacsPackage = pkgs.emacsPgtk;
+          emacsPackagesOverlay = overrides;
+          extraPackages = with pkgs; [
+            (hunspellWithDicts [
+              "en_CA-large"
+              "fr-any"
+            ])
+          ];
+          extraConfig = ''
+            (setq ispell-program-name "hunspell")
+          '';
         };
       }
       # user systemd service for Linux
