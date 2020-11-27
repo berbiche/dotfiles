@@ -17,7 +17,8 @@
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     nixpkgs-mozilla = { url = "github:mozilla/nixpkgs-mozilla"; flake = false; };
     nixpkgs-wayland = {
-      url = "github:berbiche/nixpkgs-wayland/obs-xdg-portal";
+      # url = "github:berbiche/nixpkgs-wayland/obs-xdg-portal";
+      url = "github:colemickens/nixpkgs-wayland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vim-theme-monokai = { url = "github:sickill/vim-monokai"; flake = false; };
