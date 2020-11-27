@@ -84,7 +84,7 @@
               _module.args.inputs = inputs;
               _module.args.rootPath = ./.;
               # Specify home-manager version compability
-              home.stateVersion = "20.09";
+              home.stateVersion = "21.03";
             };
           };
         };
