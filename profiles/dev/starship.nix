@@ -9,31 +9,33 @@
       settings = {
         add_newline = false;
         format = lib.concatStrings [
-          "$username::<$hostname> "
+          # "$username:$hostname "
+          "$hostname "
+          "$directory"
           # "$kubernetes"
           "$git_branch"
-          "$git_commit"
+          # "$git_commit"
           "$git_state"
           "$git_status"
           # "$hg_branch"
-          "$docker_context"
+          # "$docker_context"
           "$package"
           # "dotnet"
-          "$elixir"
+          # "$elixir"
           # "elm"
-          "$erlang"
-          "$golang"
-          "$haskell"
-          "$java"
+          # "$erlang"
+          # "$golang"
+          # "$haskell"
+          # "$java"
           # "julia"
-          "$nodejs"
+          # "$nodejs"
           # "ocaml"
           # "php"
           # "purescript"
-          "$python"
+          # "$python"
           # "ruby"
-          "$rust"
-          "$terraform"
+          # "$rust"
+          # "$terraform"
           # "zig"
           "$nix_shell"
           # "conda"
@@ -42,12 +44,12 @@
           # "gcloud"
           # "env_var"
           # "crystal"
-          "$cmd_duration"
+          # "$cmd_duration"
           # "custom"
-          "$line_break"
+          # "$line_break"
           "$jobs"
-          "$directory"
-          "$time"
+          # "$directory"
+          # "$time"
           "$status"
           "$character"
         ];
@@ -62,7 +64,13 @@
         directory = {
           truncation_length = 1;
           truncate_to_repo = false;
+          read_only = "";
           fish_style_pwd_dir_length = 1;
+        };
+
+        git_branch = {
+          symbol = "";
+          format = "\\([$symbol$branch]($style)\\)";
         };
 
         hostname = {
@@ -77,6 +85,11 @@
           impure_msg = "";
           pure_msg = "";
           symbol = "❄️";
+        };
+
+        status = {
+          disabled = false;
+          symbol = "";
         };
 
         time = {
