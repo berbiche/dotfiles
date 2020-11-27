@@ -122,6 +122,9 @@ in
         " Disables automatic commenting on newline
         autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
+        " Quick exit with `:Q`
+        command Q qa
+
         nnoremap <leader>si :set spell!<CR>
         nnoremap <leader>l :set list!<CR>
         nnoremap <leader>S :%s//g<Left><Left>
