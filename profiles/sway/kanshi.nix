@@ -3,7 +3,7 @@
 let
   swaymsg = "${pkgs.sway}/bin/swaymsg";
 
-  displays = lib.mapAttrs (_: v: v // { position = "0,0"; status = "enable"; }) {
+  displays = lib.mapAttrs (_: v: v // { position = "0,0"; status = "enable"; }) rec {
     benq = {
       criteria = "BenQ Corporation BenQ EW3270U 74J08749019";
       mode = "3840x2160@60Hz";
@@ -25,6 +25,13 @@ let
       mode = "3840x1200@144Hz";
     };
     laptop = { criteria = "eDP-1"; };
+    g9 = {
+      criteria = "Samsung Electric Company LC49G95T H4ZN801309";
+      mode = "5120x1440@60Hz";
+    };
+    g9-dsc = g9 // {
+      mode = "5120x1440@240Hz";
+    };
   };
 
   benq-dell = displays.benq // { position = "1080,0"; };
@@ -36,8 +43,15 @@ let
   genDisableLaptop = lib.flip lib.mergeAttrsConcatenateValues { outputs = [ disable-laptop ]; };
 
   configs = {
+    g9-with-two-cables.outputs = [
+      (displays.g9 // { criteria = "DP-1"; } )
+      (displays.g9 // { criteria = "HDMI-A-1"; status = "disable"; })
+    ];
+
+    g9-dsc.outputs = [ displays.g9-dsc ];
+
     lone-benq = {
-      outputs = [ (displays.benq // { position = "0,0"; }) ];
+      outputs = [ displays.benq ];
       # exec = enable-benq-adaptive-sync;
     };
 
@@ -88,7 +102,7 @@ in
           (displays.lenovo // { position = "3840,800"; })
         ];
         # This profile force enables the laptop screen for unknown configurations
-        # This profile is the fallback configuration for the laptop (since it's specified last)
+        # This profile is the fallback configuration for the laptop (since attrsets in Nix are ordered)
         zzz-fallback-laptop.outputs = [
           (displays.laptop // { status = "enable"; }) # Force enable laptop screen
           { criteria = "*"; mode = "1920x1080"; }
