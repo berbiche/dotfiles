@@ -102,8 +102,17 @@ in
   # Open ports in the firewall.
   # Chromium chromecast (port 8010)
   # https://github.com/NixOS/nixpkgs/issues/49630
-  networking.firewall.allowedTCPPorts = [ 1716 8010 21027 ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [
+    1716
+    8010
+    21027
+    # Spotify
+    57621 57622
+  ];
+  networking.firewall.allowedUDPPorts = [
+    # Spotify
+    57621 57622
+  ];
 
   virtualisation.libvirtd = {
     enable = true;
