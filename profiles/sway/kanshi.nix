@@ -44,8 +44,8 @@ let
 
   configs = {
     g9-with-two-cables.outputs = [
-      (displays.g9 // { criteria = "DP-1"; } )
-      (displays.g9 // { criteria = "HDMI-A-1"; status = "disable"; })
+      (displays.g9 // { criteria = "DP-1"; status = "disable"; } )
+      (displays.g9 // { criteria = "HDMI-A-1"; status = "enable"; })
     ];
 
     g9-dsc.outputs = [ displays.g9-dsc ];
