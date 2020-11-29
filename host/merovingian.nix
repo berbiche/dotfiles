@@ -36,25 +36,16 @@ in
   # Show Nixos logo while loading
   boot.plymouth.enable = false;
   boot.loader = {
-    timeout = null;
+    timeout = 10;
     efi = {
       canTouchEfiVariables = true;
       efiSysMountPoint = "/boot/efi";
     };
-    grub = {
-      enable = false;
-      enableCryptodisk = true;
-      useOSProber = true;
-      device = "nodev";
-      efiSupport = true;
-      efiInstallAsRemovable = false;
-    };
     systemd-boot = {
       enable = true;
-      # My disk is encrypted :)
+      # My disk is encrypted so editor isn't data big of a security risk
       editor = true;
       consoleMode = "auto";
-      configurationLimit = null;
     };
   };
 
@@ -71,18 +62,10 @@ in
       fsType = "ext4";
       options = [ "noatime" "nodiratime" "discard" ];
     };
-
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/6b8e779b-838a-433e-992c-e28ee70c7207";
-      fsType = "ext4";
-      options = [ "noatime" "nodiratime" "discard" ];
-    };
-
   fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-uuid/2B3C-E2E7";
+    { device = "/dev/disk/by-uuid/7F25-9A66";
       fsType = "vfat";
     };
-
   fileSystems."/mnt/games" =
     { device = "/dev/disk/by-uuid/D896285496283602";
       fsType = "ntfs";
