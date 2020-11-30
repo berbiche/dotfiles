@@ -89,13 +89,13 @@ in
         redhat.vscode-yaml
         ms-vscode-remote.remote-ssh
         ms-kubernetes-tools.vscode-kubernetes-tools
-        ms-vsliveshare.vsliveshare
         ms-vscode-remote.remote-ssh
         vscodevim.vim
         xaver.clang-format
         WakaTime.vscode-wakatime
       ]
       ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
+        ms-vsliveshare.vsliveshare
         ms-python.python
         llvm-org.lldb-vscode
       ]

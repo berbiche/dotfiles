@@ -49,7 +49,7 @@
       }:
       let
         defaults = { pkgs, lib, stdenv, ... }: {
-          imports = [ hostConfiguration userConfiguration ./cachix.nix ./lib.nix ];
+          imports = [ hostConfiguration userConfiguration ./cachix.nix ];
           _module.args.inputs = inputs;
           _module.args.rootPath = ./.;
 
@@ -97,7 +97,7 @@
 
         linuxDefaults = { pkgs, lib, ... }: {
           # Import home-manager/nixos version here
-          imports = [ inputs.home-manager.nixosModules.home-manager ];
+          imports = [ inputs.home-manager.nixosModules.home-manager ./lib.nix ];
           system.nixos.tags = [ "with-flakes" ];
           nix = {
             # Pin nixpkgs
@@ -146,11 +146,11 @@
           system.nixpkgsRevision = inputs.nixpkgs.rev;
         };
 
-        result = inputs.nix-darwin.lib.evalConfig {
-          configuration = { ... }: { imports = modules ++ [ darwinDefaults ]; };
+        result = inputs.nix-darwin.lib.darwinSystem {
+          modules = modules ++ [ darwinDefaults ];
           inputs.nixpkgs = inputs.nixpkgs-darwin;
         };
-      in result.system;
+      in result;
   in {
     nixosConfigurations = {
       merovingian = mkLinuxConfig {
