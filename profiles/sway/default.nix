@@ -67,6 +67,9 @@
       ./gammastep.nix
     ];
 
+    # Disable reloading Sway on every change
+    xdg.configFile."sway/config".onChange = lib.mkForce "";
+
     systemd.user.targets.wayland-session.Unit = {
       Description = "Wayland compositor session";
       Documentation = [ "man:systemd.special(7)" ];
