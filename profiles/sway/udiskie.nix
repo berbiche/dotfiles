@@ -6,8 +6,8 @@
       Description = "Disks automounter";
       Documentation = [ "man:udiskie(8)" ];
       PartOf= [ "graphical-session.target" ];
-      Requisite = [ "dbus.service" ];
-      After = [ "dbus.service" "graphical-session.target" ];
+      Requisite = [ "dbus.socket" ];
+      After = [ "dbus.socket" "graphical-session.target" ];
       StartLimitIntervalSec = 1;
     };
 

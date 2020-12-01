@@ -179,6 +179,8 @@ in
     };
 
     systemd.user.services.waybar = {
+      Unit.Requisite = lib.mkForce [ ];
+      Unit.After = lib.mkForce [ ];
       Install.WantedBy = lib.mkForce [ "sway-session.target" ];
     };
   };
