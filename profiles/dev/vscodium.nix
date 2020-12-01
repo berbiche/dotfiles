@@ -73,6 +73,20 @@ let
       version = "0.1.2";
       sha256 = "aTNxr1saUaN9I82UYCDsQvH9UBWjue/BSnUmMQOnsdg=";
     };
+    wakatime = let
+      wakatime =
+        (buildVs {
+          name = "vscode-wakatime";
+          publisher = "WakaTime";
+          version = "4.0.9";
+          sha256 = "YY0LlwFKeQiicNTGS5uifa9+cvr2NlFyKifM9VN2omo=";
+        }).overrideAttrs (old: {
+          postInstall = old.postInstall or "" + ''
+            mkdir -p "$out/${old.installPrefix}/wakatime-cli"
+            ln -sT "${pkgs.wakatime}/bin/wakatime" "$out/${old.installPrefix}/wakatime-cli/wakatime-cli"
+          '';
+        });
+    in lib.mkIf config.profiles.dev.wakatime.enable wakatime;
   };
 
 in
@@ -92,7 +106,6 @@ in
         ms-vscode-remote.remote-ssh
         vscodevim.vim
         xaver.clang-format
-        WakaTime.vscode-wakatime
       ]
       ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
         ms-vsliveshare.vsliveshare

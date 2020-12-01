@@ -70,7 +70,8 @@ in
         #
         # Gutter with  mode
         vim-signify
-      ]);
+      ]
+      ++ lib.optional config.profiles.dev.wakatime.enable vim-wakatime);
 
       extraConfig = ''
         " Default settings
@@ -193,6 +194,10 @@ in
         \   "variable": "\uf71b",
         \  }
 
+        ${lib.optionalString config.profiles.dev.wakatime.enable ''
+          " WakaTime CLI path
+          let g:wakatime_OverrideCommandPrefix = '${pkgs.wakatime}/bin/wakatime'
+        ''}
 
         autocmd! FileType which_key
         autocmd  FileType which_key set laststatus=0 noshowmode noruler

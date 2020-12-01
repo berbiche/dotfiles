@@ -12,6 +12,8 @@ in
 {
   imports = configs;
 
+  profiles.dev.wakatime.enable = true;
+
   my.home = { config, pkgs, ... }: {
     home.sessionVariables = {
       EDITOR = "${config.programs.neovim.finalPackage}/bin/nvim";

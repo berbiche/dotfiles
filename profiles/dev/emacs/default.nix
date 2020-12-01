@@ -3,6 +3,8 @@
 let
   inherit (pkgs.stdenv) isDarwin isLinux;
 
+  enableWakaTime = config.profiles.dev.wakatime.enable;
+
   # overrides = eself: esuper: rec {
   #   auctex = esuper.auctex.overrideAttrs (old: {
   #     src = pkgs.fetchurl {
@@ -39,6 +41,11 @@ lib.mkMerge [
           ];
           extraConfig = ''
             (setq ispell-program-name "hunspell")
+            ${lib.optionalString enableWakaTime ''
+              (global-wakatime-mode)
+              (setq wakatime-cli-path "${pkgs.wakatime}/bin/wakatime"
+                    wakatime-disable-on-error t)
+            ''}
           '';
         };
       }
