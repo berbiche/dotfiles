@@ -27,7 +27,7 @@ lib.mkMerge [
           doomPrivateDir = ./doom.d;
           # emacsPackage = pkgs.emacsGccPgtk;
           emacsPackage = lib.mkMerge [
-            (lib.mkIf isLinux pkgs.emacs-pgtk)
+            (lib.mkIf isLinux pkgs.emacsPgtk)
             (lib.mkIf isDarwin pkgs.emacs)
           ];
           emacsPackagesOverlay = overrides;
