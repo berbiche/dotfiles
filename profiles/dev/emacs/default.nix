@@ -42,7 +42,7 @@ lib.mkMerge [
           extraConfig = ''
             (setq ispell-program-name "hunspell")
             ${lib.optionalString enableWakaTime ''
-              (global-wakatime-mode)
+              (global-wakatime-mode +1)
               (setq wakatime-cli-path "${pkgs.wakatime}/bin/wakatime"
                     wakatime-disable-on-error t)
             ''}
