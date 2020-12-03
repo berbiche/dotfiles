@@ -25,4 +25,12 @@
     package = pkgs.pulseaudioFull;
     support32Bit = true;
   };
+
+  # Add a folder in $XDG_RUNTIME_DIR to be used as my own temporary directory
+  my.home = {
+    systemd.user.tmpfiles.rules = [
+      #Type Path   Mode User Group Age Argument
+      "D    %t/tmp 0550 -    -     -   -"
+    ];
+  };
 }
