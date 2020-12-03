@@ -200,16 +200,15 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1605652818,
-        "narHash": "sha256-RnyVZUBm7hFeIyM4cQSxXOqk9Vwh6/cWKcqHml+hH9E=",
+        "lastModified": 1606860459,
+        "narHash": "sha256-Y3PtSmLjVMxky7NbmGg30f7ZKx1oNdPTsksEG37gLKU=",
         "owner": "berbiche",
         "repo": "home-manager",
-        "rev": "3091cb462b9967e3f1714682edc23fa0f9b1bff6",
+        "rev": "06543644266edcf845ac912002868246b58d19e6",
         "type": "github"
       },
       "original": {
         "owner": "berbiche",
-        "ref": "replace-attrs-by-formats",
         "repo": "home-manager",
         "type": "github"
       }

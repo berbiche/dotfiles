@@ -10,7 +10,7 @@
     master.url = "github:nixos/nixpkgs/nixos-unstable-small";
     nix-darwin.url = "github:LnL7/nix-darwin";
     #home-manager.url= "github:berbiche/home-manager/sway-check-config-at-build-time";
-    home-manager.url= "github:berbiche/home-manager/replace-attrs-by-formats";
+    home-manager.url= "github:berbiche/home-manager";
     nur = { url = "github:nix-community/nur"; flake = false; };
     doom-emacs.url = "github:vlaci/nix-doom-emacs";
     doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
