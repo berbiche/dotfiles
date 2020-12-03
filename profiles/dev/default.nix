@@ -72,6 +72,7 @@ in
       enable = true;
       enableZshIntegration = true;
       enableFishIntegration = true;
+      enableNixDirenvIntegration = true;
     };
 
     programs.zoxide = {
