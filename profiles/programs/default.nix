@@ -29,7 +29,6 @@ in
         spotify
         signal-desktop
         chromium
-        discord # unfortunately
         libreoffice
       ])
       (lib.mkIf isDarwin [
