@@ -108,7 +108,10 @@
             ];
             allowedUsers = [ "@wheel" ];
             trustedUsers = [ "root" "@wheel" ];
-            registry.self.flake = inputs.self;
+            registry = {
+              self.flake = inputs.self;
+              nixpkgs.flake = inputs.nixpkgs;
+            };
             gc.dates = "daily";
 
             # Reduce IOnice and CPU niceness of the build daemon
