@@ -103,4 +103,55 @@ in
     Option "DRI" "3"
     Option "TearFree" "true"
   '';
+
+  networking.networkmanager.unmanaged = [ "wg0" ];
+  systemd.network.enable = true;
+  systemd.network.netdevs.wg0 = {
+    enable = true;
+    netdevConfig = {
+      Name = "wg0";
+      Kind = "wireguard";
+      Description = "wg server dozer.qt.rs";
+    };
+    wireguardConfig = {
+      PrivateKeyFile = "/private/wireguard/zion.key";
+    };
+    wireguardPeers = map (x: { wireguardPeerConfig = x; }) [{
+      AllowedIPs = [ "10.10.10.0/24" "192.168.0.0/24" "fc00:23:6::/64" ];
+      Endpoint = "dozer.qt.rs:51820";
+      PersistentKeepalive = 25;
+      PresharedKeyFile = "/private/wireguard/zion.preshared";
+      PublicKey = "U2ijs3wSSZYizj3x/K/OCYRc6yExETZUOayMFnGYLgs=";
+    }];
+  };
+  systemd.network.networks.wg0 = {
+    enable = true;
+    name = "wg0";
+    dns = [ "10.10.10.3" ];
+    matchConfig.Name = "wg0";
+    networkConfig = {
+      Address = "10.10.10.4/24";
+      DNS = [ "192.168.0.3" "10.10.10.3" ];
+      Domains = [ "~tq.rs." "~kifinti.lan." ];
+    };
+    routes = map (x: { routeConfig = x; }) [
+      {
+        Gateway = "10.10.10.1";
+        Destination = "192.168.0.0/24";
+        GatewayOnLink = true;
+      }
+      {
+        Gateway = "10.10.10.1";
+        Destination = "10.10.10.0/24";
+        GatewayOnLink = true;
+      }
+    ];
+  };
+  system.activationScripts.configure-wireguard-permissions = ''
+    mkdir -p /private/wireguard
+    echo "Setting Wireguard folder permissions"
+    chmod -c 0755 /private /private/wireguard
+    chmod -c 0440 /private/wireguard/*
+    chown -cR root:systemd-network /private/wireguard
+  '';
 }
