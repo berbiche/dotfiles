@@ -20,6 +20,7 @@ rec {
   obs = mkLinuxProfile [ ./obs ];
   steam = mkLinuxProfile [ ./steam ];
   sway = mkLinuxProfile [ ./sway ];
+  wireguard = mkLinuxProfile [ ./wireguard ];
   xfce = mkLinuxProfile [ ./xfce ];
 
   # MacOS only profiles
