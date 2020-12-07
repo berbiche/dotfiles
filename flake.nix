@@ -108,7 +108,7 @@
               self.flake = inputs.self;
               nixpkgs.flake = inputs.nixpkgs;
             };
-            gc.dates = "daily";
+            gc.dates = "weekly";
 
             # Reduce IOnice and CPU niceness of the build daemon
             daemonIONiceLevel = 3;
