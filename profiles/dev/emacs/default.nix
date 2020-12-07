@@ -19,10 +19,8 @@ let
 in
 lib.mkMerge [
   {
-    my.home.imports = [ inputs.doom-emacs.hmModule ];
-  }
-  {
     my.home = lib.mkMerge [
+      { imports = [ inputs.doom-emacs.hmModule ]; }
       {
         programs.doom-emacs = {
           enable = true;
@@ -42,9 +40,8 @@ lib.mkMerge [
           extraConfig = ''
             (setq ispell-program-name "hunspell")
             ${lib.optionalString enableWakaTime ''
-              (global-wakatime-mode +1)
-              (setq wakatime-cli-path "${pkgs.wakatime}/bin/wakatime"
-                    wakatime-disable-on-error t)
+              (global-wakatime-mode t)
+              (setq wakatime-cli-path "${pkgs.wakatime}/bin/wakatime")
             ''}
           '';
         };
