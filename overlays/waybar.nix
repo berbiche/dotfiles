@@ -11,13 +11,5 @@ let
   });
 in
 {
-  waybar = (prev.waybar.override { inherit fmt; }).overrideAttrs (_: rec {
-    version = "faacd76f627f4f7ad3413a44870e089fbdb6539e";
-    src = prev.fetchFromGitHub {
-      owner = "Alexays";
-      repo = "Waybar";
-      rev = version;
-      hash = "sha256-4DsOp25b5Z3vHw4j5LnQcvVdh+vrM9JpOJdY/JhKawk=";
-    };
-  });
+  waybar = prev.waybar.override { inherit fmt; };
 }
