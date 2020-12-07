@@ -43,6 +43,7 @@ in
         ll        = "${ls} --all --long --header --group";
         llt       = "${ll} --tree";
         tree      = "${ls} --tree";
+        batnp     = "${pkgs.bat} --pager=''";
         cdtemp    = "cd `mktemp -d`";
         cp        = "cp -iv";
         ln        = "ln -v";
