@@ -172,10 +172,7 @@ let
     startup = [
       { command = binaries.element-desktop; }
       { command = binaries.spotify; }
-      { command = binaries.bitwarden; }
-      # Kill Swaybar until I figure out how to disable the default Swaybar config
-      # in home-manager's configuration
-      { always = true; command = "sleep 10 && pkill swaybar"; }
+      # { command = binaries.bitwarden; }
     ];
 
     keybindings = callWithDefaults ./keybindings.nix {
@@ -235,7 +232,7 @@ let
       (mkMarkSocial "rocket" { class = "Rocket.Chat"; })
       (mkMarkSocial "caprine" { class = "Caprine"; })
       # assing [con_mark] does not work! So we do it here with a for_window
-      (map (x: { command = "move to workspace number 7"; criteria = x; }) [
+      (map (x: { command = "move to workspace '${WS7}'"; criteria = x; }) [
         { con_mark = "_social.*"; }
         { con_mark = "_music-player.*"; }
       ])

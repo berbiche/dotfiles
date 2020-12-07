@@ -11,9 +11,6 @@
       wlogout
       wl-clipboard
       wdisplays
-      # libinput gestures utility
-      gebaar-libinput
-      # Used in scripts
       brightnessctl
       grim
       slurp
