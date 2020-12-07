@@ -100,12 +100,8 @@
           imports = [ inputs.home-manager.nixosModules.home-manager ./lib.nix ];
           system.nixos.tags = [ "with-flakes" ];
           nix = {
-            # Pin nixpkgs
-            nixPath = [
-              "nixpkgs=${pkgs.path}"
-              "nixos-config=${toString hostConfiguration}"
-              "nixpkgs-overlays=${toString ./overlays}"
-            ];
+            # Pin nixpkgs for older Nix tools
+            nixPath = [ "nixpkgs=${pkgs.path}" ];
             allowedUsers = [ "@wheel" ];
             trustedUsers = [ "root" "@wheel" ];
             registry = {
