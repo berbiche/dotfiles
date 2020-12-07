@@ -52,6 +52,7 @@ lib.mkMerge [
           enable = true;
           # The client is already provided by the Doom Emacs final package
           client.enable = false;
+          socketActivation.enable = true;
         };
       })
     ];
