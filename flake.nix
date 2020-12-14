@@ -199,29 +199,18 @@
     };
 
     devShell = forAllPlatforms (platform: let
-        nixpkgs = nixpkgsFor.${platform};
-      in nixpkgs.mkShell {
-        nativeBuildInputs = with nixpkgs; [ git nixFlakes ];
+        pkgs = nixpkgsFor.${platform};
+      in pkgs.mkShell {
+        nativeBuildInputs = with pkgs; [ git nixFlakes ];
 
         NIX_CONF_DIR = let
-          current = nixpkgs.lib.optionalString (builtins.pathExists /etc/nix/nix.conf)
+          current = pkgs.lib.optionalString (builtins.pathExists /etc/nix/nix.conf)
           (builtins.readFile /etc/nix/nix.conf);
-          nixConf = nixpkgs.writeTextDir "etc/nix.conf" ''
+          nixConf = pkgs.writeTextDir "etc/nix.conf" ''
             ${current}
             experimental-features = nix-command flakes
           '';
         in "${nixConf}/etc";
-
-        shellHook = ''
-          export NIX_PATH="$NIX_PATH:darwin=${inputs.nix-darwin}"
-
-          rebuild () {
-            # _NIXOS_REBUILD_REEXEC is necessary to force nixos-rebuild to use the nix binary in $PATH
-            # otherwise the initial installation would fail
-            sudo --preserve-env=PATH --preserve-env=NIX_CONF_DIR _NIXOS_REBUILD_REEXEC=1 \
-              nixos-rebuild "$@"
-          }
-        '';
       });
   };
 }

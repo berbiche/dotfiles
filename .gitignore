@@ -3,3 +3,4 @@
 *.env
 hostname
 result
+/.direnv/
