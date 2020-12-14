@@ -10,13 +10,14 @@
         add_newline = false;
         format = lib.concatStrings [
           # "$username:$hostname "
-          "$hostname "
+          # "$hostname "
           "$directory"
           # "$kubernetes"
           "$git_branch"
-          # "$git_commit"
-          "$git_state"
           "$git_status"
+          # "$git_commit"
+          #"$git_status"
+          "$git_state"
           # "$hg_branch"
           # "$docker_context"
           "$package"
@@ -70,7 +71,16 @@
 
         git_branch = {
           symbol = "";
-          format = "\\([$symbol$branch]($style)\\)";
+          only_attached = true;
+          truncation_length = 12;
+          format = "([$symbol$branch]($style) )";
+        };
+
+        git_status = {
+          format = "([\\[$conflicted$deleted$modified$untracked$ahead_behind\\]]($style) )";
+          untracked = "$count?";
+          modified = "$count!";
+          deleted = "$count✘";
         };
 
         hostname = {
