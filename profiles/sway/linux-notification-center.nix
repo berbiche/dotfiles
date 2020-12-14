@@ -43,6 +43,8 @@ in
     # Force running as an XWayland client since I don't need to position
     # the popups manually and that it works fine
     Service.Environment = [ "WAYLAND_DISPLAY=" ];
+    Unit.After = [ "wayland-session.target" ];
+    Unit.Requires = [ "wayland-session.target" ];
     Install.WantedBy = lib.mkForce [ "wayland-session.target" ];
   };
 

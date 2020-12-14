@@ -32,7 +32,8 @@
       Unit = {
         Description = "XFCE notification service";
         PartOf = [ "graphical-session.target" ];
-        After = [ "graphical-session.target" ];
+        Requires = [ "x11-session.target" ];
+        After = [ "x11-session.target" ];
       };
       Service = {
         Type = "dbus";
