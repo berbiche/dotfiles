@@ -39,7 +39,7 @@ in
       gitFull rsync
       nmap telnet tcpdump dnsutils mtr
       exa fd fzf ripgrep hexyl tree bc bat
-      procs sd dust tokei bandwhich bottom
+      procs sd dust tokei bandwhich bottom hyperfine
       htop ctop
       docker-compose
     ] ++ lib.optionals pkgs.stdenv.isLinux [
