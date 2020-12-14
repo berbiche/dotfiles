@@ -13,4 +13,7 @@
       fwsetup
     }
   '';
+
+  # Virtual mouse pointer for TTY consoles
+  services.gpm.enable = true;
 }
