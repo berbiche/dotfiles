@@ -14,6 +14,7 @@
     # Emojis and whatnot
     <Multi_key> <s> <h> <r> <u> <g>  : "¯\\_(ツ)_/¯"
     <Multi_key> <s> <a> <d>          : "😿"
+    <Multi_key> <p> <o> <o>          : "💩"
 
 
     # Greek letters
