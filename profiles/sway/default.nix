@@ -4,6 +4,7 @@
   imports = [
     ./sway-config
     ./waybar
+    ./libinput.nix
   ];
 
   services.xserver.displayManager.defaultSession = "sway";
