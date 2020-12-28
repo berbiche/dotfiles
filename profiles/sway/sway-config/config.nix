@@ -1,4 +1,4 @@
-{ config, lib, pkgs, rootPath, ... }:
+{ config, options, lib, pkgs, rootPath, ... }:
 # rootPath is a custom input injected in Flake.nix
 
 let
@@ -176,7 +176,7 @@ let
     ];
 
     keybindings = callWithDefaults ./keybindings.nix {
-      inherit config binaries rootPath workspaces;
+      inherit config binaries options rootPath workspaces;
     };
 
     modes = callWithDefaults ./modes.nix {

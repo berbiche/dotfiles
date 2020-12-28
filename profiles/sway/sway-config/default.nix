@@ -1,12 +1,10 @@
-{ config, rootPath, ... }:
+{ rootPath, ... }:
 
 {
-  my.home = { config, lib, pkgs, ... }: let
-    swayConfig = config.lib.my.callWithDefaults ./config.nix { inherit config rootPath; };
+  my.home = { config, options, lib, pkgs, ... }: let
+    swayConfig = config.lib.my.callWithDefaults ./config.nix { inherit config options rootPath; };
   in {
     home.packages = with pkgs; [
-      xdg-desktop-portal-wlr
-
       # oblogout alternative
       wlogout
       wl-clipboard
@@ -20,6 +18,8 @@
 
     wayland.windowManager.sway = {
       enable = true;
+      # I don't need Home Manager's Sway, only the wrapped one provided by
+      # my NixOS options
       package = null;
       # For the sway-session.target
       systemdIntegration = true;
@@ -61,6 +61,7 @@
       Install.WantedBy = lib.mkForce [ "sway-session.target" ];
     };
 
+    # To use with `volnoti-show` to display a transparent window with the volume level
     systemd.user.services.volnoti = {
       Unit = {
         Description = "Lightweight volume notification daemon";

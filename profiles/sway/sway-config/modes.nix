@@ -59,11 +59,10 @@ lib.mkOptionDefault {
     Right = "exec ${binaries.playerctl} next";
     Up    = "exec ${binaries.playerctl} play-pause";
 
-    Backslash = "exec ${getScript "volume.sh"} 'mic-mute";
-    n   = Backslash;
+    n   = "exec ${getScript "volume.sh"} 'mic-mute";
     m   = "exec ${getScript "volume.sh"} 'toggle-mute'";
-    "." = "exec ${getScript "volume.sh"} 'decrease'";
-    "," = "exec ${getScript "volume.sh"} 'increase'";
+    Period = "exec ${getScript "volume.sh"} 'decrease'";
+    Comma = "exec ${getScript "volume.sh"} 'increase'";
 
     Return = "mode default";
     Escape = "mode default";
