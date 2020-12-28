@@ -213,22 +213,6 @@
         "type": "github"
       }
     },
-    "master": {
-      "locked": {
-        "lastModified": 1606026386,
-        "narHash": "sha256-ra8yZQsD8vBb+u35lGlA0KJyJfXxaZs6gjtKuS7qqkM=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "e286f0cf3bcffd5c0f006bb1831563d63b281fb2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable-small",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": "nixpkgs_2"
@@ -478,7 +462,6 @@
         "doom-emacs": "doom-emacs",
         "emacs-overlay": "emacs-overlay",
         "home-manager": "home-manager",
-        "master": "master",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-darwin": "nixpkgs-darwin",

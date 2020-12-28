@@ -6,18 +6,17 @@
     # This input I update less frequently
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    # Input that I update everyday for specific packages
-    master.url = "github:nixos/nixpkgs/nixos-unstable-small";
     nix-darwin.url = "github:LnL7/nix-darwin";
     #home-manager.url= "github:berbiche/home-manager/sway-check-config-at-build-time";
     home-manager.url= "github:berbiche/home-manager";
     nur = { url = "github:nix-community/nur"; flake = false; };
+
     doom-emacs.url = "github:vlaci/nix-doom-emacs";
     doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
+
     nixpkgs-mozilla = { url = "github:mozilla/nixpkgs-mozilla"; flake = false; };
     nixpkgs-wayland = {
-      # url = "github:berbiche/nixpkgs-wayland/obs-xdg-portal";
       url = "github:colemickens/nixpkgs-wayland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -48,9 +47,10 @@
       , extraModules ? [ ]
       }:
       let
-        defaults = { pkgs, lib, stdenv, ... }: {
+        defaults = { pkgs, lib, ... }: {
           imports = [ hostConfiguration userConfiguration ./cachix.nix ];
           _module.args.inputs = inputs;
+          # This will import the whole tree if evaluated, including ignored files
           _module.args.rootPath = ./.;
 
           environment.systemPackages = [ pkgs.cachix ];
@@ -85,6 +85,9 @@
               _module.args.rootPath = ./.;
               # Specify home-manager version compability
               home.stateVersion = "21.03";
+              # Use the new systemd service activation/deactivation tool
+              # See https://github.com/nix-community/home-manager/pull/1656
+              #home.startServices = "sd-switch";
             };
           };
         };
@@ -104,11 +107,17 @@
             nixPath = [ "nixpkgs=${pkgs.path}" ];
             allowedUsers = [ "@wheel" ];
             trustedUsers = [ "root" "@wheel" ];
+
             registry = {
               self.flake = inputs.self;
               nixpkgs.flake = inputs.nixpkgs;
+              nixpkgs-wayland.flake = inputs.nixpkgs-wayland;
             };
+
+            # Run weekly garbage collection to reduce store size
             gc.dates = "weekly";
+            # Optimize (hardlink duplicates) store automatically
+            autoOptimiseStore = true;
 
             # Reduce IOnice and CPU niceness of the build daemon
             daemonIONiceLevel = 3;
@@ -126,13 +135,13 @@
     mkDarwinConfig = args:
       let
         modules = mkConfig (removeAttrs args [ "platform" ]);
+        nixpkgs = inputs.nixpkgs-darwin;
 
         darwinDefaults = { config, pkgs, lib, ... }: {
           imports = [ inputs.home-manager.darwinModules.home-manager ];
           nix.gc.user = args.username;
           nix.nixPath = [
             "nixpkgs=${pkgs.path}"
-            "nixpkgs-overlays=${toString ./overlays}"
             "darwin=${inputs.nix-darwin}"
           ];
           system.checks.verifyNixPath = false;
@@ -140,16 +149,16 @@
             "darwin" + toString config.system.stateVersion + "." + inputs.nix-darwin.shortRev);
           system.darwinRevision = inputs.nix-darwin.rev;
           system.nixpkgsVersion =
-            "${inputs.nixpkgs.lastModifiedDate or inputs.nixpkgs.lastModified}.${inputs.nixpkgs.shortRev}";
+            "${nixpkgs.lastModifiedDate or nixpkgs.lastModified}.${nixpkgs.shortRev}";
           system.nixpkgsRelease = lib.version;
-          system.nixpkgsRevision = inputs.nixpkgs.rev;
+          system.nixpkgsRevision = nixpkgs.rev;
+        };
+      in
+        inputs.nix-darwin.lib.darwinSystem {
+          modules = modules ++ [ darwinDefaults ];
+          inputs.nixpkgs = nixpkgs;
         };
 
-        result = inputs.nix-darwin.lib.darwinSystem {
-          modules = modules ++ [ darwinDefaults ];
-          inputs.nixpkgs = inputs.nixpkgs-darwin;
-        };
-      in result;
   in {
     nixosConfigurations = {
       merovingian = mkLinuxConfig {
@@ -190,12 +199,6 @@
       my-nur = final: _prev: {
         my-nur = final.nur.repos.berbiche;
       };
-      master = final: prev: {
-        master = import inputs.master {
-          system = final.system;
-          config.allowUnfree = true;
-        };
-      };
     };
 
     devShell = forAllPlatforms (platform: let
@@ -204,8 +207,7 @@
         nativeBuildInputs = with pkgs; [ git nixFlakes ];
 
         NIX_CONF_DIR = let
-          current = pkgs.lib.optionalString (builtins.pathExists /etc/nix/nix.conf)
-          (builtins.readFile /etc/nix/nix.conf);
+          current = pkgs.lib.optionalString (builtins.pathExists /etc/nix/nix.conf) (builtins.readFile /etc/nix/nix.conf);
           nixConf = pkgs.writeTextDir "etc/nix.conf" ''
             ${current}
             experimental-features = nix-command flakes
