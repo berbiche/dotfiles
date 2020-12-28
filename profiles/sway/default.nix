@@ -16,11 +16,12 @@
     wrapperFeatures = {
       # Fixes GTK applications under Sway
       gtk = true;
-      # To run Sway with dbus-run-session
+      # To run Sway with dbus-run-session and other stuff
+      # (dbus-run-session is unneeded since dbus is socket activated in NixOS now)
       base = true;
     };
 
-    extraPackages = with pkgs; [ qt5.qtwayland my-nur.waylock ];
+    extraPackages = with pkgs; [ qt5.qtwayland ];
 
     extraSessionCommands = ''
       export SDL_VIDEODRIVER=wayland
@@ -29,7 +30,7 @@
       #export QT_QPA_PLATFORM=wayland-egl
       export QT_QPA_PLATFORM=wayland
       export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
-      # Renders obs-studio unusable
+      # Makes obs-studio unusably slow (more than 1 minute startup time)
       #export QT_WAYLAND_FORCE_DPI=physical
 
       # Enlightenment and stuff?
@@ -84,7 +85,18 @@
     # Copy the scripts folder
     home.file."scripts".source = let
       path = lib.makeBinPath (with pkgs; [
-        jq pamixer
+        gawk gnused jq wget
+        pulseaudio # for pactl
+        pamixer # volume control
+        volnoti # show a popup notification for the volume level
+        sway # for swaymsg
+        wl-clipboard # wl-copy/wl-paste
+        fzf # menu
+        wofi # menu
+        xdg-user-dirs # for the screenshot tool
+        networkmanager # for nmcli
+        notify-send_sh # from my overlays
+        playerctl # to control mpris players
       ]);
     in "${
       # For the patchShebang phase
