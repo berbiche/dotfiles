@@ -5,16 +5,10 @@
     ./sway-config
     ./waybar
     ./libinput.nix
+    ./screenshare.nix
   ];
 
   services.xserver.displayManager.defaultSession = "sway";
-
-  xdg.portal = {
-    enable = true;
-    extraPortals = with pkgs; [ xdg-desktop-portal-wlr xdg-desktop-portal-gtk ];
-    gtkUsePortal = true;
-  };
-  services.pipewire.enable = true;
 
   programs.sway = {
     enable = true;
