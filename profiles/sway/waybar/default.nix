@@ -1,115 +1,142 @@
 { config, lib, pkgs, ... }:
 
 let
-  config1 = {
+  spotify = pkgs.python3Packages.buildPythonApplication {
+    name = "spotify.py";
+    src = ./spotify.py;
+    format = "other";
+    doCheck = false;
+    dontUnpack = true;
+    strictDeps = false;
+    buildInputs = with pkgs; [ gtk3 playerctl ];
+    nativeBuildInputs = with pkgs; [ gobject-introspection wrapGAppsHook ];
+    propagatedBuildInputs = [ pkgs.python3Packages.pygobject3 ];
+    installPhase = ''
+      install -Dm0755 $src $out/bin/spotify
+    '';
+  };
+
+  margin = 5;
+
+  top-bar = {
     layer = "top";
     position = "top";
-    #height = 30;
-    output = [
-      # "eDP-1",
-      # "Dell Inc. DELL U3219Q F9WNWP2",
-      "DP-2"
-      "DP-4"
-      "DP-5"
-      "DP-1"
-    ];
+    margin-top = margin;
+    margin-right = margin;
+    margin-left = margin;
+    # margin-bottom = margin;
 
     modules-left = [
       "sway/workspaces"
+      "custom/separator"
       "sway/mode"
-      "custom/spotify"
+      "custom/separator"
+      "idle_inhibitor"
     ];
     modules-center = [
-      "sway/window"
-      # "temperature"
+      "cpu"
+      "custom/separator"
+      "memory"
+      "custom/separator"
+      "clock"
+      "custom/separator"
+      "disk#1"
+      "custom/separator"
+      "battery"
     ];
     modules-right = [
-      "idle_inhibitor"
-      "pulseaudio"
-      "network"
-      "cpu"
-      "memory"
-      "backlight"
       "tray"
-      "battery"
-      "clock"
+      "custom/separator"
+      "network"
+      "custom/separator"
+      "backlight"
+      "custom/separator"
+      "pulseaudio"
+      "custom/separator"
+      "custom/reboot"
+      "custom/separator"
+      "custom/shutdown"
     ];
 
     modules = {
       "sway/workspaces" = {
         disable-scroll = true;
-
         all-outputs = true;
-        format = "<span>{index}</span><span>{icon}</span>";
+        format = "{name} {icon}";
         format-icons = {
-          "1: Browsing" = "<span></span>";
-          "3: Dev" = "<span></span>";
-          "4: Sysadmin" = "<span></span>";
-          "7: Social" = "<span></span>";
+          "browsing" = "<span></span>";
+          "dev" = "<span></span>";
+          "sysadmin" = "<span></span>";
+          "social" = "<span></span>";
           "urgent" = "";
           "focused" = "";
           "default" = "";
         };
       };
+
       "sway/mode" = {
         format = "<span style=\"italic\">{}</span>";
-        tooltip = false;
       };
-      "sway/window" = {
-        max-length = 120;
-        tooltip = false;
-      };
+
       "idle_inhibitor" = {
         format = "{icon}";
         format-icons = {
           activated = "聯";
           deactivated = "輦";
         };
-        tooltip = false;
       };
+
       "tray" = {
-        icon-size = 21;
+        icon-size = 14;
         spacing = 10;
       };
+
       "clock" = {
         interval = 60;
-        format = "{ =%Y-%m-%d | %H =%M}";
-        format-alt = "{ =%Y-%m-%d}";
-        tooltip = false;
+        format = "{:%a %d %b %H:%M}";
+        tooltip = true;
+        tooltip-format = ''
+          <big>{:%Y %B}</big>
+          <tt><small>{calendar}</small></tt>
+        '';
       };
+
       "cpu" = {
-        format = " {usage =2}%";
-        tooltip = false;
+        interval = 1;
+        format = " {usage:2}%";
+        # format = " {usage:2}%";
       };
+
       "memory" = {
-        format = " { =2}%";
-        tooltip = false;
+        interval = 5;
+        format = " {:2}%";
       };
+
       "backlight" = {
         device = "intel_backlight";
-        format = "{icon} {percent =2}%";
-        format-icons = [
-          "ﯦ"
-          "ﯧ"
-        ];
-        tooltip = false;
+        format = "{icon} {percent:2}%";
+        format-icons = [ "ﯦ" "ﯧ" ];
+        on-scroll-up = "${pkgs.brightnessctl}/bin/brightnessctl set +5%";
+        on-scroll-down = "${pkgs.brightnessctl}/bin/brightnessctl set 5%-";
       };
+
       "battery" = {
         interval = 30;
-        format = "{icon} {capacity =2}%";
-        format-icons = [
-          ""
-          ""
-          ""
-          ""
-          ""
-        ];
+        format = "{icon} {capacity:2}%";
+        format-icons = [ "" "" "" "" "" ];
         states = {
+          good = 95;
           warning = 25;
           critical = 10;
         };
-        tooltip = false;
       };
+
+      "disk#1" = {
+        interval = 5;
+        format = "  {percentage_used:2}%";
+        path = "/";
+      };
+
       "network" = {
         # interface = "wlp2s0"; # (Optional) To force the use of this interface
         format-wifi = "{icon} {ipaddr}/{essid}";
@@ -123,11 +150,16 @@ let
         tooltip = "{essid} {ipaddr}/{cidr}";
         on-click = "network-manager";
       };
+
       "pulseaudio" = {
         scroll-step = "10%";
-        format = "{icon} {volume}";
-        format-bluetooth = " {volume}";
-        format-muted = "婢";
+        format = "{icon} {volume}% {format_source}";
+        format-source = " {volume}%";
+        format-source-muted = "";
+        #format-bluetooth = " {volume}";
+        format-bluetooth = "{icon} {volume}% {format_source}";
+        format-bluetooth-muted = " {icon} {format_source}";
+        format-muted = "婢 {format_source}";
         format-icons = {
           headphones = "";
           headset = "";
@@ -138,47 +170,116 @@ let
             ""
           ];
         };
-        tooltip = false;
-        on-click = "pavucontrol";
+        on-click = "${pkgs.pavucontrol}/bin/pavucontrol";
       };
-      # "temperature" = {
-      #   hwmon-path = "/sys/class/hwmon/hwmon3/temp1_input";
-      #   // format-icons = [""; ""; ""; ""; ""];
-      #   format = "{}";
+
+      "custom/reboot" = {
+        format = "";
+        tooltip = false;
+        on-click = pkgs.writeShellScript "reboot.sh" ''
+          ${pkgs.gnome3.zenity}/bin/zenity --question --text "Are you sure you want to reboot?" \
+            --title 'Reboot?' \
+            --window-icon warning \
+            --timeout 10 \
+            --height 100 --width 200 &
+          pid=$!
+          swaymsg "[pid=$pid] floating enable, focus"
+          if wait $pid; then
+            systemctl reboot
+          fi
+        '';
+      };
+
+      "custom/shutdown" = {
+        format = "";
+        tooltip = false;
+        on-click = pkgs.writeShellScript "shutdown.sh" ''
+          ${pkgs.gnome3.zenity}/bin/zenity --question --text "Are you sure you want to shutdown?" \
+            --title 'Shutdown?' \
+            --window-icon warning \
+            --timeout 10 \
+            --height 100 --width 200 &
+          pid=$!
+          swaymsg "[pid=$pid] floating enable, focus"
+          if wait $pid; then
+            systemctl poweroff
+          fi
+        '';
+      };
+
+      "custom/separator" = {
+        format = "";
+        tooltip = false;
+	    };
+    };
+  };
+
+  bottom-bar = {
+    layer = "top";
+    position = "bottom";
+    # margin-top = margin;
+    margin-right = margin;
+    margin-left = margin;
+    margin-bottom = margin;
+
+    modules-left = [ "custom/weather" "wlr/taskbar" ];
+    # modules-center = [ "sway/window" ];
+    modules-right = [ "custom/spotify" ];
+
+    modules = {
+      "wlr/taskbar" = {
+        all-outputs = false;
+        format = "{icon} {title:.18}..";
+        # icon-theme = "DarK-svg";
+        icon-size = 12;
+        on-click = "activate";
+        on-middle-click = "close";
+        on-right-click = "minimize";
+      };
+
+      # "sway/window" = {
+      #   max-length = 120;
       # };
 
-      # "custom/spotify" = {
-      #   return-type = "json";
-      #   interval = 1;
-      #   exec = "$HOME/scripts/spotify.sh";
-      #   exec-if = "pgrep -c spotify";
-      #   escape = true;
-      #   on-click = "swaymsg -q '[class=Spotify] focus'";
-      #   on-click-right = "playerctl play-pause --player=spotify";
-      # }
-      "custom/spotify" = {
-        return-type = "string";
-        tooltip = false;
+      "custom/spotify" = rec {
+        return-type = "json";
         format = " {}";
-        # Not sure the following line works
-        exec = ../../scripts/spotify.py;
-        on-click = "swaymsg -q '[class=Spotify] focus'";
-        on-click-right = "playerctl play-pause --player=spotify";
+        restart-interval = 10;
+        exec = "${spotify}/bin/spotify";
+        on-click = "${pkgs.sway}/bin/swaymsg -q '[class=Spotify] focus'";
+        on-click-right = "${pkgs.playerctl}/bin/playerctl play-pause --player=spotify";
+        on-click-middle = on-click-right;
       };
+
+      "custom/weather" = {
+        interval = 1800;
+        exec = pkgs.writeShellScript "weather.sh" ''
+          ${pkgs.curl}/bin/curl -s 'https://wttr.in/?format="%C,+%t'
+        '';
+      };
+
+      # "custom/separator" = {
+      #   format = "";
+      #   tooltip = false;
+	    # };
     };
   };
 in
 {
-  my.home = { ... }: {
+  my.home = { config, ... }: {
     programs.waybar = {
       enable = true;
       systemd.enable = true;
 
-      #settings = [ config1 ];
-      #style = builtins.readFile ./style.css;
+      settings = [
+        top-bar
+        bottom-bar
+      ];
+      style = builtins.readFile ./style.css;
     };
 
     systemd.user.services.waybar = {
+      Unit.X-Restart-Triggers = [ "${config.xdg.configFile."waybar/config".source}" ];
       Install.WantedBy = lib.mkForce [ "sway-session.target" ];
     };
   };

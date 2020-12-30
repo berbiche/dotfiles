@@ -91,16 +91,16 @@ let
   };
 
   workspaces = {
-    WS1 = "1: browsing";
-    WS2 = "2: school";
-    WS3 = "3: dev";
-    WS4 = "4: sysadmin";
-    WS5 = "5: gaming";
-    WS6 = "6: movie";
-    WS7 = "7: social";
-    WS8 = "8: random";
-    WS9 = "9: random";
-    WS10 = "10: random";
+    WS1 = "browsing";
+    WS2 = "school";
+    WS3 = "dev";
+    WS4 = "sysadmin";
+    WS5 = "gaming";
+    WS6 = "movie";
+    WS7 = "social";
+    WS8 = "8";
+    WS9 = "9";
+    WS10 = "10";
   };
 
   extraConfig = with workspaces; let
@@ -135,7 +135,7 @@ let
     focus.newWindow = "focus";
     gaps = {
       inner = 5;
-      smartGaps = true;
+      smartGaps = false;
       smartBorders = "no_gaps";
       # Following option needs to be set in extraConfig
       # window.hideEdgeBorders = "smart_no_gaps";
@@ -214,6 +214,7 @@ let
         { app_id = "^launcher$"; }
         { app_id = "xfce4-appfinder"; }
         { instance = "xfce4-appfinder"; }
+        { app_id = "zenity"; }
       ])
       (mkFloatingNoBorder {
         criteria = { app_id = "blueman-manager"; };
