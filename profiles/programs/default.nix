@@ -13,8 +13,10 @@ let
   in map (p: ./. + "/${p}") (attrNames (filtered files));
 in
 {
+  imports = [ ./gpg.nix ];
+
   my.home = {
-    imports = customPrograms;
+    imports = lib.remove ./gpg.nix customPrograms;
 
     home.packages = with pkgs; lib.mkMerge [
       [
@@ -32,7 +34,7 @@ in
         libreoffice
       ])
       (lib.mkIf isDarwin [
-       
+
       ])
     ];
   };
