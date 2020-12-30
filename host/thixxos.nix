@@ -106,4 +106,8 @@ in
     Option "DRI" "3"
     Option "TearFree" "true"
   '';
+
+  my.home.my.identity = {
+    gpgSigningKey = "74100A15021CC2857DF868D831D89C1E266CFDC8";
+  };
 }
