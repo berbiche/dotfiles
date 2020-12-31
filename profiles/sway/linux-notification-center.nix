@@ -59,9 +59,8 @@ in
     #     "exec ${move-to-corner}"
     #   ];
     # }];
-    keybindings = lib.mkOptionDefault {
-      "${mod}+a" = null;
-      "--no-repeat ${mod}+a" = "exec ${toggle-notification-center}";
+    keybindings = {
+      "--no-warn --no-repeat ${mod}+a" = "exec ${toggle-notification-center}";
     };
   };
 }
