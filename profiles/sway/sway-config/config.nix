@@ -43,7 +43,7 @@ let
     '';
     browser-private = "${browser} --private-window";
     browser-work-profile = "${browser} -P job";
-    lock = "${swaylock} -f -c 0f0f0ff0 -i ${imageFolder}/3840x2160.png";
+    lock = "${swaylock} -f -c 0f0f0ff0 -i ${imageFolder}/current";
     logout-menu = "${wlogout}";
     audiocontrol = "${pavucontrol}";
     menu = "${nwggrid} -n 10 -fp -b 121212E0";
@@ -133,7 +133,7 @@ let
     workspaceAutoBackAndForth = false;
 
     output = {
-      "*" = { bg = "${imageFolder}/3840x2160.png center"; };
+      "*" = { bg = "${imageFolder}/current center"; };
       "eDP-1" = {
         mode = "3840x2160@60Hz";
         scale_filter = "smart";
