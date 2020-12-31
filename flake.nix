@@ -7,8 +7,8 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin";
-    #home-manager.url= "github:berbiche/home-manager/sway-check-config-at-build-time";
-    home-manager.url= "github:berbiche/home-manager";
+    # home-manager.url= "github:berbiche/home-manager/waybar-module-css-ids-fix";
+    home-manager.url= "github:rycee/home-manager";
     nur = { url = "github:nix-community/nur"; flake = false; };
 
     doom-emacs.url = "github:vlaci/nix-doom-emacs";
