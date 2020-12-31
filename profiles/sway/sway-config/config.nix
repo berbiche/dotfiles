@@ -71,14 +71,16 @@ let
     xfce4-appfinder = "${pkgs.xfce.xfce4-appfinder}/bin/xfce4-appfinder";
   };
 
+  # Number at the start is used for ordering
+  # https://github.com/Alexays/Waybar/blob/f233d27b782c04ef128e3d71ec32a0b2ce02df39/src/modules/sway/workspaces.cpp#L351-L357
   workspaces = {
-    WS1 = "browsing";
-    WS2 = "school";
-    WS3 = "dev";
-    WS4 = "sysadmin";
-    WS5 = "gaming";
-    WS6 = "movie";
-    WS7 = "social";
+    WS1 = "1:"; #browsing
+    WS2 = "2:school";
+    WS3 = "3:"; #dev
+    WS4 = "4:"; #sysadmin
+    WS5 = "5:gaming";
+    WS6 = "6:movie";
+    WS7 = "7:"; #social
     WS8 = "8";
     WS9 = "9";
     WS10 = "10";
@@ -86,7 +88,7 @@ let
 
   extraConfig = with workspaces; let
     makeCommand = (i: x: "exec_always ${binaries.swaymsg} rename workspace number ${toString i} to '${x}'");
-    workspaces = [ WS1 WS2 WS3 WS4 WS5 WS6 WS7 WS8 WS9 WS10 ];
+    workspaces = [ WS1 WS2 WS3 WS4 WS5 WS6 WS7 WS8 WS9 WS10 ]; # Lexical ordering...
   in ''
     ${lib.concatImapStringsSep "\n" (makeCommand) workspaces}
 

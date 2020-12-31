@@ -1,5 +1,6 @@
 * {
 	font-size: 11px;
+	/* color: #d8dee9; */
 	font-family: "Roboto", "FontAwesome", "Font Awesome";
 }
 
@@ -48,6 +49,7 @@ window#waybar {
 }
 #workspaces button {
 	padding: 0px 5px 0px 5px;
+	color: #d8dee9;
 }
 #workspaces button.focused {
 	border-radius: 4px;
@@ -84,19 +86,20 @@ window#waybar {
 	padding-left: 0px;
 }
 #taskbar button {
+	color: #d8dee9;
 	border-radius: 4px;
-	padding-right: 3px;
+	padding-left: 5px;
+	padding-right: 5px;
 	padding-top: 0px;
 	padding-bottom: 0px;
 	text-shadow: 1px 1px 1px #2e3440;
 }
 #taskbar button.active {
 	/*background: rgba(180, 142, 173, 0.7);*/
-	background: rgba(94,129,172,0.7);
+	background: rgba(94, 129, 172, 0.7);
 }
 
-/*
 #custom-spotify {
-	background: rgba(94,129,172,0.7);
+	/* background: rgba(94, 129, 172, 0.7); */
+	background: green;
 }
-*/

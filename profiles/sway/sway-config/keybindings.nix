@@ -129,17 +129,17 @@ makeNoRepeat (defaultKeybindings // {
   "${modifier}+Shift+z" = "focus parent";
   "${modifier}+Shift+s" = "sticky toggle";
 
-  # Sway pick-ups the workspace names with "workspace ${name}"...
-  "${modifier}+1"       = "workspace ${ws.WS1}";
-  "${modifier}+2"       = "workspace ${ws.WS2}";
-  "${modifier}+3"       = "workspace ${ws.WS3}";
-  "${modifier}+4"       = "workspace ${ws.WS4}";
-  "${modifier}+5"       = "workspace ${ws.WS5}";
-  "${modifier}+6"       = "workspace ${ws.WS6}";
-  "${modifier}+7"       = "workspace ${ws.WS7}";
-  "${modifier}+8"       = "workspace ${ws.WS8}";
-  "${modifier}+9"       = "workspace ${ws.WS9}";
-  "${modifier}+0"       = "workspace ${ws.WS10}";
+  "${modifier}+1" = "workspace ${ws.WS1}";
+  "${modifier}+2" = "workspace ${ws.WS2}";
+  "${modifier}+3" = "workspace ${ws.WS3}";
+  "${modifier}+4" = "workspace ${ws.WS4}";
+  "${modifier}+5" = "workspace ${ws.WS5}";
+  "${modifier}+6" = "workspace ${ws.WS6}";
+  "${modifier}+7" = "workspace ${ws.WS7}";
+  "${modifier}+8" = "workspace ${ws.WS8}";
+  "${modifier}+9" = "workspace ${ws.WS9}";
+  "${modifier}+0" = "workspace ${ws.WS10}";
+  # Move container
   "${modifier}+Shift+1" = "move container to workspace ${ws.WS1}";
   "${modifier}+Shift+2" = "move container to workspace ${ws.WS2}";
   "${modifier}+Shift+3" = "move container to workspace ${ws.WS3}";
@@ -151,14 +151,14 @@ makeNoRepeat (defaultKeybindings // {
   "${modifier}+Shift+9" = "move container to workspace ${ws.WS9}";
   "${modifier}+Shift+0" = "move container to workspace ${ws.WS10}";
   # Move container and focus
-  "${modifier}+Ctrl+1"  = "move container to workspace ${ws.WS1};  workspace number 1";
-  "${modifier}+Ctrl+2"  = "move container to workspace ${ws.WS2};  workspace number 2";
-  "${modifier}+Ctrl+3"  = "move container to workspace ${ws.WS3};  workspace number 3";
-  "${modifier}+Ctrl+4"  = "move container to workspace ${ws.WS4};  workspace number 4";
-  "${modifier}+Ctrl+5"  = "move container to workspace ${ws.WS5};  workspace number 5";
-  "${modifier}+Ctrl+6"  = "move container to workspace ${ws.WS6};  workspace number 6";
-  "${modifier}+Ctrl+7"  = "move container to workspace ${ws.WS7};  workspace number 7";
-  "${modifier}+Ctrl+8"  = "move container to workspace ${ws.WS8};  workspace number 8";
-  "${modifier}+Ctrl+9"  = "move container to workspace ${ws.WS9};  workspace number 9";
-  "${modifier}+Ctrl+0"  = "move container to workspace ${ws.WS10}; workspace number 10";
+  "${modifier}+Ctrl+1" = "move container to workspace ${ws.WS1};  workspace ${ws.WS1}";
+  "${modifier}+Ctrl+2" = "move container to workspace ${ws.WS2};  workspace ${ws.WS2}";
+  "${modifier}+Ctrl+3" = "move container to workspace ${ws.WS3};  workspace ${ws.WS3}";
+  "${modifier}+Ctrl+4" = "move container to workspace ${ws.WS4};  workspace ${ws.WS4}";
+  "${modifier}+Ctrl+5" = "move container to workspace ${ws.WS5};  workspace ${ws.WS5}";
+  "${modifier}+Ctrl+6" = "move container to workspace ${ws.WS6};  workspace ${ws.WS6}";
+  "${modifier}+Ctrl+7" = "move container to workspace ${ws.WS7};  workspace ${ws.WS7}";
+  "${modifier}+Ctrl+8" = "move container to workspace ${ws.WS8};  workspace ${ws.WS8}";
+  "${modifier}+Ctrl+9" = "move container to workspace ${ws.WS9};  workspace ${ws.WS9}";
+  "${modifier}+Ctrl+0" = "move container to workspace ${ws.WS10}; workspace ${ws.WS10}";
 })

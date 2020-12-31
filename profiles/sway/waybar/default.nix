@@ -17,9 +17,10 @@ let
   };
 
   margin = 5;
+  layer = "bottom";
 
   top-bar = {
-    layer = "top";
+    inherit layer;
     position = "top";
     margin-top = margin;
     margin-right = margin;
@@ -64,12 +65,11 @@ let
         all-outputs = true;
         format = "{name} {icon}";
         format-icons = {
-          "browsing" = "<span></span>";
-          "dev" = "<span></span>";
-          "sysadmin" = "<span></span>";
-          "social" = "<span></span>";
+          # "urgent" = "";
           "urgent" = "";
+          # "focused" = "";
           "focused" = "";
+          # "default" = "";
           "default" = "";
         };
       };
@@ -215,7 +215,7 @@ let
   };
 
   bottom-bar = {
-    layer = "top";
+    inherit layer;
     position = "bottom";
     # margin-top = margin;
     margin-right = margin;
