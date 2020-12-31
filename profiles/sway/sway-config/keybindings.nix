@@ -128,6 +128,7 @@ makeNoRepeat (defaultKeybindings // {
   "${modifier}+z"       = "focus child";
   "${modifier}+Shift+z" = "focus parent";
   "${modifier}+Shift+s" = "sticky toggle";
+  "${modifier}+c"       = "border toggle";
 
   "${modifier}+1" = "workspace ${ws.WS1}";
   "${modifier}+2" = "workspace ${ws.WS2}";

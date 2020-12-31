@@ -22,13 +22,6 @@ let
 in
 shitty-keyboards // {
   # thiccpad touch pad
-  "2:7:SynPS/2_Synaptics_TouchPad" = {
-    dwt = "enabled";
-    tap = "enabled";
-    natural_scroll = "enabled";
-    middle_emulation = "enabled";
-  };
-
   "1739:0:Synaptics_TM3276-031" = {
     dwt = "enabled";
     tap = "enabled";

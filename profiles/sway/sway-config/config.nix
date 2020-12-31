@@ -92,7 +92,8 @@ let
   in ''
     ${lib.concatImapStringsSep "\n" (makeCommand) workspaces}
 
-    hide_edge_borders --i3 smart_no_gaps
+    # hide_edge_borders --i3 smart_no_gaps
+    hide_edge_borders --i3 vertical
 
     # Set default workspace outputs
     workspace "${WS5}" output "${OUTPUT-HOME-DELL}"
@@ -118,13 +119,13 @@ let
     focus.newWindow = "focus";
     gaps = {
       inner = 5;
-      smartGaps = false;
-      smartBorders = "no_gaps";
+      smartGaps = false; # Always display gaps
+      smartBorders = "on"; # Hide borders even with gaps
       # Following option needs to be set in extraConfig
       # window.hideEdgeBorders = "smart_no_gaps";
     };
     window = {
-      titlebar = true;
+      titlebar = false;
       border = 3;
     };
     floating = {
