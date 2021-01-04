@@ -43,7 +43,7 @@ in
         ll        = "${ls} --all --long --header --group";
         llt       = "${ll} --tree";
         tree      = "${ls} --tree";
-        batnp     = "${pkgs.bat} --pager=''";
+        batnp     = "${pkgs.bat}/bin/bat --pager=''";
         cdtemp    = "cd `mktemp -d`";
         cp        = "cp -iv";
         ln        = "ln -v";
@@ -57,6 +57,7 @@ in
         sysu      = "${systemctl} --user";
         jnsu      = "journalctl --user";
         svim      = "sudoedit";
+        trash     = lib.mkIf isLinux "gio trash";
       };
 
       initExtra = ''
