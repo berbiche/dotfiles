@@ -10,7 +10,6 @@ in
     profiles.obs
     profiles.gnome
     profiles.wireguard
-    profiles.merovingian
   ];
 
   boot.kernelParams = [ "amd_iommu=pt" "iommu=soft" ]
