@@ -1,9 +1,11 @@
 { config, ... }:
 
+let
+  cfg = config;
+in
 {
-  my.home = { config, lib, pkgs, ... }:
-  lib.mkMerge [
-    (lib.mkIf config.services.gnome-keyring.enable {
+  my.home = { config, lib, pkgs, ... }: lib.mkMerge [
+    (lib.mkIf (config.services.gnome-keyring.enable || cfg.services.gnome3.gnome-keyring.enable) {
       home.packages = [ pkgs.gnome3.seahorse ];
       programs.git.extraConfig.credential.helper = "gnome-keyring";
     })
@@ -36,7 +38,7 @@
           }
           (lib.mkIf config.programs.neovim.enable {
             mergetool.vimdiff = {
-              cmd = "${pkgs.neovim}/bin/nvim -d $LOCAL $REMOTE $MERGE -c 'wincmd w' -c 'wincmd J'";
+              cmd = "${config.programs.neovim.finalPackage}/bin/nvim -d $LOCAL $REMOTE $MERGE -c 'wincmd w' -c 'wincmd J'";
             };
           })
           (lib.mkIf (config.my.identity.gpgSigningKey != null) {
