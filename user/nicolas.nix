@@ -15,7 +15,9 @@ lib.mkMerge [
       group = username;
       home = "/home/${username}";
       extraGroups = [ "wheel" "networkmanager" "input" "audio" "video" "dialout" ]
-        ++ (lib.optional config.virtualisation.docker.enable "docker");
+      ++ (lib.optional config.virtualisation.docker.enable "docker")
+      ++ (lib.optional config.virtualisation.libvirtd.enable "libvirtd")
+      ;
     };
     users.groups.${username} = { };
 
@@ -53,9 +55,9 @@ lib.mkMerge [
       };
 
       # Passwords and stuff
-      services.gnome-keyring.enable = true;
+      # Disabled: https://github.com/nix-community/home-manager/issues/1454
+      # services.gnome-keyring.enable = true;
 
-      # services.lorri.enable = true;
       services.blueman-applet.enable = true;
       services.kdeconnect.enable = true;
       services.kdeconnect.indicator = true;
