@@ -27,6 +27,10 @@ let
       "browser.aboutConfig.showWarning" = false;
       "browser.download.useDownloadDir" = false;
 
+      # Keep a huge history of visited websites
+      "places.history.enabled" = true;
+      "places.history.expiration.max_pages" = 999999;
+
       # Tab-specific zoom
       "browser.zoom.siteSpecific" = false;
 
@@ -74,6 +78,10 @@ let
       "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons" = false;
       # Disable recommend features as you browse
       "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features" = false;
+
+      # UI : delay repaint when opening a new tab to reduce screen flash
+      # see https://old.reddit.com/r/firefox/comments/kd12b4
+      "nglayout.initialpaint.delay" = 400;
 
       # Acceleration settings
       "gfx.webrender.all" = true;
