@@ -17,23 +17,16 @@
 
   services.blueman.enable = true;
 
-  # networking.wireguard.enable = true;
-
   # Logitech
   hardware.logitech.wireless.enable = true;
   hardware.logitech.wireless.enableGraphical = true;
 
   # Forward journald logs to VTT 1
-  services.journald.extraConfig = ''
-    FordwardToConsole=yes
-    TTYPath=/dev/tty1
-  '';
-
-  # Steelseries headset
-  services.udev.extraRules = lib.optionalString config.hardware.pulseaudio.enable ''
-    ATTRS{idVendor}=="1038", ATTRS{idProduct}=="12ad", ENV{PULSE_PROFILE_SET}="steelseries-arctis-7-usb-audio.conf"
-    ATTRS{idVendor}=="1038", ATTRS{idProduct}=="12AD", ENV{PULSE_PROFILE_SET}="steelseries-arctis-7-usb-audio.conf"
-  '';
+  # Doesn't work
+  #services.journald.extraConfig = ''
+  #  FordwardToConsole=yes
+  #  TTYPath=/dev/tty1
+  #'';
 
   # Yubikey
   services.udev.packages = with pkgs; [ yubikey-personalization libu2f-host ];
