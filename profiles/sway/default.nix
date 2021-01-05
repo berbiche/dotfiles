@@ -6,6 +6,7 @@
     ./waybar
     ./libinput.nix
     ./screenshare.nix
+    ./polkit.nix
   ];
 
   services.xserver.displayManager.defaultSession = "sway";
