@@ -1,15 +1,15 @@
 { config, lib, pkgs, ... }:
 
 let
-  profiles = import ../profiles;
+  profiles = import ../profiles { isLinux = true; };
 in
 {
-  imports = [
-    profiles.default-linux
-    profiles.steam
-    profiles.obs
-    profiles.gnome
-    profiles.wireguard
+  imports = with profiles; [
+    default-linux
+    steam
+    obs
+    gnome
+    wireguard
   ];
 
   boot.kernelParams = [ "amd_iommu=pt" "iommu=soft" ]

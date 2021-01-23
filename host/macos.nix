@@ -2,7 +2,7 @@
 
 # Uses nix-darwin modules
 let
-  profiles = import ../profiles;
+  profiles = import ../profiles { isDarwin = true; };
 in
 {
   imports = with profiles; [ dev programs ];

@@ -1,31 +1,43 @@
+{ isLinux ? !isDarwin, isDarwin ? !isLinux }:
+
+# Inlined `assertMsg`
+assert (
+  if isLinux != isDarwin then
+    true
+  else
+    builtins.trace "profiles: isLinux and isDarwin are mutually exclusive" false
+  );
+
 let
-  # mkLinuxProfile = imports: { stdenv, lib, ... }:
-  #   lib.mkIf stdenv.targetPlatform.isLinux { inherit imports; };
-  # mkDarwinProfile = imports: { stdenv, lib, ... }:
-  #   lib.mkIf stdenv.targetPlatform.isDarwin { inherit imports; };
-  mkLinuxProfile = mkProfile;
-  mkDarwinProfile = mkProfile;
+  # Inlined lib.optionalAttrs
+  optionalAttrs = x: y: if x then y else { };
+  # Inlined lib.fix
+  fix = f: let x = f x; in x;
+
   mkProfile = imports: { ... }: { inherit imports; };
+
+  profiles = self: 
+    {
+      dev = mkProfile [ ./dev ];
+      programs = mkProfile [ ./programs ];
+      ctf = mkProfile [ ./ctf ];
+      secrets = mkProfile [ ./secrets ];
+    }
+    // optionalAttrs isLinux {
+      core-linux = mkProfile [ ./core-linux ];
+      gnome = mkProfile [ ./gnome ];
+      graphical-linux = mkProfile [ ./graphical-linux ];
+      kde = mkProfile [ ./kde ];
+      obs = mkProfile [ ./obs ];
+      steam = mkProfile [ ./steam ];
+      sway = mkProfile [ ./sway ];
+      wireguard = mkProfile [ ./wireguard ];
+      xfce = mkProfile [ ./xfce ];
+      # Pseudo profiles
+      default-linux = mkProfile (with self; [ core-linux dev graphical-linux xfce programs sway ctf secrets ]);
+    }
+    // optionalAttrs isDarwin {
+      yabai = mkProfile [ ./yabai ];
+    };
 in
-rec {
-  dev = mkProfile [ ./dev ];
-  programs = mkProfile [ ./programs ];
-  ctf = mkProfile [ ./ctf ];
-
-  # Linux only profiles
-  core-linux = mkLinuxProfile [ ./core-linux ];
-  gnome = mkLinuxProfile [ ./gnome ];
-  graphical-linux = mkLinuxProfile [ ./graphical-linux ];
-  kde = mkLinuxProfile [ ./kde ];
-  obs = mkLinuxProfile [ ./obs ];
-  steam = mkLinuxProfile [ ./steam ];
-  sway = mkLinuxProfile [ ./sway ];
-  wireguard = mkLinuxProfile [ ./wireguard ];
-  xfce = mkLinuxProfile [ ./xfce ];
-
-  # MacOS only profiles
-  yabai = mkDarwinProfile [ ./yabai ];
-
-  # Pseudo profiles
-  default-linux = mkLinuxProfile [ core-linux dev graphical-linux xfce programs sway ctf ];
-}
+  fix profiles

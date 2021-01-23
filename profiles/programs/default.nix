@@ -13,10 +13,10 @@ let
   in map (p: ./. + "/${p}") (attrNames (filtered files));
 in
 {
-  imports = [ ./gpg.nix ];
+  imports = [ ];
 
   my.home = {
-    imports = lib.remove ./gpg.nix customPrograms;
+    imports = customPrograms;
 
     home.packages = with pkgs; lib.mkMerge [
       [

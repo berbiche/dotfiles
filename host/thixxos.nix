@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  profiles = import ../profiles;
+  profiles = import ../profiles { isLinux = true; };
 in
 {
   imports = [
