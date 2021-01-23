@@ -68,10 +68,14 @@ lib.mkMerge [
 
   {
     my.home = { ... }: {
-      my.identity.gpgSigningKey = "1D0261F6BCA46C6E";
       my.identity = {
         name = "Nicolas Berbiche";
-        email = "nic.berbiche" + "@gmail.com";
+        # Yeah, an email address is not exactly confidential, but
+        # try avoiding the most basic scrapping attempts?
+        # My email is available in the author field of the commit
+        email = builtins.replaceStrings [ "at " ] [ "@" ] ("nicolas" + '' at '' + "normie.dev");
+        # My GPG signing key
+        gpgSigningKey = "1D0261F6BCA46C6E";
       };
 
       # HomeManager config
