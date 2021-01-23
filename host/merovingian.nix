@@ -129,8 +129,4 @@ in
 
   # Enable xbox controller
   hardware.xpadneo.enable = true;
-
-  my.home.my.identity = {
-    gpgSigningKey = "B461292445C6E696";
-  };
 }
