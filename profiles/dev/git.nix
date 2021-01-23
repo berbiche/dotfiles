@@ -75,7 +75,7 @@ in
           cmare = "${cmar} --edit";
           # I don't remember why I used 'format:relative:now' instead of 'now'
           # I think the 'format:' was introduced before 'now'? https://stackoverflow.com/a/19742762
-          cmard = ''${cmar} --date="''${GIT_COMMITTER_DATE:-"format:relative:now}"'';
+          cmard = ''${cmar} --date="''${GIT_COMMITTER_DATE:-'format:relative:now'}"'';
           cmarde = "${cmard} --edit";
           # Pretty graph
           graph = lib.concatStrings [
