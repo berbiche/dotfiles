@@ -19,18 +19,31 @@ in
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
-  boot.kernelPackages = pkgs.linuxPackages_zen;
-  #boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  boot.kernel.sysctl = {
-    "vm.swappiness" = 10;
-  };
+  # Temporary set to 5.8 because of https://gitlab.freedesktop.org/drm/amd/-/issues/1426
+  boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_zen.override {
+    argsOverride = rec {
+      version = "5.8.18";
+      modDirVersion = "${version}-zen";
+      src = pkgs.fetchFromGitHub {
+        owner = "zen-kernel";
+        repo = "zen-kernel";
+        rev = "d80d78763aaa1b2de147cf81bf8129944e1b6dfb";
+        hash = "sha256-7BIJhdCupk7DERq5qH8I9jYeDgOUHKC8WS67+C01EcI=";
+      };
+    };
+  });
+  # boot.kernelPackages = pkgs.linuxPackages_zen;
+  #boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Disable HDMI/DisplayPort audio with amdgpu
   environment.etc."modprobe.d/custom-amdgpu.conf".text = ''
     options amdgpu audio=0
     # 10-bit colors lack hw accel on Chromium, and glitches with Mesa/Vulkan
     # options amdgpu deep_color=1
+
+    # DSC still not working with my samsung monitor
+    #options amdgpu dc=0
   '';
 
   # high-resolution display
@@ -49,9 +62,11 @@ in
     };
     systemd-boot = {
       enable = true;
-      # My disk is encrypted so editor isn't that big of a security risk
+      # My disk is encrypted so enabling the editor isn't that big of a security risk
+      # If someone has physical access to my computer they have already won.
       editor = true;
       consoleMode = "auto";
+      # consoleMode = "keep";
     };
   };
 
@@ -103,6 +118,7 @@ in
   # Chromium chromecast (port 8010)
   # https://github.com/NixOS/nixpkgs/issues/49630
   networking.firewall.allowedTCPPorts = [
+    # No idea
     1716
     8010
     21027
