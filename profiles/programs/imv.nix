@@ -10,7 +10,7 @@ in
   # https://old.reddit.com/r/swaywm/comments/auxspz/how_to_change_your_wallpaper_on_the_fly/
   xdg.configFile."imv/config".text = ''
     [binds]
-    <Shift+W> = exec ln -sf "$imv_current_file" ${wallpaperDir}/current && swaymsg output "*" background ${wallpaperDir}/current center
+    <Shift+W> = exec ln -sf "$imv_current_file" ${wallpaperDir}/current && swaymsg output "*" background ${wallpaperDir}/current fit
 
     h = prev
     l = next
