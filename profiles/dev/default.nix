@@ -21,6 +21,7 @@ in
       CARGO_HOME = "${config.xdg.cacheHome}/cargo";
       DOCKER_CONFIG = "${config.xdg.configHome}/docker";
       M2_HOME = "${config.xdg.cacheHome}/maven";
+      NIX_PAGER = "less --RAW-CONTROL-CHARS --quit-if-one-screen";
     };
 
     home.packages = with pkgs; [

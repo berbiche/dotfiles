@@ -60,8 +60,6 @@ lib.mkMerge [
       services.gnome-keyring.components = [ "secrets" "ssh" ];
 
       services.blueman-applet.enable = true;
-      services.kdeconnect.enable = true;
-      services.kdeconnect.indicator = true;
       # Started with libindicator if `xsession.preferStatusNotifierItems = true`
       services.network-manager-applet.enable = true;
     };
@@ -76,17 +74,12 @@ lib.mkMerge [
         email = "nic.berbiche" + "@gmail.com";
       };
 
-      home.sessionVariables = {
-        NIX_PAGER = "less --RAW-CONTROL-CHARS --quit-if-one-screen";
-      };
-
       # HomeManager config
       # `man 5 home-configuration.nix`
       manual.manpages.enable = true;
 
       # XDG
       fonts.fontconfig.enable = lib.mkForce true;
-      programs.emacs.enable = true;
     };
   }
 ]
