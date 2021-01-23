@@ -51,7 +51,17 @@ in
           })
         ];
 
+        ignores = [
+          ".vagrant/"
+          "~."
+          ".DS_STORE"
+          "*.swp"
+        ];
+
         aliases = rec {
+          a  = "add";
+          aa = "add --all";
+          au = "add --update";
           b = "branch -vv";
           d = "diff";
           s = "show";
