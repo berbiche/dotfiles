@@ -56,8 +56,10 @@
           done
         '';
       });
-      timed.enable = true;
+      timed.enable = false;
       timed.theme = "${pkgs.gnome3.gnome-backgrounds}/share/backgrounds/gnome/adwaita-timed.xml";
+      static.enable = true;
+      static.image = "${config.home.homeDirectory}/Pictures/wallpaper/current";
     };
 
     systemd.user.services.wallutils.Install.WantedBy = mkForce [ "x11-session.target" ];
