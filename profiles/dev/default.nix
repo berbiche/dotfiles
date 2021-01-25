@@ -29,7 +29,7 @@ in
 
       # Programming
       clang
-      python3
+      (python3.withPackages (ps: with ps; [ ptpython ipython ]))
       gnumake
       powershell
       tig
