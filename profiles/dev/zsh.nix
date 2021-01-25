@@ -52,6 +52,7 @@ in
         rm        = "rm -Iv";
         dh        = "du -h";
         df        = "df -h";
+        py        = "ptipython";
         su        = "sudo -E su -m";
         systemctl = "command systemctl --no-pager --full";
         sysu      = "${systemctl} --user";
