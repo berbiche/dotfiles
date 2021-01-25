@@ -5,6 +5,7 @@ from Xlib.ext import randr
 from binascii import hexlify
 from contextlib import closing, suppress
 import json
+from operator import itemgetter
 import os
 from pathlib import Path
 import pprint
@@ -42,17 +43,24 @@ class Main():
         self.root = display.screen().root
 
     def run(self):
+        '''
+        Setup all necessary resources and configure outputs
+        '''
         self.resources = self.root.xrandr_get_screen_resources()._data
 
         self.outputs = {}
         for xid in self.resources['outputs']:
             output = self.display.xrandr_get_output_info(xid, self.resources['config_timestamp'])._data
             properties = self.display.xrandr_list_output_properties(xid)._data
-            self.properties = self.map_properties(xid, properties)
-            edid = self.map_edids(self.properties)
+            props = self.map_properties(xid, properties)
+            edid = self.map_edids(props)
             if edid is not None:
                 self.outputs[edid] = Output(output['name'], xid, output)
 
+        self.modes = [m._data for m in self.resources['modes']]
+
+        pp(self.resources)
+        pp(self.outputs)
         (profile_name, profile_config) = self.find_matching_profile() or (None, None)
         if profile_config is not None:
             log(f"found matching profile: {profile_name}")
@@ -82,14 +90,54 @@ class Main():
         log("applying profile")
         pp(profile)
         for monitor in profile:
-            if not monitor.get('status', True):
-                (name, _xid, _) = self.outputs.get(monitor['edid'])
+            (name, xid, output_data) = self.outputs.get(monitor['edid'])
+            if monitor.get('status', 'disabled') == 'disabled':
                 log(f"<TODO> disabling monitor '{name}'")
+                # Something with crtc?
                 continue
             if monitor.get('primary'):
-                (name, xid, _) = self.outputs.get(monitor['edid'])
                 log(f"setting '{name}' as primary")
                 self.root.xrandr_set_output_primary(xid)
+            # Modeline stuff
+            modeline = self.find_matching_modeline(xid, monitor, output_data)
+            if modeline is None:
+                log(f"no modeline for monitor '{name}'")
+                continue
+            self.set_modelines(xid, modeline)
+
+    def find_matching_modeline(self, xid, monitor, output_data):
+        (height, width, desired_rate, scale) = itemgetter('height', 'width', 'rate', 'scale')(monitor)
+        possible_modes = [
+            m for m in self.modes
+            if m['id'] in output_data['modes'] and m['width'] == width and m['height'] == height
+        ]
+
+        rates = {}
+        for mode_data in possible_modes:
+            # https://gitlab.freedesktop.org/xorg/app/xrandr/-/blob/824484e5ba50f1e6858ea990393c181a249c3a5e/xrandr.c#L581-594
+            vtotal = mode_data['v_total'] or 0
+            if mode_data['flags'] & randr.DoubleScan:
+                vtotal *= 2
+            if mode_data['flags'] & randr.Interlace:
+                vtotal /= 2
+            if (htotal := mode_data['h_total']) and vtotal:
+                rate = mode_data['dot_clock'] / (htotal * vtotal)
+            else:
+                rate = 0
+            rates[mode_data] = rate
+
+        if len(rates) == 0:
+            log(f'no matching modeline found for {monitor["name"]}')
+            return None
+
+        log(f'found {len(rates)} possible modelines for monitor "{monitor["name"]}"')
+        # Choose the modeline who's rate is the closest to the desired rate
+        choosed_mode = min(rates, key=lambda rate: abs(rate - desired_rate))
+        log('best modeline:', choosed_mode)
+        return choosed_mode
+
+    def set_modelines(self, xid, modeline):
+        pass
 
 
 file = Path(sys.argv[1])
