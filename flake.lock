@@ -214,6 +214,22 @@
         "type": "github"
       }
     },
+    "my-nixpkgs": {
+      "locked": {
+        "lastModified": 1611810398,
+        "narHash": "sha256-gJVagQAmOsg6qIGM/ET+U+EybGnbg4znpUJTtsoTLHU=",
+        "owner": "berbiche",
+        "repo": "nixpkgs",
+        "rev": "e501c9df0b9fd684adf57efe1c40644112ee16b5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "berbiche",
+        "ref": "init-xfce4-i3-workspaces-plugin",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": "nixpkgs_3"
@@ -478,6 +494,7 @@
         "doom-emacs": "doom-emacs",
         "emacs-overlay": "emacs-overlay",
         "home-manager": "home-manager",
+        "my-nixpkgs": "my-nixpkgs",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-darwin": "nixpkgs-darwin",

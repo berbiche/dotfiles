@@ -10,6 +10,7 @@
     # home-manager.url= "github:berbiche/home-manager/waybar-module-css-ids-fix";
     home-manager.url= "github:rycee/home-manager";
     nur = { url = "github:nix-community/nur"; flake = false; };
+    my-nixpkgs.url = "github:berbiche/nixpkgs/init-xfce4-i3-workspaces-plugin";
 
     doom-emacs.url = "github:vlaci/nix-doom-emacs";
     doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";

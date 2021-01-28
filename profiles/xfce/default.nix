@@ -2,7 +2,7 @@
 # and the required X11 server configuration has to be set
 # at the host/machine level.
 # For an example, see host/thixxos services.xserver configuration.
-{ config, pkgs, ... }:
+{ inputs, config, pkgs, ... }:
 
 {
   imports = [
@@ -33,7 +33,8 @@
       "whiskermenu"
       "windowck"
       "xkb"
-    ]);
+    ])
+    ++ [ inputs.my-nixpkgs.legacyPackages."${pkgs.system}".xfce."xfce4-i3-workspaces-plugin" ];
 
   my.home = { pkgs, ... }:
    {
