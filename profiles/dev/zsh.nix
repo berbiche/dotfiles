@@ -2,6 +2,7 @@
 
 let
   inherit (pkgs.stdenv.targetPlatform) isDarwin isLinux;
+  inherit (lib) mkIf mkMerge;
 in
 {
   environment.pathsToLink = [ "/share/zsh" ];
@@ -49,7 +50,10 @@ in
         ln        = "ln -v";
         mkdir     = "mkdir -vp";
         mv        = "mv -iv";
-        rm        = "rm -Iv";
+        rm        = mkMerge [
+          (mkIf isDarwin "rm -v")
+          (mkIf (!isDarwin) "rm -Iv")
+        ];
         dh        = "du -h";
         df        = "df -h";
         py        = "ptipython";
