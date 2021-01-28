@@ -2,6 +2,14 @@
 
 let
   cfg = config;
+
+  # Transforms a git alias into an attribute set to be reused by other aliases
+  # and abuses the __toString property of attribute sets for the serialization
+  # of the alias when converting to an INI
+  mkFunction = x: {
+    __toString = _: "!f(){ ${x}; }; f";
+    unwrapped = x;
+  };
 in
 {
   my.home = { config, lib, pkgs, ... }: lib.mkMerge [
@@ -58,19 +66,26 @@ in
           "*.swp"
         ];
 
-        aliases = rec {
+        aliases = lib.mapAttrs (_n: toString) rec {
           a  = "add";
           aa = "add --all";
           au = "add --update";
           b = "branch -vv";
-          d = "diff";
-          s = "show";
-          f = "fetch --verbose";
-          u = "reset HEAD";
           bn = "checkout -b";
           ch = "checkout";
+          d = "diff";
           dc = "diff --cached";
+          f = "fetch --verbose";
+          fo = "fetch origin";
+          fu = "fetch upstream";
+          s = "show";
           st = "status";
+          u = "reset HEAD";
+          # Shows the latest commit with more detail
+          latest = "show HEAD --summary";
+          # Shows all commits since last fetched ORIG_HEAD
+          # https://git.wiki.kernel.org/index.php/Aliases
+          lc = "log ORIG_HEAD.. --stat --no-merges";
           # stash list pretty https://stackoverflow.com/a/38826108
           sl = lib.concatStrings [
             "stash list --pretty=format:'"
@@ -78,26 +93,30 @@ in
               "%C(reset) %<(70,trunc)%s %C(green)(%ci) %C(bold blue)<%an>%C(reset)" # right part
             "'"
           ];
+          # Clone aliases
+          cl = mkFunction (lib.concatStringsSep "; " (lib.splitString "\n" ''
+            if [ "$#" -eq 0 ]; then echo "expected a remote name but none was given"; exit 1; fi
+            local origin="$1"; shift
+            git clone --origin="$origin" "$@"''));
+          clo = "${cl} origin";
+          clu = "${cl} upstream";
           # Convenient aliases for committing
           cm = "commit --verbose";
+          cmm = mkFunction ''git ${cm} -m "$@"'';
           cma = "${cm} --amend";
-          cmar = "${cma} --reuse-message=HEAD";
+          cman = "${cma} --no-edit";
+          cmar = "${cma} --reuse-message";
           cmare = "${cmar} --edit";
           # I don't remember why I used 'format:relative:now' instead of 'now'
           # I think the 'format:' was introduced before 'now'? https://stackoverflow.com/a/19742762
-          cmard = ''${cmar} --date="''${GIT_COMMITTER_DATE:-'format:relative:now'}"'';
-          cmarde = "${cmard} --edit";
+          cmard = mkFunction ''git ${cmar} "$@" --date="''${GIT_COMMITTER_DATE:-'format:relative:now'}"'';
+          cmarde = mkFunction "${cmard.unwrapped} --edit";
           # Pretty graph
           graph = lib.concatStrings [
             "! git log --graph --pretty='"
               "%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset"
             "'"
           ];
-          # Shows the latest commit with more detail
-          latest = "show HEAD --summary";
-          # Shows all commits since last fetched ORIG_HEAD
-          # https://git.wiki.kernel.org/index.php/Aliases
-          lc = "log ORIG_HEAD.. --stat --no-merges";
           # Prints all aliases
           aliases = toString [
             "! git config --get-regexp '^alias\\.'"
@@ -106,7 +125,7 @@ in
               "| sort"
           ];
           # Prints one alias
-          alias = "!f(){ git config --get --global alias.\"$1\"; }; f || echo 'alias not found'";
+          alias = mkFunction "git config --get --global alias.\"$1\"" + " || echo 'alias not found'";
           # Quick view of all recents commits for stand-ups
           oneline = "log --pretty=oneline";
           activity = lib.concatStrings [
@@ -118,13 +137,13 @@ in
           # I think I used this once
           # https://stackoverflow.com/a/23486788
           # tldr: creates a new root starting from the last commit with an optional message
-          #       this effectively "squashes" everything.
+          #       this effectively "squashes" everything with an optional message
           # Most likely needs a force push
-          squash-all = ''!f(){ git reset $(git commit-tree HEAD^{tree} -m "''${1:-A new start}");};f'';
+          squash-all = mkFunction ''git reset $(git commit-tree HEAD^{tree} -m "''${1:-A new start}")'';
 
           # Adds a new remote with the given Github handle and repo name
           # `git remote-github upstream nix-community/home-manager`
-          remote-github = ''!f(){ git remote add "$1" git@github.com:"''${2%/*}"/"''${2#*/}".git; }; f'';
+          remote-github = mkFunction ''git remote add "$1" git@github.com:"''${2%/*}"/"''${2#*/}".git'';
         };
 
         delta.enable = true;
