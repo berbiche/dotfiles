@@ -25,14 +25,15 @@
     extraPackages = with pkgs; [ qt5.qtwayland ];
 
     extraSessionCommands = ''
-      export SDL_VIDEODRIVER=wayland
-
       # needs qt5.qtwayland in systemPackages
       #export QT_QPA_PLATFORM=wayland-egl
       export QT_QPA_PLATFORM=wayland
       export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
       # Makes obs-studio unusably slow (more than 1 minute startup time)
       #export QT_WAYLAND_FORCE_DPI=physical
+
+      # Allow Steam games to run under XWayland
+      export SDL_VIDEODRIVER=x11
 
       # Enlightenment and stuff?
       export ELM_ENGINE=wayland_egl
@@ -42,6 +43,7 @@
       # use this if they aren't displayed properly:
       export _JAVA_AWT_WM_NONREPARENTING=1
 
+      # Screensharing
       export XDG_CURRENT_DESKTOP=sway
 
       # TODO: remove once gnome-keyring exports SSH_AUTH_SOCK correctly
