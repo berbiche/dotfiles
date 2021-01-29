@@ -4,6 +4,10 @@
   services.xserver.windowManager.i3 = {
     enable = true;
     package = pkgs.i3-gaps;
+    extraSessionCommands = ''
+      # TODO: remove once gnome-keyring exports SSH_AUTH_SOCK correctly
+      export SSH_AUTH_SOCK=''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/keyring/ssh
+    '';
   };
 
   my.home = { config, ... }:
