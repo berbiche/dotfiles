@@ -33,6 +33,8 @@ let
       "sway/mode"
       "custom/separator"
       "idle_inhibitor"
+      "custom/separator"
+      "custom/dark-mode"
     ];
     modules-center = [
       "cpu"
@@ -84,6 +86,55 @@ let
           activated = "聯";
           deactivated = "輦";
         };
+      };
+
+      "custom/dark-mode" =  let
+        awk = "${pkgs.gawk}/bin/awk";
+        gsettings = "${pkgs.glib.bin}/bin/gsettings";
+        escape = x: ''"${lib.escape [ ''"'' ] x}"'';
+        darkMode = builtins.toJSON {
+          text = "Dark";
+          alt = "dark";
+          tooltip = "Toggle light theme";
+          class = "dark";
+        };
+        lightMode = builtins.toJSON {
+          text = "Light";
+          alt = "light";
+          tooltip = "Toggle dark theme";
+          class = "light";
+        };
+      in {
+        return-type = "json";
+        format = "{icon}";
+        format-icons = {
+          light = ""; # fontawesome.com/cheatsheet sun f185
+          dark = ""; # fontawesome.com/cheatsheet moon f186
+        };
+        exec = pkgs.writeShellScript "waybar-custom-dark-mode" ''
+          if [[ "$(${gsettings} get org.gnome.desktop.interface gtk-theme)" = "'Adwaita'" ]]; then
+            echo ${lib.escapeShellArg lightMode}
+          else
+            echo ${lib.escapeShellArg darkMode}
+          fi
+          ${gsettings} monitor org.gnome.desktop.interface gtk-theme | \
+            stdbuf -o0 ${awk} '{
+              if ($2 ~ /'\'''Adwaita'\'''/) {
+                print ${escape lightMode}
+              }
+              else {
+                print ${escape darkMode}
+              }
+            }'
+            # ${pkgs.jq}/bin/jq --unbuffered --compact-output
+        '';
+        on-click = pkgs.writeShellScript "waybar-custom-dark-mode-on-click" ''
+          if [[ "$(${gsettings} get org.gnome.desktop.interface gtk-theme)" = "'Adwaita'" ]]; then
+            ${gsettings} set org.gnome.desktop.interface gtk-theme Adwaita-dark
+          else
+            ${gsettings} set org.gnome.desktop.interface gtk-theme Adwaita
+          fi
+        '';
       };
 
       "tray" = {
