@@ -101,14 +101,13 @@ in
       extensions = with pkgs.vscode-extensions; [
         bbenoist.Nix
         redhat.vscode-yaml
-        ms-vscode-remote.remote-ssh
         ms-kubernetes-tools.vscode-kubernetes-tools
         ms-vscode-remote.remote-ssh
         vscodevim.vim
         xaver.clang-format
       ]
       ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
-        ms-vsliveshare.vsliveshare
+        #ms-vsliveshare.vsliveshare
         ms-python.python
         llvm-org.lldb-vscode
       ]

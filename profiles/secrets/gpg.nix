@@ -13,9 +13,12 @@ in
       services.dbus.packages = [ pkgs.gcr ];
       my.home = {
         home.file.".gnupg/gpg-agent.conf".text = ''
-          pinentry-program ${pkgs.pinentry.gnome3}/bin/pinentry
+          # pinentry-program ${pkgs.pinentry.gnome3}/bin/pinentry
+          pinentry-program ${pkgs.pinentry.qt}/bin/pinentry
         '';
-        services.gpg-agent.pinentryFlavor = "gnome3";
+        # Pinentry gnome3 is broken on latest version
+        #services.gpg-agent.pinentryFlavor = "gnome3";
+        services.gpg-agent.pinentryFlavor = "qt";
       };
     })
     {
@@ -31,7 +34,7 @@ in
           target = ".gnupg/gpg.conf";
           text = ''
             # Enable smartcard
-            use-agent
+            #use-agent
 
             # Default signing key
             ${lib.optionalString (config.my.identity.gpgSigningKey != null) ''

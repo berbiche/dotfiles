@@ -62,6 +62,10 @@ lib.mkMerge [
       services.blueman-applet.enable = true;
       # Started with libindicator if `xsession.preferStatusNotifierItems = true`
       services.network-manager-applet.enable = true;
+
+      # Playerctl smart daemon to stop the "last player"
+      # i.e. not YouTube on Firefox, but Spotify
+      services.playerctld.enable = true;
     };
   })
   # </isLinux>

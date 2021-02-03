@@ -331,7 +331,6 @@ in
 
     systemd.user.services.waybar = {
       Unit.X-Restart-Triggers = [ "${config.xdg.configFile."waybar/config".source}" ];
-      Install.WantedBy = lib.mkForce [ "sway-session.target" ];
     };
   };
 }

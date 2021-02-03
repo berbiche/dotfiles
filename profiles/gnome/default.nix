@@ -36,8 +36,8 @@
   environment.gnome3.excludePackages = with pkgs; [
     gnome-usage
     gnome3.accerciser
+    evolution
     gnome3.cheese
-    gnome3.evolution
     #gnome3.gedit
     gnome3.gnome-calculator
     #gnome3.gnome-calendar

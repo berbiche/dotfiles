@@ -32,6 +32,8 @@ let
   );
   # Marks a keybinding as being repeatable (holding the key will trigger the action continuously)
   makeRepeatable = n: { repeat = n; };
+
+  withPlayerctld = lib.optionalString config.services.playerctld.enable "-p playerctld";
 in
 makeNoRepeat (defaultKeybindings // {
   # Some defaults from Sway are included for the sake of self documentation
@@ -90,10 +92,10 @@ makeNoRepeat (defaultKeybindings // {
   "${modifier}+Ctrl+n"  = "exec ${binaries.browser-work-profile}";
 
   # MPRIS
-  "--locked XF86AudioPause" = "exec ${binaries.playerctl} pause";
-  "--locked XF86AudioPlay"  = "exec ${binaries.playerctl} play";
+  "--locked XF86AudioPause" = "exec ${binaries.playerctl} ${withPlayerctld} pause";
+  "--locked XF86AudioPlay"  = "exec ${binaries.playerctl} ${withPlayerctld} play";
   # Toggle play/pause for the focused? MPRIS instance with PauseBreak
-  "--locked Pause"          = "exec ${binaries.playerctl} play-pause";
+  "--locked Pause"          = "exec ${binaries.playerctl} ${withPlayerctld} play-pause";
 
   # Move windows to the next monitor
   "${modifier}+Ctrl+${left}"  = "move window to output left";
