@@ -74,6 +74,14 @@ in
       enableZshIntegration = true;
       enableFishIntegration = true;
       enableNixDirenvIntegration = true;
+      config = {
+        global.disable_stdin = true;
+        global.strict_env = true;
+      };
+      stdlib = ''
+        # Silence DIRENV variable export
+        # export DIRENV_LOG_FORMAT=""
+      '';
     };
 
     programs.zoxide = {

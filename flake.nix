@@ -185,10 +185,11 @@
     };
 
     overlays = let
+      overlayFiles' = lib.filter (lib.hasSuffix ".nix") (lib.attrNames (builtins.readDir ./overlays));
       overlayFiles = lib.listToAttrs (map (name: {
         name = lib.removeSuffix ".nix" name;
         value = import (./overlays + "/${name}");
-      }) (lib.attrNames (builtins.readDir ./overlays)));
+      }) overlayFiles');
     in overlayFiles // {
       nixpkgs-wayland = inputs.nixpkgs-wayland.overlay;
       nixpkgs-mozilla = import inputs.nixpkgs-mozilla;

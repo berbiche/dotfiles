@@ -1,0 +1,15 @@
+diff --git a/cmd_export.go b/cmd_export.go
+index a534c8c..ba8d120 100644
+--- a/cmd_export.go
++++ b/cmd_export.go
+@@ -89,10 +89,6 @@ func exportCommand(currentEnv Env, args []string, config *Config) (err error) {
+ 		}
+ 	}
+ 
+-	if out := diffStatus(previousEnv.Diff(newEnv)); out != "" {
+-		logStatus(currentEnv, "export %s", out)
+-	}
+-
+ 	diffString := currentEnv.Diff(newEnv).ToShell(shell)
+ 	logDebug("env diff %s", diffString)
+ 	fmt.Print(diffString)
