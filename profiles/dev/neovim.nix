@@ -55,7 +55,7 @@ in
         # Rainbow paranthesis, brackets
         rainbow
         # Statusbar
-        vim-airline
+        # vim-airline
         vim-airline-themes
         # File lookup
         fzf-vim
@@ -181,7 +181,7 @@ in
         let g:rainbow_active = 1
 
         " Display all buffers when only one tab is open
-        let g:airline#extensions#tabline#enabled = 1
+        "let g:airline#extensions#tabline#enabled = 1
 
         " Polyglot
         let g:polyglot_disabled = ['markdown']
