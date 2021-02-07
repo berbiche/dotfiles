@@ -9,6 +9,7 @@
       settings = {
         add_newline = false;
         format = lib.concatStrings [
+          "$nix_shell"
           # "$username:$hostname "
           # "$hostname "
           "$directory"
@@ -38,7 +39,6 @@
           # "$rust"
           # "$terraform"
           # "zig"
-          "$nix_shell"
           # "conda"
           # "memory_usage"
           # "aws"
@@ -91,10 +91,12 @@
         line_break.disabled = false;
 
         nix_shell = {
-          use_name = false;
-          impure_msg = "";
-          pure_msg = "";
+          # impure_msg = "";
+          # pure_msg = "";
+          # format = "via [$symbol$state(\\($name\\))]($style)";
+          use_name = true;
           symbol = "❄️";
+          format = "[\\($symbol shell\\)]($style) ";
         };
 
         status = {
