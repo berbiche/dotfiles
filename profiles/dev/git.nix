@@ -125,7 +125,7 @@ in
               "| sort"
           ];
           # Prints one alias
-          alias = mkFunction "git config --get --global alias.\"$1\"" + " || echo 'alias not found'";
+          alias = mkFunction "git config --get alias.\"$1\" || echo 'alias not found'";
           # Quick view of all recents commits for stand-ups
           oneline = "log --pretty=oneline";
           activity = lib.concatStrings [
