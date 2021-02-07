@@ -73,7 +73,7 @@ in
         setopt appendhistory                                            # Immediately append history instead of overwriting
         setopt histverify                                               # When expanding the last command with !! or !?, do not execute, substitute instead
         setopt correct                                                  # Auto correct mistakes
-        setopt extendedglob                                             # Extended globbing. Allows using regular expressions with *
+        #setopt extendedglob                                             # Extended globbing. Allows using regular expressions with *
         setopt nocaseglob                                               # Case insensitive globbing
         setopt rcexpandparam                                            # Array expension with parameters
         #setopt nocheckjobs                                              # Don't warn about running processes when exiting
