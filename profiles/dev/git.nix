@@ -104,9 +104,9 @@ in
           cm = "commit --verbose";
           cmm = mkFunction ''git ${cm} -m "$@"'';
           cma = "${cm} --amend";
+          cmae = "${cma} --edit";
           cman = "${cma} --no-edit";
           cmar = "${cma} --reuse-message";
-          cmare = "${cmar} --edit";
           # I don't remember why I used 'format:relative:now' instead of 'now'
           # I think the 'format:' was introduced before 'now'? https://stackoverflow.com/a/19742762
           cmard = mkFunction ''git ${cmar} "$@" --date="''${GIT_COMMITTER_DATE:-'format:relative:now'}"'';
