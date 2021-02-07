@@ -106,4 +106,6 @@ in
     Option "DRI" "3"
     Option "TearFree" "true"
   '';
+
+  hardware.xpadneo.enable = true;
 }
