@@ -15,6 +15,7 @@ let
       "1118:1874:Microsoft_Wired_Keyboard_400"
       "1:1:AT_Translated_Set_2_keyboard"
       "1008:3402:HP_USB_Keyboard"
+      "1118:2054:Designer_Keyboard"
       # Logitech (home) Wireless Keyboard
       "1133:16501:Logitech_Wireless_Keyboard_PID:4075"
       "1133:50484:Logitech_USB_Receiver"
