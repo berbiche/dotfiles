@@ -89,29 +89,53 @@ let
     in lib.mkIf config.profiles.dev.wakatime.enable wakatime;
   };
 
+  extensions = with pkgs.vscode-extensions; [
+    bbenoist.Nix
+    redhat.vscode-yaml
+    ms-kubernetes-tools.vscode-kubernetes-tools
+    ms-vscode-remote.remote-ssh
+    vscodevim.vim
+    xaver.clang-format
+  ]
+  ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
+    ms-vsliveshare.vsliveshare
+    ms-python.python
+    llvm-org.lldb-vscode
+  ]
+  ++ lib.attrValues my-vscode-packages;
+
+  package = vscodium;
+  # package = pkgs.vscode;
+
+  finalPackage =
+    (pkgs.vscode-with-extensions.override {
+      vscode = package;
+      vscodeExtensions = extensions;
+    }).overrideAttrs (old: {
+      inherit (package) pname version;
+    });
 in
 {
   my.home = { config, ... }: {
-    home.packages = [ vscodium ];
+    xdg.mimeApps = let
+      desktopFile = "${finalPackage}/share/codium.desktop";
+    in {
+      defaultApplications = {
+        "x-scheme-handler/vscodium" = [ desktopFile ];
+        "x-scheme-handler/vscode" = [ desktopFile ];
+      };
+      associations.added = {
+        "x-scheme-handler/vscodium" = [ desktopFile ];
+        "x-scheme-handler/vscode" = [ desktopFile ];
+      };
+    };
 
     programs.vscode = {
       enable = true;
-      package = vscodium;
 
-      extensions = with pkgs.vscode-extensions; [
-        bbenoist.Nix
-        redhat.vscode-yaml
-        ms-kubernetes-tools.vscode-kubernetes-tools
-        ms-vscode-remote.remote-ssh
-        vscodevim.vim
-        xaver.clang-format
-      ]
-      ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
-        #ms-vsliveshare.vsliveshare
-        ms-python.python
-        llvm-org.lldb-vscode
-      ]
-      ++ lib.attrValues my-vscode-packages;
+      package = finalPackage; 
+
+      extensions = [];
 
       userSettings = {
         "editor.cursorSmoothCaretAnimation" = true;
