@@ -43,9 +43,6 @@
       # use this if they aren't displayed properly:
       export _JAVA_AWT_WM_NONREPARENTING=1
 
-      # Screensharing
-      export XDG_CURRENT_DESKTOP=sway
-
       # TODO: remove once gnome-keyring exports SSH_AUTH_SOCK correctly
       export SSH_AUTH_SOCK=''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/keyring/ssh
     '';
