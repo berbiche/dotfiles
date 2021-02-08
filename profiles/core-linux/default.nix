@@ -26,6 +26,13 @@
     support32Bit = true;
   };
 
+  # Set automatic hibernation image size to prevent "not enough memory"
+  # errors when trying to hibernate, even though the swapfile is as big as
+  # the amount of ram I have...
+  systemd.tmpfiles.rules = [
+    "w /sys/power/image_size - - - - 0"
+  ];
+
   # Add a folder in $XDG_RUNTIME_DIR to be used as my own temporary directory
   my.home = let
     tmpdirs = rec {
