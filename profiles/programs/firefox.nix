@@ -4,14 +4,12 @@ let
   inherit (pkgs.stdenv.targetPlatform) isDarwin isLinux;
 
   # firefox versions available in nixpkgs-mozilla are already wrapped
-  wrappedFirefox = pkgs.firefox.override {
+  wrappedFirefox = pkgs.firefox-beta-bin.override {
     desktopName = "Firefox";
     icon = "firefox";
     cfg = {
       # Chromecast support through a native extension
       enableFXCastBridge = true;
-      # Browser extension to manage bookmarks
-      enableBukubrow = true;
     };
   };
 
@@ -184,8 +182,6 @@ lib.mkIf isLinux {
     MOZ_ENABLE_WAYLAND = "1";
     MOZ_USE_XINPUT2 = "1";
   };
-
-  home.packages = [ pkgs.buku ];
 
   programs.firefox = {
     enable = true;

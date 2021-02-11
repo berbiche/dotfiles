@@ -4,10 +4,10 @@ let
   profiles = import ../profiles { isLinux = true; };
 in
 {
-  imports = [
-    profiles.default-linux
-    profiles.steam
-    profiles.wireguard
+  imports = with profiles; [
+    default-linux
+    steam
+    wireguard
   ];
 
   hardware.enableRedistributableFirmware = true;
@@ -75,11 +75,6 @@ in
   nix.maxJobs = 6;
   powerManagement.enable = true;
   powerManagement.cpuFreqGovernor = "powersave";
-
-  # High-DPI console
-  # console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
-  # console.keyMap = "us";
-  i18n.defaultLocale = "en_CA.UTF-8";
 
   networking.firewall.allowPing = true;
   #networking.firewall.allowedTCPPorts = [ 8000 ];

@@ -28,7 +28,7 @@ in
       # cli to extract data out of json input
       jq
       # interactive tool to write pipelines
-      pipr
+      pipr bubblewrap
 
       # Programming
       clang

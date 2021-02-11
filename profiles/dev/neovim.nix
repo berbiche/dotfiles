@@ -32,12 +32,12 @@ in
         sensible
         commentary
         vim-indent-guides
-        # Language
+        ## Language
         vim-nix
         #vim-addon-nix
         polyglot
         ale
-        # LSP
+        ## LSP
         coc-explorer
         coc-go
         coc-html
@@ -46,29 +46,29 @@ in
         coc-nvim
         coc-python
         coc-rust-analyzer
-        # coc-sh
+        ## coc-sh
         coc-vimlsp
-        # Git
+        ## Git
         fugitive
-        # Shows symbol with LSP
+        ## Shows symbol with LSP
         vista-vim
-        # Rainbow paranthesis, brackets
+        ## Rainbow paranthesis, brackets
         rainbow
-        # Statusbar
+        ## Statusbar
         # vim-airline
         vim-airline-themes
-        # File lookup
+        ## File lookup
         fzf-vim
-        # File tree
+        ## File tree
         defx-nvim
-        # Show key completion
+        ## Show key completion
         vim-which-key
-        # Buffer
+        ## Buffer
         vim-buffergator
         #
         # vim-indent-object
         #
-        # Gutter with  mode
+        ## Gutter with  mode
         vim-signify
       ]
       ++ lib.optional config.profiles.dev.wakatime.enable vim-wakatime);

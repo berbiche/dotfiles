@@ -172,6 +172,11 @@
         username = "nicolas";
         platform = "x86_64-linux";
       };
+      vm = mkLinuxConfig {
+        hostname = "virtualmachine";
+        username = "nicolas";
+        platform = "x86_64-linux";
+      };
     };
 
     darwinConfigurations = {

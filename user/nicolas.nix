@@ -15,13 +15,20 @@ lib.mkMerge [
       group = username;
       home = "/home/${username}";
       extraGroups = [ "wheel" "networkmanager" "input" "audio" "video" "dialout" ]
-      ++ (lib.optional config.virtualisation.docker.enable "docker")
-      ++ (lib.optional config.virtualisation.libvirtd.enable "libvirtd")
-      ;
+        ++ (lib.optional config.virtualisation.docker.enable "docker")
+        ++ (lib.optional config.virtualisation.libvirtd.enable "libvirtd")
+        ;
+      initialPassword = username;
     };
     users.groups.${username} = { };
 
-    my.home = { pkgs, ... }: {
+    # Select internationalisation properties.
+    i18n.defaultLocale = "en_CA.UTF-8";
+    console.font = "Lat2-Terminus16";
+    console.keyMap = "us";
+
+    my.home = { modulesPath, pkgs, ... }: {
+      # disabledModules = [ "${modulesPath}/programs/mpv.nix" ];
       gtk = {
         enable = true;
         iconTheme = {
@@ -66,6 +73,8 @@ lib.mkMerge [
       # Playerctl smart daemon to stop the "last player"
       # i.e. not YouTube on Firefox, but Spotify
       services.playerctld.enable = true;
+
+      home.packages = [ pkgs.zoom-us ];
     };
   })
   # </isLinux>
