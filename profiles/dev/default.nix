@@ -66,10 +66,16 @@ in
       defaultOptions = [ "--exact" "--cycle" "--layout=reverse" ];
       # enableFishIntegration = true;
     };
+    programs.zsh.initExtra = lib.mkIf (config.programs.fzf.enableZshIntegration && config.programs.mcfly.enableZshIntegration) ''
+      bindkey -r "^R"
+      bindkey "^R" mcfly-history-widget
+    '';
 
     programs.mcfly = {
-      enable = false;
+      enable = true;
+      enableZshIntegration = true;
       enableFishIntegration = true;
+      enableFuzzySearch = true;
     };
 
     programs.direnv = {
