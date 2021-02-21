@@ -134,6 +134,11 @@ in
         bindkey "^[[1;5A" up-line-or-history
         bindkey "^[[1;5B" down-line-or-history
 
+        # Ctrl-Z to foreground task in prompt
+        _zsh_cli_fg() { fg; }
+        zle -N _zsh_cli_fg
+        bindkey '^Z' _zsh_cli_fg
+
         up-line-or-local-history() {
             zle set-local-history 1
             zle up-line-or-history
