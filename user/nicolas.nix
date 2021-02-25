@@ -74,7 +74,14 @@ lib.mkMerge [
       # i.e. not YouTube on Firefox, but Spotify
       services.playerctld.enable = true;
 
-      home.packages = [ pkgs.zoom-us ];
+      home.packages = [
+        (pkgs.zoom-us.overrideAttrs (old: {
+          nativeBuildInputs = old.nativeBuildInputs or [] ++ [ pkgs.makeWrapper ];
+          postFixup = old.postFixup or "" + ''
+            wrapProgram $out/bin/zoom --set QT_QPA_PLATFORM xcb
+          '';
+        }))
+      ];
     };
   })
   # </isLinux>
