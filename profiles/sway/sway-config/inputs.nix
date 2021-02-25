@@ -22,7 +22,7 @@ let
     ]);
 in
 shitty-keyboards // {
-  # thiccpad touch pad
+  # Thinkpad T580 touch pad
   "1739:0:Synaptics_TM3276-031" = {
     dwt = "enabled";
     tap = "enabled";
@@ -32,6 +32,13 @@ shitty-keyboards // {
 
   # iKBC new Poker II
   "1241:521:USB-HID_Keyboard" = {
+    xkb_options = "compose:ralt";
+    xkb_layout = "us";
+    repeat_rate = defaultRepeatRate;
+    repeat_delay = defaultRepeatDelay;
+  };
+  # My old Noppoo KB84M
+  "1155:20736:CATEX_TECH._KB84M-S" = {
     xkb_options = "compose:ralt";
     xkb_layout = "us";
     repeat_rate = defaultRepeatRate;
