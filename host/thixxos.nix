@@ -12,10 +12,14 @@ in
 
   hardware.enableRedistributableFirmware = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  # Fix randomly high CPU usage when connected to a thunderbolt 3 dock
+  boot.kernelParams = [ "acpi_mask_gpe=0x69" ];
   boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "usb_storage" "uas" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
+
+  boot.supportedFilesystems = [ "ntfs" ];
 
   # high-resolution display
   hardware.video.hidpi.enable = lib.mkDefault true;
@@ -79,7 +83,7 @@ in
   networking.firewall.allowPing = true;
   #networking.firewall.allowedTCPPorts = [ 8000 ];
 
-  environment.systemPackages = [ pkgs.brightnessctl ];
+  environment.systemPackages = with pkgs; [ brightnessctl vagrant ];
 
   hardware.opengl = {
     enable = true;
@@ -90,6 +94,11 @@ in
       libvdpau-va-gl
       intel-media-driver
     ];
+  };
+
+  virtualisation.libvirtd = {
+    enable = true;
+    # qemuPackage = pkgs.qemu_kvm;
   };
 
   services.printing.drivers = [ pkgs.hplip ];
