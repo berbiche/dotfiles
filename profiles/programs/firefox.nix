@@ -186,7 +186,6 @@ lib.mkIf isLinux {
   programs.firefox = {
     enable = true;
     package = wrappedFirefox;
-    enableAdobeFlash = false;
 
     profiles = {
       # Merged profiles

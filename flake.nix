@@ -9,6 +9,9 @@
     nix-darwin.url = "github:LnL7/nix-darwin";
     # home-manager.url= "github:berbiche/home-manager/waybar-module-css-ids-fix";
     home-manager.url= "github:rycee/home-manager";
+    # I don't need to pin Home Manager's nixpkgs because it inherits
+    # the nixpkgs version from nix-darwin/nixos
+    #home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nur = { url = "github:nix-community/nur"; flake = false; };
     my-nixpkgs.url = "github:berbiche/nixpkgs/init-xfce4-i3-workspaces-plugin";
 
