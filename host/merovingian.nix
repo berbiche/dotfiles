@@ -20,20 +20,16 @@ in
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-  # Temporary set to 5.8 because of https://gitlab.freedesktop.org/drm/amd/-/issues/1426
-  boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_zen.override {
-    argsOverride = rec {
-      version = "5.8.18";
-      modDirVersion = "${version}-zen";
-      src = pkgs.fetchFromGitHub {
-        owner = "zen-kernel";
-        repo = "zen-kernel";
-        rev = "d80d78763aaa1b2de147cf81bf8129944e1b6dfb";
-        hash = "sha256-7BIJhdCupk7DERq5qH8I9jYeDgOUHKC8WS67+C01EcI=";
+  boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernelPatches = [
+    {
+      name = "0001-drm-amdgpu-display-restore-AUX_DPHY_TX_CONTROL-for-D.patch";
+      patch = pkgs.fetchurl {
+        url = "https://gitlab.freedesktop.org/drm/amd/uploads/8a6daf9144fbc84abab03c6b0171cbba/0001-drm-amdgpu-display-restore-AUX_DPHY_TX_CONTROL-for-D.patch";
+        sha256 = "sha256-0KqeL5sxOOp0gqxCFquUcgA2U4QiZK/Ycztw0cWnDak=";
       };
-    };
-  });
-  # boot.kernelPackages = pkgs.linuxPackages_zen;
+    }
+  ];
   #boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Disable HDMI/DisplayPort audio with amdgpu
