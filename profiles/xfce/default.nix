@@ -27,14 +27,14 @@
       "dockbarx"
       "embed"
       "hardware-monitor"
+      "i3-workspaces"
       "namebar"
       "pulseaudio"
       "weather"
       "whiskermenu"
       "windowck"
       "xkb"
-    ])
-    ++ [ inputs.my-nixpkgs.legacyPackages."${pkgs.system}".xfce."xfce4-i3-workspaces-plugin" ];
+    ]);
 
   my.home = { pkgs, ... }:
    {
