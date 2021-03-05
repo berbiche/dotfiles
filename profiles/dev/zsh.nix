@@ -31,6 +31,8 @@ in
 
       sessionVariables = {
         COLORTERM = "truecolor";
+        # ZSH_AUTOSUGGEST
+        ZSH_AUTOSUGGEST_COMPLETION_IGNORE="*/nix/store/*|rsync *|scp *|*/tmp/*";
       };
 
       shellAliases = rec {
@@ -50,10 +52,7 @@ in
         ln        = "ln -v";
         mkdir     = "mkdir -vp";
         mv        = "mv -iv";
-        rm        = mkMerge [
-          (mkIf isDarwin "rm -v")
-          (mkIf (!isDarwin) "rm -Iv")
-        ];
+        rm        = if isDarwin then "rm -v" else "rm -Iv";
         dh        = "du -h";
         df        = "df -h";
         py        = "ptipython";
@@ -62,7 +61,7 @@ in
         sysu      = "${systemctl} --user";
         jnsu      = "journalctl --user";
         svim      = "sudoedit";
-        trash     = lib.mkIf isLinux "gio trash";
+        trash     = mkIf isLinux "gio trash";
       };
 
       initExtra = ''
@@ -156,26 +155,16 @@ in
         autoload -U colors
         colors
 
-        # ZSH_AUTOSUGGEST
-        ZSH_AUTOSUGGEST_COMPLETION_IGNORE="*/nix/store/*|rsync *|scp *|*/tmp/*"
-
 
         ## VERY IMPORTANT!!!!
         unset RPS1 RPROMPT
 
 
 
+        # Hello message
         echo $USER@$HOST  $(uname -srm) \
           $(sed -n 's/^NAME=//p' /etc/os-release 2>/dev/null || printf "") \
           $(sed -n 's/^VERSION=//p' /etc/os-release 2>/dev/null || printf "")
-
-        # Migrate history from $XDG_CACHE_HOME to $XDG_DATA_HOME
-        if [[ ${config.xdg.cacheHome}/zsh/history -nt ${config.xdg.dataHome}/zsh/history ]]; then
-          echo "Migrating ZSH history to \$XDG_DATA_HOME"
-          mkdir -p $(dirname ${config.xdg.dataHome}/zsh/history)
-          [ -e ${config.xdg.dataHome}/zsh/history ] && mv ${config.xdg.dataHome}/zsh/history ${config.xdg.dataHome}/zsh/history.old
-          mv ${config.xdg.cacheHome}/zsh/history ${config.xdg.dataHome}/zsh/history
-        fi
       '';
     };
   };
