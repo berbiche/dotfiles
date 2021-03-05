@@ -58,18 +58,18 @@ in
         ## Rainbow paranthesis, brackets
         rainbow
         ## Statusbar
-        # vim-airline
+        vim-airline
         vim-airline-themes
         ## File lookup
         fzf-vim
         ## File tree
-        defx-nvim
+        # defx-nvim
         ## Show key completion
         vim-which-key
         ## Buffer
         vim-buffergator
         #
-        # vim-indent-object
+        vim-indent-object
         #
         ## Gutter with  mode
         vim-signify
