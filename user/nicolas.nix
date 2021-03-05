@@ -27,7 +27,7 @@ lib.mkMerge [
     console.font = "Lat2-Terminus16";
     console.keyMap = "us";
 
-    my.home = { modulesPath, pkgs, ... }: {
+    my.home = { config, modulesPath, pkgs, ... }: {
       # disabledModules = [ "${modulesPath}/programs/mpv.nix" ];
       gtk = {
         enable = true;
@@ -59,6 +59,11 @@ lib.mkMerge [
       qt = {
         enable = true;
         platformTheme = "gnome";
+        style = {
+          name = "Adwaita";
+          # package = config.gtk.theme.package;
+          package = pkgs.adwaita-qt;
+        };
       };
 
       # Passwords and stuff
