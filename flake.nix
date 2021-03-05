@@ -5,6 +5,7 @@
   inputs = {
     # This input I update less frequently
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
+    # nixpkgs.url = "git+file:///home/nicolas/dev/nixpkgs";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin";
     # home-manager.url= "github:berbiche/home-manager/waybar-module-css-ids-fix";
@@ -18,6 +19,9 @@
     doom-emacs.url = "github:vlaci/nix-doom-emacs";
     doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
+
+    neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
+    neovim-nightly.inputs.nixpkgs.follows = "nixpkgs";
 
     nixpkgs-mozilla = { url = "github:mozilla/nixpkgs-mozilla"; flake = false; };
     nixpkgs-wayland = {
@@ -202,6 +206,7 @@
       nixpkgs-wayland = inputs.nixpkgs-wayland.overlay;
       nixpkgs-mozilla = import inputs.nixpkgs-mozilla;
       emacsPgtk = inputs.emacs-overlay.overlay;
+      neovim-nightly = inputs.neovim-nightly.overlay;
       # nur = inputs.nur.overlay;
       nur = final: prev: {
         nur = import inputs.nur { nurpkgs = final; pkgs = final; };

@@ -28,6 +28,9 @@ in
       vimdiffAlias = true;
       withNodeJs = true;
 
+      # From neovim-nightly input
+      package = pkgs.neovim-nightly;
+
       plugins = myPlugins ++ (with pkgs.vimPlugins; [
         sensible
         commentary
