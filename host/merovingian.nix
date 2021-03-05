@@ -12,6 +12,10 @@ in
     wireguard
   ];
 
+  wireguard."tq.rs".enable = true;
+  wireguard."tq.rs".ipv4Address = "10.10.10.121/24";
+  wireguard."tq.rs".publicKey = "E6x3s+2OS7hkxZBakUJosZ/zCgNrjjb7LqmeZrhDJz0=";
+
   boot.kernelParams = [ "amd_iommu=pt" "iommu=soft" ]
     ++ [ "resume_offset=81659904" ]; # Offset of the swapfile
 

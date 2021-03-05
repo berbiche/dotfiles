@@ -10,6 +10,10 @@ in
     wireguard
   ];
 
+  wireguard."tq.rs".enable = true;
+  wireguard."tq.rs".ipv4Address = "10.10.10.4/24";
+  wireguard."tq.rs".publicKey = "U2ijs3wSSZYizj3x/K/OCYRc6yExETZUOayMFnGYLgs=";
+
   hardware.enableRedistributableFirmware = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
   # Fix randomly high CPU usage when connected to a thunderbolt 3 dock

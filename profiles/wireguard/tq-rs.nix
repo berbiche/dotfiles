@@ -1,50 +1,66 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
+
+with lib;
 
 let
+  cfg = config.wireguard."tq.rs";
   network = "tqrs";
 in
 {
-  networking.networkmanager.unmanaged = [ network ];
-
-  systemd.network.netdevs.${network} = {
-    enable = true;
-    netdevConfig = {
-      Name = network;
-      Kind = "wireguard";
-      Description = "wg server dozer.qt.rs";
+  options.wireguard."tq.rs" = {
+    enable = mkEnableOption "'tq.rs' Wireguard configuration";
+    ipv4Address = mkOption {
+      type = types.str;
+      example = "10.10.10.4/24";
     };
-    wireguardConfig = {
-      PrivateKeyFile = "/private/wireguard/zion.key";
+    publicKey = mkOption {
+      type = types.str;
     };
-    wireguardPeers = map (x: { wireguardPeerConfig = x; }) [{
-      AllowedIPs = [ "10.10.10.0/24" "192.168.0.0/24" "fc00:23:6::/64" ];
-      Endpoint = "dozer.qt.rs:51820";
-      PersistentKeepalive = 25;
-      PresharedKeyFile = "/private/wireguard/zion.preshared";
-      PublicKey = "U2ijs3wSSZYizj3x/K/OCYRc6yExETZUOayMFnGYLgs=";
-    }];
   };
-  systemd.network.networks.${network} = {
-    enable = true;
-    name = network;
-    dns = [ "10.10.10.3" ];
-    matchConfig.Name = network;
-    networkConfig = {
-      Address = "10.10.10.4/24";
-      DNS = [ "192.168.0.3" "10.10.10.3" ];
-      Domains = [ "~tq.rs." "~kifinti.lan." ];
+
+  config = mkIf cfg.enable {
+    networking.networkmanager.unmanaged = [ network ];
+
+    systemd.network.netdevs.${network} = {
+      enable = true;
+      netdevConfig = {
+        Name = network;
+        Kind = "wireguard";
+        Description = "wg server dozer.qt.rs";
+      };
+      wireguardConfig = {
+        PrivateKeyFile = "/private/wireguard/zion.key";
+      };
+      wireguardPeers = map (x: { wireguardPeerConfig = x; }) [{
+        AllowedIPs = [ "10.10.10.0/24" "192.168.0.0/24" "fc00:23:6::/64" ];
+        Endpoint = "dozer.qt.rs:51820";
+        PersistentKeepalive = 25;
+        PresharedKeyFile = "/private/wireguard/zion.preshared";
+        PublicKey = "U2ijs3wSSZYizj3x/K/OCYRc6yExETZUOayMFnGYLgs=";
+      }];
     };
-    routes = map (x: { routeConfig = x; }) [
-      {
-        Gateway = "10.10.10.1";
-        Destination = "192.168.0.0/24";
-        GatewayOnLink = true;
-      }
-      {
-        Gateway = "10.10.10.1";
-        Destination = "10.10.10.0/24";
-        GatewayOnLink = true;
-      }
-    ];
+    systemd.network.networks.${network} = {
+      enable = true;
+      name = network;
+      dns = [ "10.10.10.3" ];
+      matchConfig.Name = network;
+      networkConfig = {
+        Address = cfg.ipv4Address;
+        DNS = [ "192.168.0.3" "10.10.10.3" ];
+        Domains = [ "~tq.rs." "~kifinti.lan." ];
+      };
+      routes = map (x: { routeConfig = x; }) [
+        {
+          Gateway = "10.10.10.1";
+          Destination = "192.168.0.0/24";
+          GatewayOnLink = true;
+        }
+        {
+          Gateway = "10.10.10.1";
+          Destination = "10.10.10.0/24";
+          GatewayOnLink = true;
+        }
+      ];
+    };
   };
 }
