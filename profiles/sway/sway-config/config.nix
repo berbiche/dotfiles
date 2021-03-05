@@ -46,7 +46,8 @@ let
     lock = "${swaylock} -f -c 0f0f0ff0 -i ${imageFolder}/current";
     logout-menu = "${wlogout}";
     audiocontrol = "${pavucontrol}";
-    menu = "${nwggrid} -n 10 -fp -b 121212E0";
+    #menu = "${nwggrid} -n 10 -fp -b 121212E0";
+    menu = "${xfce4-appfinder} --disable-server";
     menu-wofi = "${wofi} --fork --show drun,run";
 
     alacritty = "${pkgs.alacritty}/bin/alacritty";
