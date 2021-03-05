@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 let
-  buildVs = ref:
+  buildVs = ref@{ license ? null, ... }:
     pkgs.vscode-utils.buildVscodeMarketplaceExtension {
       mktplcRef = builtins.removeAttrs ref [ "license" ];
-      meta = lib.optionalAttrs (ref.license or null != null) { inherit (ref) license; };
+      meta = lib.optionalAttrs (license != null) { inherit license; };
     };
 
   # Replaces VSCodium's open-vsx with Microsoft's extension gallery
@@ -40,45 +40,51 @@ let
     editorconfig = buildVs {
       name = "editorconfig";
       publisher = "editorconfig";
-      version = "0.15.1";
-      sha256 = "TaovxmPt+PLsdkWDpUgLx+vRE+QRwcCtoAFZFWxLIaM=";
+      version = "0.16.4";
+      sha256 = "sha256-j+P2oprpH0rzqI0VKt0JbZG19EDE7e7+kAb3MGGCRDk=";
     };
     erlang = buildVs {
       name = "erlang";
       publisher = "pgourlain";
-      version = "0.6.5";
-      sha256 = "B5xLx6pI2jL7zMmeP+NqmXZ0HNkTLSxHlf9YcOD0RvM=";
+      version = "0.6.9";
+      sha256 = "sha256-ZoG6dKZcBGOui7LTEFgS/kMlM7jnlWiEdqcT5PF2b30=";
     };
-    firefox-dev-tools = buildVs {
+    firefox-debugger = buildVs {
       name = "vscode-firefox-debug";
       publisher = "firefox-devtools";
-      version = "2.9.1";
-      sha256 = "ryAAgXeqwHVYpUVlBTJDxyIXwdakA0ZnVYyKNk36Ifc=";
+      version = "2.9.2";
+      sha256 = "sha256-0Cdc7i+MFiKUlVzoJvW9njT+WkuYWtylFyXg+OmUoaY=";
     };
     java = buildVs {
       name = "java";
       publisher = "redhat";
-      version = "0.70.0";
-      sha256 = "U1314bagDJO2houMyffq76qvaOdriEbR3npjugnzILg=";
+      version = "0.75.0";
+      sha256 = "sha256-cXjCndW1izhKAMARIFQv45Ar8tZds+rZiRYvIZiIzyo=";
     };
     java-debugger = buildVs {
       name = "vscode-java-debug";
       publisher = "vscjava";
-      version = "0.29.0";
-      sha256 = "xOPbJyXAqoEsKIBjkCqhguufbh+wZRgOM1MJ6t0p/4Q=";
+      version = "0.31.0";
+      sha256 = "sha256-PsddtpwaK070LFtkOIP4ddE/SUmHgfLZZozjyYQHsz0=";
+    };
+    neovim = buildVs {
+      name = "vscode-neovim";
+      publisher = "asvetliakov";
+      version = "0.0.78";
+      sha256 = "sha256-dyXuMITHoLZBOYtLo4Jknf4TkeCysiNGQWkqxMPlfyg=";
     };
     nix-env-selector = buildVs {
       name = "nix-env-selector";
       publisher = "arrterian";
-      version = "0.1.2";
-      sha256 = "aTNxr1saUaN9I82UYCDsQvH9UBWjue/BSnUmMQOnsdg=";
+      version = "1.0.2";
+      sha256 = "sha256-oe+jg/E/qj3tLyE/+K+8UCr55SD954gGqW2K/s4w/5o=";
     };
     wakatime = let
       wakatime =
         (buildVs {
           name = "vscode-wakatime";
           publisher = "WakaTime";
-          version = "4.0.9";
+          version = "5.0.1";
           sha256 = "YY0LlwFKeQiicNTGS5uifa9+cvr2NlFyKifM9VN2omo=";
         }).overrideAttrs (old: {
           postInstall = old.postInstall or "" + ''
@@ -94,8 +100,12 @@ let
     redhat.vscode-yaml
     ms-kubernetes-tools.vscode-kubernetes-tools
     ms-vscode-remote.remote-ssh
-    vscodevim.vim
     xaver.clang-format
+    coenraads.bracket-pair-colorizer-2
+    # dbaeumer.vscode-eslint
+    davidanson.vscode-markdownlint
+    # PDF preview using PDF.js
+    tomoki1207.pdf
   ]
   ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
     ms-vsliveshare.vsliveshare
@@ -118,15 +128,20 @@ in
 {
   my.home = { config, ... }: {
     xdg.mimeApps = let
-      desktopFile = "${finalPackage}/share/codium.desktop";
+      desktopFile =
+        if finalPackage.pname == "vscode"
+        then "${finalPackage}/share/codium.desktop"
+        else "${finalPackage}/share/code.desktop";
     in {
       defaultApplications = {
         "x-scheme-handler/vscodium" = [ desktopFile ];
         "x-scheme-handler/vscode" = [ desktopFile ];
+        "x-scheme-handler/code-url-handler" = [ desktopFile ];
       };
       associations.added = {
         "x-scheme-handler/vscodium" = [ desktopFile ];
         "x-scheme-handler/vscode" = [ desktopFile ];
+        "x-scheme-handler/code-url-handler" = [ desktopFile ];
       };
     };
 
@@ -163,7 +178,7 @@ in
 
         # Extension settings
         "java.semanticHighlighting.enabled" = true;
-        "vscode-neovim.neovimExecutablePaths.linux" = "${config.programs.neovim.finalPackage}";
+        "vscode-neovim.neovimExecutablePaths.linux" = "${config.programs.neovim.finalPackage}/bin/nvim";
 
         # Language settings
         "[nix]"."editor.tabSize" = 2;
