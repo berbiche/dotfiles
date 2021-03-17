@@ -78,6 +78,10 @@ in
           f = "fetch --verbose";
           fo = "fetch origin";
           fu = "fetch upstream";
+          p = "pull";
+          pl = "pull --rebase --prune";
+          pp = "push";
+          ppff = "push --force-with-lease";
           s = "show";
           st = "status";
           u = "reset HEAD";
