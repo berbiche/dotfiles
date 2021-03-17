@@ -42,17 +42,22 @@ in
     systemd.network.networks.${network} = {
       enable = true;
       name = network;
-      dns = [ "10.10.10.3" ];
+      dns = [ "192.168.0.6" "10.10.10.2" ];
       matchConfig.Name = network;
       networkConfig = {
         Address = cfg.ipv4Address;
-        DNS = [ "192.168.0.3" "10.10.10.3" ];
         Domains = [ "~tq.rs." "~kifinti.lan." ];
+        DNSSEC = false;
       };
       routes = map (x: { routeConfig = x; }) [
         {
           Gateway = "10.10.10.1";
           Destination = "192.168.0.0/24";
+          GatewayOnLink = true;
+        }
+        {
+          Gateway = "10.10.10.1";
+          Destination = "192.168.42.0/24";
           GatewayOnLink = true;
         }
         {
