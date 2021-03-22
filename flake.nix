@@ -14,6 +14,7 @@
     # the nixpkgs version from nix-darwin/nixos
     #home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nur = { url = "github:nix-community/nur"; flake = false; };
+    my-nur = { url = "github:berbiche/nur-packages"; flake = false; };
     my-nixpkgs.url = "github:berbiche/nixpkgs/init-xfce4-i3-workspaces-plugin";
 
     doom-emacs.url = "github:vlaci/nix-doom-emacs";
@@ -208,11 +209,11 @@
       emacsPgtk = inputs.emacs-overlay.overlay;
       neovim-nightly = inputs.neovim-nightly.overlay;
       # nur = inputs.nur.overlay;
-      nur = final: prev: {
+      nur = final: _prev: {
         nur = import inputs.nur { nurpkgs = final; pkgs = final; };
       };
       my-nur = final: _prev: {
-        my-nur = final.nur.repos.berbiche;
+        my-nur = import inputs.my-nur { pkgs = final; };
       };
     };
 
