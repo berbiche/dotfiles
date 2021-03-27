@@ -8,7 +8,7 @@
     # nixpkgs.url = "git+file:///home/nicolas/dev/nixpkgs";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin";
-    # home-manager.url= "github:berbiche/home-manager/waybar-module-css-ids-fix";
+    # home-manager.url= "github:berbiche/home-manager/temporary-shared-modules-fix";
     home-manager.url= "github:rycee/home-manager";
     # I don't need to pin Home Manager's nixpkgs because it inherits
     # the nixpkgs version from nix-darwin/nixos
@@ -87,18 +87,20 @@
             useGlobalPkgs = true;
             verbose = true;
           };
-          my.home = {
-            config = {
-              # Inject inputs
-              _module.args.inputs = inputs;
-              _module.args.rootPath = ./.;
-              # Specify home-manager version compability
-              home.stateVersion = "21.03";
-              # Use the new systemd service activation/deactivation tool
-              # See https://github.com/nix-community/home-manager/pull/1656
-              #home.startServices = "sd-switch";
-            };
-          };
+          home-manager.sharedModules = [
+            {
+              config = {
+                # Inject inputs
+                _module.args.inputs = inputs;
+                _module.args.rootPath = ./.;
+                # Specify home-manager version compability
+                home.stateVersion = "21.03";
+                # Use the new systemd service activation/deactivation tool
+                # See https://github.com/nix-community/home-manager/pull/1656
+                #home.startServices = "sd-switch";
+              };
+            }
+          ];
         };
       in [ ./module.nix defaults ] ++ extraModules;
 
