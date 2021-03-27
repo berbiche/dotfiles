@@ -12,7 +12,7 @@ in
     wireguard
   ];
 
-  wireguard."tq.rs".enable = true;
+  wireguard."tq.rs".enable = false;
   wireguard."tq.rs".ipv4Address = "10.10.10.121/24";
   wireguard."tq.rs".publicKey = "E6x3s+2OS7hkxZBakUJosZ/zCgNrjjb7LqmeZrhDJz0=";
 
@@ -106,6 +106,8 @@ in
   hardware.enableRedistributableFirmware = true;
   hardware.opengl.enable = true;
   hardware.opengl.driSupport = true;
+
+  services.resolved.enable = lib.mkForce false;
 
   hardware.opengl.extraPackages = with pkgs; [
     rocm-opencl-icd
