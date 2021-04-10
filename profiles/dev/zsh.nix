@@ -16,6 +16,7 @@ in
       enable = true;
       enableAutosuggestions = true;
       enableCompletion = true;
+      enableVteIntegration = true;
       dotDir = ".config/zsh";
 
       history = {
@@ -77,7 +78,7 @@ in
         setopt rcexpandparam                                            # Array expension with parameters
         #setopt nocheckjobs                                              # Don't warn about running processes when exiting
         setopt numericglobsort                                          # Sort filenames numerically when it makes sense
-        unsetopt nobeep                                                 # Enable beep
+        setopt beep                                                     # Enable beep
         setopt interactivecomments                                      # Allow using # in an interactive shell for comments
 
         setopt listbeep                                                 # Beep on ambiguous completion
