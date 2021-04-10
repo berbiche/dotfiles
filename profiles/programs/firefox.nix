@@ -52,6 +52,10 @@ let
       "media.ffmpeg.low-latency.enabled" = true;
       "media.navigator.mediadatadecoder_vpx_enable" = true;
 
+      # Allow websites to output to a specific audio device
+      # Leaks available audio devices (fingerprinting)
+      "media.setsinkid.enable" = true;
+
       # UI settings
       "browser.uidensity" = 1;
       "browser.tabs.drawInTitlebar" = true;
