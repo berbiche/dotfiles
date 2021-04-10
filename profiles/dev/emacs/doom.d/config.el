@@ -30,6 +30,9 @@
 ;; Projectile default directory for my projects
 (setq projectile-project-search-path '("~/dev/"))
 
+;; Make treemacs rename use a minibuffer
+(setq treemacs-read-string-input 'from-minibuffer)
+
 ;; Rust development using shell.nix
 (setq racer-rust-src-path nil)
 (setq racer-cmd "racer")
@@ -78,4 +81,3 @@
   (interactive)
   (save-excursion
     (indent-region (point-min) (point-max) nil)))
-
