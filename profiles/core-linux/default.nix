@@ -17,15 +17,6 @@
   networking.firewall.enable = true;
   networking.nameservers = [ "1.1.1.1" "1.0.0.1" "8.8.8.8" "9.9.9.9" ];
 
-  # Enable sound.
-  sound.enable = true;
-  hardware.pulseaudio = {
-    enable = true;
-    extraModules = [ pkgs.pulseaudio-modules-bt ];
-    package = pkgs.pulseaudioFull;
-    support32Bit = true;
-  };
-
   # Set automatic hibernation image size to prevent "not enough memory"
   # errors when trying to hibernate, even though the swapfile is as big as
   # the amount of ram I have...
