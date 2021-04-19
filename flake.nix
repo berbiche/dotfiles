@@ -10,6 +10,7 @@
     nix-darwin.url = "github:LnL7/nix-darwin";
     # home-manager.url= "github:berbiche/home-manager/temporary-shared-modules-fix";
     home-manager.url= "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
     # I don't need to pin Home Manager's nixpkgs because it inherits
     # the nixpkgs version from nix-darwin/nixos
     #home-manager.inputs.nixpkgs.follows = "nixpkgs";

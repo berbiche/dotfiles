@@ -24,9 +24,11 @@
       "battery"
       "clipman"
       "datetime"
-      "dockbarx"
-      "embed"
-      "hardware-monitor"
+      ## Uses insecure Pillow from Python 2.7
+      # "dockbarx"
+      ## Broken packages
+      # "embed"
+      # "hardware-monitor"
       "i3-workspaces"
       "namebar"
       "pulseaudio"
