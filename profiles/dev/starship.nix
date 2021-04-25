@@ -94,7 +94,6 @@
           # impure_msg = "";
           # pure_msg = "";
           # format = "via [$symbol$state(\\($name\\))]($style)";
-          use_name = true;
           symbol = "❄️";
           format = "[\\($symbol shell\\)]($style) ";
         };
