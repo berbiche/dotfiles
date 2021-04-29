@@ -64,6 +64,7 @@ in
           "~."
           ".DS_STORE"
           "*.swp"
+          "kubeconfig"
         ];
 
         aliases = lib.mapAttrs (_n: toString) rec {
