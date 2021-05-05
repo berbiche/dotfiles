@@ -82,32 +82,6 @@
       After = lib.mkForce [ "wayland-session.target" ];
     };
 
-    # Copy the scripts folder
-    home.file."scripts".source = let
-      path = lib.makeBinPath (with pkgs; [
-        gawk gnused jq wget
-        pulseaudio # for pactl
-        pamixer # volume control
-        volnoti # show a popup notification for the volume level
-        sway # for swaymsg
-        wl-clipboard # wl-copy/wl-paste
-        fzf # menu
-        wofi # menu
-        xdg-user-dirs # for the screenshot tool
-        networkmanager # for nmcli
-        notify-send_sh # from my overlays
-        playerctl # to control mpris players
-      ]);
-    in "${
-      # For the patchShebang phase
-      pkgs.runCommandLocal "sway-scripts" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
-        cp --no-preserve=mode -T -r "${./scripts}" $out
-        chmod +x $out/*
-        for i in $out/*; do
-          wrapProgram $i --prefix PATH : ${path}
-        done
-      ''
-    }";
 
     programs.swaylock = {
       enable = true;

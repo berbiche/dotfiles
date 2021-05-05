@@ -1,12 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, isLinux, isDarwin, ... }:
 
 let
-  inherit (pkgs.stdenv.targetPlatform) isDarwin isLinux;
-
   inherit (config.my) username;
 in
 lib.mkMerge [
-  (lib.mkIf isLinux {
+  (lib.optionalAttrs isLinux {
     users.users.${username} = {
       createHome = true;
       isNormalUser = true;
@@ -27,8 +25,7 @@ lib.mkMerge [
     console.font = "Lat2-Terminus16";
     console.keyMap = "us";
 
-    my.home = { config, modulesPath, pkgs, ... }: {
-      # disabledModules = [ "${modulesPath}/programs/mpv.nix" ];
+    my.home = { config, pkgs, ... }: {
       gtk = {
         enable = true;
         iconTheme = {
@@ -87,6 +84,33 @@ lib.mkMerge [
           '';
         }))
       ];
+
+      # Copy the scripts folder
+      home.file."scripts".source = let
+        path = lib.makeBinPath (with pkgs; [
+          gawk gnused jq wget
+          pulseaudio # for pactl
+          pamixer # volume control
+          volnoti # show a popup notification for the volume level
+          sway # for swaymsg
+          wl-clipboard # wl-copy/wl-paste
+          fzf # menu
+          wofi # menu
+          xdg-user-dirs # for the screenshot tool
+          networkmanager # for nmcli
+          notify-send_sh # from my overlays
+          playerctl # to control mpris players
+        ]);
+      in "${
+        # For the patchShebang phase
+        pkgs.runCommandLocal "sway-scripts" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
+          cp --no-preserve=mode -T -r "${./scripts}" $out
+          chmod +x $out/*
+          for i in $out/*; do
+            wrapProgram $i --prefix PATH : ${path}
+          done
+        ''
+      }";
     };
   })
   # </isLinux>
