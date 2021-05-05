@@ -81,3 +81,9 @@
   (interactive)
   (save-excursion
     (indent-region (point-min) (point-max) nil)))
+
+(use-package! jsonnet-mode
+  :defer t
+  :mode "\\.jsonnet\\'"
+  :config
+  (set-electric! 'jsonnet-mode :chars '(?\n ?: ?{ ?})))

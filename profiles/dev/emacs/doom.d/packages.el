@@ -9,3 +9,4 @@
 ;; Broken 2021-04-23
 ; (package! ox-reveal)
 (package! wakatime-mode)
+(package! jsonnet-mode)
