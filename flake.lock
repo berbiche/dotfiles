@@ -266,11 +266,11 @@
     "my-nur": {
       "flake": false,
       "locked": {
-        "lastModified": 1617823195,
-        "narHash": "sha256-PT8XWq2P6JYuZuS87kcD/K8qPnRC8qevD80DDwvdEj0=",
+        "lastModified": 1620274709,
+        "narHash": "sha256-Do6FzyJ8UbN55BAgv0OVyjyxBwJ+gr+x3JQEOlT1/c0=",
         "owner": "berbiche",
         "repo": "nur-packages",
-        "rev": "c285f4666bf35e4b068297c11b6ba4feee631da6",
+        "rev": "5fbe8b425db425b97441410139a2165f5e046644",
         "type": "github"
       },
       "original": {

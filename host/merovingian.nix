@@ -4,9 +4,10 @@
   imports = with profiles; [
     base
     default-linux
-    steam
-    obs
     gnome
+    kinect
+    obs
+    steam
     wireguard
   ];
 
@@ -127,7 +128,7 @@
     enable = true;
     qemuPackage = pkgs.qemu_kvm;
   };
-  environment.systemPackages = with pkgs; [ vagrant freenect ];
+  environment.systemPackages = with pkgs; [ vagrant ];
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_CA.UTF-8";

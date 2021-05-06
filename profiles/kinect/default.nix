@@ -14,4 +14,8 @@
   environment.etc."modprobe.d/kinect.conf".text = ''
     options gspca-kinect depth_mode=0
   '';
+
+  environment.systemPackages = [ pkgs.freenect ];
+
+  services.udev.packages = [ pkgs.my-nur.kinect-audio-setup ];
 }

@@ -4,7 +4,6 @@
   imports = [
     ./user.nix
     ./xserver.nix
-    ./udev.nix
   ];
 
   services.xserver.enable = true;
