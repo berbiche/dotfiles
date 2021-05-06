@@ -1,7 +1,11 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = [ ./user.nix ./xserver.nix ];
+  imports = [
+    ./user.nix
+    ./xserver.nix
+    ./udev.nix
+  ];
 
   services.xserver.enable = true;
   services.xserver.displayManager.lightdm = {

@@ -1,11 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, profiles, ... }:
 
-# Uses nix-darwin modules
-let
-  profiles = import ../profiles { isDarwin = true; };
-in
 {
-  imports = with profiles; [ dev programs ];
+  imports = with profiles; [ base dev programs ];
 
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog

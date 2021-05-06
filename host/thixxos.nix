@@ -1,10 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, profiles, ... }:
 
-let
-  profiles = import ../profiles { isLinux = true; };
-in
 {
   imports = with profiles; [
+    base
     default-linux
     steam
     wireguard

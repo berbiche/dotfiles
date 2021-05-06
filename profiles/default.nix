@@ -18,6 +18,7 @@ let
 
   profiles = self: 
     {
+      base = mkProfile [ ];
       dev = mkProfile [ ./dev ];
       programs = mkProfile [ ./programs ];
       ctf = mkProfile [ ./ctf ];

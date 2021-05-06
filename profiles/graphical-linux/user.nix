@@ -2,8 +2,6 @@
 
 {
   my.home = { config, pkgs, ... }: {
-    imports = [ ./systemd.nix ];
-
     home.packages = with pkgs; [
       pavucontrol # Audio software
       playerctl # control MPRIS players

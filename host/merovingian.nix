@@ -1,10 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, profiles, ... }:
 
-let
-  profiles = import ../profiles { isLinux = true; };
-in
 {
   imports = with profiles; [
+    base
     default-linux
     steam
     obs
@@ -27,15 +25,6 @@ in
   boot.extraModulePackages = [ ];
 
   boot.kernelPackages = pkgs.linuxPackages_zen;
-  # boot.kernelPatches = [
-  #   {
-  #     name = "0001-drm-amdgpu-display-restore-AUX_DPHY_TX_CONTROL-for-D.patch";
-  #     patch = pkgs.fetchurl {
-  #       url = "https://gitlab.freedesktop.org/drm/amd/uploads/8a6daf9144fbc84abab03c6b0171cbba/0001-drm-amdgpu-display-restore-AUX_DPHY_TX_CONTROL-for-D.patch";
-  #       sha256 = "sha256-0KqeL5sxOOp0gqxCFquUcgA2U4QiZK/Ycztw0cWnDak=";
-  #     };
-  #   }
-  # ];
   #boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Disable HDMI/DisplayPort audio with amdgpu
@@ -138,7 +127,7 @@ in
     enable = true;
     qemuPackage = pkgs.qemu_kvm;
   };
-  environment.systemPackages = with pkgs; [ vagrant ];
+  environment.systemPackages = with pkgs; [ vagrant freenect ];
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_CA.UTF-8";

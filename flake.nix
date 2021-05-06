@@ -50,19 +50,29 @@
       config.allowUnfree = true;
     });
 
+    specialArgs = extraArgs:
+      let
+        args = self: {
+          profiles = import ./profiles { inherit (self) isLinux; };
+          isLinux = self.isLinux;
+          isDarwin = !self.isLinux;
+          # This could import the whole tree if evaluated?, including ignored files?
+          rootPath = ./.;
+        } // extraArgs;
+      in
+      lib.fix args;
+
     mkConfig =
       { hostname
       , username
+      , isLinux
       , hostConfiguration ? ./host + "/${hostname}.nix"
       , userConfiguration ? ./user + "/${username}.nix"
       , extraModules ? [ ]
       }:
       let
-        defaults = { pkgs, lib, ... }: {
+        defaults = { config, pkgs, lib, ... }: {
           imports = [ hostConfiguration userConfiguration ./cachix.nix ];
-          _module.args.inputs = inputs;
-          # This will import the whole tree if evaluated, including ignored files
-          _module.args.rootPath = ./.;
 
           environment.systemPackages = [ pkgs.cachix ];
 
@@ -89,18 +99,20 @@
             useGlobalPkgs = true;
             verbose = true;
           };
+          home-manager.extraSpecialArgs = {
+            isLinux = isLinux;
+            isDarwin = !isLinux;
+            # Inject inputs
+            inputs = inputs;
+            rootPath = ./.;
+          };
           home-manager.sharedModules = [
             {
-              config = {
-                # Inject inputs
-                _module.args.inputs = inputs;
-                _module.args.rootPath = ./.;
-                # Specify home-manager version compability
-                home.stateVersion = "21.03";
-                # Use the new systemd service activation/deactivation tool
-                # See https://github.com/nix-community/home-manager/pull/1656
-                #home.startServices = "sd-switch";
-              };
+              # Specify home-manager version compability
+              home.stateVersion = "21.05";
+              # Use the new systemd service activation/deactivation tool
+              # See https://github.com/nix-community/home-manager/pull/1656
+              systemd.user.startServices = "sd-switch";
             }
           ];
         };
@@ -109,7 +121,7 @@
     mkLinuxConfig =
       { platform, hostname, hostConfiguration ? ./host + "/${hostname}.nix", ... } @ args:
       let
-        modules = mkConfig (removeAttrs args [ "platform" ]);
+        modules = mkConfig ((removeAttrs args [ "platform" ]) // { isLinux = true; });
 
         linuxDefaults = { pkgs, lib, ... }: {
           # Import home-manager/nixos version here
@@ -141,13 +153,16 @@
         lib.nixosSystem {
           modules = [ linuxDefaults ] ++ modules;
           system = platform;
-          specialArgs = { inherit inputs; };
           pkgs = nixpkgsFor.${platform};
+          specialArgs = specialArgs {
+            inherit inputs;
+            isLinux = true;
+          };
         };
 
     mkDarwinConfig = args:
       let
-        modules = mkConfig (removeAttrs args [ "platform" ]);
+        modules = mkConfig ((removeAttrs args [ "platform" ]) // { isLinux = false; });
         nixpkgs = inputs.nixpkgs-darwin;
 
         darwinDefaults = { config, pkgs, lib, ... }: {
@@ -170,6 +185,10 @@
         inputs.nix-darwin.lib.darwinSystem {
           modules = modules ++ [ darwinDefaults ];
           inputs.nixpkgs = nixpkgs;
+          specialArgs = specialArgs {
+            inherit inputs;
+            isLinux = true;
+          };
         };
 
   in {
