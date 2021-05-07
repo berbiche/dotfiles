@@ -26,11 +26,8 @@
 
     extraSessionCommands = ''
       # needs qt5.qtwayland in systemPackages
-      #export QT_QPA_PLATFORM=wayland-egl
-      export QT_QPA_PLATFORM=wayland
+      export QT_QPA_PLATFORM=wayland-egl
       export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
-      # Makes obs-studio unusably slow (more than 1 minute startup time)
-      #export QT_WAYLAND_FORCE_DPI=physical
 
       # Allow Steam games to run under XWayland
       export SDL_VIDEODRIVER=x11

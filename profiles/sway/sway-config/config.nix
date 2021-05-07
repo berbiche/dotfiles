@@ -50,6 +50,22 @@ let
     menu = "${xfce4-appfinder} --disable-server";
     menu-wofi = "${wofi} --fork --show drun,run";
 
+    on-startup-shutdown = pkgs.runCommand "sway-on-startup-shutdown" {
+      src = pkgs.fetchFromGitHub {
+        owner = "alebastr";
+        repo = "sway-systemd";
+        rev = "v0.1.2";
+        hash = "sha256-dQrCT9S36ebwMzNf7Xfu4914wCEPEA02VnneyaUm1U8=";
+      };
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      BINS = lib.makeBinPath (with pkgs; [ systemd dbus sway ]);
+    } ''
+      mkdir -p $out/bin
+      install -Dm755 $src/src/session.sh $out/bin/session.sh
+      echo 'systemctl --user stop wayland-session.target' >> $out/bin/session.sh
+      wrapProgram $out/bin/session.sh --set PATH $BINS
+    '';
+
     alacritty = "${pkgs.alacritty}/bin/alacritty";
     bitwarden = "${pkgs.bitwarden}/bin/bitwarden";
     brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
@@ -75,16 +91,16 @@ let
   # Number at the start is used for ordering
   # https://github.com/Alexays/Waybar/blob/f233d27b782c04ef128e3d71ec32a0b2ce02df39/src/modules/sway/workspaces.cpp#L351-L357
   workspaces = {
-    WS1 = "1:"; #browsing
-    WS2 = "2:school";
-    WS3 = "3:"; #dev
-    WS4 = "4:"; #sysadmin
-    WS5 = "5:gaming";
-    WS6 = "6:movie";
-    WS7 = "7:"; #social
-    WS8 = "8";
-    WS9 = "9";
-    WS10 = "10";
+    WS1 = "1:";      # browsing
+    WS2 = "2:";      # school
+    WS3 = "3:";      # dev
+    WS4 = "4:";      # sysadmin
+    WS5 = "5:";      # gaming
+    WS6 = "6:";      # movie
+    WS7 = "7:";      # social
+    WS8 = "8";        # scratchpad
+    WS9 = "9";        # scratchpad
+    WS10 = "10";      # scratchpad
   };
 
   extraConfig = with workspaces; let
@@ -107,6 +123,9 @@ let
 
     # Set default cursor size
     seat seat0 xcursor_theme ${config.xsession.pointerCursor.name} ${toString config.xsession.pointerCursor.size}
+
+    # We want to execute this last
+    exec ${binaries.on-startup-shutdown}/bin/session.sh --with-cleanup
   '';
 
   swayConfig = with workspaces; {
@@ -115,7 +134,10 @@ let
     floating.modifier = "Mod4";
     menu = binaries.menu-wofi;
 
-    fonts = [ "FontAwesome 9" "Fira Sans 9" ];
+    fonts = {
+      names = [ "FontAwesome" "FontAwesome5Free" "Fira Sans" "DejaVu Sans Mono" ];
+      size = 9.0;
+    };
 
     focus.newWindow = "focus";
     gaps = {

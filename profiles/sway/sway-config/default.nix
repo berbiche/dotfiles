@@ -18,11 +18,11 @@
 
     wayland.windowManager.sway = {
       enable = true;
-      # I don't need Home Manager's Sway, only the wrapped one provided by
-      # my NixOS options
+      # I don't need Home Manager's Sway, only the configuration
       package = null;
-      # For the sway-session.target
-      systemdIntegration = true;
+
+      # We handle the on-startup ourselves now
+      systemdIntegration = false;
       xwayland = true;
 
       inherit (swayConfig) config extraConfig;

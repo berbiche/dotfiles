@@ -1,25 +1,31 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, isLinux, isDarwin, ... }:
 
 let
-  inherit (pkgs.stdenv) isLinux isDarwin;
-  inherit (lib) mkIf mkMerge;
+  inherit (lib) mkIf mkMerge mkSinkUndeclaredOptions optionalAttrs;
 in
 {
-  options.services.dbus = lib.optionalAttrs isDarwin (lib.mkSinkUndeclaredOptions { });
+  options.services.dbus = optionalAttrs isDarwin (mkSinkUndeclaredOptions { });
 
   config = mkMerge [
     (mkIf isLinux {
       # Pinentry configuration for gpg-agent with pinentry-gnome3
       services.dbus.packages = [ pkgs.gcr ];
       my.home = {
+        # gnome3 pinentry unbroken in my Sway setup with
+        # dbus-update-activation-environment from 'on-startup-shutdown' script
         home.file.".gnupg/gpg-agent.conf".text = ''
-          # pinentry-program ${pkgs.pinentry.gnome3}/bin/pinentry
-          pinentry-program ${pkgs.pinentry.qt}/bin/pinentry
+          pinentry-program ${pkgs.pinentry.gnome3}/bin/pinentry
+          # pinentry-program ${pkgs.pinentry.qt}/bin/pinentry
         '';
-        # Pinentry gnome3 is broken on 2021-02-02
-        #services.gpg-agent.pinentryFlavor = "gnome3";
-        services.gpg-agent.pinentryFlavor = "qt";
+        services.gpg-agent.pinentryFlavor = "gnome3";
+        # services.gpg-agent.pinentryFlavor = "qt";
       };
+    })
+    (mkIf isDarwin {
+      # pinentry-mac is not packaged on nixpkgs
+      my.home.home.file.".gnupg/gpg-agent.conf".text = ''
+        pinentry-program /usr/local/bin/pinentry-mac
+      '';
     })
     {
       my.home = { config, ... }: {
@@ -35,8 +41,8 @@ in
             hasGpgSigningKey = gpgSigningKey != null;
           in {
             use-agent = false;
-            default-key = lib.mkIf hasGpgSigningKey "0x${gpgSigningKey}";
-            trusted-key = lib.mkIf hasGpgSigningKey "0x${gpgSigningKey}";
+            default-key = mkIf hasGpgSigningKey "0x${gpgSigningKey}";
+            trusted-key = mkIf hasGpgSigningKey "0x${gpgSigningKey}";
           };
         };
       };
