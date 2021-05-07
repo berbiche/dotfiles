@@ -4,7 +4,6 @@
   imports = with profiles; [
     base
     default-linux
-    gnome
     kinect
     obs
     steam
