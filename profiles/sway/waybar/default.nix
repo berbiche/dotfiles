@@ -104,6 +104,9 @@ let
           tooltip = "Toggle dark theme";
           class = "light";
         };
+        xdg_data_dir = ''
+          export XDG_DATA_DIRS="${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}''${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS"
+        '';
       in {
         return-type = "json";
         format = "{icon}";
@@ -112,6 +115,7 @@ let
           dark = ""; # fontawesome.com/cheatsheet moon f186
         };
         exec = pkgs.writeShellScript "waybar-custom-dark-mode" ''
+          ${xdg_data_dir}
           if [[ "$(${gsettings} get org.gnome.desktop.interface gtk-theme)" = "'Adwaita'" ]]; then
             echo ${lib.escapeShellArg lightMode}
           else
@@ -129,6 +133,7 @@ let
             # ${pkgs.jq}/bin/jq --unbuffered --compact-output
         '';
         on-click = pkgs.writeShellScript "waybar-custom-dark-mode-on-click" ''
+          ${xdg_data_dir}
           if [[ "$(${gsettings} get org.gnome.desktop.interface gtk-theme)" = "'Adwaita'" ]]; then
             ${gsettings} set org.gnome.desktop.interface gtk-theme Adwaita-dark
           else
