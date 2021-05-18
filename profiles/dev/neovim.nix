@@ -118,7 +118,8 @@ in
         set formatoptions+=o   " insert the comment leader after hitting 'o'
 
         " Enable autocompletion
-        set wildmode=longest,list,full
+        " set wildmode=longest,list,full
+        set wildmode=longest,full
 
         " Live substitution
         set inccommand=nosplit
@@ -174,7 +175,7 @@ in
         nnoremap <leader>sp :FzfRg<CR>
 
         " Git
-        nnoremap <silent> <leader>gg :Gstatus<CR>
+        nnoremap <silent> <leader>gg :Git<CR>
         nnoremap <silent> <leader>gd :Gdiff<CR>
         nnoremap <silent> <leader>gc :Gcommit<CR>
         nnoremap <silent> <leader>gb :Gblame<CR>
