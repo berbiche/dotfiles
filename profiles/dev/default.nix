@@ -39,6 +39,7 @@ in
 
       wget # I prefer using curl but still useful for one-off things
       curl # make advanced http requests, fetch files, etc.
+      httpie # like curl/wget with a simpler cli interface
       aria # curl/wget on steroid to download files using different protocols
       lsof # shows information about opened files by processes, useful for debugging
       iotop # see which processes/kernel tasks are using IO
@@ -69,6 +70,8 @@ in
       ctop # shows running containers (supports docker, mock, runc)
       docker-compose # a nice wrapper for docker to manage multiple docker containers (for one-off projects)
       onefetch # neofetch for a git repository : lines of code, repo, etc.
+
+      github-cli # Quite useful actually
     ] ++ lib.optionals pkgs.stdenv.isLinux [
       #jetbrains.idea-community # IDE that I don't use anymore, even for Java development
       insomnia # GUI tool to test http APIs, alternative to postman and hoppscotch (formerly postwoman)
