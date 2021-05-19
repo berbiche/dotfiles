@@ -127,7 +127,7 @@ lib.mkMerge [
     my.home = { ... }: {
       my.identity = {
         name = "Nicolas Berbiche";
-        email = "nicolas@normie.dev");
+        email = "nicolas@normie.dev";
         # My GPG signing key
         gpgSigningKey = "1D0261F6BCA46C6E";
       };

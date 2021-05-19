@@ -13,7 +13,7 @@ Where:
   everything  take a screenshot of the entire desktop \
 "
 
-output_file="$(xdg-user-dir PICTURES)/screenshots/$(date +'%Y')/$(date +'%m')/$(date +'%Y-%m-%d-%H.%M.%S').png"
+output_file="$(xdg-user-dir SCREENSHOTS)/$(date +'%Y')/$(date +'%m')/$(date +'%Y-%m-%d-%H.%M.%S').png"
 
 slurp="command slurp -d -s '#ff00001a' -c '#ff0000'"
 select_window="$(dirname "$0")/sway_select_window_geometry.sh"
