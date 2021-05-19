@@ -63,17 +63,12 @@ lib.mkMerge [
         };
       };
 
-      xdg.configFile."user-dirs.dirs".text = ''
-        XDG_DESKTOP_DIR="$HOME/Desktop"
-        XDG_DOWNLOAD_DIR="$HOME/Downloads"
-        XDG_TEMPLATES_DIR="$HOME/Templates"
-        XDG_PUBLICSHARE_DIR="$HOME/Public"
-        XDG_DOCUMENTS_DIR="$HOME/Documents"
-        XDG_MUSIC_DIR="$HOME/Music"
-        XDG_PICTURES_DIR="$HOME/Pictures"
-        XDG_SCREENSHOTS_DIR="$HOME/Pictures/screenshots"
-        XDG_VIDEOS_DIR="$HOME/Videos"
-      '';
+      xdg.userDirs = {
+        enable = true;
+        extraConfig = {
+          "XDG_SCREENSHOTS_DIR" = "${config.xdg.userDirs.pictures}/screenshots";
+        };
+      };
 
       # Passwords and stuff
       # Disabled: https://github.com/nix-community/home-manager/issues/1454
@@ -85,10 +80,11 @@ lib.mkMerge [
       services.network-manager-applet.enable = true;
 
       # Playerctl smart daemon to stop the "last player"
-      # i.e. not YouTube on Firefox, but Spotify
+      # supposedly smarter than the default play-pause behavior
       services.playerctld.enable = true;
 
       home.packages = [
+        # Force Zoom to run on X11 for all the popups and everything
         (pkgs.zoom-us.overrideAttrs (old: {
           nativeBuildInputs = old.nativeBuildInputs or [] ++ [ pkgs.makeWrapper ];
           postFixup = old.postFixup or "" + ''
@@ -131,10 +127,7 @@ lib.mkMerge [
     my.home = { ... }: {
       my.identity = {
         name = "Nicolas Berbiche";
-        # Yeah, an email address is not exactly confidential, but
-        # try avoiding the most basic scrapping attempts?
-        # My email is available in the author field of the commit
-        email = builtins.replaceStrings [ "at " ] [ "@" ] ("nicolas" + '' at '' + "normie.dev");
+        email = "nicolas@normie.dev");
         # My GPG signing key
         gpgSigningKey = "1D0261F6BCA46C6E";
       };
