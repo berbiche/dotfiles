@@ -7,6 +7,7 @@
     ./libinput.nix
     ./screenshare.nix
     ./polkit.nix
+    ./xsettingsd.nix
   ];
 
   services.xserver.displayManager.defaultSession = "sway";
