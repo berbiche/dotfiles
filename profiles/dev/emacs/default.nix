@@ -5,16 +5,6 @@ let
 
   enableWakaTime = config.profiles.dev.wakatime.enable;
 
-  # overrides = eself: esuper: rec {
-  #   auctex = esuper.auctex.overrideAttrs (old: {
-  #     src = pkgs.fetchurl {
-  #       # The generated url is wrong, it needs a ".lz"
-  #       url = "https://elpa.gnu.org/packages/auctex-${old.version}.tar.lz";
-  #       sha256 = old.src.outputHash;
-  #     };
-  #   });
-  #   # elpaPackages.auctex = auctex;
-  # };
   overrides = eself: esuper: { };
 in
 lib.mkMerge [
@@ -27,6 +17,7 @@ lib.mkMerge [
           doomPrivateDir = ./doom.d;
           # emacsPackage = pkgs.emacsGccPgtk;
           emacsPackage = lib.mkMerge [
+            # (lib.mkIf isLinux pkgs.emacsPgtkGcc)
             (lib.mkIf isLinux pkgs.emacsPgtk)
             (lib.mkIf isDarwin pkgs.emacs)
           ];

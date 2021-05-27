@@ -32,13 +32,13 @@ in
       package = pkgs.neovim-nightly;
 
       plugins = myPlugins ++ (with pkgs.vimPlugins; [
-        sensible
-        commentary
+        vim-sensible
+        vim-commentary
         vim-indent-guides
         ## Language
         vim-nix
         #vim-addon-nix
-        polyglot
+        vim-polyglot
         ale
         ## LSP
         coc-explorer
@@ -52,7 +52,7 @@ in
         ## coc-sh
         coc-vimlsp
         ## Git
-        fugitive
+        vim-fugitive
         ## Shows symbol with LSP
         vista-vim
         ## Rainbow paranthesis, brackets
@@ -62,6 +62,7 @@ in
         vim-airline-themes
         ## File lookup
         fzf-vim
+        fzf-lsp-nvim
         ## File tree
         # defx-nvim
         ## Show key completion

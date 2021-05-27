@@ -4,8 +4,8 @@
 
   inputs = {
     # This input I update less frequently
-    # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
-    nixpkgs.url = "github:berbiche/nixpkgs";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
+    # nixpkgs.url = "github:berbiche/nixpkgs";
     # nixpkgs.url = "git+file:///home/nicolas/dev/nixpkgs";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin";
@@ -26,7 +26,6 @@
     neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
     neovim-nightly.inputs.nixpkgs.follows = "nixpkgs";
 
-    nixpkgs-mozilla = { url = "github:mozilla/nixpkgs-mozilla"; flake = false; };
     nixpkgs-wayland = {
       url = "github:colemickens/nixpkgs-wayland";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -228,7 +227,6 @@
       }) overlayFiles');
     in overlayFiles // {
       nixpkgs-wayland = inputs.nixpkgs-wayland.overlay;
-      nixpkgs-mozilla = import inputs.nixpkgs-mozilla;
       emacsPgtk = inputs.emacs-overlay.overlay;
       neovim-nightly = inputs.neovim-nightly.overlay;
       # nur = inputs.nur.overlay;
@@ -246,7 +244,7 @@
         nativeBuildInputs = with pkgs; [ git nixFlakes ];
 
         NIX_CONF_DIR = let
-          current = pkgs.lib.optionalString (builtins.pathExists /etc/nix/nix.conf) (builtins.readFile /etc/nix/nix.conf);
+          current = lib.optionalString (builtins.pathExists /etc/nix/nix.conf) (builtins.readFile /etc/nix/nix.conf);
           nixConf = pkgs.writeTextDir "etc/nix.conf" ''
             ${current}
             experimental-features = nix-command flakes
