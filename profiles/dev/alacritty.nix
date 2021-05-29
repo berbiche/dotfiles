@@ -107,11 +107,23 @@ in
 
       mouse = {
         hide_when_typing = false;
-        url = {
-          launcher = "xdg-open";
-          modifiers = "Control";
-        };
       };
+
+      hints = {
+        enabled = [
+          {
+            regex = "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:|git\\\\+ssh:)[^\\u0000-\\u001F\\u007F-\\u009F<>\"\\\\s{-}\\\\^⟨⟩`]+";
+            command = "xdg-open";
+            post_processing = true;
+            mouse = {
+              enabled = true;
+              mods = "Control";
+            };
+          }
+        ];
+      };
+
+      line_indicator.foreground = "#c5c8c6";
 
       selection = {
         save_to_clipboard = false;
@@ -126,10 +138,10 @@ in
       # Send ESC (\x1b) before characters when alt is pressed.
       alt_send_esc = true;
 
-      key_bindings = [
-        # { key = "Space";  mods = "Shift|Control"; mode = "Vi"; action = "ScrollToBottom";          }
-        # { key = "Space";  mods = "Shift|Control";              action = "ToggleViMode";            }
-      ];
+      # key_bindings = [
+      #   { key = "Space";  mods = "Shift|Control"; mode = "Vi"; action = "ScrollToBottom";          }
+      #   { key = "Space";  mods = "Shift|Control";              action = "ToggleViMode";            }
+      # ];
     };
   };
 }
