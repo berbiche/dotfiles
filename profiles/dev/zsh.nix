@@ -63,6 +63,11 @@ in
         jnsu      = "journalctl --user";
         svim      = "sudoedit";
         trash     = mkIf isLinux "gio trash";
+        nrsf      = ''() {
+          local a=(sudo nixos-rebuild switch --flake ~/dotfiles -v -L);
+          echo "''${a[@]}" "$@";
+          "''${a[@]}" "$@";
+        }'';
       };
 
       initExtra = ''
