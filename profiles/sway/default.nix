@@ -23,7 +23,7 @@
       base = true;
     };
 
-    extraPackages = with pkgs; [ qt5.qtwayland ];
+    extraPackages = with pkgs; [ qt5.qtwayland cage ];
 
     extraSessionCommands = ''
       # needs qt5.qtwayland in systemPackages

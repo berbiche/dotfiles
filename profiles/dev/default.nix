@@ -32,7 +32,6 @@ in
 
       # Programming
       clang # for the binary tools it offers?
-      (python3.withPackages (ps: with ps; [ ptpython ipython ]))
       gnumake # for the `make` program
       powershell # for some rare one-off scripts and tests
       tig # navigate a git repository's log and commits in a TUI, provides sorting, filtering, etc.
@@ -71,7 +70,22 @@ in
       docker-compose # a nice wrapper for docker to manage multiple docker containers (for one-off projects)
       onefetch # neofetch for a git repository : lines of code, repo, etc.
 
+      ispell # spellchecking
+
       github-cli # Quite useful actually
+
+      # NixOS/nixpkgs stuff
+      nixpkgs-review # review nixpkgs PR
+      nix-update # quickly update a package
+
+      # Global packages for some programming languages
+      # I often open repls to test things
+      nodejs
+      (python3.withPackages (ps: with ps; [ ptpython ipython ]))
+      erlang
+      rebar3
+      erlang-ls
+
     ] ++ lib.optionals pkgs.stdenv.isLinux [
       #jetbrains.idea-community # IDE that I don't use anymore, even for Java development
       insomnia # GUI tool to test http APIs, alternative to postman and hoppscotch (formerly postwoman)
@@ -92,7 +106,7 @@ in
       defaultOptions = [ "--exact" "--cycle" "--layout=reverse" ];
       # enableFishIntegration = true;
     };
-    programs.zsh.initExtra = lib.mkIf (with config.programs; fzf.enableZshIntegration && mcfly.enable && mcfly.enableZshIntegration) ''
+    programs.zsh.initExtra = lib.mkIf (with config.programs; (!fzf.enableZshIntegration) && mcfly.enable && mcfly.enableZshIntegration) ''
       bindkey -r "^R"
       bindkey "^R" mcfly-history-widget
     '';
@@ -121,10 +135,6 @@ in
         global.disable_stdin = true;
         global.strict_env = true;
       };
-      stdlib = ''
-        # Silence DIRENV variable export
-        # export DIRENV_LOG_FORMAT=""
-      '';
     };
 
     # Quickly jump to directories with `z something` or `z s`

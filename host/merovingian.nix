@@ -10,6 +10,12 @@
     wireguard
   ];
 
+  environment.systemPackages = with pkgs; [
+    vagrant
+    multimc
+    virt-manager
+  ];
+
   wireguard."tq.rs".enable = false;
   wireguard."tq.rs".ipv4Address = "10.10.10.121/24";
   wireguard."tq.rs".publicKey = "E6x3s+2OS7hkxZBakUJosZ/zCgNrjjb7LqmeZrhDJz0=";
@@ -127,7 +133,6 @@
     enable = true;
     qemuPackage = pkgs.qemu_kvm;
   };
-  environment.systemPackages = with pkgs; [ vagrant ];
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_CA.UTF-8";

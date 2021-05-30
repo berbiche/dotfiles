@@ -91,6 +91,8 @@ lib.mkMerge [
             wrapProgram $out/bin/zoom --set QT_QPA_PLATFORM xcb
           '';
         }))
+        pkgs.discord
+        pkgs.teams
       ];
 
       # Copy the scripts folder
