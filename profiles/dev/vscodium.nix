@@ -163,6 +163,7 @@ in
         "extensions.autoCheckUpdates" = false;
         "git.suggestSmartCommit" = false;
         "search.collapseResults" = "alwaysCollapse";
+        "terminal.integrated.tabs.enabled" = true;
         "update.mode" = "none";
         "update.channel" = "none";
         "window.menuBarVisibility" = "toggle";
