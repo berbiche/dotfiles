@@ -46,6 +46,8 @@
           Type = "simple";
           Restart = "always";
           RestartSec = "1sec";
+          # Scripts started by swayidle are executed with 'sh -c'
+          Environment = [ "PATH=${dirOf pkgs.stdenv.shell}:$PATH" ];
           ExecStart = ''
             ${swayidle} -w \
                 timeout 300  "${swaylock} -f" \
