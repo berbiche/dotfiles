@@ -91,6 +91,7 @@ let
       "custom/dark-mode" =  let
         awk = "${pkgs.gawk}/bin/awk";
         gsettings = "${pkgs.glib.bin}/bin/gsettings";
+        stdbuf = "${pkgs.coreutils}/bin/stdbuf";
         escape = x: ''"${lib.escape [ ''"'' ] x}"'';
         darkMode = builtins.toJSON {
           text = "Dark";
@@ -122,7 +123,7 @@ let
             echo ${lib.escapeShellArg darkMode}
           fi
           ${gsettings} monitor org.gnome.desktop.interface gtk-theme | \
-            stdbuf -o0 ${awk} '{
+            ${stdbuf} -o0 ${awk} '{
               if ($2 ~ /'\'''Adwaita'\'''/) {
                 print ${escape lightMode}
               }
