@@ -58,11 +58,7 @@
     '';
   };
 
-  # Doesn't work
-  security.pam.services.waylock = {};
-
   my.home = { config, pkgs, lib, ... }: {
-
     # Disable reloading Sway on every change
     xdg.configFile."sway/config".onChange = lib.mkForce "";
 
@@ -81,7 +77,6 @@
       Wants = [ "graphical-session.target" ];
       After = [ "graphical-session.target" ];
     };
-
 
     programs.swaylock = {
       enable = true;

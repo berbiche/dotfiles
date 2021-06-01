@@ -44,6 +44,12 @@ lib.mkMerge [
           # The client is already provided by the Doom Emacs final package
           client.enable = false;
         };
+
+        systemd.user.services.emacs = {
+          Unit.PartOf = [ "graphical-session.target" ];
+          Unit.After = [ "graphical-session.target" ];
+          Install.WantedBy = lib.mkForce [ "graphical-session.target" ];
+        };
       })
     ];
   }
