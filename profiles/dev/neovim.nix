@@ -49,6 +49,67 @@ in
           config = ''
             let g:mapleader = "\<Space>"
             let g:maplocalleader = ','
+
+            " Default settings
+            set nocompatible
+            set nobackup
+            " Yup, I live on the edge
+            set noswapfile
+            " Update terminal's titlebar
+            set title
+            " Use utf-8 by default
+            set encoding=utf-8
+
+            " Colors/Theme
+            set termguicolors
+            set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
+                  \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
+                  \,sm:block-blinkwait175-blinkoff150-blinkon175
+            au ColorScheme * hi Normal  ctermbg=none guibg=none
+            au ColorScheme * hi NonText ctermbg=none guibg=none
+            " Use visual bell
+            set visualbell
+
+            " Basics
+            syntax on
+            colorscheme gruvbox
+
+            set hidden      " Allows hidden buffer
+            set hlsearch    " Highlight search result
+            set smartcase
+            filetype plugin on
+            set listchars=tab:>-,trail:*
+            set tabstop=2 softtabstop=2 shiftwidth=2
+            set expandtab
+            set number
+            set relativenumber
+            set scrolloff=5             " keep 5 lines of context when scrolling
+            set lazyredraw              " do not redraw screen while executing a macro
+            set splitbelow splitright
+            set mouse=nv                " Enable mouse usage except in insert mode
+            set cursorline              " Highlight line with cursor
+
+            set wrap
+            set linebreak
+            set breakindent
+            let &showbreak = '↳ '
+
+
+            set formatoptions+=j   " remove a comment leader when joining lines.
+            set formatoptions+=o   " insert the comment leader after hitting 'o'
+
+            " Enable autocompletion
+            " set wildmode=longest,list,full
+            set wildmode=longest,full
+
+            " I already use vim-airline
+            set noshowmode
+
+            " Live substitution
+            set inccommand=nosplit
+
+            " Don't pass messages to |ins-completion-menu|
+            set shortmess+=c
           '';
         }
 
@@ -135,19 +196,6 @@ in
           '';
         }
         {
-          # Statusbar
-          plugin = vim-airline;
-          config = ''
-            " Display all buffers when only one tab is open
-            "let g:airline#extensions#tabline#enabled = 1
-          '';
-        }
-        {
-          # Statusbar themes
-          plugin = vim-airline-themes;
-          config = "let g:airline_theme = 'bubblegum'";
-        }
-        {
           plugin = fzf-vim;
           config = ''
             let g:fzf_command_prefix = 'Fzf'
@@ -191,16 +239,51 @@ in
         ## Languages and LSP
         vim-nix
         # vim-addon-nix
+        {
+          plugin = coc-nvim;
+          config = ''
+            inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
+            inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+            inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+            set signcolumn=number
+
+            autocmd CursorHold * silent call CocActionAsync('highlight')
+
+            command! -nargs=0 Format :call CocAction('format')
+
+            nnoremap <leader>gf :<C-u>Format
+            xmap     <leader>=  <Plug>(coc-format-selected)
+
+            nmap <silent> gd <Plug>(coc-definition)
+            nmap <silent> gy <Plug>(coc-type-definition)
+            nmap <silent> gi <Plug>(coc-implementation)
+            nmap <silent> gr <Plug>(coc-references)
+          '';
+        }
         coc-explorer
         coc-go
         coc-html
         coc-json
         coc-markdownlint
-        coc-nvim
         coc-python
         # coc-rust-analyzer
         # coc-sh
         coc-vimlsp
+
+        {
+          # Statusbar
+          plugin = vim-airline;
+          config = ''
+            " Display all buffers when only one tab is open
+            "let g:airline#extensions#tabline#enabled = 1
+          '';
+        }
+        {
+          # Statusbar themes
+          plugin = vim-airline-themes;
+          config = "let g:airline_theme = 'bubblegum'";
+        }
 
       ]
       ++ lib.optional config.profiles.dev.wakatime.enable {
@@ -214,62 +297,6 @@ in
       });
 
       extraConfig = ''
-        " Default settings
-        set nocompatible
-        set nobackup
-        " Yup, I live on the edge
-        set noswapfile
-        " Update terminal's titlebar
-        set title
-
-        " Colors/Theme
-        set termguicolors
-        set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
-              \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
-              \,sm:block-blinkwait175-blinkoff150-blinkon175
-        au ColorScheme * hi Normal  ctermbg=none guibg=none
-        au ColorScheme * hi NonText ctermbg=none guibg=none
-        " Use visual bell
-        set visualbell
-
-        " Basics
-        syntax on
-        colorscheme gruvbox
-
-        set hidden      " Allows hidden buffer
-        set hlsearch    " Highlight search result
-        set smartcase
-        filetype plugin on
-        set listchars=tab:>-,trail:*
-        set tabstop=2 softtabstop=2 shiftwidth=2
-        set expandtab
-        set number
-        set relativenumber
-        set scrolloff=5             " keep 5 lines of context when scrolling
-        set lazyredraw              " do not redraw screen while executing a macro
-        set splitbelow splitright
-        set mouse=nv                " Enable mouse usage except in insert mode
-        set cursorline              " Highlight line with cursor
-
-        set wrap
-        set linebreak
-        set breakindent
-        let &showbreak = '↳ '
-
-
-        set formatoptions+=j   " remove a comment leader when joining lines.
-        set formatoptions+=o   " insert the comment leader after hitting 'o'
-
-        " Enable autocompletion
-        " set wildmode=longest,list,full
-        set wildmode=longest,full
-
-        " I already use vim-airline
-        set noshowmode
-
-        " Live substitution
-        set inccommand=nosplit
-
         " Disables automatic commenting on newline if previous line is a comment
         autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
