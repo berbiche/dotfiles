@@ -26,7 +26,7 @@
   in [
     {
       home.file.proton-ge-custom = {
-        recursive = true;
+        recursive = false;
         source = proton-ge;
         target = ".steam/root/compatibilitytools.d/Proton-${version}";
       };
