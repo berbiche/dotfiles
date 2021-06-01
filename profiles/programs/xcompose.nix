@@ -9,8 +9,8 @@
     <Multi_key> <i> <n> <f>          : "∞"
     <Multi_key> <i> <n> <t>          : "∫"
     <Multi_key> <i> <n>              : "∈"
-    <Multi_key> <*> <o>              : "°"
-    <Multi_key> <o> <*>              : "°"
+    <Multi_key> <asterisk> <o>       : "°"
+    <Multi_key> <o> <asterisk>       : "°"
     # Emojis and whatnot
     <Multi_key> <s> <h> <r> <u> <g>  : "¯\\_(ツ)_/¯"
     <Multi_key> <s> <a> <d>          : "😿"
