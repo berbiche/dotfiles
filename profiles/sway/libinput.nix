@@ -54,7 +54,7 @@ in
   '';
 
   users.users.libinput-gestures = {
-    group = "input";
+    group = config.users.groups.input.name;
     description = "libinput gestures/gebaard user";
     isSystemUser = true;
     inherit (config.users.users.nobody) home;

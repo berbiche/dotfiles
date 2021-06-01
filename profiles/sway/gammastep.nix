@@ -1,37 +1,37 @@
 { config, lib, pkgs, ... }:
 
-let
-  inherit (pkgs.stdenv.targetPlatform) isDarwin isLinux;
-in
-lib.mkIf isLinux {
-  # Requires nixpkgs-wayland overlay
-  home.packages = [ pkgs.gammastep ];
+{
+  my.home = { config, ... }: {
+    home.packages = [ pkgs.gammastep ];
 
-  systemd.user.services.gammastep = {
-    Unit = {
-      Description = "Display colour temperature adjustment";
-      PartOf = [ "graphical-session.target" ];
-      After = [ "graphical-session.target" ];
-      X-Restart-Triggers = [ "${config.xdg.configFile."gammastep/config.ini".source}" ];
+    systemd.user.services.gammastep = {
+      Unit = {
+        Description = "Display colour temperature adjustment";
+        PartOf = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
+        X-Restart-Triggers = [ "${config.xdg.configFile."gammastep/config.ini".source}" ];
+        ConditionEnvironment = "WAYLAND_DISPLAY";
+      };
+      Service = {
+        ExecStart = "${pkgs.gammastep}/bin/gammastep-indicator";
+        Restart = "on-failure";
+      };
+      Install.WantedBy = [ "graphical-session.target" ];
     };
-    Service = {
-      ExecStart = "${pkgs.gammastep}/bin/gammastep-indicator";
-      Restart = "on-failure";
-    };
-    Install.WantedBy = [ "wayland-session.target" ];
+
+    xdg.configFile."gammastep/config.ini".text = ''
+      [general]
+      temp-day=6500
+      temp-night=4000
+      fade=1
+      gamma-day=0.8:0.7:0.8
+      gamma-night=0.6
+      location-provider=manual
+      adjustment-method=wayland
+
+      [manual]
+      lat=45.50
+      lon=-73.56
+    '';
   };
-
-  xdg.configFile."gammastep/config.ini".text = ''
-    [general]
-    temp-day=6500
-    temp-night=4000
-    fade=1
-    gamma-day=0.8:0.7:0.8
-    gamma-night=0.6
-    location-provider=manual
-    adjustment-method=wayland
-    [manual]
-    lat=45.50
-    lon=-73.56
-  '';
 }

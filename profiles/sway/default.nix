@@ -4,9 +4,18 @@
   imports = [
     ./sway-config
     ./waybar
+
+    ./gammastep.nix
+    ./idle-service.nix
+    ./kanshi.nix
     ./libinput.nix
-    ./screenshare.nix
+    ./linux-notification-center.nix
+    # ./mako.nix
     ./polkit.nix
+    ./screenshare.nix
+    ./swaylock.nix
+    ./udiskie.nix
+    ./wofi.nix
     ./xsettingsd.nix
   ];
 
@@ -52,34 +61,24 @@
   security.pam.services.waylock = {};
 
   my.home = { config, pkgs, lib, ... }: {
-    imports = [
-      ./kanshi.nix
-      # ./mako.nix
-      ./udiskie.nix
-      ./linux-notification-center.nix
-      ./swaylock.nix
-      ./wlogout.nix
-      ./wofi.nix
-      ./gammastep.nix
-    ];
 
     # Disable reloading Sway on every change
     xdg.configFile."sway/config".onChange = lib.mkForce "";
 
-    systemd.user.targets.wayland-session.Unit = {
-      Description = "Wayland compositor session";
-      Documentation = [ "man:systemd.special(7)" ];
-      BindsTo = [ "graphical-session.target" ];
-      Wants = [ "graphical-session-pre.target" ];
-      After = [ "graphical-session-pre.target" ];
-    };
+    # systemd.user.targets.wayland-session.Unit = {
+    #   Description = "Wayland compositor session";
+    #   Documentation = [ "man:systemd.special(7)" ];
+    #   BindsTo = [ "graphical-session.target" ];
+    #   Wants = [ "graphical-session-pre.target" ];
+    #   After = [ "graphical-session-pre.target" ];
+    # };
 
     systemd.user.targets.sway-session.Unit = {
       Description = "sway compositor session";
       Documentation = [ "man:systemd.special(7)" ];
-      BindsTo = lib.mkForce [ "wayland-session.target" ];
-      Wants = lib.mkForce [ "wayland-session.target" ];
-      After = lib.mkForce [ "wayland-session.target" ];
+      BindsTo = [ "graphical-session.target" ];
+      Wants = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
     };
 
 

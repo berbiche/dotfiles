@@ -8,10 +8,5 @@
   };
   services.pipewire.enable = true;
 
-  programs.sway.extraSessionCommands = lib.mkBefore ''
-    # Screensharing
-    export XDG_CURRENT_DESKTOP=sway
-  '';
-
   environment.systemPackages = with pkgs; [ xdg-desktop-portal-wlr ];
 }

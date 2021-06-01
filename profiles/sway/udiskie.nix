@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 
 {
-  systemd.user.services.udiskie = {
+  my.home.systemd.user.services.udiskie = {
     Unit = {
       Description = "Disks automounter";
       Documentation = [ "man:udiskie(8)" ];

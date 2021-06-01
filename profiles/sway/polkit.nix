@@ -9,7 +9,8 @@
       Unit = {
         Description = "Polkit GNOME agent";
         PartOf = [ "graphical-session.target" ];
-        After = [ "graphical-session-pre.target" ];
+        After = [ "graphical-session.target" ];
+        ConditionEnvironment = [ "XDG_CURRENT_DESKTOP=sway" ];
       };
       Service = {
         # Type = "dbus";
@@ -18,7 +19,7 @@
         ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
         Restart = "abort";
       };
-      Install.WantedBy = [ "sway-session.target" ];
+      Install.WantedBy = [ "graphical-session.target" ];
     };
   };
 }

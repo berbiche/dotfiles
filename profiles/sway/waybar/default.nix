@@ -336,7 +336,9 @@ in
     };
 
     systemd.user.services.waybar = {
+      Unit.ConditionEnvironment = [ "WAYLAND_DISPLAY" ];
       Unit.X-Restart-Triggers = [ "${config.xdg.configFile."waybar/config".source}" ];
+      Install.WantedBy = lib.mkForce [ "graphical-session.target" ];
     };
   };
 }

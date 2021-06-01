@@ -83,6 +83,7 @@ let
     # swaymsg = "${config.wayland.windowManager.sway.package}/bin/swaymsg";
     swaymsg = "${pkgs.sway}/bin/swaymsg";
     wl-paste = "${pkgs.wl-clipboard}/bin/wl-paste";
+    # vvvv Requires my wlogout overlay
     wlogout = "${pkgs.wlogout}/bin/wlogout -p layer-shell";
     wofi = "${pkgs.wofi}/bin/wofi";
     xfce4-appfinder = "${pkgs.xfce.xfce4-appfinder}/bin/xfce4-appfinder";
