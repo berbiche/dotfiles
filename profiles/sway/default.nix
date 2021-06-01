@@ -15,6 +15,7 @@
     ./screenshare.nix
     ./swaylock.nix
     ./udiskie.nix
+    ./wob.nix
     ./wofi.nix
     ./xsettingsd.nix
   ];

@@ -31,6 +31,7 @@ let
 
   # Sway variables
   imageFolder = toString config.programs.swaylock.imageFolder;
+  wobsocket = "$XDG_RUNTIME_DIR/wob.sock";
 
   binaries = rec {
     terminal = "${alacritty} --working-directory ${config.home.homeDirectory}";
@@ -62,13 +63,19 @@ let
     } ''
       mkdir -p $out/bin
       install -Dm755 $src/src/session.sh $out/bin/session.sh
-      echo 'systemctl --user stop wayland-session.target' >> $out/bin/session.sh
-      wrapProgram $out/bin/session.sh --set PATH $BINS
+      # echo 'systemctl --user stop wayland-session.target' >> $out/bin/session.sh
+      wrapProgram $out/bin/session.sh --set PATH "$BINS"
     '';
 
     alacritty = "${pkgs.alacritty}/bin/alacritty";
     bitwarden = "${pkgs.bitwarden}/bin/bitwarden";
-    brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
+    brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl -m";
+    brightnessctl-wob = toString (pkgs.writeShellScript "brightnessctl-wob" ''
+      cut -d, -f4 | tr -d '%' |
+        if [ -p "${wobsocket}" ]; then
+          ${pkgs.coreutils}/bin/timeout --kill-after=5 5 ${pkgs.coreutils}/bin/cat > ${wobsocket} ;
+        fi
+    '');
     emacsclient = "${config.programs.emacs.finalPackage}/bin/emacsclient -c";
     # Firefox from the overlay
     firefox = "${pkgs.firefox}/bin/firefox";
