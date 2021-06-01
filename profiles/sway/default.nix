@@ -25,6 +25,8 @@
 
     extraPackages = with pkgs; [ qt5.qtwayland cage ];
 
+    extraOptions = [ "--verbose" ];
+
     extraSessionCommands = ''
       # needs qt5.qtwayland in systemPackages
       export QT_QPA_PLATFORM=wayland-egl
