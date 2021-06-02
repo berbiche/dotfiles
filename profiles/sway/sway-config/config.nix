@@ -83,6 +83,7 @@ let
     pavucontrol = "${pkgs.pavucontrol}/bin/pavucontrol";
     playerctl = "${pkgs.playerctl}/bin/playerctl";
     element-desktop = "${pkgs.element-desktop}/bin/element-desktop";
+    signal-desktop = "${pkgs.signal-desktop}/bin/signal-desktop";
     nwggrid = "${pkgs.nwg-launchers}/bin/nwggrid";
     nwgbar = "${pkgs.nwg-launchers}/bin/nwgbar";
     spotify = "${pkgs.spotify}/bin/spotify";
@@ -132,7 +133,7 @@ let
     # Set default cursor size
     seat seat0 xcursor_theme ${config.xsession.pointerCursor.name} ${toString config.xsession.pointerCursor.size}
 
-    # We want to execute this last
+    # We want to execute this last otherwise Waybar doesn't read the workspace names correctly
     exec ${binaries.on-startup-shutdown}/bin/session.sh --with-cleanup
   '';
 
@@ -187,6 +188,7 @@ let
     startup = [
       { command = binaries.element-desktop; }
       { command = binaries.spotify; }
+      { command = binaries.signal-desktop; }
       # { command = binaries.bitwarden; }
     ];
 

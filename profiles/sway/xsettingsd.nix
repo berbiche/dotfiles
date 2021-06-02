@@ -7,7 +7,7 @@
         Description = "xsettingsd daemon for xwayland applications that read and expect an xsettings configuration.";
         PartOf = [ "graphical-session.target" ];
         After = [ "graphical-session.target" ];
-        ConditionEnvironment = [ "XDG_CURRENT_DESKTOP=sway" ];
+        # ConditionEnvironment = [ "XDG_CURRENT_DESKTOP=sway" ];
       };
 
       Service = {
@@ -17,7 +17,7 @@
         Restart = "on-failure";
       };
 
-      Install.WantedBy = [ "graphical-session.target" ];
+      Install.WantedBy = [ "sway-session.target" ];
     };
   };
 }

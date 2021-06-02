@@ -10,13 +10,12 @@
         PartOf = [ "graphical-session.target" ];
         After = [ "graphical-session.target" ];
         X-Restart-Triggers = [ "${config.xdg.configFile."gammastep/config.ini".source}" ];
-        ConditionEnvironment = "WAYLAND_DISPLAY";
       };
       Service = {
         ExecStart = "${pkgs.gammastep}/bin/gammastep-indicator";
         Restart = "on-failure";
       };
-      Install.WantedBy = [ "graphical-session.target" ];
+      Install.WantedBy = [ "sway-session.target" ];
     };
 
     xdg.configFile."gammastep/config.ini".text = ''

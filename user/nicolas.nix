@@ -76,8 +76,14 @@ lib.mkMerge [
       services.gnome-keyring.components = [ "secrets" "ssh" ];
 
       services.blueman-applet.enable = true;
+      systemd.user.services.blueman-applet = {
+        Unit.After = lib.mkForce [ "graphical-session.target" ];
+      };
       # Started with libindicator if `xsession.preferStatusNotifierItems = true`
       services.network-manager-applet.enable = true;
+      systemd.user.services.network-manager-applet = {
+        Unit.After = lib.mkForce [ "graphical-session.target" ];
+      };
 
       # Playerctl smart daemon to stop the "last player"
       # supposedly smarter than the default play-pause behavior

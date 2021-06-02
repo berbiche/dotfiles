@@ -38,7 +38,6 @@
         PartOf = [ "graphical-session.target" ];
         After = [ "graphical-session.target" ];
         X-Restart-Triggers = [ "${config.xdg.configFile."mako/config".source}" ];
-        ConditionEnvironment = [ "WAYLAND_DISPLAY" ];
       };
 
       Service = {
@@ -50,7 +49,7 @@
         RestartSec = "1sec";
       };
 
-      Install.WantedBy = [ "graphical-session.target" ];
+      Install.WantedBy = [ "sway-session.target" ];
     };
   };
 }
