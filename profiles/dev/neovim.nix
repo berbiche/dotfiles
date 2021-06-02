@@ -304,9 +304,6 @@ in
         highlight TrailingWhitespace ctermbg=red guibg=red
         match TrailingWhitespace /\s\+$/
 
-        " Quick exit with `:Q`
-        command Q qa
-
         nnoremap <leader>si :set spell!<CR>
         nnoremap <leader>l :set list!<CR>
         nnoremap <leader>S :%s//g<Left><Left>
