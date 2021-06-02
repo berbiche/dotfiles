@@ -74,7 +74,7 @@
         # Force running as an XWayland client since I don't need to position
         # the popups manually and that it works fine
         Service.Environment = [ "WAYLAND_DISPLAY=" ];
-        Unit.ConditionEnvironment = "WAYLAND_DISPLAY";
+        Install.WantedBy = lib.mkForce [ "sway-session.target" ];
       };
 
 
