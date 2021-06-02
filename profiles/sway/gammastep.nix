@@ -32,5 +32,25 @@
       lat=45.50
       lon=-73.56
     '';
+
+    xdg.configFile."gammastep/hooks/gtk-dark-mode".source =
+      let
+        xdg_data_dir = ''
+          export XDG_DATA_DIRS="${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}''${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS"
+        '';
+        gsettings = "${pkgs.glib.bin}/bin/gsettings";
+      in
+      pkgs.writeShellScript "gtk-dark-mode" ''
+        ${xdg_data_dir}
+        case "$1" in
+          period-changed)
+            ${pkgs.coreutils}/bin/timeout 5 ${pkgs.libnotify}/bin/notify-send "Gammastep" "Changing to $3"
+            case "$3" in
+              night) ${gsettings} set org.gnome.desktop.interface gtk-theme Adwaita-dark ;;
+              daytime) ${gsettings} set org.gnome.desktop.interface gtk-theme Adwaita ;;
+            esac
+            ;;
+        esac
+      '';
   };
 }
