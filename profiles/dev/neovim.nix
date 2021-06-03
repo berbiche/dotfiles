@@ -271,6 +271,8 @@ in
         # coc-sh
         coc-vimlsp
 
+        direnv-vim
+
         {
           # Statusbar
           plugin = vim-airline;
