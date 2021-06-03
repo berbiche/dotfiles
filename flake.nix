@@ -5,7 +5,7 @@
   inputs = {
     # This input I update less frequently
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
-    # nixpkgs.url = "github:berbiche/nixpkgs";
+    # nixpkgs.url = "github:berbiche/nixpkgs/fix/neovim-always-create-rplugin";
     # nixpkgs.url = "git+file:///home/nicolas/dev/nixpkgs";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin";
