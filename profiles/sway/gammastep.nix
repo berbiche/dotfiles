@@ -9,7 +9,10 @@
         Description = "Display colour temperature adjustment";
         PartOf = [ "graphical-session.target" ];
         After = [ "graphical-session.target" ];
-        X-Restart-Triggers = [ "${config.xdg.configFile."gammastep/config.ini".source}" ];
+        X-Restart-Triggers = [
+          "${config.xdg.configFile."gammastep/config.ini".source}"
+          "${config.xdg.configFile."gammastep/hooks/gtk-dark-mode".source}"
+        ];
       };
       Service = {
         ExecStart = "${pkgs.gammastep}/bin/gammastep-indicator";
@@ -42,12 +45,26 @@
       in
       pkgs.writeShellScript "gtk-dark-mode" ''
         ${xdg_data_dir}
+        notify() {
+            ${pkgs.coreutils}/bin/timeout 5 ${pkgs.libnotify}/bin/notify-send "Gammastep" "Changing to $1 theme"
+        }
         case "$1" in
           period-changed)
-            ${pkgs.coreutils}/bin/timeout 5 ${pkgs.libnotify}/bin/notify-send "Gammastep" "Changing to $3"
             case "$3" in
-              night) ${gsettings} set org.gnome.desktop.interface gtk-theme Adwaita-dark ;;
-              daytime) ${gsettings} set org.gnome.desktop.interface gtk-theme Adwaita ;;
+              night)
+                notify night
+                ${gsettings} set org.gnome.desktop.interface gtk-theme Adwaita-dark
+                ;;
+              daytime)
+                notify day
+                ${gsettings} set org.gnome.desktop.interface gtk-theme Adwaita
+                ;;
+              transition)
+                if [ "$2" = "none" ]; then
+                  notify night
+                  ${gsettings} set org.gnome.desktop.interface gtk-theme Adwaita-dark
+                fi
+                ;;
             esac
             ;;
         esac
