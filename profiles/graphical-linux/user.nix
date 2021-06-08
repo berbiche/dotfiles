@@ -26,6 +26,7 @@
 
 
     # XDG configuration
+    xdg.configFile."mimeapps.list".force = true;
     xdg =  {
       enable = true;
       mimeApps.enable = true;
