@@ -13,69 +13,43 @@
 { config, pkgs, lib, ... }:
 
 let
-  ydotool = "${pkgs.ydotool}/bin/ydotool";
-
-  # This configuration is tightly related to my Sway `keybindings.nix`
-  # This configuration also uses "natural scrolling" where in
-  # swiping and moving your fingers moves the content, not the viewport
-  # (like MacOS)
-  configFile = pkgs.writeTextDir "gebaar/gebaard.toml" ''
-    # I'm only using this configuration with a computer with a single touchpad
-    # so I don't care about matching all touchpads
-    device all
-
-    # Go to next workspace when swiping left with 4 fingers
-    gesture swipe left  4 ${ydotool} key Super_L+o
-    # Go to previous workspace when swiping right with 4 fingers
-    gesture swipe right 4 ${ydotool} key Super_L+i
-
-    # Gesture for Firefox
-    # Go to next page in history when swiping left with 2 fingers
-    gesture swipe left 2  ${ydotool} key Alt_L+Right
-    # Go to previous page in history when swiping right with 2 fingers
-    gesture swipe right 2 ${ydotool} key Alt_L+Left
-
-    # [swipe.commands.four]
-    # left = "${ydotool} key Super_L+o"
-    # right = "${ydotool} key Super_L+i"
-
-    # [swipe.commands.three]
-    # up = "${ydotool} key Super_L+p"
-  '';
+  # Introduce a sleep in every ydotool command for better compatibility with Sway
+  ydotool = "${pkgs.ydotool}/bin/ydotool sleep 200 ,";
 in
 {
   my.home.home.packages = [ pkgs.ydotool ];
 
-  # https://github.com/NixOS/nixpkgs/issues/70471
-  # Chown&chmod /dev/uinput to owner:root group:input mode:0660
-  boot.kernelModules = [ "uinput" ];
-  services.udev.extraRules = ''
-    SUBSYSTEM=="misc", KERNEL=="uinput", TAG+="uaccess", OPTIONS+="static_node=uinput", GROUP="input", MODE="0660"
-  '';
+  services.gebaar-libinput = {
+    enable = true;
 
-  users.users.libinput-gestures = {
-    group = config.users.groups.input.name;
-    description = "libinput gestures/gebaard user";
-    isSystemUser = true;
-    inherit (config.users.users.nobody) home;
-  };
+    # ydotool.enable = true;
 
-  systemd.services.libinput-gestures = {
-    description = "Touchpad gesture listener";
-    reloadIfChanged = true;
+    # This configuration is tightly related to my Sway `keybindings.nix`
+    # This configuration also uses "natural scrolling" where in
+    # swiping and moving your fingers moves the content, not the viewport
+    # (like MacOS)
+    settings = {
+      swipe.commands.four = {
+        # Go to next workspace when swiping left with 4 fingers
+        left = "${ydotool} key Super_L+o";
+        # Go to previous workspace when swiping right with 4 fingers
+        right = "${ydotool} key Super_L+i";
+      };
+      swipe.commands.three = {
+        up = "${ydotool} key Super_L+p";
+      };
+      swipe.settings = {
+        threshold = 0.5;
+        one_shot = true;
+        trigger_on_release = false;
+      };
 
-    partOf = [ "graphical.target" ];
-    requires = [ "graphical.target" ];
-    after = [ "graphical.target" ];
-    wantedBy = [ "graphical.target" ];
-
-    serviceConfig = {
-      Type = "simple";
-      ExecStart = "${pkgs.libinput-gestures}/bin/libinput-gestures -c ${configFile}/gebaar/gebaard.toml";
-      #ExecStart = "${pkgs.gebaar-libinput}/bin/gebaard";
-      #Environment = [ ''"XDG_CONFIG_HOME=${configFile}"'' ];
-      User = config.users.users.libinput-gestures.name;
-      Group = config.users.users.libinput-gestures.group;
+      ##### Not currently supported by Gebaar
+      # # Gesture for Firefox
+      # # Go to next page in history when swiping left with 2 fingers
+      # gesture swipe left 2  ${ydotool} key Alt_L+Right
+      # # Go to previous page in history when swiping right with 2 fingers
+      # gesture swipe right 2 ${ydotool} key Alt_L+Left
     };
   };
 }

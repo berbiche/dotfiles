@@ -13,7 +13,7 @@ let
     toPath (attrNames filteredFiles);
 in
 {
-  imports = filesInDir ./modules;
+  imports = filesInDir ./modules/nixos;
 
   options.my = {
     username = mkOption {
