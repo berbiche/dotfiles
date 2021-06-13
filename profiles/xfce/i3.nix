@@ -66,7 +66,10 @@
         config = rec {
           modifier = "Mod4";
           floating.modifier = modifier;
-          fonts = [ "pango:DejaVu Sans Mono, FontAwesome 10" ];
+          fonts = {
+            names = [ "FontAwesome" "FontAwesome5Free" "Fira Sans" "DejaVu Sans Mono" ];
+            size = 10.0;
+          };
 
           terminal = binaries.terminal;
           menu = binaries.xfce4-appfinder;
