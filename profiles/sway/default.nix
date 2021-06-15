@@ -3,7 +3,8 @@
 {
   imports = [
     ./sway-config
-    ./waybar
+    # ./waybar
+    ./nwg-panel
 
     ./gammastep.nix
     ./idle-service.nix
