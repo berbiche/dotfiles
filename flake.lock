@@ -266,11 +266,11 @@
     "my-nur": {
       "flake": false,
       "locked": {
-        "lastModified": 1623611448,
-        "narHash": "sha256-s1Ca4DzWAyQV1BMgTWdYo17ZajsPaZZeJL+h6ad7o6c=",
+        "lastModified": 1623726255,
+        "narHash": "sha256-qrbBqflkbVecQoCqMJvkfLhTJbLguLi0XtBu4mJmrjE=",
         "owner": "berbiche",
         "repo": "nur-packages",
-        "rev": "5e627ed938f80c42413c740a4607a87fb73861c6",
+        "rev": "42ddb0feb5d1e5db30f1e3f5de7ce311ba2e3633",
         "type": "github"
       },
       "original": {
@@ -460,11 +460,11 @@
     "nur": {
       "flake": false,
       "locked": {
-        "lastModified": 1623683729,
-        "narHash": "sha256-JRpBWqn+VTQmp+HN7quxxkJxphBNDOAEkcnmjFbV5D0=",
+        "lastModified": 1623723587,
+        "narHash": "sha256-t1pae890aFcWAHPMFNCzP85MT1fWstbwJx0x9wyG+Us=",
         "owner": "nix-community",
         "repo": "nur",
-        "rev": "16e92426c93600963cbd4438c569606fc81d594c",
+        "rev": "4bff6105889fc0b2ce8834a4738199c9e22587ef",
         "type": "github"
       },
       "original": {
