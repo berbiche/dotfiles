@@ -5,6 +5,7 @@
     ./sway-config
     # ./waybar
     ./nwg-panel
+    ./eww
 
     ./gammastep.nix
     ./idle-service.nix
