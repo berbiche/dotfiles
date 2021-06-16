@@ -1,41 +1,43 @@
-{ ... }:
+{ lib, pkgs, ... }:
 
 {
-  my.home = { config, lib, pkgs, ... }: {
-    # Idle service
-    systemd.user.services.sway-idle =
-      let
-        swaylock  = "${pkgs.swaylock}/bin/swaylock";
-        swayidle  = "${pkgs.swayidle}/bin/swayidle";
-        swaymsg   = "${pkgs.sway}/bin/swaymsg";
-        playerctl = "${pkgs.playerctl}/bin/playerctl";
-        withPlayerctld = lib.optionalString config.services.playerctld.enable "-p playerctld";
-      in
-      {
-        Unit = {
-          Description = "Idle manager for Wayland";
-          Documentation = "man:swayidle(1)";
-          PartOf = [ "graphical-session.target" ];
-          After = [ "graphical-session.target" ];
-          ConditionEnvironment = [ "WAYLAND_DISPLAY" "SWAYSOCK" ];
-        };
+  my.home = { config, ... }: let
+    swaylock  = "${pkgs.swaylock}/bin/swaylock";
+    swaymsg   = "${pkgs.sway}/bin/swaymsg";
+    playerctl = "${pkgs.playerctl}/bin/playerctl";
+    withPlayerctld = lib.optionalString config.services.playerctld.enable "-p playerctld";
+    dunstctl  = "${config.services.dunst.package}/bin/dunstctl";
+  in {
+    services.swayidle = {
+      enable = true;
 
-        Service = {
-          Type = "simple";
-          Restart = "always";
-          RestartSec = "1sec";
-          # Scripts started by swayidle are executed with 'sh -c'
-          Environment = [ "PATH=${dirOf pkgs.stdenv.shell}:$PATH" ];
-          ExecStart = ''
-            ${swayidle} -w \
-                timeout 300  "${swaylock} -f" \
-                timeout 600  "${swaymsg} 'output * dpms off'" \
-                resume       "${swaymsg} 'output * dpms on'" \
-                before-sleep "${playerctl} ${withPlayerctld} pause"\
-                before-sleep "${swaylock} -f"
-          '';
-        };
-        Install.WantedBy = [ "sway-session.target" ];
-      };
+      idlehint = "5 minutes";
+
+      timeout = [
+        {
+          timeout = "5 minutes";
+          command = "${swaylock} -f";
+        }
+        {
+          timeout = "10 minutes";
+          command = "${swaymsg} 'output * dpms off'";
+          resume = "${swaymsg} 'output * dpms on'";
+        }
+      ];
+
+      before-sleep = [
+        "${playerctl} ${withPlayerctld} pause"
+        "${dunstctl} set-paused true"
+        "${swaylock} -f"
+      ];
+
+      lock = [
+        "${dunstctl} set-paused true"
+      ];
+
+      unlock = [
+        "${dunstctl} set-paused false"
+      ];
+    };
   };
 }
