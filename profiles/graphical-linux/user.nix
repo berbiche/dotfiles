@@ -8,8 +8,6 @@
       libnotify # `notify-send` notifications to test mako
       dex # execute .desktop files
 
-      my-nur.eww
-
       ffmpeg
 
       # Programs
