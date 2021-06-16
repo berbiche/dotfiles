@@ -230,11 +230,10 @@
       emacsPgtk = inputs.emacs-overlay.overlay;
       neovim-nightly = inputs.neovim-nightly.overlay;
       # nur = inputs.nur.overlay;
-      nur = final: _prev: {
+      nur = final: prev: {
         nur = import inputs.nur { nurpkgs = final; pkgs = final; };
-      };
-      my-nur = final: _prev: {
         my-nur = import inputs.my-nur { pkgs = final; };
+        nixpkgs-wayland = inputs.nixpkgs-wayland.overlay final prev;
       };
     };
 

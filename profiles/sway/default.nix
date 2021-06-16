@@ -7,11 +7,12 @@
     ./nwg-panel
     ./eww
 
+    ./dunst.nix
     ./gammastep.nix
     ./idle-service.nix
     ./kanshi.nix
     ./libinput.nix
-    ./linux-notification-center.nix
+    # ./linux-notification-center.nix
     # ./mako.nix
     ./polkit.nix
     ./screenshare.nix
