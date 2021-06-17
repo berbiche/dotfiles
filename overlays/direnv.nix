@@ -5,5 +5,4 @@ final: prev:
       ./direnv-disable-logging-exports.patch
     ];
   });
-  nix-direnv = prev.nix-direnv.override { enableFlakes = true; };
 }
