@@ -15,6 +15,8 @@ let
 in
 {
   my.home = { config, ... }: {
+    imports = [ ./microphone-indicator.nix ];
+
     home.packages = [ pkgs.my-nur.eww-wayland ];
 
     xdg.configFile = ewwFiles // { "eww/.keep" = { source = builtins.toFile "empty" ""; force = true; }; };
@@ -29,9 +31,9 @@ in
       Service = {
         Type = "forking";
         ExecStart = "${pkgs.my-nur.eww-wayland}/bin/eww daemon";
-        Environment = [
-          "PATH=${lib.makeBinPath (with pkgs; [ playerctl curl gnome.nautilus curl ])}:$PATH"
-        ];
+        EnvironmentFile = "${pkgs.writeShellScript "eww-environment" ''
+          export PATH=${lib.escapeShellArg (lib.makeBinPath (with pkgs; [ playerctl curl gnome.nautilus curl ]))}"''${PATH:+:}$PATH"
+        ''}";
         Restart = "on-failure";
         RestartSec = "1sec";
         KillMode = "mixed";

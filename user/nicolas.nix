@@ -116,6 +116,8 @@ lib.mkMerge [
           networkmanager # for nmcli
           notify-send_sh # from my overlays
           playerctl # to control mpris players
+          util-linux # flock
+          my-nur.eww-wayland # 'eww open'
         ]);
       in "${
         # For the patchShebang phase
