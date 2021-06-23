@@ -157,6 +157,13 @@ in
         }
         zle -N down-line-or-local-history
 
+        # https://nuclearsquid.com/writings/edit-long-commands/
+        # Somehow this was missing from my shell?
+        autoload -U edit-command-line
+        zle -N edit-command-line
+        bindkey '^xe' edit-command-line
+        bindkey '^x^e' edit-command-line
+
         # Theming section
         autoload -U colors
         colors
