@@ -23,7 +23,12 @@ let
 in
 {
   my.home = {
-    home.packages = [ pkgs.fzf ];
+    home.packages = [
+      pkgs.fzf
+      ## Doesn't support Wayland correctly yet and xWayland is blurry
+      ## with wlroots-based compositor like Sway when scaling is in effect
+      # pkgs.neovide
+    ];
 
     programs.neovim = {
       enable = true;
@@ -59,6 +64,9 @@ in
             set title
             " Use utf-8 by default
             set encoding=utf-8
+
+            " For CursorHold autocommand, required by which-key
+            set updatetime=100
 
             " Colors/Theme
             set termguicolors
@@ -110,6 +118,10 @@ in
 
             " Don't pass messages to |ins-completion-menu|
             set shortmess+=c
+
+
+            " Remove Ex mode keybind
+            :nnoremap Q <nop>
           '';
         }
 
@@ -120,6 +132,9 @@ in
         vim-sensible
         auto-pairs
         vim-indent-guides
+
+        # Tabbar
+        # barbar-nvim
 
         {
           ## Git
@@ -134,27 +149,10 @@ in
         }
         {
           ## Show key completion
-          plugin = vim-which-key;
+          plugin = which-key-nvim;
           config = ''
-            let g:which_key_map = {}
-            let g:which_key_map.q = { 'name': 'Close buffer' }
-            let g:which_key_map.Q = { 'name': 'Close buffer/window' }
-            " The floating window is ugly, disable it
-            let g:which_key_use_floating_win = 0
-
-            " For CursorHold autocommand, required by which-key
-            set updatetime=100
-
-            au VimEnter * call which_key#register('<Space>', "g:which_key_map")
-            au VimEnter * call which_key#register(',', "g:which_key_map")
-
-            nnoremap <silent> <leader>      :<C-u>WhichKey '<Space>'<CR>
-            nnoremap <silent> <localleader> :<C-u>WhichKey ','<CR>
-            vnoremap <silent> <leader>      :<C-u>WhichKeyVisual '<Space>'<CR>
-            vnoremap <silent> <localleader> :<C-u>WhichKeyVisual ','<CR>
-            autocmd! FileType which_key
-            autocmd  FileType which_key set laststatus=0 noshowmode noruler
-              \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+            lua <<EOF
+            EOF
           '';
         }
         {
@@ -175,18 +173,19 @@ in
             nnoremap <silent><leader>q <cmd>Sayonara!<CR>
           '';
         }
-        {
-          ## Shows symbol with LSP
-          plugin = vista-vim;
-          config = ''
-            let g:vista_fzf_preview = ['right:30%']
-            let g:vista#renderer#enable_icon = 1
-            let g:vista#renderer#icons = {
-            \   "function": "\uf794",
-            \   "variable": "\uf71b",
-            \  }
-          '';
-        }
+        ## Disabled because integrated in Telescope
+        # {
+        #   ## Shows symbol with LSP
+        #   plugin = vista-vim;
+        #   config = ''
+        #     let g:vista_fzf_preview = ['right:30%']
+        #     let g:vista#renderer#enable_icon = 1
+        #     let g:vista#renderer#icons = {
+        #     \   "function": "\uf794",
+        #     \   "variable": "\uf71b",
+        #     \  }
+        #   '';
+        # }
         {
           # Rainbow paranthesis, brackets
           plugin = rainbow;
@@ -195,6 +194,68 @@ in
             let g:rainbow_active = 1
           '';
         }
+
+
+        popup-nvim
+        plenary-nvim
+        sql-nvim
+        telescope-frecency-nvim
+        telescope-fzy-native-nvim
+        {
+          plugin = telescope-nvim;
+          config = ''
+            lua <<EOF
+              local ts = require('telescope')
+              local actions = require('telescope.actions')
+              ts.setup {
+                defaults = {
+                  mappings = {
+                    i = {
+                      ["esc"] = actions.close,
+                    },
+                    n = {
+                      ["esc"] = actions.close,
+                    },
+                  },
+                },
+                extensions = {
+                  fzf = {
+                    fuzzy = true,
+                    override_generic_sorter = false,
+                    override_file_sorter = true,
+                    case_mode = "smart_case",
+                  }
+                },
+                pickers = {
+                  buffers = {
+                    theme = "dropdown",
+                    previewer = false,
+                  },
+                  find_files = {
+                    theme = "dropdown",
+                  },
+                },
+              }
+
+              ts.load_extension('fzy_native')
+              ts.load_extension('frecency')
+            EOF
+
+            nnoremap <silent> <leader><space> :lua require('telescope.builtin').git_files()<CR>
+            nnoremap <silent> <leader>. :lua require('telescope.builtin').find_files({ cwd = vim.fn.expand('%:p:h') })<CR>
+            nnoremap <silent> <leader>bi :lua require('telescope.builtin').buffers() theme=get_dropdown<CR>
+            nnoremap <silent> <leader>si :lua require('telescope.builtin').spell_suggest() theme=get_dropdown<CR>
+            nnoremap <silent> <leader>fF :lua require('telescope').extensions.frecency.frecency()<CR>
+
+            " Finding things
+            nnoremap <silent> <leader>ss :lua require('telescope.builtin').live_grep({ grep_open_files: true })<CR>
+            nnoremap <silent> <leader>sp :lua require('telescope.builtin').live_grep()<CR>
+
+            autocmd! User TelescopePreviewerLoaded setlocal wrap
+          '';
+        }
+
+        /*
         {
           plugin = fzf-vim;
           config = ''
@@ -202,16 +263,20 @@ in
             let g:fzf_nvim_statusline = 0
             let g:fzf_buffers_jump = 1
             let g:fzf_full_preview_toggle_key = '<C-s>'
-            nnoremap <C-t> :FzfFiles!
-            nnoremap <leader><space> :FzfFiles<CR>
-            nnoremap <leader>. :FzfFiles %:p:h<CR>
+            " nnoremap <C-t> :FzfFiles!
+            " nnoremap <leader><space> :FzfFiles<CR>
+            " nnoremap <leader>. :FzfFiles %:p:h<CR>
 
             " Finding things
             nnoremap <leader>ss :FzfBLines<CR>
             nnoremap <leader>sp :FzfRg<CR>
+            nnoremap <leader>bi :FzfBuffers<CR>
           '';
         }
-        fzf-lsp-nvim
+        {
+          plugin = fzf-lsp-nvim;
+        }
+        */
 
         {
           plugin = vim-startify;
@@ -245,6 +310,7 @@ in
             inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
             inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
             inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+            inoremap <silent><expr> <c-space> coc#refresh()
 
             set signcolumn=number
 
@@ -252,16 +318,53 @@ in
 
             command! -nargs=0 Format :call CocAction('format')
 
-            nnoremap <leader>gf :<C-u>Format
+            nnoremap <leader>gf :<C-u>Format<CR>
             xmap     <leader>=  <Plug>(coc-format-selected)
 
+            nmap <silent> [g <Plug>(coc-diagnostic-prev)
+            nmap <silent> ]g <Plug>(coc-diagnostic-next)
             nmap <silent> gd <Plug>(coc-definition)
             nmap <silent> gy <Plug>(coc-type-definition)
             nmap <silent> gi <Plug>(coc-implementation)
             nmap <silent> gr <Plug>(coc-references)
           '';
         }
-        coc-explorer
+        {
+          ## For coc-explorer
+          plugin = vim-devicons;
+          config = ''
+            let g:webdevicons_enable = 1
+            let g:webdevicons_enable_airline_statusline = 1
+            let g:webdevicons_enable_startify = 1
+            let g:DevIconsEnableFoldersOpenClose = 1
+          '';
+        }
+        {
+          ## For telescope
+          plugin = nvim-web-devicons;
+          config = ''
+            lua <<EOF
+              require('nvim-web-devicons').setup {
+                default = true,
+              }
+            EOF
+          '';
+        }
+        {
+          plugin = coc-explorer;
+          config = ''
+            if exists('g:indent_guides_exclude_filetypes')
+              let g:indent_guides_exclude_filetypes += [ 'coc-explorer' ]
+            else
+              let g:indent_guides_exclude_filetypes = [ 'coc-explorer' ]
+            endif
+            function! RevealCurrentFile()
+              CocCommand explorer
+              " call CocAction('runCommand', 'explorer.doAction', 'closest', ['reveal:0'], [['reveal', 0, 'file']])
+            endfunction
+            nnoremap <silent> <leader>e :call RevealCurrentFile()<CR>
+          '';
+        }
         coc-go
         coc-html
         coc-json
@@ -306,7 +409,7 @@ in
         highlight TrailingWhitespace ctermbg=red guibg=red
         match TrailingWhitespace /\s\+$/
 
-        nnoremap <leader>si :set spell!<CR>
+        " nnoremap <leader>si :set spell!<CR>
         nnoremap <leader>l :set list!<CR>
         nnoremap <leader>S :%s//g<Left><Left>
         nnoremap <leader>m :set number!<CR>
@@ -328,7 +431,6 @@ in
         nnoremap <leader>bn :bnext<CR>
         nnoremap <leader>bN :enew<CR>
         nnoremap <leader>bp :bprevious<CR>
-        nnoremap <leader>bi :FzfBuffers<CR>
         " Window management
         nnoremap <leader>w <C-w>
 
@@ -382,6 +484,30 @@ in
           command = "rnix-lsp";
           filetypes = [ "nix" ];
         };
+      };
+
+      "explorer.icon.enableNerdFond" = true;
+      "explorer.icon.enableVimDevicons" = true;
+      "explorer.buffer.tabOnly" = true;
+      "explorer.file.revealWhenOpen" = true;
+      "explorer.file.autoReveal" = false;
+      "explorer.file.hiddenRules" = {
+        "extensions" = [
+          "o" "a" "obj" "pyc"
+        ];
+        "filenames" = [ "node_modules" "result" "_build" ];
+        "patternMatches" = [ "^\\." ];
+      };
+      "explorer.file.root.template" = "[icon] [title] [root] [fullpath]";
+      "explorer.keyMappings.global" = {
+        "u" = [ "wait" "indentPrev" ];
+        "cf" = "addFile";
+        "cd" = "addDirectory";
+        "r" = "refresh";
+        "a" = false;
+        "A" = false;
+        "R" = "rename";
+        "/" = "search";
       };
     };
   };

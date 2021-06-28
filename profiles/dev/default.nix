@@ -26,7 +26,7 @@ in
 
     home.packages = with pkgs; [
       jq # tool to extract data out from a json input (files, stdin, ...)
-     
+
       pipr # interactive tool to write pipelines
       bubblewrap # required by pipr
 
@@ -102,7 +102,7 @@ in
     programs.fzf = {
       enable = true;
       enableZshIntegration = true;
-      defaultCommand = ''${pkgs.fd}/bin/fd --follow --type f --exclude="'.git'" .'';
+      defaultCommand = ''${pkgs.fd}/bin/fd --follow --type f --exclude=".git" .'';
       defaultOptions = [ "--exact" "--cycle" "--layout=reverse" ];
       # enableFishIntegration = true;
     };
