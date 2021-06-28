@@ -36,7 +36,7 @@
       base = true;
     };
 
-    extraPackages = with pkgs; [ qt5.qtwayland cage ];
+    extraPackages = with pkgs; [ qt5.qtwayland ];
 
     extraOptions = [ "--verbose" ];
 
