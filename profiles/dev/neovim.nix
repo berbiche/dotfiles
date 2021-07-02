@@ -16,10 +16,6 @@ let
       hash = "sha256-Kqk3ZdWXCR7uqE9GJ+zaDMs0SeP/0/8bTxdoDiRnRTo=";
     };
   };
-
-  toLua = x: ''lua <<EOF
-    ${x}
-  EOF'';
 in
 {
   my.home = {
@@ -130,12 +126,40 @@ in
         vim-surround
         vim-signify
         vim-sensible
-        auto-pairs
+        nvim-autopairs
         vim-indent-guides
 
         # Tabbar
-        # barbar-nvim
+        {
+          plugin = barbar-nvim;
+          config = ''
+            let bufferline = get(g:, 'bufferline', {})
+            let bufferline.closable = v:false
+            let bufferline.closable = v:false
 
+            autocmd User CocExplorerOpenPre lua require'bufferline.state'.set_offset(30, 'FileTree')
+            autocmd User CocExplorerQuitPre lua require'bufferline.state'.set_offset(0)
+          '';
+        }
+
+        # Git
+        # diffview-nvim
+        # {
+        #   plugin = neogit;
+        #   config = ''
+        #     lua <<EOF
+        #       require('neogit').setup {
+        #         disable_commit_confirmation = true,
+        #         integrations = {
+        #           diffview = true,
+        #         },
+        #       }
+        #     EOF
+
+        #     nnoremap <silent> <leader>gg lua require('neogit').open()<CR>
+        #     nnoremap <silent> <leader>gc lua require('neogit').open({ 'commit' })<CR>
+        #   '';
+        # }
         {
           ## Git
           plugin = vim-fugitive;
@@ -167,31 +191,45 @@ in
           '';
         }
         {
+          # Close buffers/windows/etc.
           plugin = vim-sayonara;
           config = ''
             nnoremap <silent><leader>Q <cmd>Sayonara<CR>
             nnoremap <silent><leader>q <cmd>Sayonara!<CR>
           '';
         }
-        ## Disabled because integrated in Telescope
-        # {
-        #   ## Shows symbol with LSP
-        #   plugin = vista-vim;
-        #   config = ''
-        #     let g:vista_fzf_preview = ['right:30%']
-        #     let g:vista#renderer#enable_icon = 1
-        #     let g:vista#renderer#icons = {
-        #     \   "function": "\uf794",
-        #     \   "variable": "\uf71b",
-        #     \  }
-        #   '';
-        # }
         {
           # Rainbow paranthesis, brackets
           plugin = rainbow;
           config = ''
             " Enable rainbow paranthesis globally
             let g:rainbow_active = 1
+          '';
+        }
+
+        {
+          plugin = nvim-treesitter;
+          config = ''
+            lua <<EOF
+              require('nvim-treesitter.configs').setup {
+                highlight = {
+                  enable = true,
+                },
+                incremental_selection = { enable = true, },
+                textobjects = { enable = true, },
+                indent = {
+                  enable = true,
+                },
+              }
+            EOF
+          '';
+        }
+
+        {
+          # Show code action lightbulb
+          plugin = nvim-lightbulb;
+          config = ''
+            autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
           '';
         }
 
@@ -243,40 +281,17 @@ in
 
             nnoremap <silent> <leader><space> :lua require('telescope.builtin').git_files()<CR>
             nnoremap <silent> <leader>. :lua require('telescope.builtin').find_files({ cwd = vim.fn.expand('%:p:h') })<CR>
-            nnoremap <silent> <leader>bi :lua require('telescope.builtin').buffers() theme=get_dropdown<CR>
-            nnoremap <silent> <leader>si :lua require('telescope.builtin').spell_suggest() theme=get_dropdown<CR>
+            nnoremap <silent> <leader>bi :lua require('telescope.builtin').buffers()<CR>
+            nnoremap <silent> <leader>si :lua require('telescope.builtin').spell_suggest()<CR>
             nnoremap <silent> <leader>fF :lua require('telescope').extensions.frecency.frecency()<CR>
 
             " Finding things
-            nnoremap <silent> <leader>ss :lua require('telescope.builtin').live_grep({ grep_open_files: true })<CR>
+            nnoremap <silent> <leader>ss :lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>
             nnoremap <silent> <leader>sp :lua require('telescope.builtin').live_grep()<CR>
 
             autocmd! User TelescopePreviewerLoaded setlocal wrap
           '';
         }
-
-        /*
-        {
-          plugin = fzf-vim;
-          config = ''
-            let g:fzf_command_prefix = 'Fzf'
-            let g:fzf_nvim_statusline = 0
-            let g:fzf_buffers_jump = 1
-            let g:fzf_full_preview_toggle_key = '<C-s>'
-            " nnoremap <C-t> :FzfFiles!
-            " nnoremap <leader><space> :FzfFiles<CR>
-            " nnoremap <leader>. :FzfFiles %:p:h<CR>
-
-            " Finding things
-            nnoremap <leader>ss :FzfBLines<CR>
-            nnoremap <leader>sp :FzfRg<CR>
-            nnoremap <leader>bi :FzfBuffers<CR>
-          '';
-        }
-        {
-          plugin = fzf-lsp-nvim;
-        }
-        */
 
         {
           plugin = vim-startify;
@@ -289,6 +304,14 @@ in
             let g:startify_custom_header = []
             let g:startify_custom_footer = []
 
+            let g:startify_lists = [
+              \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+              \ { 'type': 'files',     'header': ['   MRU']            },
+              \ { 'type': 'sessions',  'header': ['   Sessions']       },
+              \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+              \ { 'type': 'commands',  'header': ['   Commands']       },
+              \ ]
+
             let g:startify_skiplist = [
               \ 'COMMIT_EDITMSG',
               \ '^/nix/store',
@@ -298,6 +321,11 @@ in
               \ ]
 
             autocmd User Startified setlocal cursorline
+
+            " Save the current session
+            nnoremap <leader>qS :SSave
+            " Load a session
+            nnoremap <leader>qL :SLoad
           '';
         }
 
@@ -353,13 +381,10 @@ in
         {
           plugin = coc-explorer;
           config = ''
-            if exists('g:indent_guides_exclude_filetypes')
-              let g:indent_guides_exclude_filetypes += [ 'coc-explorer' ]
-            else
-              let g:indent_guides_exclude_filetypes = [ 'coc-explorer' ]
-            endif
+            let g:indent_guides_exclude_filetypes = get(g:, 'indent_guides_exclude_filetypes', [])
+            let g:indent_guides_exclude_filetypes += [ 'coc-explorer' ]
             function! RevealCurrentFile()
-              CocCommand explorer
+              CocCommand explorer --width 30
               " call CocAction('runCommand', 'explorer.doAction', 'closest', ['reveal:0'], [['reveal', 0, 'file']])
             endfunction
             nnoremap <silent> <leader>e :call RevealCurrentFile()<CR>
@@ -427,7 +452,7 @@ in
         autocmd VimEnter * silent! nunmap <leader>b
         nnoremap <leader>, <C-^>
         nnoremap <leader>b, <C-^>
-        nnoremap <leader>bd :bd<CR>
+        nnoremap <leader>bd :BufferClose<CR>
         nnoremap <leader>bn :bnext<CR>
         nnoremap <leader>bN :enew<CR>
         nnoremap <leader>bp :bprevious<CR>
@@ -448,7 +473,7 @@ in
     };
 
     # Stolen from legendofmiracles' dotnix
-    home.file.".config/nvim/after/queries/nix/injections.scm".text = ''
+    xdg.configFile."nvim/after/queries/nix/injections.scm".text = ''
       (
           (app [
               ((identifier) @_func)
@@ -467,7 +492,7 @@ in
       )
     '';
 
-    home.file.".config/nvim/coc-settings.json".source = (pkgs.formats.json { }).generate "coc-settings.json" {
+    xdg.configFile."nvim/coc-settings.json".source = (pkgs.formats.json { }).generate "coc-settings.json" {
       diagnostic = {
         enable = true;
         errorSign = ">>";
@@ -510,5 +535,25 @@ in
         "/" = "search";
       };
     };
+
+    xdg.configFile = let
+      tree-sitter-grammars = [
+        "bash"
+        "c"
+        "css"
+        "go"
+        "json"
+        "html"
+        "markdown"
+        "nix"
+        "python"
+        "toml"
+        "yaml"
+      ];
+      grammar = x: {
+        name = "nvim/parser/${x}.so";
+        value.source = "${pkgs.tree-sitter.builtGrammars."tree-sitter-${x}"}/parser";
+      };
+    in lib.listToAttrs (map grammar tree-sitter-grammars);
   };
 }

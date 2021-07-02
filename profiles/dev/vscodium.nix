@@ -148,7 +148,7 @@ in
     programs.vscode = {
       enable = true;
 
-      package = finalPackage; 
+      package = finalPackage;
 
       extensions = [];
 
