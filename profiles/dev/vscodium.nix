@@ -177,7 +177,7 @@ in
         if finalPackage.pname == "vscode"
         then "${finalPackage}/share/codium.desktop"
         else "${finalPackage}/share/code.desktop";
-    in isLinux {
+    in {
       defaultApplications = {
         "x-scheme-handler/vscodium" = [ desktopFile ];
         "x-scheme-handler/vscode" = [ desktopFile ];

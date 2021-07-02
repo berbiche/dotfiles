@@ -168,7 +168,7 @@ in
         Documentation = "man:swayidle(1)";
         PartOf = [ "graphical-session.target" ];
         After = [ "graphical-session.target" ];
-        ConditionEnvironment = [ "WAYLAND_DISPLAY" ];
+        # ConditionEnvironment = [ "WAYLAND_DISPLAY" ];
       };
 
       Service = {
