@@ -5,7 +5,18 @@ let
 
   enableWakaTime = config.profiles.dev.wakatime.enable;
 
-  overrides = eself: esuper: { };
+  overrides = eself: esuper: rec {
+    # project = esuper.project.overrideAttrs (_: {
+    #     version = "0.6.0";
+    #     elpaBuild = super.elpaBuild
+    #     src = pkgs.fetchurl {
+    #       url = "https://elpa.gnu.org/packages/project-0.6.0.tar";
+    #       sha256 = "0m0r1xgz1ffx6mi2gjz1dkgrn89sh4y5ysi0gj6p1w05bf8p0lc0";
+    #     };
+    # });
+    #elpaPackages = esuper.elpaPackages // { inherit project; };
+    #melpaPackages = esuper.melpaPackages // { inherit project; };
+  };
 in
 lib.mkMerge [
   {
@@ -17,7 +28,6 @@ lib.mkMerge [
           doomPrivateDir = ./doom.d;
           # emacsPackage = pkgs.emacsGccPgtk;
           emacsPackage = lib.mkMerge [
-            # (lib.mkIf isLinux pkgs.emacsPgtkGcc)
             (lib.mkIf isLinux pkgs.emacsPgtk)
             (lib.mkIf isDarwin pkgs.emacs)
           ];

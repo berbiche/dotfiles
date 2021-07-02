@@ -1,9 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, isLinux, ... }:
 
 let
   wallpaperDir = toString config.programs.swaylock.imageFolder;
 in
-{
+lib.optionalAttrs isLinux {
   # Image Viewer that I only plan on using to set my wallpaper
   home.packages = [ pkgs.imv ];
 

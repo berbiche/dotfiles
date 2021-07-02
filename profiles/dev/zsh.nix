@@ -16,7 +16,7 @@ in
       enable = true;
       enableAutosuggestions = true;
       enableCompletion = true;
-      enableVteIntegration = true;
+      enableVteIntegration = pkgs.stdenv.isLinux;
       dotDir = ".config/zsh";
 
       history = {

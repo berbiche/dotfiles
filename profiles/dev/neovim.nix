@@ -535,7 +535,7 @@ in
         "/" = "search";
       };
     };
-
+  } // {
     xdg.configFile = let
       tree-sitter-grammars = [
         "bash"

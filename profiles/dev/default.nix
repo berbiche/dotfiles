@@ -27,9 +27,6 @@ in
     home.packages = with pkgs; [
       jq # tool to extract data out from a json input (files, stdin, ...)
 
-      pipr # interactive tool to write pipelines
-      bubblewrap # required by pipr
-
       # Programming
       clang # for the binary tools it offers?
       gnumake # for the `make` program
@@ -41,7 +38,6 @@ in
       httpie # like curl/wget with a simpler cli interface
       aria # curl/wget on steroid to download files using different protocols
       lsof # shows information about opened files by processes, useful for debugging
-      iotop # see which processes/kernel tasks are using IO
       gitFull # contains extra stuff that I don't remember
       rsync # copy files localy and remotely
       nmap # scanner for CTF and my local network
@@ -87,6 +83,11 @@ in
       erlang-ls
 
     ] ++ lib.optionals pkgs.stdenv.isLinux [
+      pipr # interactive tool to write pipelines
+      bubblewrap # required by pipr
+
+      iotop # see which processes/kernel tasks are using IO
+
       #jetbrains.idea-community # IDE that I don't use anymore, even for Java development
       insomnia # GUI tool to test http APIs, alternative to postman and hoppscotch (formerly postwoman)
     ];

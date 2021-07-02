@@ -326,14 +326,16 @@
     },
     "nix-darwin": {
       "inputs": {
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
-        "lastModified": 1603640233,
-        "narHash": "sha256-6OEAhLhcuQtTM+tCWkRElcVHc3/nlj/k422RxI4kxcc=",
+        "lastModified": 1622060422,
+        "narHash": "sha256-hPVlvrAyf6zL7tTx0lpK+tMxEfZeMiIZ/A2xaJ41WOY=",
         "owner": "LnL7",
         "repo": "nix-darwin",
-        "rev": "c2124383f47315c23b0fbe8b75a1190b6d7929d0",
+        "rev": "007d700e644ac588ad6668e6439950a5b6e2ff64",
         "type": "github"
       },
       "original": {
@@ -374,22 +376,6 @@
         "type": "indirect"
       }
     },
-    "nixpkgs-darwin": {
-      "locked": {
-        "lastModified": 1602051038,
-        "narHash": "sha256-bx7xwZ/MsLUMZ62Bh2c5jO2SpR9lAkL/ssyhsag5ESo=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "41c0f49681009ceb57a65b7cd7d4e6d605df712c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-wayland": {
       "inputs": {
         "cachix": "cachix",
@@ -412,20 +398,6 @@
       }
     },
     "nixpkgs_2": {
-      "locked": {
-        "lastModified": 1590692307,
-        "narHash": "sha256-rAq7smRWtGmPdMolBTdA7Eps8TS9noJ2oE6jkUA8Npc=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "d4226e3a4b5fcf988027147164e86665d382bbfa",
-        "type": "github"
-      },
-      "original": {
-        "id": "nixpkgs",
-        "type": "indirect"
-      }
-    },
-    "nixpkgs_3": {
       "locked": {
         "lastModified": 1624690077,
         "narHash": "sha256-46hCcih4CjjX3S3MGbIn0nRE7io1VjXRMQ33Uos1azY=",
@@ -562,8 +534,7 @@
         "my-nur": "my-nur",
         "neovim-nightly": "neovim-nightly",
         "nix-darwin": "nix-darwin",
-        "nixpkgs": "nixpkgs_3",
-        "nixpkgs-darwin": "nixpkgs-darwin",
+        "nixpkgs": "nixpkgs_2",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "nur": "nur",
         "vim-theme-anderson": "vim-theme-anderson",

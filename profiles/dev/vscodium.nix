@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, isLinux, ... }:
 
 let
   buildVs = ref@{ license ? null, ... }:
@@ -127,24 +127,6 @@ let
 in
 {
   my.home = { config, ... }: {
-    xdg.mimeApps = let
-      desktopFile =
-        if finalPackage.pname == "vscode"
-        then "${finalPackage}/share/codium.desktop"
-        else "${finalPackage}/share/code.desktop";
-    in {
-      defaultApplications = {
-        "x-scheme-handler/vscodium" = [ desktopFile ];
-        "x-scheme-handler/vscode" = [ desktopFile ];
-        "x-scheme-handler/code-url-handler" = [ desktopFile ];
-      };
-      associations.added = {
-        "x-scheme-handler/vscodium" = [ desktopFile ];
-        "x-scheme-handler/vscode" = [ desktopFile ];
-        "x-scheme-handler/code-url-handler" = [ desktopFile ];
-      };
-    };
-
     programs.vscode = {
       enable = true;
 
@@ -188,6 +170,24 @@ in
       keybindings = [
 
       ];
+    };
+  } // lib.optionalAttrs isLinux {
+    xdg.mimeApps = let
+      desktopFile =
+        if finalPackage.pname == "vscode"
+        then "${finalPackage}/share/codium.desktop"
+        else "${finalPackage}/share/code.desktop";
+    in isLinux {
+      defaultApplications = {
+        "x-scheme-handler/vscodium" = [ desktopFile ];
+        "x-scheme-handler/vscode" = [ desktopFile ];
+        "x-scheme-handler/code-url-handler" = [ desktopFile ];
+      };
+      associations.added = {
+        "x-scheme-handler/vscodium" = [ desktopFile ];
+        "x-scheme-handler/vscode" = [ desktopFile ];
+        "x-scheme-handler/code-url-handler" = [ desktopFile ];
+      };
     };
   };
 }

@@ -7,8 +7,8 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     # nixpkgs.url = "github:berbiche/nixpkgs/fix/neovim-always-create-rplugin";
     # nixpkgs.url = "git+file:///home/nicolas/dev/nixpkgs";
-    nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     # home-manager.url= "github:berbiche/home-manager/temporary-shared-modules-fix";
     home-manager.url= "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -162,7 +162,7 @@
     mkDarwinConfig = args:
       let
         modules = mkConfig ((removeAttrs args [ "platform" ]) // { isLinux = false; });
-        nixpkgs = inputs.nixpkgs-darwin;
+        nixpkgs = inputs.nixpkgs;
 
         darwinDefaults = { config, pkgs, lib, ... }: {
           imports = [ inputs.home-manager.darwinModules.home-manager ];
@@ -171,6 +171,8 @@
             "nixpkgs=${pkgs.path}"
             "darwin=${inputs.nix-darwin}"
           ];
+	  # The Darwin module wraps the nixpkgs input itself for some reason...
+	  nixpkgs.overlays = builtins.attrValues self.overlays;
           system.checks.verifyNixPath = false;
           system.darwinVersion = lib.mkForce (
             "darwin" + toString config.system.stateVersion + "." + inputs.nix-darwin.shortRev);
@@ -185,8 +187,8 @@
           modules = modules ++ [ darwinDefaults ];
           inputs.nixpkgs = nixpkgs;
           specialArgs = specialArgs {
-            inherit inputs;
-            isLinux = true;
+            inputs = inputs // { darwin = inputs.nix-darwin; };
+            isLinux = false;
           };
         };
 

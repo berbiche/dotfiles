@@ -8,13 +8,8 @@
   system.stateVersion = 4;
 
   nix = {
-    useSandbox = true;
     sandboxPaths = [ "/System/Library/Frameworks" "/System/Library/PrivateFrameworks" "/usr/lib" "/private/tmp" "/private/var/tmp" "/usr/bin/env" ];
-    trustedUsers = [ "@admin" ];
   };
-
-  # This is a single-user Nix install
-  services.nix-daemon.enable = lib.mkForce false;
 
   programs.fish.enable = true;
   programs.zsh.enable = true;
@@ -26,6 +21,12 @@
     isHidden = false;
     shell = pkgs.zsh;
   };
+
+  profiles.dev.wakatime.enable = lib.mkForce false;
+
+  users.nix.configureBuildUsers = true;
+
+  services.nix-daemon.enable = true;
 
   system.defaults.finder = {
     AppleShowAllExtensions = true;

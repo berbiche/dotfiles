@@ -1,4 +1,4 @@
-{ config, options, lib, ... }:
+{ config, options, lib, isLinux, ... }:
 
 with lib;
 
@@ -13,7 +13,7 @@ let
     toPath (attrNames filteredFiles);
 in
 {
-  imports = filesInDir ./modules/nixos;
+  imports = optionals isLinux (filesInDir ./modules/nixos);
 
   options.my = {
     username = mkOption {
