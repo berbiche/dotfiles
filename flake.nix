@@ -61,12 +61,18 @@
       in
       lib.fix args;
 
+    load = y: x:
+      if builtins.pathExists (y + "/${x}.nix") then
+        y + "/${x}.nix"
+      else
+        y + "/${x}/default.nix";
+
     mkConfig =
       { hostname
       , username
       , isLinux
-      , hostConfiguration ? ./host + "/${hostname}.nix"
-      , userConfiguration ? ./user + "/${username}.nix"
+      , hostConfiguration ? load ./host hostname
+      , userConfiguration ? load ./user username
       , extraModules ? [ ]
       }:
       let
