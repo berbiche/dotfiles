@@ -1,26 +1,7 @@
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
-  # Stolen from Tristan's config
-  theme = {
-    color0 = "#1d1f21";
-    color1 = "#282a2e";
-    color2 = "#373b41";
-    color3 = "#969896";
-    color4 = "#b4b7b4";
-    color5 = "#c5c8c6";
-    color6 = "#e0e0e0";
-    color7 = "#ffffff";
-    color8 = "#cc6666";
-    color9 = "#de935f";
-    colorA = "#f0c674";
-    colorB = "#b5bd68";
-    colorC = "#8abeb7";
-    colorD = "#81a2be";
-    colorE = "#b294bb";
-    colorF = "#a3685a";
-  };
-
+  theme = config.my.colors;
   transparency = lvl: color:
     assert lvl <= 100 && lvl >= 0;
     color + lib.toHexString (lvl * 256 / 100);

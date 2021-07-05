@@ -118,8 +118,7 @@ let
   in ''
     ${lib.concatImapStringsSep "\n" (makeCommand) workspaces}
 
-    # hide_edge_borders --i3 smart_no_gaps
-    hide_edge_borders --i3 vertical
+    hide_edge_borders --i3 smart_no_gaps
 
     # Set default workspace outputs
     workspace "${WS5}" output "${OUTPUT-HOME-DELL}"
@@ -146,6 +145,41 @@ let
     fonts = {
       names = [ "FontAwesome" "FontAwesome5Free" "Fira Sans" "DejaVu Sans Mono" ];
       size = 9.0;
+    };
+
+    colors = rec {
+      focused = let color = "${config.my.colors.color8}"; in {
+        border = color;
+        background = color;
+        # Default colors
+        text = "#ffffff";
+        indicator = "#000000";
+        childBorder = color;
+      };
+      focusedInactive = let color = "${config.my.colors.color8}c0"; in {
+        border = color;
+        background = color;
+        # Default colors
+        text = "#ffffff";
+        indicator = "#484e50";
+        childBorder = color;
+      };
+      unfocused = let color = "${config.my.colors.color9Darker}c0"; in {
+        border = color;
+        background = color;
+        text = "#e6e6e6";
+        # Default color
+        indicator = "#292d2e";
+        childBorder = color;
+      };
+      urgent = let color = "${config.my.colors.colorF}"; in {
+        border = color;
+        background = color;
+        # Default colors
+        text = "#ffffff";
+        indicator = "#900000";
+        childBorder = color;
+      };
     };
 
     focus.newWindow = "focus";
