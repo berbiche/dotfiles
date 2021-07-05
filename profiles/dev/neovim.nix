@@ -326,6 +326,10 @@ in
             nnoremap <leader>qS :SSave
             " Load a session
             nnoremap <leader>qL :SLoad
+
+            " Open Startify when it's the last remaining buffer
+            " autocmd BufEnter * if line2byte('.') == -1 && len(tabpagebuflist()) == 1 && empty(expand('%')) && empty(&l:buftype) && &l:modifiable | Startify | endif
+            autocmd BufDelete * if empty(filter(tabpagebuflist(), '!buflisted(v:val)')) && empty(expand('%')) && empty(&l:buftype) | Startify | endif
           '';
         }
 
@@ -452,7 +456,7 @@ in
         autocmd VimEnter * silent! nunmap <leader>b
         nnoremap <leader>, <C-^>
         nnoremap <leader>b, <C-^>
-        nnoremap <leader>bd :BufferClose<CR>
+        nnoremap <silent> <leader>bd :BufferClose<CR>
         nnoremap <leader>bn :bnext<CR>
         nnoremap <leader>bN :enew<CR>
         nnoremap <leader>bp :bprevious<CR>
