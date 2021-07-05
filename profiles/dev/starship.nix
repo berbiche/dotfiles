@@ -95,7 +95,8 @@
           # pure_msg = "";
           # format = "via [$symbol$state(\\($name\\))]($style)";
           symbol = "❄️";
-          format = "[\\($symbol shell\\)]($style) ";
+          # format = "[\\($symbol shell\\)]($style) ";
+          format = "[\\($symbol ($name)\\)]($style) ";
         };
 
         status = {
