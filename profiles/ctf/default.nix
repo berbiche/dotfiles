@@ -8,10 +8,13 @@
     pwndbg
     burpsuite
     binutils
-    volatility
+    # volatility
     p7zip
     patchelf
     shellcheck
     python3Packages.binwalk
   ];
+
+  # Volatility requires this unfortunately
+  # my.home.nixpkgs.config.permittedInsecurePackages = [ "python2.7-Pillow-6.2.2" ];
 }
