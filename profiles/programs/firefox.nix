@@ -81,6 +81,11 @@ let
       # Disable recommend features as you browse
       "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features" = false;
 
+      # Prevent the browser from requesting true fullscreen
+      # This allows me to personally fullscreen or not something (e.g. Youtube)
+      # https://github.com/swaywm/sway/pull/4255#issuecomment-606081970
+      "full-screen-api.ignore-widgets" = true;
+
       # UI : delay repaint when opening a new tab to reduce screen flash
       # see https://old.reddit.com/r/firefox/comments/kd12b4
       "nglayout.initialpaint.delay" = 400;

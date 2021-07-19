@@ -1,19 +1,20 @@
 { config, options, lib, isLinux, ... }:
 
 with lib;
+with builtins;
 
 let
   filesInDir = directory:
     let
-      files = builtins.readDir directory;
-      filteredFiles = filterAttrs (n: v: hasSuffix "nix" n && n != "default.nix") files;
+      files = readDir directory;
+      filteredFiles = lib.filterAttrs (n: v: lib.hasSuffix "nix" n && n != "default.nix") files;
       toPath = map (x: directory + "/${x}");
     in
-    assert builtins.isPath directory;
+    assert isPath directory;
     toPath (attrNames filteredFiles);
 in
 {
-  imports = optionals isLinux (filesInDir ./modules/nixos);
+  imports = filesInDir ../modules/nixos;
 
   options.my = {
     username = mkOption {
@@ -26,7 +27,7 @@ in
       type = options.home-manager.users.type.functor.wrapped;
     };
     colors = mkOption {
-      type = types.attrsOf (types.oneOf [ types.str types.int types.float ]);
+      type = with types; attrsOf (oneOf [ str int float ]);
       description = "Color profile for theming purposes.";
       default = {
         # Stolen from Tristan's config
@@ -55,7 +56,7 @@ in
     home-manager.users.${config.my.username} = mkAliasDefinitions options.my.home;
 
     my.home = { ... }:  {
-      imports = filesInDir ./modules/home-manager;
+      imports = filesInDir ../modules/home-manager;
 
       options.my.identity = {
         name = mkOption {

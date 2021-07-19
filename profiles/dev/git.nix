@@ -69,6 +69,7 @@ in
 
         aliases = lib.mapAttrs (_n: toString) rec {
           a  = "add";
+          an = "add --intent-to-add";
           aa = "add --all";
           au = "add --update";
           b = "branch -vv";

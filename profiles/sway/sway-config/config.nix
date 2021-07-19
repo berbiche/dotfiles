@@ -156,14 +156,15 @@ let
         indicator = "#000000";
         childBorder = color;
       };
-      focusedInactive = let color = "${config.my.colors.color8}c0"; in {
-        border = color;
-        background = color;
-        # Default colors
-        text = "#ffffff";
-        indicator = "#484e50";
-        childBorder = color;
-      };
+      # focusedInactive = let color = "${config.my.colors.color8}c0"; in {
+      #   border = color;
+      #   background = color;
+      #   # Default colors
+      #   text = "#ffffff";
+      #   indicator = "#484e50";
+      #   childBorder = color;
+      # };
+      focusedInactive = unfocused;
       unfocused = let color = "${config.my.colors.color9Darker}c0"; in {
         border = color;
         background = color;

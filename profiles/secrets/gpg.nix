@@ -1,10 +1,11 @@
-{ pkgs, lib, isLinux, isDarwin, ... }:
+{ pkgs, lib, ... }:
 
 let
   inherit (lib) mkIf mkMerge mkSinkUndeclaredOptions optionalAttrs;
+  inherit (pkgs.stdenv.hostPlatform) isLinux isDarwin;
 in
 {
-  options.services.dbus = optionalAttrs isDarwin (mkSinkUndeclaredOptions { });
+  # options.services.dbus = mkIf isDarwin (mkSinkUndeclaredOptions { });
 
   config = mkMerge [
     (mkIf isLinux {

@@ -17,6 +17,7 @@ in
       enableAutosuggestions = true;
       enableCompletion = true;
       enableVteIntegration = pkgs.stdenv.isLinux;
+      enableSyntaxHighlighting = true;
       dotDir = ".config/zsh";
 
       history = {
@@ -63,11 +64,6 @@ in
         jnsu      = "journalctl --user";
         svim      = "sudoedit";
         trash     = mkIf isLinux "gio trash";
-        nrsf      = ''() {
-          local a=(sudo nixos-rebuild switch --flake ~/dotfiles -v -L);
-          echo "''${a[@]}" "$@";
-          "''${a[@]}" "$@";
-        }'';
       };
 
       initExtra = ''
@@ -167,6 +163,12 @@ in
         # Theming section
         autoload -U colors
         colors
+
+        nrsf() {
+          local a=(sudo nixos-rebuild switch --flake ~/dotfiles -v -L);
+          echo "''${a[@]}" "$@";
+          "''${a[@]}" "$@";
+        };
 
 
         ## VERY IMPORTANT!!!!

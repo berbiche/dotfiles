@@ -22,8 +22,7 @@ case "$1" in
     pactl set-source-mute '@DEFAULT_SOURCE@' toggle
     file="${TEMP:-${XDG_RUNTIME_DIR:-/}/tmp}/volume-sh"-LOCK
     touch "$file"
-    exec 100>"$file"
-    exec flock -F -E 0 -nx 100 /bin/sh -c 'eww open microphone; sleep 5; eww close microphone'
+    exec flock -F -E 0 -nx "$file" /bin/sh -c 'eww open microphone; sleep 5; eww close microphone'
     ;;
   *)
     echo "Usage: $0 {increase|decrease|toggle-mute|mic-mute}"

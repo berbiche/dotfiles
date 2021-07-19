@@ -16,7 +16,7 @@ let
 
   mkProfile = imports: { ... }: { inherit imports; };
 
-  profiles = self: 
+  profiles = self:
     {
       base = mkProfile [ ];
       dev = mkProfile [ ./dev ];
@@ -25,7 +25,7 @@ let
       secrets = mkProfile [ ./secrets ];
     }
     // optionalAttrs isLinux {
-      core-linux = mkProfile [ ./core-linux ./pipewire ];
+      core-linux = mkProfile [ ./core-linux ./pipewire ./email ];
       gnome = mkProfile [ ./gnome ];
       graphical-linux = mkProfile [ ./graphical-linux ];
       kde = mkProfile [ ./kde ];

@@ -1,7 +1,7 @@
 { config, pkgs, inputs, lib, ... }:
 
 let
-  inherit (pkgs.stdenv) isDarwin isLinux;
+  inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
 
   enableWakaTime = config.profiles.dev.wakatime.enable;
 
@@ -26,9 +26,8 @@ lib.mkMerge [
         programs.doom-emacs = {
           enable = true;
           doomPrivateDir = ./doom.d;
-          # emacsPackage = pkgs.emacsGccPgtk;
           emacsPackage = lib.mkMerge [
-            (lib.mkIf isLinux pkgs.emacsPgtk)
+            (lib.mkIf isLinux pkgs.emacsPgtkGcc)
             (lib.mkIf isDarwin pkgs.emacs)
           ];
           emacsPackagesOverlay = overrides;
@@ -48,7 +47,7 @@ lib.mkMerge [
         };
       }
       # user systemd service for Linux
-      (lib.optionalAttrs isLinux {
+      (lib.mkIf isLinux {
         services.emacs = {
           enable = true;
           # The client is already provided by the Doom Emacs final package

@@ -1,5 +1,5 @@
 # Nixpkgs allows defining your own lib functions
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 with builtins;
 
@@ -16,6 +16,7 @@ let
 in
 {
   lib.my = myLib;
+
   my.home = { config, ... }:  {
     lib.my = myLib // {
       getScript = name: "${config.home.file."scripts".source}/${name}";

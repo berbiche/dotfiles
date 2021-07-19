@@ -56,7 +56,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (pkgs.stdenv.hostPlatform.isLinux && cfg.enable) {
     # https://github.com/NixOS/nixpkgs/issues/70471
     # Chown&chmod /dev/uinput to owner:root group:input mode:0660
     boot.kernelModules = [ "uinput" ];

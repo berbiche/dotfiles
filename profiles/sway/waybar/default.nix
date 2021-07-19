@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 let
   spotify = pkgs.python3Packages.buildPythonApplication {
@@ -325,7 +325,8 @@ in
 {
   my.home = { config, ... }: {
     programs.waybar = {
-      enable = true;
+      package = pkgs.nixpkgs-wayland.waybar;
+
       systemd.enable = true;
 
       settings = [
@@ -335,8 +336,7 @@ in
       style = builtins.readFile ./style.css;
     };
 
-    systemd.user.services.waybar = {
-      # Unit.ConditionEnvironment = [ "WAYLAND_DISPLAY" ];
+    systemd.user.services.waybar = lib.mkIf config.programs.waybar.enable {
       Unit.X-Restart-Triggers = [ "${config.xdg.configFile."waybar/config".source}" ];
     };
   };

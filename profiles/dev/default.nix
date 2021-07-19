@@ -83,8 +83,9 @@ in
       erlang-ls
 
     ] ++ lib.optionals pkgs.stdenv.isLinux [
-      pipr # interactive tool to write pipelines
-      bubblewrap # required by pipr
+      # Broken: 2021-07-10
+      # pipr # interactive tool to write pipelines
+      # bubblewrap # required by pipr
 
       iotop # see which processes/kernel tasks are using IO
 

@@ -4,26 +4,26 @@ let
   toPlugin = n: v: pkgs.vimUtils.buildVimPluginFrom2Nix { name = n; src = v; };
 
   myPlugins = lib.mapAttrsToList toPlugin {
-    anderson = inputs.vim-theme-anderson;
-    gruvbox = inputs.vim-theme-gruvbox;
-    monokai = inputs.vim-theme-monokai;
-    synthwave84 = inputs.vim-theme-synthwave84;
-    # https://github.com/neovim/neovim/issues/12587
-    "FixCursorHold.nvim" = pkgs.fetchFromGitHub {
-      owner = "antoinemadec";
-      repo = "FixCursorHold.nvim";
-      rev = "d932d56b844f6ea917d3f7c04ff6871158954bc0";
-      hash = "sha256-Kqk3ZdWXCR7uqE9GJ+zaDMs0SeP/0/8bTxdoDiRnRTo=";
-    };
   };
+
+  kommentary = toPlugin "kommentary" (pkgs.fetchFromGitHub {
+    owner = "b3nj5m1n";
+    repo = "kommentary";
+    rev = "f5b088a0e6a4cfeee6f1902141acbc47a75af5ed";
+    hash = "sha256-wzXxdLx3x/L4JD9M+SEorIhXlCFIfUh+Pr+dbY95Crk=";
+  });
 in
 {
   my.home = {
+    imports = [
+      ./coc.nix
+      ./tree-sitter.nix
+    ];
+
     home.packages = [
       pkgs.fzf
-      ## Doesn't support Wayland correctly yet and xWayland is blurry
-      ## with wlroots-based compositor like Sway when scaling is in effect
-      # pkgs.neovide
+      # graphical neovim
+      pkgs.neovide
     ];
 
     programs.neovim = {
@@ -38,103 +38,62 @@ in
 
       extraPackages = with pkgs; [
         nodePackages.bash-language-server
+        # For clangd
+        clang-tools
         nodePackages.typescript-language-server
         rnix-lsp
         rust-analyzer
         shellcheck
       ];
 
-      plugins = myPlugins ++ (with pkgs.vimPlugins; [
+      plugins = with pkgs.vimPlugins; [
         {
           plugin = pkgs.runCommandLocal "null-plugin" { } "touch $out";
           config = ''
             let g:mapleader = "\<Space>"
             let g:maplocalleader = ','
-
-            " Default settings
-            set nocompatible
-            set nobackup
-            " Yup, I live on the edge
-            set noswapfile
-            " Update terminal's titlebar
-            set title
-            " Use utf-8 by default
-            set encoding=utf-8
-
-            " For CursorHold autocommand, required by which-key
-            set updatetime=100
-
-            " Colors/Theme
-            set termguicolors
-            set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
-                  \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
-                  \,sm:block-blinkwait175-blinkoff150-blinkon175
-            au ColorScheme * hi Normal  ctermbg=none guibg=none
-            au ColorScheme * hi NonText ctermbg=none guibg=none
-            " Use visual bell
-            set visualbell
-
-            " Basics
-            syntax on
-            colorscheme gruvbox
-
-            set hidden      " Allows hidden buffer
-            set hlsearch    " Highlight search result
-            set smartcase
-            filetype plugin on
-            set listchars=tab:>-,trail:*
-            set tabstop=2 softtabstop=2 shiftwidth=2
-            set expandtab
-            set number
-            set relativenumber
-            set scrolloff=5             " keep 5 lines of context when scrolling
-            set lazyredraw              " do not redraw screen while executing a macro
-            set splitbelow splitright
-            set mouse=nv                " Enable mouse usage except in insert mode
-            set cursorline              " Highlight line with cursor
-
-            set wrap
-            set linebreak
-            set breakindent
-            let &showbreak = '↳ '
-
-
-            set formatoptions+=j   " remove a comment leader when joining lines.
-            set formatoptions+=o   " insert the comment leader after hitting 'o'
-
-            " Enable autocompletion
-            " set wildmode=longest,list,full
-            set wildmode=longest,full
-
-            " I already use vim-airline
-            set noshowmode
-
-            " Live substitution
-            set inccommand=nosplit
-
-            " Don't pass messages to |ins-completion-menu|
-            set shortmess+=c
-
-
-            " Remove Ex mode keybind
-            :nnoremap Q <nop>
           '';
         }
-
-        vim-buffergator
+      ]
+      ++ myPlugins
+      ++ [
+        # https://github.com/neovim/neovim/issues/12587
+        FixCursorHold-nvim
+        gruvbox-nvim
         vim-indent-object
         vim-surround
         vim-signify
         vim-sensible
         nvim-autopairs
-        vim-indent-guides
-
-        # Tabbar
         {
+          # Displays vertical line for the indentation level
+          plugin = indent-blankline-nvim;
+          config = ''
+            let g:indent_blankline_use_treesitter = v:true
+            let g:indent_blankline_show_current_context = v:false
+
+            let g:indent_blankline_filetype_exclude = ['help', 'startify']
+            let g:indent_blankline_buftype_exclude = ['terminal', 'startify']
+          '';
+        }
+        {
+          plugin = vim-sneak;
+          config = ''
+            let g:sneak#prompt = 'sneak> '
+            let g:sneak#label = 1
+            " let g:sneak#map_netrw = 0
+          '';
+        }
+        registers-nvim
+
+        # Better netrw
+        vim-vinegar
+
+        {
+          # Tab-bar
           plugin = barbar-nvim;
           config = ''
             let bufferline = get(g:, 'bufferline', {})
-            let bufferline.closable = v:false
             let bufferline.closable = v:false
 
             autocmd User CocExplorerOpenPre lua require'bufferline.state'.set_offset(30, 'FileTree')
@@ -143,7 +102,7 @@ in
         }
 
         # Git
-        # diffview-nvim
+        diffview-nvim
         # {
         #   plugin = neogit;
         #   config = ''
@@ -156,8 +115,8 @@ in
         #       }
         #     EOF
 
-        #     nnoremap <silent> <leader>gg lua require('neogit').open()<CR>
-        #     nnoremap <silent> <leader>gc lua require('neogit').open({ 'commit' })<CR>
+        #     " nnoremap <silent> <leader>gg lua require('neogit').open()<CR>
+        #     " nnoremap <silent> <leader>gc lua require('neogit').open({ 'commit' })<CR>
         #   '';
         # }
         {
@@ -176,18 +135,35 @@ in
           plugin = which-key-nvim;
           config = ''
             lua <<EOF
+              require('which-key').setup { }
             EOF
           '';
         }
         {
           # Comment lines with commentary.vim
-          plugin = vim-commentary;
+          plugin = kommentary;
+          # config = ''
+          #   inoremap <silent> <M-;> <C-o>:Commentary<CR>
+          #   nmap <silent> <M-;> gcc
+          #   vmap <silent> <M-;> gc
+          #   nmap <silent> <leader>; gcc
+          #   vmap <silent> <leader>; gc
+          # '';
           config = ''
-            inoremap <silent> <M-;> <C-o>:Commentary<CR>
-            nmap <silent> <M-;> gcc
-            vmap <silent> <M-;> gc
-            nmap <silent> <leader>; gcc
-            vmap <silent> <leader>; gc
+            lua <<EOF
+              local k = require('kommentary.config')
+
+              k.use_extended_mappings()
+              k.configure_language("default", {
+                prefer_single_line_comments = true,
+              })
+
+              vim.api.nvim_set_keymap("i", "<M-;>", "<Plug>kommentary_line_default", {noremap = true})
+              vim.api.nvim_set_keymap("n", "<M-;>", "<Plug>kommentary_line_default", {})
+              vim.api.nvim_set_keymap("v", "<M-;>", "<Plug>kommentary_visual_default", {})
+              vim.api.nvim_set_keymap("n", "<leader>;", "<Plug>kommentary_line_default", {})
+              vim.api.nvim_set_keymap("v", "<leader>;", "<Plug>kommentary_visual_default", {})
+            EOF
           '';
         }
         {
@@ -208,10 +184,11 @@ in
         }
 
         {
-          plugin = nvim-treesitter;
+          plugin = nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars);
           config = ''
             lua <<EOF
               require('nvim-treesitter.configs').setup {
+                ensure_installed = { 'c', 'cpp', },
                 highlight = {
                   enable = true,
                 },
@@ -329,13 +306,37 @@ in
 
             " Open Startify when it's the last remaining buffer
             " autocmd BufEnter * if line2byte('.') == -1 && len(tabpagebuflist()) == 1 && empty(expand('%')) && empty(&l:buftype) && &l:modifiable | Startify | endif
-            autocmd BufDelete * if empty(filter(tabpagebuflist(), '!buflisted(v:val)')) && empty(expand('%')) && empty(&l:buftype) | Startify | endif
+            if !exists('g:vscode')
+              autocmd BufDelete * if empty(filter(tabpagebuflist(), '!buflisted(v:val)')) && empty(expand('%')) && empty(&l:buftype) | Startify | endif
+            endif
           '';
         }
 
         ## Languages and LSP
         vim-nix
+        # vim-clang-format
+        {
+          plugin = nvim-lspconfig;
+          config = ''
+            lua <<EOF
+              local lsp = require('lspconfig')
+
+              -- lsp.clangd.setup {
+              --   default_config = {
+              --     cmd = {
+              --       'clangd', '--background-index', '--pch-storage=memory', '--clang-tidy', '--suggest-missing-includes',
+              --     },
+              --     filetypes = { 'c', 'cpp', },
+              --     root_dir = lsp.util.root_pattern('compile_commands.json', 'compile_flags.txt', '.git'),
+              --   },
+              -- }
+
+              lsp.rust_analyzer.setup {}
+            EOF
+          '';
+        }
         # vim-addon-nix
+        coc-clangd
         {
           plugin = coc-nvim;
           config = ''
@@ -387,9 +388,11 @@ in
           config = ''
             let g:indent_guides_exclude_filetypes = get(g:, 'indent_guides_exclude_filetypes', [])
             let g:indent_guides_exclude_filetypes += [ 'coc-explorer' ]
+            let g:indent_blankline_filetype_exclude = get(g:, 'indent_blankline_filetype_exclude', [])
+            let g:indent_blankline_filetype_exclude += ['coc-explorer']
             function! RevealCurrentFile()
-              CocCommand explorer --width 30
-              " call CocAction('runCommand', 'explorer.doAction', 'closest', ['reveal:0'], [['reveal', 0, 'file']])
+            CocCommand explorer --width 30
+            " call CocAction('runCommand', 'explorer.doAction', 'closest', ['reveal:0'], [['reveal', 0, 'file']])
             endfunction
             nnoremap <silent> <leader>e :call RevealCurrentFile()<CR>
           '';
@@ -405,8 +408,8 @@ in
 
         direnv-vim
 
+        # Statusbar
         {
-          # Statusbar
           plugin = vim-airline;
           config = ''
             " Display all buffers when only one tab is open
@@ -422,15 +425,90 @@ in
       ]
       ++ lib.optional config.profiles.dev.wakatime.enable {
         plugin = vim-wakatime;
+        optional = true;
         config = ''
-          ${lib.optionalString config.profiles.dev.wakatime.enable ''
-            " WakaTime CLI path
-            let g:wakatime_OverrideCommandPrefix = '${pkgs.wakatime}/bin/wakatime'
-          ''}
+          " WakaTime CLI path
+          let g:wakatime_OverrideCommandPrefix = ${lib.escapeShellArg pkgs.wakatime}.'/bin/wakatime'
         '';
-      });
+      };
 
       extraConfig = ''
+        " Default settings
+        set nocompatible
+        set nobackup
+        " Yup, I live on the edge
+        set noswapfile
+        " Update terminal's titlebar
+        set title
+        " Use utf-8 by default
+        set enc=utf-8
+        set fenc=utf-8
+        set termencoding=utf-8
+        set encoding=utf-8
+
+        " For CursorHold autocommand, required by which-key
+        set updatetime=100
+
+        " Colors/Theme
+        set termguicolors
+        set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
+              \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
+              \,sm:block-blinkwait175-blinkoff150-blinkon175
+        au ColorScheme * hi Normal  ctermbg=none guibg=none
+        au ColorScheme * hi NonText ctermbg=none guibg=none
+
+        " Use visual bell
+        set visualbell
+
+        " Basics
+        syntax on
+        colorscheme gruvbox
+
+        set hidden      " Allows hidden buffer
+        set hlsearch    " Highlight search result
+        set smartcase
+        filetype plugin on
+        set listchars=tab:>-,trail:*
+        set tabstop=2 softtabstop=2 shiftwidth=2
+        set expandtab
+        set number
+        set relativenumber
+        set scrolloff=5             " keep 5 lines of context when scrolling
+        set lazyredraw              " do not redraw screen while executing a macro
+        set splitbelow splitright
+        set mouse=nv                " Enable mouse usage except in insert mode
+        set cursorline              " Highlight line with cursor
+
+        " Reuse indentation from previous line
+        set autoindent
+
+        set wrap
+        set linebreak
+        set breakindent
+        let &showbreak = '↳ '
+
+
+        set formatoptions+=j   " remove a comment leader when joining lines.
+        set formatoptions+=o   " insert the comment leader after hitting 'o'
+
+        " Enable autocompletion
+        " set wildmode=longest,list,full
+        set wildmode=longest,full
+
+        " I already use vim-airline
+        set noshowmode
+
+        " Live substitution
+        set inccommand=nosplit
+
+        " Don't pass messages to |ins-completion-menu|
+        set shortmess+=c
+
+
+        " Remove Ex mode keybind
+        :nnoremap Q <nop>
+
+
         " Disables automatic commenting on newline if previous line is a comment
         autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
@@ -443,6 +521,28 @@ in
         nnoremap <leader>S :%s//g<Left><Left>
         nnoremap <leader>m :set number!<CR>
         nnoremap <leader>n :set relativenumber!<CR>
+
+        " Fix terminal escape char
+        tnoremap <Esc> <C-\><C-n>
+        function OpenTerm()
+          :bo split
+          :res -10
+          :terminal
+        endfunction
+        map <silent> <leader>ot :call OpenTerm()<CR>
+
+        " Removes the trailing space highlighting
+        function RemoveTrailingHighlight()
+          let l:tr = map(filter(getmatches(), 'get(v:val, "group", 0) == "TrailingWhitespace"'), 'get(v:val, "id")')
+          if get(l:tr, 0, 'false') != 'false'
+            matchdelete(l:tr[0], win_getid())
+          endif
+        endfunction
+
+        if !exists('g:vscode')
+          " autocmd TermOpen * silent call RemoveTrailingHighlight()
+          packadd vim-wakatime
+        endif
 
         " Insert line above
         nnoremap [o O<Esc>j
@@ -475,89 +575,5 @@ in
         au FileType gitcommit setlocal tw=68 colorcolumn=69 spell
       '';
     };
-
-    # Stolen from legendofmiracles' dotnix
-    xdg.configFile."nvim/after/queries/nix/injections.scm".text = ''
-      (
-          (app [
-              ((identifier) @_func)
-              (select (identifier) (attrpath (attr_identifier) @_func . ))
-          ]) (indented_string) @bash
-          (#match? @_func "(writeShellScript(Bin)?)")
-          ; #!/bin/sh shebang highlighting
-          ((indented_string) @bash @_code
-            (#lua-match? @_code "\s*#!\s*/bin/sh"))
-          ; Bash strings
-          ((indented_string) @bash @_code
-            (#lua-match? @_code "\s*## Syntax: bash"))
-          ; Lua strings
-          ((indented_string) @lua @_code
-            (#lua-match? @_code "\s*\\-\- Syntax: lua"))
-      )
-    '';
-
-    xdg.configFile."nvim/coc-settings.json".source = (pkgs.formats.json { }).generate "coc-settings.json" {
-      diagnostic = {
-        enable = true;
-        errorSign = ">>";
-        warningSign = "⚠";
-      };
-      languageserver = {
-        bash = {
-          command = "bash-language-server";
-          args = [ "start" ];
-          filetypes = [ "sh" "bash" ];
-          ignoredRootPaths = [ "~" ];
-        };
-        nix = {
-          command = "rnix-lsp";
-          filetypes = [ "nix" ];
-        };
-      };
-
-      "explorer.icon.enableNerdFond" = true;
-      "explorer.icon.enableVimDevicons" = true;
-      "explorer.buffer.tabOnly" = true;
-      "explorer.file.revealWhenOpen" = true;
-      "explorer.file.autoReveal" = false;
-      "explorer.file.hiddenRules" = {
-        "extensions" = [
-          "o" "a" "obj" "pyc"
-        ];
-        "filenames" = [ "node_modules" "result" "_build" ];
-        "patternMatches" = [ "^\\." ];
-      };
-      "explorer.file.root.template" = "[icon] [title] [root] [fullpath]";
-      "explorer.keyMappings.global" = {
-        "u" = [ "wait" "indentPrev" ];
-        "cf" = "addFile";
-        "cd" = "addDirectory";
-        "r" = "refresh";
-        "a" = false;
-        "A" = false;
-        "R" = "rename";
-        "/" = "search";
-      };
-    };
-  } // {
-    xdg.configFile = let
-      tree-sitter-grammars = [
-        "bash"
-        "c"
-        "css"
-        "go"
-        "json"
-        "html"
-        "markdown"
-        "nix"
-        "python"
-        "toml"
-        "yaml"
-      ];
-      grammar = x: {
-        name = "nvim/parser/${x}.so";
-        value.source = "${pkgs.tree-sitter.builtGrammars."tree-sitter-${x}"}/parser";
-      };
-    in lib.listToAttrs (map grammar tree-sitter-grammars);
   };
 }

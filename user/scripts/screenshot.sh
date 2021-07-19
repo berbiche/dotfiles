@@ -55,7 +55,7 @@ create_dir() {
 # $1: notification title
 notify() {
   # Only show if last exit code is a success
-  notify-send.sh --icon=mail-unread --app-name=screenshot-tool \
+  notify-send.sh --app-name=screenshot-tool \
     "Screenshot" "Saved to $output_file and copied to clipboard" \
     --default-action "feh --scale-down --auto-zoom --draw-filename '$output_file'"
 }
