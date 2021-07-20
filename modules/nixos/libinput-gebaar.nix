@@ -74,7 +74,6 @@ in
 
     systemd.services.gebaar-libinput = {
       description = "Gebaar Daemon touchpad gesture listener";
-      reloadIfChanged = true;
 
       partOf = [ "graphical.target" ];
       requires = [ "graphical.target" ];
@@ -82,12 +81,16 @@ in
       wantedBy = [ "graphical.target" ];
 
       serviceConfig = rec {
-        Type = "simple";
+        Type = "forking";
         ExecStart = "${cfg.package}/bin/gebaard";
         ExecStartPre = pkgs.writeShellScript "gebaard-start-pre" ''
           ${pkgs.coreutils}/bin/ln -sv "${configFile}" "''${XDG_CONFIG_HOME}/gebaar/gebaard.toml"
         '';
         Restart = "on-failure";
+        # The process will exit successfully if it doesn't find a touchpad
+        # So we mark at it as "RemainAfterExit" to prevent NixOS
+        # from restarting the service on every rebuild
+        RemainAfterExit = true;
         User = config.users.users.gebaar-libinput.name;
         Group = config.users.users.gebaar-libinput.group;
 
