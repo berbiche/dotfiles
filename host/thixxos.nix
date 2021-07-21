@@ -57,6 +57,14 @@
     };
   };
 
+  # Select internationalisation properties.
+  i18n.defaultLocale = "en_CA.UTF-8";
+  console.font = "Lat2-Terminus16";
+  console.keyMap = "us";
+
+  time.timeZone = "America/Montreal";
+  location.provider = "geoclue2";
+
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/a9cbb95c-523c-4e81-90f1-33b0f4557a32";
       fsType = "ext4";
