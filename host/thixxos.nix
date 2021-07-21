@@ -6,6 +6,7 @@
     default-linux
     steam
     wireguard
+    obs
   ];
 
   environment.systemPackages = with pkgs; [
@@ -21,7 +22,8 @@
   profiles.pipewire.enable = true;
 
   hardware.enableRedistributableFirmware = true;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_zen;
   # Fix randomly high CPU usage when connected to a thunderbolt 3 dock
   boot.kernelParams = [ "acpi_mask_gpe=0x69" ];
   boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "usb_storage" "uas" "sd_mod" ];
@@ -31,8 +33,14 @@
 
   boot.supportedFilesystems = [ "ntfs" ];
 
+  # Hibernate after sleeping in suspend mode for 30 minutes
+  systemd.sleep.extraConfig = ''
+    HibernateDelaySec=30min
+  '';
+  # services.logind.lidSwitch = "ignore";
+
   # high-resolution display
-  hardware.video.hidpi.enable = lib.mkDefault true;
+  hardware.video.hidpi.enable = true;
 
   boot.plymouth.enable = true;
   boot.loader = {
@@ -48,22 +56,6 @@
       consoleMode = "auto";
     };
   };
-
-  # services.logind.lidSwitch = "ignore";
-
-  # boot.initrd.luks = {
-  #  cryptoModules = [ "aes" "xts" "sha512" ];
-  #  yubikeySupport = true;
-  #  devices = [ {
-  #    name = "nixos-enc";
-  #    preLVM = false;
-  #    yubikey = {
-  #      slot = 2;
-  #      twoFactor = false;
-  #      storage.device = "/dev/disk/by-partuuid/f6a9cde0-5728-46d1-aaa3-eae945f76aae";
-  #    };
-  #  } ];
-  # };
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/a9cbb95c-523c-4e81-90f1-33b0f4557a32";
@@ -88,7 +80,9 @@
 
   nix.maxJobs = 6;
   powerManagement.enable = true;
-  powerManagement.cpuFreqGovernor = "powersave";
+  # powerManagement.cpuFreqGovernor = "powersave";
+  powerManagement.cpuFreqGovernor = "performance";
+  services.thermald.enable = true;
 
   networking.firewall.allowPing = true;
   #networking.firewall.allowedTCPPorts = [ 8000 ];
@@ -112,6 +106,7 @@
   services.printing.drivers = [ pkgs.hplip ];
 
   # X11 fixes for the tearing and low performance
+  # Doesn't seem to be working ¯\_(ツ)_/¯
   services.xserver.useGlamor = true;
   services.xserver.videoDrivers = lib.mkForce [ "modesettings" ];
   services.xserver.deviceSection = ''
@@ -119,5 +114,6 @@
     Option "TearFree" "true"
   '';
 
+  # Xbox One S bluetooth controller support
   hardware.xpadneo.enable = true;
 }
