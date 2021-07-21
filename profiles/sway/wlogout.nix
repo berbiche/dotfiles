@@ -2,45 +2,45 @@
 
 {
   my.home = {
-    home.packages = with pkgs; [ wlogout ];
+    programs.wlogout.enable = true;
 
-    xdg.configFile."wlogout/layout".text = ''
+    programs.wlogout.layouts."layout" = [
       {
-        "label" : "lock",
-        "action" : "swaylock",
-        "text" : "Lock",
-        "keybind" : "l"
+        label = "lock";
+        action = "${pkgs.swaylock}/bin/swaylock";
+        text = "Lock";
+        keybind = "l";
       }
       {
-        "label" : "hibernate",
-        "action" : "systemctl hibernate",
-        "text" : "Hibernate",
-        "keybind" : "h"
+        label = "hibernate";
+        action = "${pkgs.systemd}/bin/systemctl hibernate";
+        text = "Hibernate";
+        keybind = "h";
       }
       {
-        "label" : "logout",
-        "action" : "loginctl terminate-user $USER",
-        "text" : "Logout",
-        "keybind" : "K"
+        label = "logout";
+        action = "${pkgs.systemd}/bin/loginctl terminate-user $USER";
+        text = "Logout";
+        keybind = "K";
       }
       {
-        "label" : "shutdown",
-        "action" : "systemctl poweroff",
-        "text" : "Shutdown",
-        "keybind" : "H"
+        label = "shutdown";
+        action = "${pkgs.systemd}/bin/systemctl poweroff";
+        text = "Shutdown";
+        keybind = "H";
       }
       {
-        "label" : "suspend",
-        "action" : "systemctl suspend",
-        "text" : "Suspend",
-        "keybind" : "s"
+        label = "suspend";
+        action = "${pkgs.systemd}/bin/systemctl suspend-then-hibernate";
+        text = "Suspend";
+        keybind = "s";
       }
       {
-        "label" : "reboot",
-        "action" : "systemctl reboot",
-        "text" : "Reboot",
-        "keybind" : "r"
+        label = "reboot";
+        action = "${pkgs.systemd}/bin/systemctl reboot";
+        text = "Reboot";
+        keybind = "r";
       }
-    '';
+    ];
   };
 }
