@@ -59,8 +59,9 @@
       # TODO: remove once gnome-keyring exports SSH_AUTH_SOCK correctly
       export SSH_AUTH_SOCK=''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/keyring/ssh
 
-      [ -f /etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh ] && \
-        . /etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh
+      # Breaks FZF keybindings for some reason
+      # [ -f /etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh ] && \
+      #   . /etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh
     '';
   };
 
