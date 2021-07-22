@@ -6,6 +6,13 @@ let
   myPlugins = lib.mapAttrsToList toPlugin {
   };
 
+  telescope-project-nvim = toPlugin "telescope-project.nvim" (pkgs.fetchFromGitHub {
+    owner = "nvim-telescope";
+    repo = "telescope-project.nvim";
+    rev = "e02e9b7ea7f4a1dba841521d8ba3eeae6eeca810";
+    hash = "sha256-LBCLafSAwW7vgYcBRhvOP9sm2YJMZ7x7/rqt9klKysw=";
+  });
+
   kommentary = toPlugin "kommentary" (pkgs.fetchFromGitHub {
     owner = "b3nj5m1n";
     repo = "kommentary";
@@ -214,6 +221,7 @@ in
         popup-nvim
         plenary-nvim
         sql-nvim
+        telescope-project-nvim
         telescope-frecency-nvim
         telescope-fzy-native-nvim
         {
@@ -224,6 +232,7 @@ in
               local actions = require('telescope.actions')
               ts.setup {
                 defaults = {
+                  layout_strategy = 'horizontal',
                   mappings = {
                     i = {
                       ["esc"] = actions.close,
@@ -239,7 +248,13 @@ in
                     override_generic_sorter = false,
                     override_file_sorter = true,
                     case_mode = "smart_case",
-                  }
+                  },
+                  project = {
+                    display_type = 'full',
+                    base_dirs = {
+                      {'~/dev', max_depth = 3},
+                    },
+                  },
                 },
                 pickers = {
                   buffers = {
@@ -254,6 +269,7 @@ in
 
               ts.load_extension('fzy_native')
               ts.load_extension('frecency')
+              ts.load_extension('project')
             EOF
 
             nnoremap <silent> <leader><space> :lua require('telescope.builtin').git_files()<CR>
@@ -261,6 +277,7 @@ in
             nnoremap <silent> <leader>bi :lua require('telescope.builtin').buffers()<CR>
             nnoremap <silent> <leader>si :lua require('telescope.builtin').spell_suggest()<CR>
             nnoremap <silent> <leader>fF :lua require('telescope').extensions.frecency.frecency()<CR>
+            nnoremap <silent> <leader>pp :lua require('telescope').extensions.project.project{}<CR>
 
             " Finding things
             nnoremap <silent> <leader>ss :lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>
@@ -493,7 +510,8 @@ in
 
         " Enable autocompletion
         " set wildmode=longest,list,full
-        set wildmode=longest,full
+        set wildmode=longest:full,full
+        set wildignorecase
 
         " I already use vim-airline
         set noshowmode
