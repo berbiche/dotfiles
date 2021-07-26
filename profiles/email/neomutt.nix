@@ -2,11 +2,21 @@
 
 with lib;
 
+let
+  mapKeys = map (x: let
+    x' = splitString " " x;
+  in {
+    map = splitString "," (head x');
+    key = elemAt x' 1;
+    action = last x';
+  });
+in
 {
   my.home = { config, ... }: {
     # MUA
     programs.neomutt.enable = true;
     programs.neomutt.sidebar.enable = true;
+    programs.neomutt.sidebar.format = "%D%?F? [%F]?%* %?N?%N/?%S";
     # programs.neomutt.vimKeys = true;
 
     programs.neomutt.sort = "reverse-threads";
@@ -42,13 +52,7 @@ with lib;
     };
 
     # Taken from mutt-wizard/mutt-wizard.muttrc
-    programs.neomutt.binds = map (x: let
-      x' = splitString " " x;
-    in {
-      map = splitString "," (head x');
-      key = elemAt x' 1;
-      action = last x';
-    }) [
+    programs.neomutt.binds = mapKeys [
       "index,pager i noop"
       "index,pager g noop"
       "index \\Cf noop"
@@ -85,13 +89,15 @@ with lib;
       "editor <Tab> complete-query"
 
       # Pager stuff
-      "index,pager \\Ck sidebar-prev"
-      "index,pager \\Cj sidebar-next"
-      "index,pager \\Co sidebar-open"
-      "index,pager \\Cp sidebar-prev-new"
-      "index,pager \\Cn sidebar-next-new"
-
       "index,pager B sidebar-toggle-visible"
+    ];
+
+    # Taken from mutt-wizard/mutt-wizard.muttrc
+    programs.neomutt.macros = mapKeys [
+      "index,pager \\Ck <sidebar-prev><sidebar-open>"
+      "index,pager \\Cj <sidebar-next><sidebar-open>"
+      "index,pager \\Cp <sidebar-prev-new><sidebar-open>"
+      "index,pager \\Cn <sidebar-next-new><sidebar-open>"
     ];
 
     # Taken from mutt-wizard/mutt-wizard.muttrc

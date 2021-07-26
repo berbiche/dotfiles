@@ -42,6 +42,22 @@ in
       neomutt.extraConfig = ''
         set sort = "reverse-threads";
       '';
+      neomutt.mailboxName = "gmail.com";
+      neomutt.extraMailboxes = [
+        # {
+        #   mailbox = "[Gmail]/Sent";
+        #   name = "Sent";
+        # }
+        # {
+        #   mailbox = "[Gmail]/Drafts";
+        #   name = "Drafts";
+        # }
+        # {
+        #   mailbox = "[Gmail]/Spam";
+        #   name = "Spam";
+        # }
+        "archive" "Drafts" "Sent" "Starred" "Trash"
+      ];
       # Tag email
       notmuch.enable = true;
 
@@ -128,6 +144,9 @@ in
 
     # Notifies mbsync of new emails
     services.imapnotify.enable = true;
+
+    # Manages my contacts
+    programs.abook.enable = true;
 
     # Sync emails on initial login
     systemd.user.services.mbsync-oneshot = {
