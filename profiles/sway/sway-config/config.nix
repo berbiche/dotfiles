@@ -48,8 +48,9 @@ let
     logout-menu = "${wlogout}";
     audiocontrol = "${pavucontrol}";
     #menu = "${nwggrid} -n 10 -fp -b 121212E0";
-    menu = "${xfce4-appfinder} --disable-server";
-    menu-wofi = "${wofi} --fork --show drun,run";
+    menu = "${pkgs.bash}/bin/bash -c '${xfce4-appfinder} --disable-server'";
+    # Execute in bash shell to inherit shell variables
+    menu-wofi = "${pkgs.bash}/bin/bash -c '${wofi} --fork --show drun,run'";
 
     on-startup-shutdown = pkgs.runCommand "sway-on-startup-shutdown" {
       src = pkgs.fetchFromGitHub {
