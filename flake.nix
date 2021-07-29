@@ -110,7 +110,7 @@
     };
 
     darwinConfigurations = {
-      pc335 = mkDarwinConfig {
+      PC335 = mkDarwinConfig {
         hostname = "PC335";
         username = "n.berbiche";
         platform = "x86_64-darwin";
