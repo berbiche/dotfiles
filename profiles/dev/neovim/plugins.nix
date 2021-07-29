@@ -183,7 +183,17 @@ in
 
     popup-nvim
     plenary-nvim
-    sql-nvim
+    {
+      plugin = sql-nvim;
+      config = lib.mkMerge [
+        (lib.mkIf pkgs.stdenv.targetPlatform.isDarwin ''
+          let g:sql_clib_path = '${pkgs.sqlite.out}/lib/libsqlite3.dylib'
+        '')
+        (lib.mkIf (!pkgs.stdenv.targetPlatform.isDarwin) ''
+          let g:sql_clib_path = '${pkgs.sqlite.out}/lib/libsqlite3.so'
+        '')
+      ];
+    }
     telescope-project-nvim
     telescope-frecency-nvim
     telescope-fzy-native-nvim
