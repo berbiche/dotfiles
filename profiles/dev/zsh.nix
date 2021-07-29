@@ -172,10 +172,15 @@ in
         colors
 
         nrsf() {
-          local a=(sudo nixos-rebuild switch --flake ~/dotfiles -v -L);
-          echo "''${a[@]}" "$@";
-          "''${a[@]}" "$@";
-        };
+          ${lib.optionalString pkgs.stdenv.isLinux ''
+            local cmd=(sudo nixos-rebuild switch --flake ~/dotfiles -v -L)
+          ''}
+          ${lib.optionalString pkgs.stdenv.isDarwin ''
+            local cmd=(sudo darwin-rebuild switch --flake ~/dotfiles -v -L)
+          ''}
+          echo "''${cmd[@]}" "$@"
+          "''${cmd[@]}" "$@"
+        }
       '';
     };
   };
