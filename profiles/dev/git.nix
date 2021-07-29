@@ -57,6 +57,11 @@ in
             # Signs pushes to prevent replay attacks
             push.gpgSign = "if-asked";
           })
+          (lib.mkIf pkgs.stdenv.isDarwin {
+            # This is VERY VERY impure and needed to use ssh keys automatically loaded with MacOS' Keychain
+            # https://github.com/NixOS/nixpkgs/issues/15686#issuecomment-865928923
+            core.sshCommand = "/usr/bin/ssh";
+          })
         ];
 
         ignores = [
