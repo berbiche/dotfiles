@@ -14,7 +14,6 @@
     ${pkgs.openrgb}/bin/openrgb --noautoconnect --server --server-port 43321 --profile ${configFile}
     '';
     serviceConfig = {
-      User = "nobody";
       RemainAfterExit = true;
     };
     restartTriggers = [ configFile ];
