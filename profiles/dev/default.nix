@@ -70,6 +70,8 @@ in
 
       github-cli # Quite useful actually
 
+      googler # search Google from the command line and copy links
+
       # NixOS/nixpkgs stuff
       nixpkgs-review # review nixpkgs PR
       nix-update # quickly update a package
@@ -77,6 +79,7 @@ in
       # Global packages for some programming languages
       # I often open repls to test things
       nodejs
+      # v Works well with my python alias to "ptipython"
       (python3.withPackages (ps: with ps; [ ptpython ipython ]))
       erlang
       rebar3
