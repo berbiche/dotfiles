@@ -30,6 +30,8 @@
     extraPackages = with pkgs; [ libva ];
   };
 
+  # Authorization prompt for wheel/root actions
+  # for things that support polkit
   security.polkit.enable = true;
 
   services.flatpak.enable = true;
@@ -44,6 +46,9 @@
   services.avahi.enable = true;
   services.avahi.nssmdns = true;
   services.printing.browsing = true;
+
+  # Microphone noise remover
+  programs.noisetorch.enable = true;
 
   nixpkgs.config.chromium = {
     enableWideVine = true;
