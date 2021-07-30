@@ -63,7 +63,9 @@ in
         sysu      = "${systemctl} --user";
         jnsu      = "journalctl --user";
         svim      = "sudoedit";
-        trash     = mkIf isLinux "gio trash";
+        # The GTK portal to trash files does not work on Sway :(
+        # with xdg-desktop-portal-gtk
+        trash     = mkIf isLinux "GTK_USE_PORTAL=0 gio trash";
       };
 
       initExtra = ''
