@@ -28,10 +28,10 @@ in
       jq # tool to extract data out from a json input (files, stdin, ...)
 
       # Programming
-      clang # for the binary tools it offers?
       gnumake # for the `make` program
       powershell # for some rare one-off scripts and tests
       tig # navigate a git repository's log and commits in a TUI, provides sorting, filtering, etc.
+      clang # for the binary tools it offers?
 
       wget # I prefer using curl but still useful for one-off things
       curl # make advanced http requests, fetch files, etc.
@@ -149,6 +149,42 @@ in
       enable = true;
       enableZshIntegration = true;
       enableFishIntegration = true;
+    };
+
+    programs.tmux = {
+      enable = true;
+      keyMode = "vi";
+      # Use C-a
+      shortcut = "a";
+      baseIndex = 1;
+      escapeTime = 0;
+
+      historyLimit = 10000;
+
+      clock24 = true;
+      # customPaneNavigationAndResize = true;
+
+      plugins = with pkgs.tmuxPlugins; [
+        {
+          # Show when the prefix is used in the status bar
+          plugin = prefix-highlight;
+        }
+        {
+          # Easymotion/Acejump: type 1 char to jump to a word
+          plugin = jump;
+        }
+        {
+          plugin = power-theme;
+          extraConfig = ''
+            set -g @tmux_power_theme 'redwine'
+            set -g @tmux_power_prefix_highlight_pos 'L'
+          '';
+        }
+      ];
+
+      extraConfig = ''
+        set -g mouse on
+      '';
     };
   };
 }
