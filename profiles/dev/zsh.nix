@@ -24,7 +24,7 @@ in
         expireDuplicatesFirst = true;
         ignoreDups = true;
         ignoreSpace = true;
-        extended = false;
+        extended = true;
         path = "${config.xdg.dataHome}/zsh/history";
         share = false;
         size = 100000;
@@ -34,7 +34,7 @@ in
       sessionVariables = {
         COLORTERM = "truecolor";
         # ZSH_AUTOSUGGEST
-        ZSH_AUTOSUGGEST_COMPLETION_IGNORE="*/nix/store/*|rsync *|scp *|*/tmp/*";
+        ZSH_AUTOSUGGEST_COMPLETION_IGNORE = "*/nix/store/*|rsync *|scp *|*/tmp/*";
       };
 
       shellAliases = rec {
@@ -68,7 +68,7 @@ in
         trash     = mkIf isLinux "GTK_USE_PORTAL=0 gio trash";
       };
 
-      initExtra = ''
+      profileExtra = ''
         setopt incappendhistory
         setopt histfindnodups
         setopt histreduceblanks
@@ -101,6 +101,18 @@ in
         zstyle ':completion:*' menu yes select search
 
         WORDCHARS=''${WORDCHARS//[\/&.;_-]}                                 # Don't consider certain characters part of the word
+      '';
+
+      initExtra = ''
+        # Hello message
+        (
+        echo $USER@$HOST  $(uname -srm) \
+          $(sed -n 's/^NAME=//p' /etc/os-release 2>/dev/null || printf "") \
+          $(sed -n 's/^VERSION=//p' /etc/os-release 2>/dev/null || printf "")
+        ) || true
+
+        ## VERY IMPORTANT!!!!
+        unset RPS1 RPROMPT
 
         ## Keybindings section
         bindkey -e
@@ -171,17 +183,6 @@ in
           echo "''${a[@]}" "$@";
           "''${a[@]}" "$@";
         };
-
-
-        ## VERY IMPORTANT!!!!
-        unset RPS1 RPROMPT
-
-
-
-        # Hello message
-        echo $USER@$HOST  $(uname -srm) \
-          $(sed -n 's/^NAME=//p' /etc/os-release 2>/dev/null || printf "") \
-          $(sed -n 's/^VERSION=//p' /etc/os-release 2>/dev/null || printf "")
       '';
     };
   };
