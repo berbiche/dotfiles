@@ -12,11 +12,7 @@
     ./openrgb.nix
   ];
 
-  environment.systemPackages = with pkgs; [
-    vagrant
-    multimc
-    virt-manager
-  ];
+  environment.systemPackages = with pkgs; [];
 
   wireguard."tq.rs".enable = false;
   wireguard."tq.rs".ipv4Address = "10.10.10.121/24";

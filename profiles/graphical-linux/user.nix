@@ -19,7 +19,14 @@
 
       # Virtualization software
       gnome3.gnome-boxes
-      # virt-manager
+      virt-manager
+      vagrant
+
+      # Torrent client
+      qbittorrent
+
+      # Minecraft client
+      multimc
     ];
 
 

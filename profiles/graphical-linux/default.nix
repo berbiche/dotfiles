@@ -6,6 +6,15 @@
     ./xserver.nix
   ];
 
+  environment.systemPackages = with pkgs; [
+    polkit
+    polkit_gnome
+    (hunspellWithDicts [
+      hunspellDicts.en_CA-large
+      hunspellDicts.fr-any
+    ])
+  ];
+
   services.xserver.enable = true;
   services.xserver.displayManager.lightdm = {
     enable = true;
@@ -18,7 +27,6 @@
   # To use the gnome-keyring and have it act as the ssh-agent
   services.gnome.gnome-keyring.enable = true;
   programs.seahorse.enable = true;
-  environment.systemPackages = with pkgs; [ polkit polkit_gnome ];
 
   services.xserver.libinput.enable = true;
   services.xserver.layout = "us";
