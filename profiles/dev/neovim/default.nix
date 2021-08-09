@@ -30,7 +30,8 @@ in
     home.packages = [
       pkgs.fzf
       # graphical neovim
-      pkgs.neovide
+      # Broken on nixpkgs' master
+      # pkgs.neovide
     ];
 
     programs.neovim = {

@@ -96,7 +96,7 @@ let
   };
 
   extensions = with pkgs.vscode-extensions; [
-    bbenoist.Nix
+    bbenoist.nix
     redhat.vscode-yaml
     ms-kubernetes-tools.vscode-kubernetes-tools
     ms-vscode-remote.remote-ssh
