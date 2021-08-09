@@ -25,6 +25,8 @@ let
       package = pkgs.nixUnstable;
       extraOptions = ''
         experimental-features = nix-command flakes
+        keep-outputs = true
+        keep-derivations = true
       '';
       # Automatic GC of nix files
       gc = {
