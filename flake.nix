@@ -4,8 +4,8 @@
 
   inputs = {
     # This input I update less frequently
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
-    # nixpkgs.url = "github:berbiche/nixpkgs/fix/neovim-always-create-rplugin";
+    # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
+    nixpkgs.url = "github:berbiche/nixpkgs/fix-emacs-passthru";
     # nixpkgs.url = "git+file:///home/nicolas/dev/nixpkgs";
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
@@ -15,8 +15,12 @@
     nur.url = "github:nix-community/nur";
     my-nur = { url = "github:berbiche/nur-packages"; flake = false; };
 
-    doom-emacs.url = "github:vlaci/nix-doom-emacs";
+    doom-emacs.url = "github:vlaci/nix-doom-emacs/develop";
     doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
+    doom-emacs.inputs.nix-straight.follows = "nix-straight";
+    # Temporary fix for the emacs gcc package
+    nix-straight.url = "github:vlaci/nix-straight.el/a2379105b7506094a818de1486fa8f2525854149";
+    nix-straight.flake = false;
     emacs-overlay.url = "github:nix-community/emacs-overlay";
 
     neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
