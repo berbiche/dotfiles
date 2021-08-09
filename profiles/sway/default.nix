@@ -66,6 +66,8 @@
     '';
   };
 
+  programs.wshowkeys.enable = true;
+
   my.home = { config, pkgs, lib, ... }: {
     # Disable reloading Sway on every change
     xdg.configFile."sway/config".onChange = lib.mkForce "";
