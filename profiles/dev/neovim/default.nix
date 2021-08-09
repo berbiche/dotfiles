@@ -111,31 +111,21 @@ in
 
         # Git
         diffview-nvim
-        # {
-        #   plugin = neogit;
-        #   config = ''
-        #     lua <<EOF
-        #       require('neogit').setup {
-        #         disable_commit_confirmation = true,
-        #         integrations = {
-        #           diffview = true,
-        #         },
-        #       }
-        #     EOF
-
-        #     " nnoremap <silent> <leader>gg lua require('neogit').open()<CR>
-        #     " nnoremap <silent> <leader>gc lua require('neogit').open({ 'commit' })<CR>
-        #   '';
-        # }
         {
-          ## Git
-          plugin = vim-fugitive;
+          # Kinda like emacs' magit
+          plugin = neogit;
           config = ''
-            nnoremap <silent> <leader>gg :Git<CR>
-            nnoremap <silent> <leader>gd :Gdiff<CR>
-            nnoremap <silent> <leader>gc :Gcommit<CR>
-            nnoremap <silent> <leader>gb :Gblame<CR>
-            nnoremap <silent> <leader>ge :Gedit<CR>
+            lua <<EOF
+              require('neogit').setup {
+                disable_commit_confirmation = true,
+                integrations = {
+                  diffview = true,
+                },
+              }
+            EOF
+
+            nnoremap <silent> <leader>gg :lua require('neogit').open()<CR>
+            nnoremap <silent> <leader>gc :lua require('neogit').open({ 'commit' })<CR>
           '';
         }
         {
@@ -150,13 +140,6 @@ in
         {
           # Comment lines with commentary.vim
           plugin = kommentary;
-          # config = ''
-          #   inoremap <silent> <M-;> <C-o>:Commentary<CR>
-          #   nmap <silent> <M-;> gcc
-          #   vmap <silent> <M-;> gc
-          #   nmap <silent> <leader>; gcc
-          #   vmap <silent> <leader>; gc
-          # '';
           config = ''
             lua <<EOF
               local k = require('kommentary.config')
