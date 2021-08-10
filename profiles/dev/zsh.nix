@@ -99,8 +99,6 @@ in
         # Fish-like completion (https://unix.stackexchange.com/a/467852)
         zmodload zsh/complist
         zstyle ':completion:*' menu yes select search
-
-        WORDCHARS=''${WORDCHARS//[\/&.;_-]}                                 # Don't consider certain characters part of the word
       '';
 
       initExtra = ''
@@ -113,6 +111,9 @@ in
 
         ## VERY IMPORTANT!!!!
         unset RPS1 RPROMPT
+
+        # Important
+        WORDCHARS=''${WORDCHARS//[\/&.;_-]}                                 # Don't consider certain characters part of the word
 
         ## Keybindings section
         bindkey -e
