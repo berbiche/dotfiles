@@ -18,6 +18,7 @@
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ivy               ; a search engine for love and life
+       ;;vertico           ; the search engine of the future
 
        :ui
        ;;deft              ; notational velocity for Emacs
@@ -25,7 +26,6 @@
        doom-dashboard    ; a nifty splash screen for Emacs
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
        ;;(emoji +unicode)  ;
-       ;;fill-column       ; a `fill-column' indicator
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        ;;hydra
        indent-guides     ; highlighted indent columns
@@ -36,7 +36,6 @@
        ;;neotree           ; a project drawer, like NERDTree for vim
        ophints           ; highlight the region an operation acts on
        (popup            ; tame sudden yet inevitable temporary windows
-        +all             ; catch all popups that start with an asterix
         +defaults)       ; default popup rules
        ;;tabs              ; an tab bar for Emacs
        treemacs          ; a project drawer, like neotree but cooler
@@ -52,6 +51,7 @@
        file-templates    ; auto-snippets for empty files
        fold              ; (nigh) universal code folding
        ;;(format +onsave)  ; automated prettiness
+       format            ; automated prettiness
        ;;god               ; run Emacs commands without modifier keys
        ;;lispy             ; vim for lisp, for people who dont like vim
        ;;multiple-cursors  ; editing in many places at once
@@ -76,8 +76,10 @@
 
        :checkers
        syntax              ; tasing you for every semicolon you forget
-       spell               ; tasing you for misspelling mispelling
-       ;;grammar           ; tasing grammar mistake every you make
+       (spell            ; tasing you for misspelling mispelling
+        +hunspell
+        +everywhere)
+       ;;grammar             ; tasing grammar mistake every you make
 
        :tools
        ansible
@@ -89,7 +91,7 @@
        (eval +overlay)     ; run code, run (also, repls)
        ;;gist              ; interacting with github gists
        lookup           ; helps you navigate your code and documentation
-       lsp
+       (lsp +peek)      ; M-x vscode
        magit             ; a git porcelain for Emacs
        make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
@@ -103,12 +105,12 @@
 
        :os
        (:if IS-MAC macos)  ; improve compatibility with macOS
-       ;;tty               ; improve the terminal Emacs experience
+       (tty +osc)        ; improve the terminal Emacs experience
 
        :lang
        ;;agda                ; types of types of types of types...
-       ; v-- emacs-irony is broken in emacs-overlay?
-       ;;cc                  ; C/C++/Obj-C madness
+       (cc                  ; C/C++/Obj-C madness
+        +lsp)
        ;;clojure             ; java with a lisp
        ;;common-lisp         ; if you've seen one lisp, you've seen them all
        ;;coq                 ; proofs-as-programs
@@ -116,7 +118,8 @@
        ;;csharp              ; unity, .NET, and mono shenanigans
        data                ; config/data formats
        ;;(dart +flutter)     ; paint ui and not much else
-       elixir              ; erlang done right
+       ;;dhall
+       ;;elixir              ; erlang done right
        ;;elm                 ; care for a cup of TEA?
        emacs-lisp          ; drown in parentheses
        (erlang +lsp)       ; an elegant language for a more civilized age
@@ -127,12 +130,12 @@
        ;;gdscript          ; the language you waited for
        (go +lsp)           ; the hipster dialect
        ;;(haskell +dante)    ; a language that's lazier than I am
-       (haskell +lsp)      ; a language that's lazier than I am
+       ;;(haskell +lsp)      ; a language that's lazier than I am
        ;;hy                  ; readability of scheme w/ speed of python
        ;;idris               ; a language you can depend on
        json                ; At least it ain't XML
        (java +meghanada)   ; the poster child for carpal tunnel syndrome
-       javascript          ; all(hope(abandon(ye(who(enter(here))))))
+       ;;(javascript +lsp)   ; all(hope(abandon(ye(who(enter(here))))))
        ;;julia               ; a better, faster MATLAB
        ;;kotlin              ; a better, slicker Java(Script)
        ;;latex               ; writing papers in Emacs has never been so fun
@@ -146,15 +149,17 @@
        ;;ocaml               ; an objective camel
        (org                ; organize your plain life in plain text
         +dragndrop         ; drag & drop files/images into org buffers
-        +hugo              ; use Emacs for hugo blogging
-        +ipython           ; ipython/jupyter support for babel
+        ;;+hugo              ; use Emacs for hugo blogging
+        ;;+ipython           ; ipython/jupyter support for babel
         +pandoc            ; export-with-pandoc support
-        +pomodoro          ; be fruitful with the tomato technique
+        ;;+pomodoro          ; be fruitful with the tomato technique
         +present)          ; using org-mode for presentations
-       php                 ; perl's insecure younger brother
+       ;;php                 ; perl's insecure younger brother
        plantuml            ; diagrams for confusing people more
        ;;purescript          ; javascript, but functional
-       python              ; beautiful is better than ugly
+       (python             ; beautiful is better than ugly
+        +lsp
+        +pyright)
        ;;qt                  ; the 'cutest' gui framework ever
        ;;racket              ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6
@@ -165,17 +170,20 @@
        ;;rust                ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala               ; java, but good
        ;;scheme              ; a fully conniving family of lisps
-       sh                  ; she sells {ba,z,fi}sh shells on the C xor
+       (sh                 ; she sells {ba,z,fi}sh shells on the C xor
+        +lsp
+        +fish
+        +powershell)
        ;;sml
        ;;solidity            ; do you need a blockchain? No.
        ;;swift               ; who asked for emoji variables?
        ;;terra               ; Earth and Moon in alignment for performance.
-       web                 ; the tubes
+       ;;web                 ; the tubes
        yaml                ; JSON, but readable
 
        :email
-       ;;(mu4e +gmail)
-       ;;notmuch
+       ;;(mu4e +org +gmail)
+       (notmuch)
        ;;(wanderlust +gmail)
 
        ;; Applications are complex and opinionated modules that transform Emacs

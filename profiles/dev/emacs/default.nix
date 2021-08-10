@@ -10,14 +10,55 @@ lib.mkMerge [
     my.home = lib.mkMerge [
       { imports = [ inputs.doom-emacs.hmModule ]; }
       {
+        # Extra packages that are already part of my config
+        # won't be duplicated
+        # Of course, all of these packages can be overriden
+        # by direnv (envrc)
+        home.packages = with pkgs; [
+          # Nix
+          nixfmt
+
+          # C/cpp
+          clang-tools # for clangd
+
+          # Markdown exporting
+          mdl pandoc
+
+          # Python LSP setup
+          # nodePackages.pyright
+          # pipenv
+          # (python3.withPackages (ps: with ps; [
+          #   black isort pyflakes pytest
+          # ]))
+
+          # JavaScript
+          # nodePackages.typescript-language-server
+
+          # Bash
+          nodePackages.bash-language-server shellcheck
+
+          # Rust
+          cargo cargo-audit cargo-edit clippy rust-analyzer rustfmt
+
+          # Erlang and Elixir
+          erlang-ls
+          # beamPackages.elixir beamPackages.elixir_ls
+
+          # Go
+          go gocode goimports golangci-lint gore
+        ];
+
         programs.doom-emacs = {
           enable = true;
+
           doomPrivateDir = ./doom.d;
+
           emacsPackage = lib.mkMerge [
             # The `passthru` attribute is somehow missing...
             (lib.mkIf isLinux pkgs.emacsPgtkGcc)
             (lib.mkIf isDarwin pkgs.emacs)
           ];
+
           extraConfig = ''
             (setq ispell-program-name "hunspell")
             ${lib.optionalString enableWakaTime ''

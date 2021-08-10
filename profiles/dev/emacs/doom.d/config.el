@@ -30,12 +30,22 @@
 ;; Projectile default directory for my projects
 (setq projectile-project-search-path '("~/dev/"))
 
+;; Set notmuch backend to mbsync
+(setq +notmuch-sync-backend 'mbsync)
+
 ;; Make treemacs rename use a minibuffer
 (setq treemacs-read-string-input 'from-minibuffer)
 
-;; Rust development using shell.nix
-(setq racer-rust-src-path nil)
-(setq racer-cmd "racer")
+(setq lsp-clients-clangd-args '("-j=3"
+                                "--background-index"
+                                "--clang-tidy"
+                                "--pch-storage=memory"
+                                "--completion-style=detailed"
+                                "--header-insertion=never"
+                                "--header-insertion-decorators=0"
+                                "--suggest-missing-includes"
+                                ))
+(after! lsp-clangd (set-lsp-priority! 'clangd 2))
 
 ;; Highlight trailing whitespacse by default
 (setq-default show-trailing-whitespace 't)
@@ -65,12 +75,16 @@
 (ivy-posframe-mode +1)
 
 ;; Don't push a new buffer when navigating with RETURN in dired
-(define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+;;(define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
 
 ;; On vsplit using V, focus the new frame
 (map! :ne "SPC w V" (lambda () (interactive)(evil-window-vsplit) (other-window 1)))
 
 (add-hook 'yaml-mode-hook 'electric-indent-local-mode)
+
+;; (add-hook 'erlang-mode-hook 'linum-mode)
+;; (add-hook 'erlang-mode-hook 'column-number-mode)
+;; (add-hook 'erlang-mode-hook 'which-key-mode)
 
 
 ;; Set initial position
