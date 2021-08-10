@@ -1,4 +1,4 @@
-{ config, options, pkgs, lib, binaries, rootPath, workspaces }:
+{ config, options, pkgs, lib, binaries, workspaces }:
 
 let
   inherit (config.wayland.windowManager.sway.config)
@@ -13,7 +13,7 @@ let
   # passed to Sway's `bindsym`. See `makeNoRepeat`.
   defaultKeybindings = let
     # these variable names have no meanings
-    md = lib.head options.wayland.windowManager.sway.config.type.functor.wrapped.functor.payload.modules; 
+    md = lib.head options.wayland.windowManager.sway.config.type.functor.wrapped.functor.payload.modules;
     kb = (lib.head md.imports).options.keybindings.default;
   in assert builtins.isAttrs kb; kb;
 
@@ -96,6 +96,14 @@ makeNoRepeat (defaultKeybindings // {
   "--locked XF86AudioPlay"  = "exec ${binaries.playerctl} ${withPlayerctld} play";
   # Toggle play/pause for the focused? MPRIS instance with PauseBreak
   "--locked Pause"          = "exec ${binaries.playerctl} ${withPlayerctld} play-pause";
+
+  # Preserve the moving window behavior of being repeatable
+  # I'd like to make this only repeatable for floating windows
+  # But it's not possible unless I make the the script very complex
+  "${modifier}+Shift+${left}"  = makeRepeatable "move left";
+  "${modifier}+Shift+${right}" = makeRepeatable "move right";
+  "${modifier}+Shift+${up}"    = makeRepeatable "move up";
+  "${modifier}+Shift+${down}"  = makeRepeatable "move down";
 
   # Move windows to the next monitor
   "${modifier}+Ctrl+${left}"  = "move window to output left";

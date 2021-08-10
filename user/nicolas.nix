@@ -82,7 +82,8 @@ lib.mkMerge [
 
       # Playerctl smart daemon to stop the "last player"
       # supposedly smarter than the default play-pause behavior
-      services.playerctld.enable = true;
+      # Disabled (2021-08-09) because it's not possible to ignore certain players (e.g. Firefox)
+      services.playerctld.enable = false;
 
       home.packages = [
         # Force Zoom to run on X11 for all the popups and everything
