@@ -68,7 +68,18 @@ in
         trash     = mkIf isLinux "GTK_USE_PORTAL=0 gio trash";
       };
 
-      profileExtra = ''
+      initExtra = ''
+        # Hello message
+        (
+        echo $USER@$HOST  $(uname -srm) \
+          $(sed -n 's/^NAME=//p' /etc/os-release 2>/dev/null || printf "") \
+          $(sed -n 's/^VERSION=//p' /etc/os-release 2>/dev/null || printf "")
+        ) || true
+
+        ## VERY IMPORTANT!!!!
+        unset RPS1 RPROMPT
+
+
         setopt incappendhistory
         setopt histfindnodups
         setopt histreduceblanks
@@ -99,18 +110,6 @@ in
         # Fish-like completion (https://unix.stackexchange.com/a/467852)
         zmodload zsh/complist
         zstyle ':completion:*' menu yes select search
-      '';
-
-      initExtra = ''
-        # Hello message
-        (
-        echo $USER@$HOST  $(uname -srm) \
-          $(sed -n 's/^NAME=//p' /etc/os-release 2>/dev/null || printf "") \
-          $(sed -n 's/^VERSION=//p' /etc/os-release 2>/dev/null || printf "")
-        ) || true
-
-        ## VERY IMPORTANT!!!!
-        unset RPS1 RPROMPT
 
         # Important
         WORDCHARS=''${WORDCHARS//[\/&.;_-]}                                 # Don't consider certain characters part of the word
@@ -127,19 +126,11 @@ in
         if [[ "''${terminfo[kend]}" != "" ]]; then
           bindkey "''${terminfo[kend]}" end-of-line                       # [End] - Go to end of line
         fi
-        bindkey '^[[2~' overwrite-mode                                  # Insert key
         bindkey '^[[3~' delete-char                                     # Delete key
-        bindkey '^[[C'  forward-char                                    # Right key
-        bindkey '^[[D'  backward-char                                   # Left key
         bindkey '^[[5~' history-beginning-search-backward               # Page up key
         bindkey '^[[6~' history-beginning-search-forward                # Page down key
 
         # Navigate words with ctrl+arrow keys
-        bindkey '^[Oc' forward-word                                     #
-        bindkey '^[Od' backward-word                                    #
-        bindkey '^[[1;5D' backward-word                                 #
-        bindkey '^[[1;5C' forward-word                                  #
-        bindkey '^H' backward-kill-word                                 # delete previous word with ctrl+backspace
         bindkey '^[[Z' undo                                             # Shift+tab undo last action
 
         # Local history (taken from https://superuser.com/a/691603)
@@ -151,6 +142,7 @@ in
         bindkey "^[[1;5B" down-line-or-history
 
         # Ctrl-Z to foreground task in prompt
+        # This also allows use of Ctrl-Z to background a task
         _zsh_cli_fg() { fg; }
         zle -N _zsh_cli_fg
         bindkey '^Z' _zsh_cli_fg
