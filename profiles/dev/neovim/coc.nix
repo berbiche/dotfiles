@@ -20,11 +20,9 @@
       };
     };
 
-    "explorer.icon.enableNerdFond" = true;
-    "explorer.icon.enableVimDevicons" = true;
+    "explorer.icon.enableNerdFont" = true;
     "explorer.buffer.tabOnly" = true;
-    "explorer.file.revealWhenOpen" = true;
-    "explorer.file.autoReveal" = false;
+    "explorer.file.reveal.whenOpen" = true;
     "explorer.file.hiddenRules" = {
       "extensions" = [
         "o" "a" "obj" "pyc"
