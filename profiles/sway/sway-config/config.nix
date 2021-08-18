@@ -81,7 +81,7 @@ let
     firefox = "${pkgs.firefox}/bin/firefox";
     nautilus = "${pkgs.gnome3.nautilus}/bin/nautilus";
     pavucontrol = "${pkgs.pavucontrol}/bin/pavucontrol";
-    playerctl = "${pkgs.playerctl}/bin/playerctl --player=spotify,mpv";
+    playerctl = "${pkgs.playerctl}/bin/playerctl '--player=spotify,mpv'";
     element-desktop = "${pkgs.element-desktop}/bin/element-desktop";
     signal-desktop = "${pkgs.signal-desktop}/bin/signal-desktop";
     nwggrid = "${pkgs.nwg-launchers}/bin/nwggrid";
