@@ -16,7 +16,6 @@ in
 
   my.home = { config, pkgs, ... }: {
     home.sessionVariables = {
-      EDITOR = "${config.programs.neovim.finalPackage}/bin/nvim";
       LESS = "--RAW-CONTROL-CHARS --quit-if-one-screen";
       CARGO_HOME = "${config.xdg.cacheHome}/cargo";
       DOCKER_CONFIG = "${config.xdg.configHome}/docker";
