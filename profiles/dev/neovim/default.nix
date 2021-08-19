@@ -11,8 +11,7 @@
     home.packages = [
       pkgs.fzf
       # graphical neovim
-      # Broken on nixpkgs' master
-      # pkgs.neovide
+      pkgs.neovide
       pkgs.neovim-remote
     ];
 
