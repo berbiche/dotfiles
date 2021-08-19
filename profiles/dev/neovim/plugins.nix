@@ -9,15 +9,15 @@ let
   telescope-project-nvim = toPlugin "telescope-project.nvim" (pkgs.fetchFromGitHub {
     owner = "nvim-telescope";
     repo = "telescope-project.nvim";
-    rev = "e02e9b7ea7f4a1dba841521d8ba3eeae6eeca810";
-    hash = "sha256-LBCLafSAwW7vgYcBRhvOP9sm2YJMZ7x7/rqt9klKysw=";
+    rev = "6f63c15efc4994e54c3240db8ed4089c926083d8";
+    sha256 = "0mda6cak1qqa5h9j5xng8wq81aqfypizmxpfdfqhzjsswwpa9bjy";
   });
 
   kommentary = toPlugin "kommentary" (pkgs.fetchFromGitHub {
     owner = "b3nj5m1n";
     repo = "kommentary";
-    rev = "f5b088a0e6a4cfeee6f1902141acbc47a75af5ed";
-    hash = "sha256-wzXxdLx3x/L4JD9M+SEorIhXlCFIfUh+Pr+dbY95Crk=";
+    rev = "a5d7cd90059ad99b5e80a1d40d655756d86b5dad";
+    sha256 = "1bgi9dzzlw09llyq09jgnyg7n64s1nk5s5knlkhijrhsw0jmxjkk";
   });
 in
 {
@@ -414,7 +414,7 @@ in
   };
 
   programs.neovim.extraConfig = lib.mkAfter ''
-    # neovim-remote setup
+    " neovim-remote setup
     let $GIT_EDITOR = 'nvr -cc split --remote-wait'
     au FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
     command! DisconnectClients
