@@ -1,6 +1,9 @@
 { config, pkgs, lib, inputs, ... }:
 {
-  imports = [ inputs.home-manager.nixosModules.home-manager ];
+  imports = [
+    inputs.home-manager.nixosModules.home-manager
+    inputs.sops-nix.nixosModules.sops
+  ];
 
   nix = {
     nixPath = [
@@ -24,4 +27,10 @@
     daemonIONiceLevel = 3;
     daemonNiceLevel = 10;
   };
+
+  # We need this to generate the sops host key
+  services.openssh.enable = true;
+  services.openssh.openFirewall = false;
+  services.openssh.permitRootLogin = "no";
+  services.openssh.passwordAuthentication = false;
 }

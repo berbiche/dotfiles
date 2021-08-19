@@ -15,6 +15,9 @@
     nur.url = "github:nix-community/nur";
     my-nur = { url = "github:berbiche/nur-packages"; flake = false; };
 
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+
     doom-emacs.url = "github:vlaci/nix-doom-emacs/develop";
     doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
     doom-emacs.inputs.nix-straight.follows = "nix-straight";
@@ -51,7 +54,7 @@
           profiles = import ./profiles { inherit (self) isLinux; };
           isLinux = self.isLinux;
           isDarwin = !self.isLinux;
-          rootPath = self;
+          rootPath = ./.;
         } // extraArgs;
       in
       lib.fix args;
@@ -136,8 +139,12 @@
 
     devShell = forAllPlatforms (platform: let
         pkgs = nixpkgsFor.${platform};
+        sops = inputs.sops-nix.packages.${platform};
       in pkgs.mkShell {
-        nativeBuildInputs = with pkgs; [ git nixFlakes ];
+        nativeBuildInputs = with pkgs; [
+          git nixFlakes
+          sops.sops-import-keys-hook
+        ];
 
         NIX_CONF_DIR = let
           current = lib.optionalString (builtins.pathExists /etc/nix/nix.conf) (builtins.readFile /etc/nix/nix.conf);
@@ -146,6 +153,10 @@
             experimental-features = nix-command flakes
           '';
         in "${nixConf}/etc";
+
+        sopsPGPKeyDirs = [
+          "./secrets/hosts"
+        ];
       });
   };
 }

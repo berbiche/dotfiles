@@ -1,0 +1,9 @@
+keys:
+- &mine 328820E009708FDD29C08DBA1D0261F6BCA46C6E
+- &mero 0dac6aef24c04c867fa1b0516d96fce616772081
+creation_rules:
+- path_regex: 'secrets/(merovingian.ya?ml|smb-public-share.txt)$'
+  key_groups:
+  - pgp:
+    - *mine
+    - *mero

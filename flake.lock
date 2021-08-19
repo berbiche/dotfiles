@@ -541,7 +541,8 @@
         "nix-straight": "nix-straight",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-wayland": "nixpkgs-wayland",
-        "nur": "nur"
+        "nur": "nur",
+        "sops-nix": "sops-nix"
       }
     },
     "rotate-text": {
@@ -557,6 +558,26 @@
       "original": {
         "owner": "debug-ito",
         "repo": "rotate-text.el",
+        "type": "github"
+      }
+    },
+    "sops-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1625936460,
+        "narHash": "sha256-U6xlITKrYuhlHWe+poACaz4GJl3ZVN1BSUqZe2gFg+g=",
+        "owner": "Mic92",
+        "repo": "sops-nix",
+        "rev": "ec2800174de5a7be8ec5b144819af2c7de77abe2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Mic92",
+        "repo": "sops-nix",
         "type": "github"
       }
     },
