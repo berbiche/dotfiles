@@ -98,6 +98,19 @@ in
       description = "Package to use.";
     };
 
+    extraArgs = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      defaultText = literalExample "[ ]";
+      example = literalExample ''
+        [
+          "-d"
+          "-S seat0"
+        ]
+      '';
+      description = "Extra arguments to pass to <command>swayidle</command>";
+    };
+
     idlehint = mkOption {
       type = types.nullOr (types.either types.ints.positive (types.strMatching durationFormat));
       default = null;
@@ -143,32 +156,38 @@ in
   };
 
   config = let
-    commands = let
-      formatCommand = cmd: commands:
-        optionals (commands != []) (map (x: "${cmd} ${commandToStr x}") commands);
-    in []
-    ++ optional (cfg.idlehint != null) "idlehint ${durationToSecond cfg.idlehint}"
-    ++ map timeoutToStr cfg.timeout
-    ++ formatCommand "before-sleep" cfg.before-sleep
-    ++ formatCommand "after-resume" cfg.after-resume
-    ++ formatCommand "lock" cfg.lock
-    ++ formatCommand "unlock" cfg.unlock
-    ;
+    formatCommand = cmd: commands:
+      optionalString (commands != []) (concatMapStringsSep "\n" (x: "${cmd} ${commandToStr x}") commands);
 
-    commands' = concatStringsSep "\\\n  " commands;
+    finalConfig = pkgs.writeText "swayidle-config" ''
+      ${optionalString (cfg.idlehint != null) "idlehint ${durationToSecond cfg.idlehint}"}
+      ${concatMapStringsSep "\n" timeoutToStr cfg.timeout}
+      ${formatCommand "before-sleep" cfg.before-sleep}
+      ${formatCommand "after-resume" cfg.before-sleep}
+      ${formatCommand "lock" cfg.before-sleep}
+      ${formatCommand "unlock" cfg.before-sleep}
+    '';
 
-    finalCommand = "${cfg.package}/bin/swayidle ${optionalString cfg.wait-for-command-completion "-w"} ${commands'}";
+    finalCommand = concatStringsSep " " [
+      "${cfg.package}/bin/swayidle"
+      (optionalString cfg.wait-for-command-completion "-w")
+      (escapeShellArgs cfg.extraArgs)
+      "-C ${finalConfig}"
+    ];
   in
   mkIf cfg.enable {
     home.packages = [ cfg.package ];
+
+    xdg.configFile."swayidle/config".source = finalConfig;
 
     systemd.user.services.swayidle = {
       Unit = {
         Description = "Idle manager for Wayland";
         Documentation = "man:swayidle(1)";
         PartOf = [ "graphical-session.target" ];
-        After = [ "graphical-session.target" ];
-        # ConditionEnvironment = [ "WAYLAND_DISPLAY" ];
+        After = [ "graphical-session-pre.target" ];
+        Requisite = [ "graphical-session.target" ];
+        ConditionEnvironment = [ "WAYLAND_DISPLAY" ];
       };
 
       Service = {
@@ -177,7 +196,6 @@ in
         RestartSec = "1sec";
         # Scripts started by swayidle are executed with 'sh -c'
         Environment = [ "PATH=${dirOf pkgs.stdenv.shell}:$PATH" ];
-        # The command will look ugly in systemctl and nothing can be done
         ExecStart = finalCommand;
       };
       Install.WantedBy = [ "graphical-session.target" ];
