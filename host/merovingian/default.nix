@@ -1,4 +1,4 @@
-{ config, lib, pkgs, profiles, ... }:
+{ config, lib, pkgs, profiles, rootPath, ... }:
 
 {
   imports = with profiles; [
@@ -18,7 +18,12 @@
   wireguard."tq.rs".ipv4Address = "10.10.10.121/24";
   wireguard."tq.rs".publicKey = "E6x3s+2OS7hkxZBakUJosZ/zCgNrjjb7LqmeZrhDJz0=";
 
+  profiles.smb.enable = true;
+  profiles.smb.secretFile = rootPath + "/secrets/smb-public-share.txt";
+
   profiles.pipewire.enable = true;
+
+  sops.defaultSopsFile = rootPath + "/secrets/merovingian.yaml";
 
   boot.kernelParams = [ "amd_iommu=pt" "iommu=soft" ]
   ++ [ "resume_offset=81659904" ]; # Offset of the swapfile

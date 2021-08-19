@@ -1,7 +1,10 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ./tq-rs.nix ];
+  imports = [
+    ./tq-rs.nix
+    ./smb.nix
+  ];
 
   systemd.network.enable = true;
 
