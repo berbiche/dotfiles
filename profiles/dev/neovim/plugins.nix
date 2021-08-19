@@ -131,7 +131,14 @@ in
     }
     {
       # Close buffers/windows/etc.
-      plugin = vim-sayonara;
+      plugin = vim-sayonara.overrideAttrs (_: {
+        src = pkgs.fetchFromGitHub {
+          owner = "mhinz";
+          repo = "vim-sayonara";
+          rev = "7e774f58c5865d9c10d40396850b35ab95af17c5";
+          hash = "sha256-QDBK6ezXuLpAYh6V1fpwbJkud+t34aPBu/uR4pf8QlQ=";
+        };
+      });
       config = ''
         nnoremap <silent><leader>Q <cmd>Sayonara<CR>
         nnoremap <silent><leader>q <cmd>Sayonara!<CR>
