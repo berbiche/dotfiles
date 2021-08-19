@@ -389,16 +389,16 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1628471279,
-        "narHash": "sha256-sf463XVN6G47Eir6fq9Sf8RvSdmo3GvqxizhY7zI+lI=",
-        "owner": "berbiche",
+        "lastModified": 1629318195,
+        "narHash": "sha256-mFqoLruMu3poN6pkbegevDcGYwMVjoiyAexL+KE7DBg=",
+        "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "4080be10d5bd4aac3437ff5ff8338385ce216a45",
+        "rev": "7c38b03f742a657bf38e9579adeb608fc7cc5f1a",
         "type": "github"
       },
       "original": {
-        "owner": "berbiche",
-        "ref": "fix-emacs-passthru",
+        "owner": "nixos",
+        "ref": "nixos-unstable-small",
         "repo": "nixpkgs",
         "type": "github"
       }

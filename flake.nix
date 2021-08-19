@@ -4,8 +4,8 @@
 
   inputs = {
     # This input I update less frequently
-    # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
-    nixpkgs.url = "github:berbiche/nixpkgs/fix-emacs-passthru";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
+    # nixpkgs.url = "github:berbiche/nixpkgs/fix-emacs-passthru";
     # nixpkgs.url = "git+file:///home/nicolas/dev/nixpkgs";
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
