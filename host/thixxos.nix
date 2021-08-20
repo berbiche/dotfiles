@@ -84,8 +84,8 @@
 
   nix.maxJobs = 6;
   powerManagement.enable = true;
-  # powerManagement.cpuFreqGovernor = "powersave";
-  powerManagement.cpuFreqGovernor = "performance";
+  powerManagement.cpuFreqGovernor = "powersave";
+  # powerManagement.cpuFreqGovernor = "performance";
   services.thermald.enable = true;
 
   networking.firewall.allowPing = true;
