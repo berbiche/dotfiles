@@ -11,7 +11,7 @@
 
   environment.systemPackages = with pkgs; [];
 
-  wireguard."tq.rs".enable = false;
+  wireguard."tq.rs".enable = true;
   wireguard."tq.rs".ipv4Address = "10.10.10.4/24";
   wireguard."tq.rs".publicKey = "U2ijs3wSSZYizj3x/K/OCYRc6yExETZUOayMFnGYLgs=";
 
