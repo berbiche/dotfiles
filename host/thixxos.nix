@@ -37,6 +37,7 @@
 
   # high-resolution display
   hardware.video.hidpi.enable = true;
+  boot.kernel.sysctl."dev.i915.perf_stream_paranoid" = 0;
 
   boot.plymouth.enable = true;
   boot.loader = {
