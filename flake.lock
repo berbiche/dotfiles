@@ -239,15 +239,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1629347633,
-        "narHash": "sha256-FGZJ7lmTAMIkjdrh6dIPck5HuB4KMT2GgDV5ZjiCWoc=",
-        "owner": "nix-community",
+        "lastModified": 1629602536,
+        "narHash": "sha256-j5sG72FKncVLgd2U0mTnUhDQYLF1oBjKba1HWmqTZEA=",
+        "owner": "berbiche",
         "repo": "home-manager",
-        "rev": "bf6b85136b47ab1a76df4a90ea4850871147494a",
+        "rev": "7d33cc9caf93f62698cc7fa046e4685f666239dd",
         "type": "github"
       },
       "original": {
-        "owner": "nix-community",
+        "owner": "berbiche",
+        "ref": "neovim-initextra",
         "repo": "home-manager",
         "type": "github"
       }

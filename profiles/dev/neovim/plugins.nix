@@ -21,15 +21,7 @@ let
   });
 in
 {
-  programs.neovim.plugins = with pkgs.vimPlugins; [
-    {
-      plugin = pkgs.runCommandLocal "null-plugin" { } "touch $out";
-      config = ''
-        let g:mapleader = "\<Space>"
-        let g:maplocalleader = ','
-      '';
-    }
-  ]
+  programs.neovim.plugins = with pkgs.vimPlugins; [ ]
   ++ myPlugins
   ++ [
     # https://github.com/neovim/neovim/issues/12587

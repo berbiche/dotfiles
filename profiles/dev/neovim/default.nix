@@ -40,7 +40,7 @@
         shellcheck
       ];
 
-      extraConfig = ''
+      initExtra = ''
         " Default settings
         set nocompatible
         set nobackup
@@ -57,6 +57,11 @@
         " For CursorHold autocommand, required by which-key
         set updatetime=100
 
+        let g:mapleader = "\<Space>"
+        let g:maplocalleader = ','
+      '';
+
+      extraConfig = ''
         " Colors/Theme
         set termguicolors
         set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50

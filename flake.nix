@@ -9,7 +9,8 @@
     # nixpkgs.url = "git+file:///home/nicolas/dev/nixpkgs";
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url= "github:nix-community/home-manager";
+    # home-manager.url= "github:nix-community/home-manager";
+    home-manager.url= "github:berbiche/home-manager/neovim-initextra";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/nur";
     my-nur = { url = "github:berbiche/nur-packages"; flake = false; };

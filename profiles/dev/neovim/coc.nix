@@ -1,7 +1,8 @@
 { pkgs, lib, ... }:
 
 {
-  xdg.configFile."nvim/coc-settings.json".source = (pkgs.formats.json { }).generate "coc-settings.json" {
+  programs.neovim.coc.enable = true;
+  programs.neovim.coc.settings = {
     diagnostic = {
       enable = true;
       errorSign = ">>";
