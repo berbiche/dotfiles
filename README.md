@@ -99,6 +99,19 @@ You can purge your old configurations at anytime with `sudo nix-collect-garbage 
 
 Most programs configuration live under `user/programs`.
 
+### Email
+
+1. Create an application password on Google
+
+2. Copy the password and add it to the keyring
+
+    ``` console
+    $ nix shell nixpkgs#gnome3.libsecret
+    $ secret-tool store --label='Gmail account for neomutt' account gmail
+    Password: <paste>
+    $ mbsync -V gmail
+    ```
+
 ### ZSH
 
 Many aliases are defined in my ZSH config that replaces default commands.
