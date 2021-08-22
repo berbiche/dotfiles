@@ -69,19 +69,21 @@ in
 
         aliases = lib.mapAttrs (_n: toString) rec {
           a  = "add";
-          an = "add --intent-to-add";
-          aa = "add --all";
-          au = "add --update";
+          an = "${a} --intent-to-add";
+          aa = "${a} --all";
+          au = "${a} --update";
           b = "branch -vv";
           bn = "checkout -b";
           ch = "checkout";
           d = "diff";
           dc = "diff --cached";
-          f = "fetch --verbose";
-          fo = "fetch origin";
-          fu = "fetch upstream";
+          f = "fetch --prune";
+          fo = "${f} origin";
+          fu = "${f} upstream";
           p = "pull --prune";
           pl = "${p} --rebase";
+          pu = "${p} upstream";
+          pum = "${pu} master:master";
           plum = "${pl} upstream master:master";
           pp = "push --prune";
           ppff = "push --prune --force-with-lease";
@@ -109,7 +111,6 @@ in
           clu = "${cl} upstream";
           # Convenient aliases for committing
           cm = "commit --verbose";
-          cmm = mkFunction ''git ${cm} -m "$@"'';
           cma = "${cm} --amend";
           cmae = "${cma} --edit";
           cman = "${cma} --no-edit";
@@ -134,7 +135,7 @@ in
           # Prints one alias
           alias = mkFunction "git config --get alias.\"$1\" || echo 'alias not found'";
           # Quick view of all recents commits for stand-ups
-          oneline = "log --pretty=oneline";
+          oneline = "! git --no-pager log --oneline -n 20";
           activity = lib.concatStrings [
             "! git for-each-ref --sort=-committerdate refs/heads/ --format='"
               "%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - "
