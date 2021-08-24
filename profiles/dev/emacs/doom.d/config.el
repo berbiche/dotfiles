@@ -5,7 +5,8 @@
 (require 'base16-theme)
 
 ;; Fonts too
-(setq doom-theme 'doom-gruvbox
+;; (setq doom-theme 'base16-gruvbox-dark-hard
+(setq doom-theme 'base16-tomorrow-night-eighties
       display-line-numbers-type 'relative)
 
 ;; (setq doom-font (font-spec :family "Iosevka" :size 16)

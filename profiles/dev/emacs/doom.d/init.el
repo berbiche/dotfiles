@@ -206,7 +206,7 @@
 ;  ;; If there is more than one, they won't work right.
 ;  '(custom-safe-themes
 ;    (quote
-;     ("ca0a98b766b64d98c24084e2fd2b74b795286a0ff322f53459fe60684c2fcffb" "d8e3a2b8c72c3cb52d070a5e1969849197488b92d7211cc86c97e033239fdde2" default)))
+;     ("ca0a98b766b64d98c24084e2fd2b74b795286a0ff322f53459fe60684c2fcffb" "d8e3a2b8c72c3cb52d070a5e1969849197488b92d7211cc86c97e033239fdde2" "5784d048e5a985627520beb8a101561b502a191b52fa401139f4dd20acb07607" default)))
 ;  '(js-indent-level 2))
 ; (custom-set-faces
 ;  ;; custom-set-faces was added by Custom.
