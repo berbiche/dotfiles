@@ -22,6 +22,7 @@
     ./wob.nix
     ./wofi.nix
     ./xsettingsd.nix
+    # ./gnome-session.nix
   ];
 
   services.xserver.displayManager.defaultSession = "sway";

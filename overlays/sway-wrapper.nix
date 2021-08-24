@@ -10,6 +10,7 @@ final: prev: {
     , withBaseWrapper ? true, extraSessionCommands ? "", dbus
     , withGtkWrapper ? false, wrapGAppsHook, gdk-pixbuf, glib, gtk3
     , extraOptions ? [] # E.g.: [ "--verbose" ]
+    , xdgCurrentDesktop ? "sway"
     # Used by the NixOS module:
     , isNixOS ? false
     }:
@@ -23,7 +24,7 @@ final: prev: {
       baseWrapper = writeShellScriptBin "sway" ''
          set -o errexit
          if [ ! "$_SWAY_WRAPPER_ALREADY_EXECUTED" ]; then
-           export XDG_CURRENT_DESKTOP=sway
+           export XDG_CURRENT_DESKTOP=${xdgCurrentDesktop}
            ${extraSessionCommands}
            export _SWAY_WRAPPER_ALREADY_EXECUTED=1
          fi
