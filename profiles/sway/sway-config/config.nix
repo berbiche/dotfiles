@@ -224,6 +224,18 @@ let
       { command = binaries.element-desktop; }
       { command = binaries.spotify; }
       { command = binaries.signal-desktop; }
+      {
+        always = true;
+        command = let
+          gsettings = "${pkgs.glib.bin}/bin/gsettings";
+          gnome-schema = "org.gnome.desktop.interface";
+        in toString (pkgs.writeShellScript "sway-gsettings" ''
+          ${gsettings} set "${gnome-schema}" gtk-theme ${config.gtk.theme.name}
+          ${gsettings} set "${gnome-schema}" icon-theme ${config.gtk.iconTheme.name}
+          ${gsettings} set "${gnome-schema}" cursor-theme ${config.xsession.pointerCursor.name}
+          ${gsettings} set "${gnome-schema}" cursor-size ${toString config.xsession.pointerCursor.size}
+        '');
+      }
       # { command = binaries.bitwarden; }
     ];
 
