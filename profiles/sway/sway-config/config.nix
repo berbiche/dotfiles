@@ -51,7 +51,7 @@ let
     # Execute in bash shell to inherit shell variables
     menu-wofi = "${pkgs.bash}/bin/bash -c '${wofi} --fork --show drun,run'";
 
-    on-startup-shutdown = pkgs.runCommand "sway-on-startup-shutdown" {
+    on-startup-shutdown = pkgs.runCommandLocal "sway-on-startup-shutdown" {
       src = pkgs.fetchFromGitHub {
         owner = "alebastr";
         repo = "sway-systemd";

@@ -13,7 +13,7 @@ let
   # This is exactly like `pkgs.formats.json.generate` except we remove
   # the array wrapping the list.
   # wlogout accepts a list of object separated by an optional comma (a "json line" file)
-  generateLayout = name: value: pkgs.runCommandNoCC name {
+  generateLayout = name: value: pkgs.runCommandLocal name {
     nativeBuildInputs = [ pkgs.jq ];
     value = builtins.toJSON value;
     passAsFile = [ "value" ];
