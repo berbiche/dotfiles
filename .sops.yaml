@@ -1,8 +1,15 @@
 keys:
 - &mine 328820E009708FDD29C08DBA1D0261F6BCA46C6E
 - &mero 0dac6aef24c04c867fa1b0516d96fce616772081
+- &thixxos 1BAB840E7B780C7B908E0FC979B575163EF90D10
 creation_rules:
-- path_regex: 'secrets/(merovingian.ya?ml|smb-public-share.txt)$'
+- path_regex: 'secrets/smb-public-share.txt$'
+  key_groups:
+  - pgp:
+    - *mine
+    - *mero
+    - *thixxos
+- path_regex: 'secrets/merovingian.ya?ml$'
   key_groups:
   - pgp:
     - *mine

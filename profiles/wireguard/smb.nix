@@ -23,6 +23,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    /*
+      Setup:
+      1. sudo nix run nixpkgs#ssh-to-pgp -- -i /etc/ssh/ssh_host_rsa_key -o secrets/hosts/"$(hostname -s)".asc
+      2. Copy the fingerprint to `.sops.yaml`
+    */
     sops.secrets.smb-public-share = {
       sopsFile = cfg.secretFile;
       mode = "0400";
