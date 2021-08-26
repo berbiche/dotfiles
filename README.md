@@ -112,6 +112,13 @@ Most programs configuration live under `user/programs`.
     $ mbsync -V gmail
     ```
 
+### Sops
+
+Setup:
+
+1. `sudo nix run nixpkgs#ssh-to-pgp -- -i /etc/ssh/ssh_host_rsa_key -o secrets/hosts/"$(hostname -s)".asc`
+2. Copy the fingerprint to `.sops.yaml`
+
 ### ZSH
 
 Many aliases are defined in my ZSH config that replaces default commands.
