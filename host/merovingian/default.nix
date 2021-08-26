@@ -107,7 +107,7 @@
   console.keyMap = "us";
 
   time.timeZone = "America/Montreal";
-  location.provider = "geoclue2";
+  location.provider = "manual";
 
 
   services.xserver.videoDrivers = [ "amdgpu" ];

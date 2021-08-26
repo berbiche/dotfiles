@@ -63,7 +63,7 @@
   console.keyMap = "us";
 
   time.timeZone = "America/Montreal";
-  location.provider = "geoclue2";
+  location.provider = "manual";
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/a9cbb95c-523c-4e81-90f1-33b0f4557a32";

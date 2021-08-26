@@ -132,6 +132,11 @@ lib.mkMerge [
   # </isLinux>
 
   {
+    my.location = {
+      latitude = 45.50;
+      longitude = 73.56;
+    };
+
     my.home = { ... }: {
       my.identity = {
         name = "Nicolas Berbiche";

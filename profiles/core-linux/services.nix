@@ -8,18 +8,8 @@
   # Allow updating the firmware of various components
   services.fwupd.enable = true;
 
-  # Enable CUPS to print documents.
-  #services.printing.enable = true;
-
-  # Enable locate
-  services.locate.enable = true;
+  #
   services.acpid.enable = true;
-
-  services.blueman.enable = true;
-
-  # Logitech
-  hardware.logitech.wireless.enable = true;
-  hardware.logitech.wireless.enableGraphical = true;
 
   # Forward journald logs to VTT 1
   # Doesn't work

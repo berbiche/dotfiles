@@ -32,8 +32,8 @@
       adjustment-method=wayland
 
       [manual]
-      lat=45.50
-      lon=-73.56
+      lat=${lib.strings.floatToString config.my.location.latitude}
+      lon=-${lib.strings.floatToString config.my.location.longitude}
     '';
 
     xdg.configFile."gammastep/hooks/gtk-dark-mode".source =

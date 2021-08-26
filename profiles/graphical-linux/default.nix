@@ -55,6 +55,12 @@
   services.avahi.nssmdns = true;
   services.printing.browsing = true;
 
+  services.blueman.enable = true;
+
+  # Logitech
+  hardware.logitech.wireless.enable = true;
+  hardware.logitech.wireless.enableGraphical = true;
+
   # Microphone noise remover
   programs.noisetorch.enable = true;
 

@@ -33,4 +33,7 @@
   services.openssh.openFirewall = false;
   services.openssh.permitRootLogin = "no";
   services.openssh.passwordAuthentication = false;
+
+  location.longitude = config.my.location.longitude;
+  location.latitude = config.my.location.latitude;
 }

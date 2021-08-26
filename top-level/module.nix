@@ -26,6 +26,17 @@ in
     home = mkOption {
       type = options.home-manager.users.type.functor.wrapped;
     };
+    location = mkOption {
+      type = types.submodule {
+        options.longitude = mkOption {
+          type = types.float;
+        };
+        options.latitude = mkOption {
+          type = types.float;
+        };
+      };
+      default = {};
+    };
     colors = mkOption {
       type = with types; attrsOf (oneOf [ str int float ]);
       description = "Color profile for theming purposes.";
@@ -55,7 +66,7 @@ in
   config = {
     home-manager.users.${config.my.username} = mkAliasDefinitions options.my.home;
 
-    my.home = { ... }:  {
+    home-manager.sharedModules = [{
       imports = filesInDir ../modules/home-manager;
 
       options.my.identity = {
@@ -73,8 +84,12 @@ in
           description = "Primary GPG signing key";
         };
       };
+      # mkAliasDefinitions cannot be used for these options
       options.my.colors = options.my.colors;
-    };
+      options.my.location = options.my.location;
+
+      config.my.location = mkDefault config.my.location;
+    }];
   };
 
 }
