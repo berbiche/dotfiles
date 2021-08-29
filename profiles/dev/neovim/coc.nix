@@ -29,6 +29,21 @@
         nmap <silent> gr <Plug>(coc-references)
       '';
     }
+    {
+      # Filetree
+      plugin = coc-explorer;
+      config = ''
+        let g:indent_guides_exclude_filetypes = get(g:, 'indent_guides_exclude_filetypes', [])
+        let g:indent_guides_exclude_filetypes += [ 'coc-explorer' ]
+        let g:indent_blankline_filetype_exclude = get(g:, 'indent_blankline_filetype_exclude', [])
+        let g:indent_blankline_filetype_exclude += ['coc-explorer']
+        function! RevealCurrentFile()
+          CocCommand explorer --width 30
+          " call CocAction('runCommand', 'explorer.doAction', 'closest', ['reveal:0'], [['reveal', 0, 'file']])
+        endfunction
+        nnoremap <silent> <leader>op :call RevealCurrentFile()<CR>
+      '';
+    }
     coc-go
     coc-html
     coc-json

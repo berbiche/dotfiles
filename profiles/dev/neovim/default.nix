@@ -174,8 +174,6 @@
         nnoremap <expr> gp '`['.strpart(getregtype(), 0, 1).'`]'
         " Buffer management
         autocmd VimEnter * silent! nunmap <leader>b
-        nnoremap <leader>, <C-^>
-        nnoremap <leader>b, <C-^>
         nnoremap <silent> <leader>bd :BufferClose<CR>
         nnoremap <leader>bn :bnext<CR>
         nnoremap <leader>bN :enew<CR>

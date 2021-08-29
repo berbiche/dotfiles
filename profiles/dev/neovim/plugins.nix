@@ -6,6 +6,15 @@ let
   myPlugins = lib.mapAttrsToList toPlugin {
   };
 
+  vim-sayonara = pkgs.vimPlugins.vim-sayonara.overrideAttrs (_: {
+    src = pkgs.fetchFromGitHub {
+      owner = "mhinz";
+      repo = "vim-sayonara";
+      rev = "7e774f58c5865d9c10d40396850b35ab95af17c5";
+      hash = "sha256-QDBK6ezXuLpAYh6V1fpwbJkud+t34aPBu/uR4pf8QlQ=";
+    };
+  });
+
   fterm-nvim = toPlugin "fterm.nvim" (pkgs.fetchFromGitHub {
     owner = "numToStr";
     repo = "FTerm.nvim";
@@ -130,7 +139,6 @@ in
         EOF
 
         nnoremap <silent> <leader>gg :lua require('neogit').open()<CR>
-        nnoremap <silent> <leader>gc :lua require('neogit').open({ 'commit' })<CR>
       '';
     }
     {
@@ -159,24 +167,18 @@ in
             prefer_single_line_comments = true,
           })
 
-          vim.api.nvim_set_keymap("i", "<M-;>", "<Plug>kommentary_line_default", {noremap = true})
-          vim.api.nvim_set_keymap("n", "<M-;>", "<Plug>kommentary_line_default", {})
-          vim.api.nvim_set_keymap("v", "<M-;>", "<Plug>kommentary_visual_default", {})
-          vim.api.nvim_set_keymap("n", "<leader>;", "<Plug>kommentary_line_default", {})
-          vim.api.nvim_set_keymap("v", "<leader>;", "<Plug>kommentary_visual_default", {})
+          local map = vim.api.nvim_set_keymap
+          map("i", "<M-;>", "<Plug>kommentary_line_default", {noremap = true})
+          map("n", "<M-;>", "<Plug>kommentary_line_default", {})
+          map("v", "<M-;>", "<Plug>kommentary_visual_default", {})
+          map("n", "<leader>;", "<Plug>kommentary_line_default", {})
+          map("v", "<leader>;", "<Plug>kommentary_visual_default", {})
         EOF
       '';
     }
     {
       # Close buffers/windows/etc.
-      plugin = vim-sayonara.overrideAttrs (_: {
-        src = pkgs.fetchFromGitHub {
-          owner = "mhinz";
-          repo = "vim-sayonara";
-          rev = "7e774f58c5865d9c10d40396850b35ab95af17c5";
-          hash = "sha256-QDBK6ezXuLpAYh6V1fpwbJkud+t34aPBu/uR4pf8QlQ=";
-        };
-      });
+      plugin = vim-sayonara; 
       config = ''
         nnoremap <silent><leader>Q <cmd>Sayonara<CR>
       '';
@@ -250,6 +252,8 @@ in
             },
             pickers = {
               buffers = {
+                sort_lastused = true,
+                sort_mru = true,
                 theme = "dropdown",
                 previewer = false,
               },
@@ -262,24 +266,32 @@ in
           ts.load_extension('fzy_native')
           ts.load_extension('frecency')
           ts.load_extension('project')
+
+          local map = vim.api.nvim_set_keymap
+          local opts = { noremap = true, silent = true }
+
+          map("n", "<space><space>", "<cmd>lua require('telescope.builtin').git_files()<CR>", opts)
+          -- map("n", "<leader><.>", "<cmd>lua require('telescope.builtin').find_files({ cwd = vim.fn.expand('%:p:h')})<CR>", opts)
+
+          -- Create new file with <C-e> in file_browser
+          map("n", "<leader>.", "<cmd>lua require('telescope.builtin').file_browser({ cwd = vim.fn.expand('%:p:h') })<CR>", opts)
+
+          for _, v in pairs({",", "b,", "bi"}) do
+            map("n", "<leader>"..v, "<cmd>lua require('telescope.builtin').buffers()<CR>", opts)
+          end
+
+          -- List
+          map("n", "<leader>si", "<cmd>lua require('telescope.builtin').spell_suggest()<CR>", opts)
+          -- List recent files
+          map("n", "<leader>fr", "<cmd>lua require('telescope.builtin').oldfiles()<CR>", opts)
+          -- List most open files
+          map("n", "<leader>fF", "<cmd>lua require('telescope').extensions.frecency.frecency()<CR>", opts)
+          map("n", "<leader>pp", "<cmd>lua require('telescope').extensions.project.project()<CR>", opts)
+
+          -- Finding things
+          map("n", "<leader>ss", "<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>", opts)
+          map("n", "<leader>sp", "<cmd>lua require('telescope.builtin').live_grep()<CR>", opts)
         EOF
-
-        nnoremap <silent> <space><space> :lua require('telescope.builtin').git_files()<CR>
-        " nnoremap <silent> <leader>. :lua require('telescope.builtin').find_files({ cwd = vim.fn.expand('%:p:h') })<CR>
-        " Create new file with <C-e>
-        nnoremap <silent> <leader>. :lua require('telescope.builtin').file_browser({ cwd = vim.fn.expand('%:p:h') })<CR>
-        nnoremap <silent> <leader>bi :lua require('telescope.builtin').buffers()<CR>
-        " List
-        nnoremap <silent> <leader>si :lua require('telescope.builtin').spell_suggest()<CR>
-        " List recent files
-        nnoremap <silent> <leader>fr :lua require('telescope.builtin').oldfiles()<CR>
-        " List most open files
-        nnoremap <silent> <leader>fF :lua require('telescope').extensions.frecency.frecency()<CR>
-        nnoremap <silent> <leader>pp :lua require('telescope').extensions.project.project()<CR>
-
-        " Finding things
-        nnoremap <silent> <leader>ss :lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>
-        nnoremap <silent> <leader>sp :lua require('telescope.builtin').live_grep()<CR>
 
         autocmd! User TelescopePreviewerLoaded setlocal wrap
       '';
@@ -347,21 +359,6 @@ in
         EOF
       '';
     }
-    {
-      # Filetree
-      plugin = coc-explorer;
-      config = ''
-        let g:indent_guides_exclude_filetypes = get(g:, 'indent_guides_exclude_filetypes', [])
-        let g:indent_guides_exclude_filetypes += [ 'coc-explorer' ]
-        let g:indent_blankline_filetype_exclude = get(g:, 'indent_blankline_filetype_exclude', [])
-        let g:indent_blankline_filetype_exclude += ['coc-explorer']
-        function! RevealCurrentFile()
-        CocCommand explorer --width 30
-        " call CocAction('runCommand', 'explorer.doAction', 'closest', ['reveal:0'], [['reveal', 0, 'file']])
-        endfunction
-        nnoremap <silent> <leader>op :call RevealCurrentFile()<CR>
-      '';
-    }
 
     # Statusbar
     {
@@ -384,8 +381,39 @@ in
         let bufferline = get(g:, 'bufferline', {})
         let bufferline.closable = v:false
 
-        autocmd User CocExplorerOpenPre lua require'bufferline.state'.set_offset(30, 'FileTree')
-        autocmd User CocExplorerQuitPre lua require'bufferline.state'.set_offset(0)
+        " autocmd User CocExplorerOpenPre lua require'bufferline.state'.set_offset(30, 'FileTree')
+        " autocmd User CocExplorerQuitPre lua require'bufferline.state'.set_offset(0)
+      '';
+    }
+    {
+      # Filetree
+      plugin = nvim-tree-lua;
+      config = ''
+        let g:nvim_tree_auto_close = 1
+        let g:nvim_tree_auto_ignore_ft = ['startify', 'dashboard']
+        let g:nvim_tree_add_trailing = 1
+        let g:nvim_tree_follow = 1
+        let g:nvim_tree_gitignore = 1
+        let g:nvim_tree_git_hl = 1
+        let g:nvim_tree_highlight_opened_files = 1
+        let g:nvim_tree_ignore = ['.git', 'result']
+        let g:nvim_tree_lsp_diagnostics = 1
+
+        lua <<EOF
+          function _G.tree_toggle()
+            local tree = require('nvim-tree')
+            local view = require('nvim-tree.view')
+            local st = require('bufferline.state')
+            tree.toggle()
+            if view.win_open() then
+              st.set_offset(31, 'FileTree')
+            else
+              st.set_offset(0)
+            end
+          end
+        EOF
+
+        nnoremap <silent> <leader>op :call v:lua.tree_toggle()<CR>
       '';
     }
 
