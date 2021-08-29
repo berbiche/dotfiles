@@ -72,11 +72,8 @@ lib.mkOptionDefault {
     # Spotify
     s = ''[class="Spotify"] focus; mode default'';
 
-    r = "noop";
-    # Riot
-    "r+i" = ''[class="Riot"] focus; mode default'';
-    # RocketChat
-    "r+c" = ''[class="Rocket.Chat" instance="rocket.chat"] focus; mode default'';
+    # Riot/Element
+    r = ''[class="Element"] focus; mode default'';
     # Lollypop (Gnome music player)
     l = ''[app_id="lollypop"] focus; mode default'';
     # Bitwarden
@@ -84,7 +81,7 @@ lib.mkOptionDefault {
     # Discord
     d = ''[class="discord"] focus; mode default'';
     # Emacs
-    e = ''[class="Emacs"] focus; mode default'';
+    e = ''[app_id="emacs"] focus; mode default'';
     # Pavucontrol
     c = "exec ${binaries.audiocontrol}; mode default";
 
