@@ -362,7 +362,7 @@ in
         require("lualine").setup {
           options = {
             disabled_filetypes = { "NvimTree", "startify", "terminal", "coc-explorer" },
-            theme = 'auto',
+            theme = 'seoul256',
           },
         }
       EOF

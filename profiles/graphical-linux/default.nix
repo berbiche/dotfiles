@@ -24,8 +24,6 @@
     };
   };
 
-  services.xserver.dpi = lib.mkForce null;
-
   # To use the gnome-keyring and have it act as the ssh-agent
   services.gnome.gnome-keyring.enable = true;
   programs.seahorse.enable = true;
