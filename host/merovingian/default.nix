@@ -53,7 +53,7 @@
   # Resume device is the partition with the swapfile in this case
   boot.resumeDevice = "/dev/mapper/cryptroot";
   # Show Nixos logo while loading
-  boot.plymouth.enable = false;
+  boot.plymouth.enable = true;
   boot.loader = {
     timeout = 10;
     efi = {
