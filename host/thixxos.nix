@@ -124,4 +124,7 @@
 
   # Xbox One S bluetooth controller support
   hardware.xpadneo.enable = true;
+
+  # Brightness control based on ambient light level
+  services.clight.enable = true;
 }
