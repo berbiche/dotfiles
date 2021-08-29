@@ -1,11 +1,17 @@
 { config, lib, pkgs, ... }:
 
 {
+  # Languages and LSP
   programs.neovim.plugins = with pkgs.vimPlugins; [
-    ## Languages and LSP
-    vim-nix
+    {
+      plugin = vim-nix;
+      config = ''
+        au BufRead,BufNewFile *.nix setf nix
+      '';
+    }
     lspkind-nvim
     lsp_signature-nvim
+    nvim-ts-rainbow
     # Language/grammar parser with multiple practical functionalities
     {
       plugin = nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars);
@@ -23,6 +29,12 @@
             indent = { enable = true, },
             matchup = { enable = true, },
             autopairs = { enable = true, },
+
+            rainbow = {
+              enable = true,
+              extended_mode = false,
+              max_file_lines = 20000,
+            }
           }
         EOF
       '';

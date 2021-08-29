@@ -6,34 +6,11 @@ let
   myPlugins = lib.mapAttrsToList toPlugin {
   };
 
-  vim-sayonara = pkgs.vimPlugins.vim-sayonara.overrideAttrs (_: {
-    src = pkgs.fetchFromGitHub {
-      owner = "mhinz";
-      repo = "vim-sayonara";
-      rev = "7e774f58c5865d9c10d40396850b35ab95af17c5";
-      hash = "sha256-QDBK6ezXuLpAYh6V1fpwbJkud+t34aPBu/uR4pf8QlQ=";
-    };
-  });
-
   fterm-nvim = toPlugin "fterm.nvim" (pkgs.fetchFromGitHub {
     owner = "numToStr";
     repo = "FTerm.nvim";
     rev = "024c76c577718028c4dd5a670552117eef73e69a";
     sha256 = "sha256-Ooan02z82m6hFmwSJDP421QuUqOfjH55X7OwJ5Pixe0=";
-  });
-
-  telescope-project-nvim = toPlugin "telescope-project.nvim" (pkgs.fetchFromGitHub {
-    owner = "nvim-telescope";
-    repo = "telescope-project.nvim";
-    rev = "6f63c15efc4994e54c3240db8ed4089c926083d8";
-    sha256 = "0mda6cak1qqa5h9j5xng8wq81aqfypizmxpfdfqhzjsswwpa9bjy";
-  });
-
-  kommentary = toPlugin "kommentary" (pkgs.fetchFromGitHub {
-    owner = "b3nj5m1n";
-    repo = "kommentary";
-    rev = "a5d7cd90059ad99b5e80a1d40d655756d86b5dad";
-    sha256 = "1bgi9dzzlw09llyq09jgnyg7n64s1nk5s5knlkhijrhsw0jmxjkk";
   });
 in
 {
@@ -75,6 +52,7 @@ in
       config = "lua require('numb').setup()";
     }
     {
+      # Better wildmenu
       plugin = wilder-nvim;
       config = ''
         call wilder#setup({'modes': [':', '/', '?']})
@@ -126,7 +104,7 @@ in
     # Git
     diffview-nvim
     {
-      # Kinda like emacs' magit
+      # Like emacs' magit
       plugin = neogit;
       config = ''
         lua <<EOF
@@ -147,7 +125,7 @@ in
     }
 
     {
-      ## Show key completion
+      # Show key completion
       plugin = which-key-nvim;
       config = ''
         lua <<EOF
@@ -178,17 +156,9 @@ in
     }
     {
       # Close buffers/windows/etc.
-      plugin = vim-sayonara; 
+      plugin = vim-sayonara;
       config = ''
         nnoremap <silent><leader>Q <cmd>Sayonara<CR>
-      '';
-    }
-    {
-      # Rainbow paranthesis, brackets
-      plugin = rainbow;
-      config = ''
-        " Enable rainbow paranthesis globally
-        let g:rainbow_active = 1
       '';
     }
     {
@@ -218,7 +188,14 @@ in
     telescope-frecency-nvim
     telescope-fzy-native-nvim
     {
-      plugin = telescope-nvim;
+      plugin = telescope-nvim.overrideAttrs (_: {
+        src = pkgs.fetchFromGitHub {
+          owner = "nvim-telescope";
+          repo = "telescope.nvim";
+          rev = "f45c170f2853c1c1492d3f30a950a99d30706ea2";
+          hash = "sha256-oblAnSABpP3vgLblkcW9P5GhyTn5hAtKFw7WS9ZU4R4=";
+        };
+      });
       config = ''
         lua <<EOF
           local ts = require('telescope')

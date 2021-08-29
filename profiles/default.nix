@@ -36,7 +36,7 @@ let
       wireguard = mkProfile [ ./wireguard ];
       xfce = mkProfile [ ./xfce ];
       # Pseudo profiles
-      default-linux = mkProfile (with self; [ core-linux dev graphical-linux xfce programs sway ctf secrets ]);
+      default-linux = mkProfile (with self; [ core-linux dev graphical-linux programs sway ctf secrets ]);
     }
     // optionalAttrs isDarwin {
       yabai = mkProfile [ ./yabai ];
