@@ -6,6 +6,13 @@ let
   myPlugins = lib.mapAttrsToList toPlugin {
   };
 
+  fterm-nvim = toPlugin "fterm.nvim" (pkgs.fetchFromGitHub {
+    owner = "numToStr";
+    repo = "FTerm.nvim";
+    rev = "024c76c577718028c4dd5a670552117eef73e69a";
+    sha256 = "sha256-Ooan02z82m6hFmwSJDP421QuUqOfjH55X7OwJ5Pixe0=";
+  });
+
   telescope-project-nvim = toPlugin "telescope-project.nvim" (pkgs.fetchFromGitHub {
     owner = "nvim-telescope";
     repo = "telescope-project.nvim";
@@ -24,14 +31,56 @@ in
   programs.neovim.plugins = with pkgs.vimPlugins; [ ]
   ++ myPlugins
   ++ [
+    {
+      # Notifications display
+      plugin = nvim-notify;
+      config = ''lua vim.notify = require("notify")'';
+    }
     # https://github.com/neovim/neovim/issues/12587
     FixCursorHold-nvim
-    gruvbox-nvim
+    {
+      plugin = sonokai; # theme
+      config = ''
+        let g:sonokai_style = 'maia'
+        let g:sonokai_enable_italic = 1
+        let g:sonokai_transparent_background = 1
+      '';
+    }
+    gruvbox-nvim # theme
     vim-indent-object
     vim-surround
     vim-signify
     vim-sensible
-    nvim-autopairs
+    # Highlight TODO:, FIXME, HACK etc.
+    todo-comments-nvim
+    # Automatically close pairs of symbols like {}, [], (), "", etc.
+    {
+      plugin = nvim-autopairs;
+      config = "lua require('nvim-autopairs').setup { check_ts = true, }";
+    }
+    # Automatically source the .envrc (integration with direnv)
+    direnv-vim
+    {
+      # Peek lines when typing :30 for instance
+      plugin = numb-nvim;
+      config = "lua require('numb').setup()";
+    }
+    {
+      plugin = wilder-nvim;
+      config = ''
+        call wilder#setup({'modes': [':', '/', '?']})
+        call wilder#set_option('pipeline', [
+          \ wilder#branch(
+          \   wilder#cmdline_pipeline({'fuzzy': 1, 'language': 'python'}),
+          \   wilder#python_search_pipeline(),
+          \ ),
+          \ ])
+        call wilder#set_option('renderer', wilder#popupmenu_renderer({
+          \ 'highlighter': [wilder#basic_highlighter()],
+          \ 'left': [wilder#popupmenu_devicons()],
+          \ }))
+      '';
+    }
     {
       # Displays vertical line for the indentation level
       plugin = indent-blankline-nvim;
@@ -44,29 +93,26 @@ in
       '';
     }
     {
-      plugin = vim-sneak;
+      # Shows a key sequence to jump to a word/letter letter after typing 's<letter><letter>'
+      plugin = lightspeed-nvim;
       config = ''
-        let g:sneak#prompt = 'sneak> '
-        let g:sneak#label = 1
+        " let g:sneak#prompt = 'sneak> '
+        " let g:sneak#label = 1
         " let g:sneak#map_netrw = 0
       '';
     }
-    registers-nvim
+    {
+      plugin = registers-nvim;
+      config = ''
+        let g:registers_delay = 500 " milliseconds
+        let g:registers_show_empty_registers = 0
+        let g:registers_hide_only_whitespace = 1
+        let g:registers_window_border = 'rounded'
+      '';
+    }
 
     # Better netrw
     vim-vinegar
-
-    {
-      # Tab-bar
-      plugin = barbar-nvim;
-      config = ''
-        let bufferline = get(g:, 'bufferline', {})
-        let bufferline.closable = v:false
-
-        autocmd User CocExplorerOpenPre lua require'bufferline.state'.set_offset(30, 'FileTree')
-        autocmd User CocExplorerQuitPre lua require'bufferline.state'.set_offset(0)
-      '';
-    }
 
     # Git
     diffview-nvim
@@ -133,7 +179,6 @@ in
       });
       config = ''
         nnoremap <silent><leader>Q <cmd>Sayonara<CR>
-        nnoremap <silent><leader>q <cmd>Sayonara!<CR>
       '';
     }
     {
@@ -144,34 +189,25 @@ in
         let g:rainbow_active = 1
       '';
     }
-
     {
-      plugin = nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars);
+      plugin = nvim-hlslens;
       config = ''
-        lua <<EOF
-          require('nvim-treesitter.configs').setup {
-            ensure_installed = { 'c', 'cpp', },
-            highlight = {
-              enable = true,
-            },
-            incremental_selection = { enable = true, },
-            textobjects = { enable = true, },
-            indent = {
-              enable = true,
-            },
-          }
-        EOF
+        noremap <silent> n <cmd>execute('normal! ' . v:count1 . 'n')<CR>
+                    \<cmd>lua require('hlslens').start()<CR>
+        noremap <silent> N <cmd>execute('normal! ' . v:count1 . 'N')<CR>
+                    \<cmd>lua require('hlslens').start()<CR>
+        noremap * *<cmd>lua require('hlslens').start()<CR>
+        noremap # #<cmd>lua require('hlslens').start()<CR>
+        noremap g* g*<cmd>lua require('hlslens').start()<CR>
+        noremap g# g#<cmd>lua require('hlslens').start()<CR>
+
+        " use : instead of <cmd>
+        nnoremap <silent> <leader>l :noh<CR>
       '';
     }
 
-    {
-      # Show code action lightbulb
-      plugin = nvim-lightbulb;
-      config = ''
-        autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
-      '';
-    }
-
+    # Jump to matching keyword, supercharged %
+    vim-matchup
 
     popup-nvim
     plenary-nvim
@@ -190,10 +226,11 @@ in
               layout_strategy = 'horizontal',
               mappings = {
                 i = {
-                  ["esc"] = actions.close,
+                  ["C-c"] = actions.close,
                 },
                 n = {
-                  ["esc"] = actions.close,
+                  ["<esc>"] = actions.close,
+                  ["C-c"] = actions.close,
                 },
               },
             },
@@ -227,12 +264,18 @@ in
           ts.load_extension('project')
         EOF
 
-        nnoremap <silent> <leader><space> :lua require('telescope.builtin').git_files()<CR>
-        nnoremap <silent> <leader>. :lua require('telescope.builtin').find_files({ cwd = vim.fn.expand('%:p:h') })<CR>
+        nnoremap <silent> <space><space> :lua require('telescope.builtin').git_files()<CR>
+        " nnoremap <silent> <leader>. :lua require('telescope.builtin').find_files({ cwd = vim.fn.expand('%:p:h') })<CR>
+        " Create new file with <C-e>
+        nnoremap <silent> <leader>. :lua require('telescope.builtin').file_browser({ cwd = vim.fn.expand('%:p:h') })<CR>
         nnoremap <silent> <leader>bi :lua require('telescope.builtin').buffers()<CR>
+        " List
         nnoremap <silent> <leader>si :lua require('telescope.builtin').spell_suggest()<CR>
+        " List recent files
+        nnoremap <silent> <leader>fr :lua require('telescope.builtin').oldfiles()<CR>
+        " List most open files
         nnoremap <silent> <leader>fF :lua require('telescope').extensions.frecency.frecency()<CR>
-        nnoremap <silent> <leader>pp :lua require('telescope').extensions.project.project{}<CR>
+        nnoremap <silent> <leader>pp :lua require('telescope').extensions.project.project()<CR>
 
         " Finding things
         nnoremap <silent> <leader>ss :lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>
@@ -283,58 +326,6 @@ in
         endif
       '';
     }
-
-    ## Languages and LSP
-    vim-nix
-    lspkind-nvim
-    # vim-clang-format
-    {
-      plugin = nvim-lspconfig;
-      config = ''
-        lua <<EOF
-          local lsp = require('lspconfig')
-
-          -- lsp.clangd.setup {
-          --   default_config = {
-          --     cmd = {
-          --       'clangd', '--background-index', '--pch-storage=memory', '--clang-tidy', '--suggest-missing-includes',
-          --     },
-          --     filetypes = { 'c', 'cpp', },
-          --     root_dir = lsp.util.root_pattern('compile_commands.json', 'compile_flags.txt', '.git'),
-          --   },
-          -- }
-
-          lsp.rust_analyzer.setup {}
-        EOF
-      '';
-    }
-    # vim-addon-nix
-    coc-clangd
-    {
-      plugin = coc-nvim;
-      config = ''
-        inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
-        inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-        inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-        inoremap <silent><expr> <c-space> coc#refresh()
-
-        set signcolumn=number
-
-        autocmd CursorHold * silent call CocActionAsync('highlight')
-
-        command! -nargs=0 Format :call CocAction('format')
-
-        nnoremap <leader>gf :<C-u>Format<CR>
-        xmap     <leader>=  <Plug>(coc-format-selected)
-
-        nmap <silent> [g <Plug>(coc-diagnostic-prev)
-        nmap <silent> ]g <Plug>(coc-diagnostic-next)
-        nmap <silent> gd <Plug>(coc-definition)
-        nmap <silent> gy <Plug>(coc-type-definition)
-        nmap <silent> gi <Plug>(coc-implementation)
-        nmap <silent> gr <Plug>(coc-references)
-      '';
-    }
     {
       ## For coc-explorer
       plugin = vim-devicons;
@@ -357,6 +348,7 @@ in
       '';
     }
     {
+      # Filetree
       plugin = coc-explorer;
       config = ''
         let g:indent_guides_exclude_filetypes = get(g:, 'indent_guides_exclude_filetypes', [])
@@ -370,31 +362,70 @@ in
         nnoremap <silent> <leader>op :call RevealCurrentFile()<CR>
       '';
     }
-    coc-go
-    coc-html
-    coc-json
-    coc-markdownlint
-    coc-python
-    # coc-rust-analyzer
-    # coc-sh
-    coc-vimlsp
-
-    direnv-vim
 
     # Statusbar
     {
-      plugin = vim-airline;
+      plugin = lualine-nvim;
       config = ''
-        " Display all buffers when only one tab is open
-        "let g:airline#extensions#tabline#enabled = 1
+      lua <<EOF
+        require("lualine").setup {
+          options = {
+            disabled_filetypes = { "NvimTree", "startify", "terminal", "coc-explorer" },
+            theme = 'auto',
+          },
+        }
+      EOF
       '';
     }
     {
-      # Statusbar themes
-      plugin = vim-airline-themes;
-      config = "let g:airline_theme = 'bubblegum'";
+      # Tab-bar
+      plugin = barbar-nvim;
+      config = ''
+        let bufferline = get(g:, 'bufferline', {})
+        let bufferline.closable = v:false
+
+        autocmd User CocExplorerOpenPre lua require'bufferline.state'.set_offset(30, 'FileTree')
+        autocmd User CocExplorerQuitPre lua require'bufferline.state'.set_offset(0)
+      '';
     }
 
+    # Highlight css colors such as #ccc
+    {
+      plugin = nvim-colorizer-lua;
+      config = ''
+        lua <<EOF
+          require('colorizer').setup {
+            ['*'] = {
+              names = false,
+              mode = 'background',
+            },
+            css = { css = true, css_fn = true, },
+            html = { names = true, },
+            '!c',
+            '!cpp',
+            '!erlang',
+            '!go',
+          }
+        EOF
+      '';
+    }
+
+    {
+      plugin = fterm-nvim;
+      config = ''
+        lua <<EOF
+          require('FTerm').setup {
+            border = 'rounded',
+          }
+
+          local map = vim.api.nvim_set_keymap
+          local opts = { noremap = true, silent = true }
+
+          map('n', '<space>`', '<cmd>lua require("FTerm").toggle()<CR>', opts)
+          -- map('t', '<space>`', '<cmd>lua require("FTerm").toggle()<CR>', opts)
+        EOF
+      '';
+    }
   ]
   ++ lib.optional nixosConfig.profiles.dev.wakatime.enable {
     plugin = vim-wakatime;

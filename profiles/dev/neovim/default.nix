@@ -3,9 +3,10 @@
 {
   my.home = {
     imports = [
-      ./coc.nix
+      # ./coc.nix
       ./plugins.nix
       ./tree-sitter.nix
+      ./lsp.nix
     ];
 
     home.packages = [
@@ -15,8 +16,8 @@
       pkgs.neovim-remote
     ];
 
+    # programs.neovim.defaultEditor = true;
     home.sessionVariables = {
-      # EDITOR = "${config.programs.neovim.finalPackage}/bin/nvim";
       EDITOR = "${pkgs.neovim-remote}/bin/nvr -s";
     };
 
@@ -26,6 +27,7 @@
       vimAlias = true;
       vimdiffAlias = true;
       withNodeJs = true;
+      withRuby = false;
 
       # From neovim-nightly input
       package = pkgs.neovim-nightly;
@@ -59,23 +61,25 @@
 
         let g:mapleader = "\<Space>"
         let g:maplocalleader = ','
+
+        " Use visual bell
+        set termguicolors
+        set visualbell
+
+        " Basics
+        syntax on
       '';
 
       extraConfig = ''
         " Colors/Theme
-        set termguicolors
         set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
               \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
               \,sm:block-blinkwait175-blinkoff150-blinkon175
         au ColorScheme * hi Normal  ctermbg=none guibg=none
         au ColorScheme * hi NonText ctermbg=none guibg=none
 
-        " Use visual bell
-        set visualbell
-
-        " Basics
-        syntax on
-        colorscheme gruvbox
+        " Color/theme : sonokai
+        colorscheme sonokai
 
         set hidden      " Allows hidden buffer
         set hlsearch    " Highlight search result
@@ -133,10 +137,10 @@
         match TrailingWhitespace /\s\+$/
 
         " nnoremap <leader>si :set spell!<CR>
-        nnoremap <leader>l :set list!<CR>
-        nnoremap <leader>S :%s//g<Left><Left>
-        nnoremap <leader>m :set number!<CR>
-        nnoremap <leader>n :set relativenumber!<CR>
+        " nnoremap <leader>l :set list!<CR>
+        " nnoremap <leader>S :%s//g<Left><Left>
+        " nnoremap <leader>m :set number!<CR>
+        " nnoremap <leader>n :set relativenumber!<CR>
 
         " Fix terminal escape char
         tnoremap <Esc> <C-\><C-n>
@@ -178,6 +182,7 @@
         nnoremap <leader>bp :bprevious<CR>
         " Window management
         map <leader>w <C-w>
+        nnoremap <leader>qq <cmd>quitall<CR>
 
         " Move line below
         nnoremap <A-j> :m .+1<CR>==
