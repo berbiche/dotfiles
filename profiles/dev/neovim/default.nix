@@ -1,5 +1,13 @@
 { config, inputs, lib, pkgs, ... }:
 
+let
+  shellAliases = rec {
+    nvim = "${pkgs.neovim-remote}/bin/nvr -s";
+    n = nvim;
+    vim = nvim;
+    vi = nvim;
+  };
+in
 {
   my.home = {
     imports = [
@@ -11,22 +19,25 @@
 
     home.packages = [
       pkgs.fzf
-      # graphical neovim
-      pkgs.neovide
       pkgs.neovim-remote
-    ];
+    ]
+    # graphical neovim
+    ++ lib.optional pkgs.stdenv.isLinux pkgs.neovide;
 
     # programs.neovim.defaultEditor = true;
     home.sessionVariables = {
       EDITOR = "${pkgs.neovim-remote}/bin/nvr -s";
     };
 
+    programs.zsh.shellAliases = shellAliases;
+    programs.bash.shellAliases = shellAliases;
+
     programs.neovim = {
       enable = true;
-      viAlias = true;
-      vimAlias = true;
       vimdiffAlias = true;
+      # For some plugins?
       withNodeJs = true;
+      withPython3 = true;
       withRuby = false;
 
       # From neovim-nightly input
@@ -161,7 +172,9 @@
 
         if !exists('g:vscode')
           " autocmd TermOpen * silent call RemoveTrailingHighlight()
-          packadd vim-wakatime
+          ${lib.optionalString config.profiles.dev.wakatime.enable ''
+              packadd vim-wakatime
+           ''}
         endif
 
         " Insert line above

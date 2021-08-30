@@ -89,6 +89,13 @@ in
       '';
     }
     {
+      plugin = BufOnly-vim;
+      config = ''
+        nnoremap <leader>bk :BufOnly<CR>
+        nnoremap <leader>bK :BufOnly!<CR>
+      '';
+    }
+    {
       plugin = registers-nvim;
       config = ''
         let g:registers_delay = 500 " milliseconds
