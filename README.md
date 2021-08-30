@@ -12,6 +12,30 @@ my configuration files and my packages.
 
 I use Gnome Keyring to manage my secrets (SSH, GPG) and to have a graphical prompt to unlock my keys.
 
+## Structure
+
+My configuration is organized as follows:
+
+- `./flake.nix`: contains my system definitions
+
+- `./top-level`: contains logic to load my custom NixOS/Darwin/Home Manager modules
+  and the basic common setup used by all my systems.
+
+  This is where some of the options that I use in my configuration are defined.
+
+- `./user`: declares an active user, note that my system configuration does not
+  support using multiple users yet.
+
+- `./host`: this is where I define each host
+
+- `./modules`: this is where I define my custom modules.
+
+   These modules are loaded automatically depending on the platform
+   by `./top-level/module.nix`
+
+- `./cachix`: this folder is owned by cachix and serves to fetch binary files from
+  trusted sources without having to build packages (substituers).
+
 ## Initial setup
 
 1. Clone this repository.
@@ -33,32 +57,46 @@ then you won't need to do the next steps and can jump directly to building.
 3. Build the system (in this case the `merovingian` host)
 
     ``` console
-    $ rebuild switch --flake '.#merovingian' -v
+    $ rebuild switch --flake '.#merovingian' -v -L
     ```
 
 ## Building
 
 If the new system configuration has been built once before, then you don't need to use the nix-shell
 
-1. Rebuild the system (in this case the `merovingian` host)
+1. Rebuild the system
 
-    ``` console
-    $ sudo nixos-rebuild switch --flake '.#merovingian' -v
-    ```
+    - On NixOS (in this case the `merovingian` host)
+
+        ``` console
+        $ sudo nixos-rebuild switch --flake '.#merovingian' -v -L
+        buulding the system configuration...
+        ```
+
+        This is also aliased to the command `nrsf` in my shells.
+
+    - On Darwin
+
+        ``` console
+        $ sudo darwin-rebuild switch --flake '.#PC335' -v -L
+        building the system configuration...
+        ```
 
 ## Updating
 
 1. Update the dependencies
 
     ``` console
-    $ nix flake update --recreate-lock-file
+    $ nix flake update
     ```
 
-2. Rebuild (in this case the `merovingian` host)
+    or
 
     ``` console
-    $ sudo nixos-rebuild switch --flake . -v
+    $ nix flake lock --update-input <input-name>
     ```
+
+2. Rebuild per instructions in the [Building](#building) section
 
 ## Add a Cachix cache
 
@@ -71,13 +109,14 @@ while the `-m` flag forces cachix to only modify the two files mentionned before
 
 ## Darwin
 
-Until nix-darwin is updated to have proper support for Flakes, the installation has to be done
-manually (or via a script).
+As it stands, bootstrapping the system using only flakes is not possible
+because nix-darwin does not expose the installer script in the flake.
 
 1. Build the configuration
 
     ``` console
-    $ nix build '.#darwinConfigurations.${machine-name}' -v
+    $ nix build '.#darwinConfigurations.${machine-name}' -v -L
+    ...
     ```
 
 2. Activate the system configuration
@@ -135,6 +174,9 @@ Many aliases are defined in my ZSH config that replaces default commands.
 
 ### TODOS
 
-Packages to add to my configuration:
+- Further improve the README, maybe change markdown to orgmode
 
-- <https://github.com/jtheoff/swappy> blocked by <https://github.com/NixOS/nixpkgs/pull/81116>
+- Transform my profiles in real Nix modules where it makes sense.
+
+  Certain profiles will never be loaded on Darwin or NixOS because
+  they do not expose certain options, resulting in an error.
