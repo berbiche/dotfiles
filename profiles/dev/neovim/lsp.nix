@@ -18,7 +18,7 @@
       config = ''
         lua <<EOF
           require('nvim-treesitter.configs').setup {
-            ensure_installed = { 'c', 'cpp', },
+            -- ensure_installed = { 'c', 'cpp', },
 
             -- highlight = { enable = true, },
             incremental_selection = { enable = true, },
@@ -28,8 +28,10 @@
             },
             indent = { enable = true, },
             matchup = { enable = true, },
+            -- With nvim-autopairs
             autopairs = { enable = true, },
 
+            -- With nvim-ts-rainbow
             rainbow = {
               enable = true,
               extended_mode = false,

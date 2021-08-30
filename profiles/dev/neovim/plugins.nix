@@ -1,4 +1,4 @@
-{ config, nixosConfig, lib, pkgs, ... }:
+{ config, osConfig, lib, pkgs, ... }:
 
 let
   toPlugin = n: v: pkgs.vimUtils.buildVimPluginFrom2Nix { name = n; src = v; };
@@ -449,7 +449,7 @@ in
       '';
     }
   ]
-  ++ lib.optional nixosConfig.profiles.dev.wakatime.enable {
+  ++ lib.optional osConfig.profiles.dev.wakatime.enable {
     plugin = vim-wakatime;
     optional = true;
     config = ''

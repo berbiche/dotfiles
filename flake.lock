@@ -239,11 +239,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1629602536,
-        "narHash": "sha256-j5sG72FKncVLgd2U0mTnUhDQYLF1oBjKba1HWmqTZEA=",
+        "lastModified": 1630294414,
+        "narHash": "sha256-+FIN4w3dqb06ERQHUk78N/WZLKtdNJjnzBw44PQEJvM=",
         "owner": "berbiche",
         "repo": "home-manager",
-        "rev": "7d33cc9caf93f62698cc7fa046e4685f666239dd",
+        "rev": "7c9b54ef6acab9ae2c06f6ec7f7f99503c392e5c",
         "type": "github"
       },
       "original": {
