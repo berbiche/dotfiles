@@ -7,14 +7,16 @@ let
   filesInDir = directory:
     let
       files = readDir directory;
-      filteredFiles = lib.filterAttrs (n: v: lib.hasSuffix "nix" n && n != "default.nix") files;
+      filteredFiles = filterAttrs (n: v: hasSuffix "nix" n && n != "default.nix") files;
       toPath = map (x: directory + "/${x}");
     in
     assert isPath directory;
-    toPath (attrNames filteredFiles);
+    if pathExists directory then
+      toPath (attrNames filteredFiles)
+    else [];
 in
 {
-  imports = filesInDir ../modules/nixos;
+  imports = if isLinux then filesInDir ../modules/nixos else filesInDir ../modules/darwin;
 
   options.my = {
     username = mkOption {
