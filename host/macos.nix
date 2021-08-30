@@ -77,5 +77,16 @@
         pathsToLink = "/Applications";
       };
     in "${apps}/Applications";
+
+    programs.git.extraConfig = {
+      "includeIf \"gitdir:~/dev/adgear/\"".path = toString (pkgs.writeText "git-includeif-work" ''
+        [user]
+          email = "${(y: x: "${x}@${y}") "gmail.com" "nic.berbiche"}"
+      '');
+      "includeIf \"gitdir:~/dotfiles/\"".path = toString (pkgs.writeText "git-includeif-dotfiles" ''
+        [user]
+          email = "${config.my.identity.email}"
+      '');
+    };
   };
 }

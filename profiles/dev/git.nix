@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config;
@@ -6,9 +6,13 @@ let
   # Transforms a git alias into an attribute set to be reused by other aliases
   # and abuses the __toString property of attribute sets for the serialization
   # of the alias when converting to an INI
-  mkFunction = x: {
-    __toString = _: "!f(){ ${x}; }; f";
-    unwrapped = x;
+  mkFunction = x: let
+    y = if builtins.match ".+\n." x != null
+        then lib.concatStringsSep "; " (lib.splitString "\n" x)
+        else x;
+  in {
+    __toString = _: "!f(){ ${y}; }; f";
+    unwrapped = y;
   };
 in
 {
@@ -27,6 +31,9 @@ in
 
         extraConfig = lib.mkMerge [
           {
+            core.eol = "lf";
+            core.autocrlf = false;
+
             user.useConfigOnly = true;
             pull.ff = "only";
             push.default = "current";
@@ -92,6 +99,9 @@ in
           plum = "${pl} upstream master:master";
           pp = "push --prune";
           ppff = "push --prune --force-with-lease";
+          ra = "rebase --abort";
+          rc = "rebase --continue";
+          ri = "rebase -i";
           s = "show";
           st = "status";
           u = "reset HEAD";
@@ -108,10 +118,10 @@ in
             "'"
           ];
           # Clone aliases
-          cl = mkFunction (lib.concatStringsSep "; " (lib.splitString "\n" ''
+          cl = mkFunction ''
             if [ "$#" -eq 0 ]; then echo "expected a remote name but none was given"; exit 1; fi
             local origin="$1"; shift
-            git clone --origin="$origin" "$@"''));
+            git clone --origin="$origin" "$@"'';
           clo = "${cl} origin";
           clu = "${cl} upstream";
           # Convenient aliases for committing
