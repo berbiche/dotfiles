@@ -8,6 +8,7 @@ in
 { hostname
 , username
 , isLinux
+, allowUnfree ? true
 , hostConfiguration ? load ../host hostname
 , userConfiguration ? load ../user username
 , extraModules ? [ ]
@@ -20,7 +21,7 @@ let
 
     networking.hostName = lib.mkDefault hostname;
 
-    nixpkgs.config.allowUnfree = true;
+    nixpkgs.config.allowUnfree = allowUnfree;
     nix = {
       package = pkgs.nixUnstable;
       extraOptions = ''
@@ -35,7 +36,7 @@ let
       };
     };
     # My custom user settings
-    my = { inherit username; };
+    my.username = username;
   };
 in [
   ./lib.nix

@@ -155,7 +155,6 @@ lib.mkMerge [
       # `man 5 home-configuration.nix`
       manual.manpages.enable = true;
 
-      # XDG
       fonts.fontconfig.enable = lib.mkForce true;
     };
   }

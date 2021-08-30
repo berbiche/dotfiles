@@ -59,6 +59,7 @@
       in
       lib.fix args;
 
+    # Returns a list of Nix modules
     mkConfig = import ./top-level/mkConfig.nix;
 
     mkLinuxConfig = args@{ platform, hostname, ... }:
