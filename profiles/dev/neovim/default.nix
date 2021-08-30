@@ -2,7 +2,9 @@
 
 let
   shellAliases = rec {
-    nvim = "${pkgs.neovim-remote}/bin/nvr -s";
+    # The `-s` or `--remote` flag has to be specified last
+    # The `mktemp -u` flag will not create the file (otherwise neovim will refuse to replace it)
+    nvim = "${pkgs.neovim-remote}/bin/nvr --servername \"\${NVIM_LISTEN_ADDRESS:-$(mktemp -ut nvim-nvr)}\" -s --remote-wait-silent";
     n = nvim;
     vim = nvim;
     vi = nvim;
@@ -26,7 +28,7 @@ in
 
     # programs.neovim.defaultEditor = true;
     home.sessionVariables = {
-      EDITOR = "${pkgs.neovim-remote}/bin/nvr -s";
+      EDITOR = shellAliases.nvim;
     };
 
     programs.zsh.shellAliases = shellAliases;
@@ -35,8 +37,6 @@ in
     programs.neovim = {
       enable = true;
       vimdiffAlias = true;
-      # For some plugins?
-      withNodeJs = true;
       withPython3 = true;
       withRuby = false;
 
