@@ -7,9 +7,7 @@
   # $ darwin-rebuild changelog
   system.stateVersion = 4;
 
-  nix = {
-    sandboxPaths = [ "/System/Library/Frameworks" "/System/Library/PrivateFrameworks" "/usr/lib" "/private/tmp" "/private/var/tmp" "/usr/bin/env" ];
-  };
+  nix.maxJobs = 6;
 
   environment.systemPackages = [ pkgs.vagrant ];
 
@@ -25,10 +23,6 @@
   };
 
   profiles.dev.wakatime.enable = lib.mkForce false;
-
-  users.nix.configureBuildUsers = true;
-
-  services.nix-daemon.enable = true;
 
   system.defaults.finder = {
     AppleShowAllExtensions = true;
@@ -68,13 +62,20 @@
     "com.apple.mouse.tapBehavior" = 1;
   };
 
-  system.activationScripts.preUserActivation.text = ''
-    mkdir -p ~/Screenshots
-  '';
   system.defaults.screencapture.location = "${config.users.users.${config.my.username}.home}/Screenshots";
 
   system.defaults.trackpad = {
     Clicking = true;
     TrackpadRightClick = true;
+  };
+
+  my.home = { config, pkgs, ... }: {
+    home.file."Applications/Home Manager Apps".source = let
+      apps = pkgs.buildEnv {
+        name = "home-manager-applications";
+        paths = config.home.packages;
+        pathsToLink = "/Applications";
+      };
+    in "${apps}/Applications";
   };
 }

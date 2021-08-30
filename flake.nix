@@ -35,7 +35,7 @@
     };
   };
 
-  outputs = inputs @ { nixpkgs, self, ... }: let
+  outputs = inputs @ { self, nixpkgs, ... }: let
     inherit (nixpkgs) lib;
 
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
@@ -79,12 +79,20 @@
       inputs.nix-darwin.lib.darwinSystem {
         modules = mkConfig ((removeAttrs args [ "platform" ]) // {
           isLinux = false;
-          extraModules = [{
-            nixpkgs.overlays = builtins.attrValues self.overlays;
-          }];
+          extraModules = [
+            ./top-level/darwin.nix
+            {
+              nixpkgs.overlays = nixpkgsFor."${args.platform}".overlays;
+            }
+          ];
         });
+        # This has to be passed here otherwise nix-darwin tries
+        # to use its own very old nixpkgs
         inputs.nixpkgs = inputs.nixpkgs;
         specialArgs = specialArgs {
+          # inputs are not passed as specialArgs
+          # and if I override everything then nix-darwin can no longer
+          # get it's own `self`
           inputs = inputs // { darwin = inputs.nix-darwin; };
           isLinux = false;
         };
