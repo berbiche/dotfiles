@@ -1,17 +1,22 @@
-{ config, inputs, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-let
-  shellAliases = rec {
-    # The `-s` or `--remote` flag has to be specified last
-    # The `mktemp -u` flag will not create the file (otherwise neovim will refuse to replace it)
-    nvim = "${pkgs.neovim-remote}/bin/nvr --servername \"\${NVIM_LISTEN_ADDRESS:-$(mktemp -ut nvim-nvr)}\" -s --remote-wait-silent";
-    n = nvim;
-    vim = nvim;
-    vi = nvim;
-  };
-in
 {
-  my.home = {
+  my.home = { config, osConfig, lib, pkgs, ... }: let
+    shellAliases = rec {
+      # The `-s` or `--remote` flag has to be specified last
+      # The `mktemp -u` flag will not create the file (otherwise neovim will refuse to replace it)
+      nvim = toString (pkgs.writeShellScript "neovim-alias" ''
+        if [[ -z "$NVIM_LISTEN_ADDRESS" ]]; then
+          exec ${config.programs.neovim.finalPackage}/bin/nvim "$@"
+        else
+          exec ${pkgs.neovim-remote}/bin/nvr -s "$@"
+        fi
+      '');
+      n = nvim;
+      vim = nvim;
+      vi = nvim;
+    };
+  in {
     imports = [
       # ./coc.nix
       ./plugins.nix
@@ -172,7 +177,7 @@ in
 
         if !exists('g:vscode')
           " autocmd TermOpen * silent call RemoveTrailingHighlight()
-          ${lib.optionalString config.profiles.dev.wakatime.enable ''
+          ${lib.optionalString osConfig.profiles.dev.wakatime.enable ''
               packadd vim-wakatime
            ''}
         endif
