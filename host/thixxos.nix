@@ -127,4 +127,8 @@
 
   # Brightness control based on ambient light level
   services.clight.enable = false;
+
+  my.home = { config, lib, pkgs, ... }: {
+    programs.doom-emacs.emacsPackage = lib.mkForce pkgs.emacsPgtk;
+  };
 }
