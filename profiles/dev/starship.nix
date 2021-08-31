@@ -21,7 +21,7 @@
           "$git_state"
           # "$hg_branch"
           # "$docker_context"
-          "$package"
+          # "$package"
           # "dotnet"
           # "$elixir"
           # "elm"
@@ -45,7 +45,7 @@
           # "gcloud"
           # "env_var"
           # "crystal"
-          # "$cmd_duration"
+          "$cmd_duration"
           # "custom"
           # "$line_break"
           "$jobs"
@@ -60,7 +60,11 @@
           success_symbol = ''[\$](bold green)'';
         };
 
-        cmd_duration.disable = true;
+        cmd_duration = {
+          min_time = 5000;
+          show_notifications = false;
+          format = ''[$duration]($style)'';
+        };
 
         directory = {
           truncation_length = 1;
