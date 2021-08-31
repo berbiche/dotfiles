@@ -63,7 +63,7 @@
         cmd_duration = {
           min_time = 5000;
           show_notifications = false;
-          format = ''[$duration]($style)'';
+          format = ''[$duration]($style) '';
         };
 
         directory = {
