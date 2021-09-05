@@ -34,6 +34,8 @@
 
   # Hibernate after sleeping in suspend mode for 30 minutes
   systemd.sleep.extraConfig = ''
+    HandleSuspendKey=suspend-then-hibernate
+    SuspendMode=suspend-then-hibernate
     HibernateDelaySec=30min
   '';
   # services.logind.lidSwitch = "ignore";
