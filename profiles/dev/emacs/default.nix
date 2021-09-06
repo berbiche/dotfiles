@@ -54,8 +54,7 @@ lib.mkMerge [
           doomPrivateDir = ./doom.d;
 
           emacsPackage = lib.mkMerge [
-            # The `passthru` attribute is somehow missing...
-            (lib.mkIf isLinux pkgs.emacsPgtkGcc)
+            (lib.mkIf isLinux pkgs.emacsPgtk)
             (lib.mkIf isDarwin pkgs.emacs)
           ];
 

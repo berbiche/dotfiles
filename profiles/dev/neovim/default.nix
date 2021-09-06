@@ -46,7 +46,8 @@
       withRuby = false;
 
       # From neovim-nightly input
-      package = pkgs.neovim-nightly;
+      # package = inputs.neovim-nightly.packages.${pkgs.system}.neovim-nightly;
+      package = pkgs.neovim-unwrapped;
 
       extraPackages = with pkgs; [
         nodePackages.bash-language-server

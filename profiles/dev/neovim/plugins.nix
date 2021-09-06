@@ -39,6 +39,8 @@ in
     vim-sensible
     # Highlight TODO:, FIXME, HACK etc.
     todo-comments-nvim
+    # Highlight ranges in the commandline such as :10,20
+    range-highlight-nvim
     # Automatically close pairs of symbols like {}, [], (), "", etc.
     {
       plugin = nvim-autopairs;
@@ -191,28 +193,17 @@ in
     popup-nvim
     plenary-nvim
     {
-      plugin = sql-nvim;
-      config = lib.mkMerge [
-        (lib.mkIf pkgs.stdenv.targetPlatform.isDarwin ''
-          let g:sql_clib_path = '${pkgs.sqlite.out}/lib/libsqlite3.dylib'
-        '')
-        (lib.mkIf (!pkgs.stdenv.targetPlatform.isDarwin) ''
-          let g:sql_clib_path = '${pkgs.sqlite.out}/lib/libsqlite3.so'
-        '')
-      ];
+      plugin = sqlite-lua;
+      config = ''
+        let g:sqlite_clib_path = '${pkgs.sqlite.out}/lib/libsqlite3${pkgs.hostPlatform.extensions.sharedLibrary}'
+      '';
     }
     telescope-project-nvim
     telescope-frecency-nvim
-    telescope-fzy-native-nvim
+    # telescope-fzy-native-nvim
+    telescope-fzf-native-nvim
     {
-      plugin = telescope-nvim.overrideAttrs (_: {
-        src = pkgs.fetchFromGitHub {
-          owner = "nvim-telescope";
-          repo = "telescope.nvim";
-          rev = "f45c170f2853c1c1492d3f30a950a99d30706ea2";
-          hash = "sha256-oblAnSABpP3vgLblkcW9P5GhyTn5hAtKFw7WS9ZU4R4=";
-        };
-      });
+      plugin = telescope-nvim;
       config = ''
         lua <<EOF
           local ts = require('telescope')
@@ -257,7 +248,8 @@ in
             },
           }
 
-          ts.load_extension('fzy_native')
+          -- ts.load_extension('fzy_native')
+          ts.load_extension('fzf')
           ts.load_extension('frecency')
           ts.load_extension('project')
 

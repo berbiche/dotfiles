@@ -28,7 +28,8 @@ in
 
       # Programming
       gnumake # for the `make` program
-      powershell # for some rare one-off scripts and tests
+      # Broken (2021-09-06)
+      # powershell # for some rare one-off scripts and tests
       tig # navigate a git repository's log and commits in a TUI, provides sorting, filtering, etc.
       clang # for the binary tools it offers?
 

@@ -46,8 +46,7 @@
     #options amdgpu dc=0
     '';
 
-  # high-resolution display
-  hardware.video.hidpi.enable = lib.mkDefault true;
+  hardware.video.hidpi.enable = false;
 
   # Boot loader settings
   # Resume device is the partition with the swapfile in this case

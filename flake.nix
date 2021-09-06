@@ -137,7 +137,7 @@
     in overlayFiles // {
       nixpkgs-wayland = inputs.nixpkgs-wayland.overlay;
       emacs = inputs.emacs-overlay.overlay;
-      neovim-nightly = inputs.neovim-nightly.overlay;
+      # neovim-nightly = inputs.neovim-nightly.overlay;
       nur = inputs.nur.overlay;
       manual = final: prev: {
         # nur = import inputs.nur { nurpkgs = final; pkgs = final; };

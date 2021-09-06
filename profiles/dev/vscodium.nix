@@ -55,12 +55,6 @@ let
       version = "2.9.2";
       sha256 = "sha256-0Cdc7i+MFiKUlVzoJvW9njT+WkuYWtylFyXg+OmUoaY=";
     };
-    java = buildVs {
-      name = "java";
-      publisher = "redhat";
-      version = "0.75.0";
-      sha256 = "sha256-cXjCndW1izhKAMARIFQv45Ar8tZds+rZiRYvIZiIzyo=";
-    };
     java-debugger = buildVs {
       name = "vscode-java-debug";
       publisher = "vscjava";
@@ -72,12 +66,6 @@ let
       publisher = "asvetliakov";
       version = "0.0.78";
       sha256 = "sha256-dyXuMITHoLZBOYtLo4Jknf4TkeCysiNGQWkqxMPlfyg=";
-    };
-    nix-env-selector = buildVs {
-      name = "nix-env-selector";
-      publisher = "arrterian";
-      version = "1.0.2";
-      sha256 = "sha256-oe+jg/E/qj3tLyE/+K+8UCr55SD954gGqW2K/s4w/5o=";
     };
     wakatime = let
       wakatime =
@@ -98,9 +86,11 @@ let
   extensions = with pkgs.vscode-extensions; [
     bbenoist.nix
     redhat.vscode-yaml
+    arrterian.nix-env-selector
     ms-kubernetes-tools.vscode-kubernetes-tools
     ms-vscode-remote.remote-ssh
     xaver.clang-format
+    redhat.java
     coenraads.bracket-pair-colorizer-2
     # dbaeumer.vscode-eslint
     davidanson.vscode-markdownlint
@@ -109,7 +99,8 @@ let
   ]
   ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
     ms-vsliveshare.vsliveshare
-    ms-python.python
+    # Broken
+    # ms-python.python
     llvm-org.lldb-vscode
   ]
   ++ lib.attrValues my-vscode-packages;
