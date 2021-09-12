@@ -9,5 +9,13 @@ final: prev: {
         hash = "sha256-+eD8Z4e3i8e5EnoqfhC+osJDR/pEFsfeLpmZ7mbsF0k=";
       };
     });
+    nvim-hlslens = prev'.nvim-hlslens.overrideAttrs (old: {
+      src = prev.fetchFromGitHub {
+        owner = "kevinhwang91";
+        repo = "nvim-hlslens";
+        rev = "0e43dd0cce59d161ab968b4ed45897e946122d9d";
+        hash = "sha256-jP/1fYDqCQT0v5VVi+9iaWxEmn2GMKFXmcIClzZmSUY=";
+      };
+    });
   });
 }
