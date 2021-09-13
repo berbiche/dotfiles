@@ -2,6 +2,8 @@
 
 # https://github.com/NixOS/nixpkgs/pull/86480
 {
+  imports = [ ./wine.nix ];
+
   programs.steam.enable = true;
 
   nixpkgs.overlays = [

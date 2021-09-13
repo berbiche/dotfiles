@@ -23,6 +23,8 @@
 
   profiles.pipewire.enable = true;
 
+  profiles.steam.wine.enable = true;
+
   sops.defaultSopsFile = rootPath + "/secrets/merovingian.yaml";
 
   boot.kernelParams = [ "amd_iommu=pt" "iommu=soft" ]
