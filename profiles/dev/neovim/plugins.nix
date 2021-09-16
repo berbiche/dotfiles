@@ -1,7 +1,7 @@
 { config, osConfig, lib, pkgs, ... }:
 
 let
-  toPlugin = n: v: pkgs.vimUtils.buildVimPluginFrom2Nix { name = n; src = v; };
+  toPlugin = n: v: pkgs.vimUtils.buildVimPluginFrom2Nix { pname = n; version = "unstable"; src = v; };
 
   myPlugins = lib.mapAttrsToList toPlugin {
   };

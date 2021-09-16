@@ -7,6 +7,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     # nixpkgs.url = "github:berbiche/nixpkgs/fix-emacs-passthru";
     # nixpkgs.url = "git+file:///home/nicolas/dev/nixpkgs";
+    master.url = "github:nixos/nixpkgs/master";
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     # home-manager.url= "github:nix-community/home-manager";
@@ -101,13 +102,13 @@
 
   in {
     nixosConfigurations = {
-      merovingian = mkLinuxConfig {
-        hostname = "merovingian";
+      mero = mkLinuxConfig {
+        hostname = "mero";
         username = "nicolas";
         platform = "x86_64-linux";
       };
-      thixxos = mkLinuxConfig {
-        hostname = "thixxos";
+      t580 = mkLinuxConfig {
+        hostname = "t580";
         username = "nicolas";
         platform = "x86_64-linux";
       };
