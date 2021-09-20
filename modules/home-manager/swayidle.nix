@@ -187,7 +187,7 @@ in
         PartOf = [ "graphical-session.target" ];
         After = [ "graphical-session-pre.target" ];
         Requisite = [ "graphical-session.target" ];
-        ConditionEnvironment = [ "WAYLAND_DISPLAY" ];
+        #ConditionEnvironment = [ "WAYLAND_DISPLAY" ];
       };
 
       Service = {
