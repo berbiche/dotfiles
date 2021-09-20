@@ -13,6 +13,7 @@
     patchelf
     shellcheck
     python3Packages.binwalk
+    hexedit
   ];
 
   # Volatility requires this unfortunately
