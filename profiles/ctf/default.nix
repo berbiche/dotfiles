@@ -14,6 +14,8 @@
     shellcheck
     python3Packages.binwalk
     hexedit
+    gobuster
+    file
   ];
 
   # Volatility requires this unfortunately
