@@ -197,17 +197,10 @@ lib.mkIf isLinux {
     package = wrappedFirefox;
 
     profiles = {
-      # Merged profiles
+      # Profile ids need to be sequential?
       default = makeProfile { id = 0; default = true; };
-      # Import existing profiles
-      thixxos = {
-        id = 1;
-        path = "i8mynnn3.default-1555270342176";
-      };
-      merovingian = {
-        id = 2;
-        path = "cn435xs5.default";
-      };
+      secondary = makeProfile { id = 1; };
+      ternary = makeProfile { id = 2; };
       job = makeProfile { id = 3; };
     };
   };
