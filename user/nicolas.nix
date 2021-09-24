@@ -28,7 +28,7 @@ lib.mkMerge [
       style = "adwaita";
     };
 
-    my.home = { config, pkgs, ... }: {
+    my.home = { config, pkgs, inputs, ... }: {
       gtk = {
         enable = true;
         iconTheme = {
@@ -101,6 +101,8 @@ lib.mkMerge [
             wrapProgram $out/bin/zoom --set QT_QPA_PLATFORM xcb
           '';
         }))
+        # Temporary
+        # (import inputs.master { inherit (pkgs) config system; }).discord
         pkgs.discord
         pkgs.teams
       ];

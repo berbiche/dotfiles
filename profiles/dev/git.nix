@@ -35,7 +35,7 @@ in
             advice.addEmptyPathspec = false;
             diff.colorMoved = "default";
             log.showSignature = false;
-
+            init.defaultBranch = "master";
             status.showStash = true;
 
             # Allows `git fetch upstream master:master` if current checkout branch is master
