@@ -132,6 +132,10 @@
           lsp.rnix.setup {
             on_attach = on_attach,
           }
+          -- Bash
+          lsp.bashls.setup {
+            on_attach = on_attach,
+          }
         EOF
       '';
     }
