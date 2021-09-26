@@ -33,6 +33,7 @@
 
       lock = [
         "${dunstctl} set-paused true"
+        "${swaylock} -f"
       ];
 
       unlock = [

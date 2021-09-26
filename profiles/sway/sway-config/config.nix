@@ -43,7 +43,8 @@ let
     '';
     browser-private = "${browser} --private-window";
     browser-work-profile = "${browser} -P job";
-    lock = "${swaylock} -f -c 0f0f0ff0 -i ${imageFolder}/current";
+    # lock = "${swaylock} -f -c 0f0f0ff0 -i ${imageFolder}/current";
+    lock = "${pkgs.systemd}/bin/loginctl lock-session";
     logout-menu = "${wlogout}";
     audiocontrol = "${pavucontrol}";
     #menu = "${nwggrid} -n 10 -fp -b 121212E0";

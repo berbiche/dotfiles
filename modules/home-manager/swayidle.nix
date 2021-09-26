@@ -163,9 +163,9 @@ in
       ${optionalString (cfg.idlehint != null) "idlehint ${durationToSecond cfg.idlehint}"}
       ${concatMapStringsSep "\n" timeoutToStr cfg.timeout}
       ${formatCommand "before-sleep" cfg.before-sleep}
-      ${formatCommand "after-resume" cfg.before-sleep}
-      ${formatCommand "lock" cfg.before-sleep}
-      ${formatCommand "unlock" cfg.before-sleep}
+      ${formatCommand "after-resume" cfg.after-resume}
+      ${formatCommand "lock" cfg.lock}
+      ${formatCommand "unlock" cfg.unlock}
     '';
 
     finalCommand = concatStringsSep " " [

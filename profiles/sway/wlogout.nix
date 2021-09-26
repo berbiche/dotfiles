@@ -7,7 +7,7 @@
     programs.wlogout.layouts."layout" = [
       {
         label = "lock";
-        action = "${pkgs.swaylock}/bin/swaylock";
+        action = "${pkgs.systemd}/bin/loginctl lock-session";
         text = "Lock";
         keybind = "l";
       }
