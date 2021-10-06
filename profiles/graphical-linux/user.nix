@@ -10,6 +10,8 @@
 
       ffmpeg
 
+      glib.bin # for 'gio'
+
       # Programs
       gnome3.nautilus # Gnome file manager
       gnome3.networkmanager-openconnect # OpenConnect plugin for NetworkManager
@@ -27,6 +29,9 @@
 
       # Minecraft client
       multimc
+
+      # Merge pdfs and other stuff
+      pdfarranger
     ];
 
 

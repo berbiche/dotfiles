@@ -2,20 +2,31 @@
 
 {
   my.home.home.packages = with pkgs; [
-    wireshark
-    ghidra-bin
-    gdb
-    pwndbg
-    burpsuite
     binutils
-    # volatility
-    p7zip
-    patchelf
-    shellcheck
-    python3Packages.binwalk
-    hexedit
-    gobuster
+    # Edit and view hex data
+    bless
+    # Tool to modify web requests, automate web requests, proxy, etc.
+    burpsuite
+    # See the file type
     file
+    # Debug binaries for reversing
+    gdb
+    # Reversing binaries
+    ghidra-bin
+    # A better (faster) dirbuster: files/directory enumeration for many protocols
+    gobuster
+    # Modify hex data
+    hexedit
+    # Extract 7z files and a lot of other stuff
+    p7zip
+    # Patch binaries using dynamic libs and other stuff
+    patchelf
+    pwndbg
+    python3Packages.binwalk
+    shellcheck
+    stegseek
+    wireshark
+    # volatility
   ];
 
   # Volatility requires this unfortunately

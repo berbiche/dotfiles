@@ -308,6 +308,7 @@ in
           \ ]
         let g:startify_bookmarks = [
           \ { 'd': '~/dotfiles' },
+          \ { 'k': '~/dev/infra/keanu.ovh' },
           \ ]
 
         autocmd User Startified setlocal cursorline
@@ -375,17 +376,22 @@ in
       # Filetree
       plugin = nvim-tree-lua;
       config = ''
-        let g:nvim_tree_auto_close = 1
-        let g:nvim_tree_auto_ignore_ft = ['startify', 'dashboard']
         let g:nvim_tree_add_trailing = 1
-        let g:nvim_tree_follow = 1
         let g:nvim_tree_gitignore = 1
         let g:nvim_tree_git_hl = 1
         let g:nvim_tree_highlight_opened_files = 1
         let g:nvim_tree_ignore = ['.git', 'result']
-        let g:nvim_tree_lsp_diagnostics = 1
 
         lua <<EOF
+          require('nvim-tree').setup {
+            auto_close = true,
+            update_focused_file = {
+              enable = true,
+              ignore_list = {'startify', 'dashboard'},
+            },
+            lsp_diagnostics = enable,
+          }
+
           function _G.tree_toggle()
             local tree = require('nvim-tree')
             local view = require('nvim-tree.view')
@@ -397,9 +403,12 @@ in
               st.set_offset(0)
             end
           end
-        EOF
 
-        nnoremap <silent> <leader>op :call v:lua.tree_toggle()<CR>
+          local map = vim.api.nvim_set_keymap
+          local opts = { noremap = true, silent = true }
+
+          map('n', '<leader>op', '<cmd>call v:lua.tree_toggle()<CR>', opts)
+        EOF
       '';
     }
 

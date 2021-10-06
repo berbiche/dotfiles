@@ -28,6 +28,8 @@
   services.gnome.gnome-keyring.enable = true;
   programs.seahorse.enable = true;
 
+  programs.dconf.enable = true;
+
   services.xserver.libinput.enable = true;
   services.xserver.layout = "us";
 
@@ -63,6 +65,19 @@
 
   # Microphone noise remover
   programs.noisetorch.enable = true;
+  home-manager.sharedModules = [{
+    systemd.user.services.noisetorch = {
+      Unit = {
+        Description = "noisetorch oneshot loading of microphone suppressor";
+      };
+      Service = {
+        Type = "oneshot";
+        ExecStart = "${config.programs.noisetorch.package}/bin/noisetorch -i";
+        RemainAfterExit = true;
+      };
+      Install.WantedBy = [ "graphical-session.target" ];
+    };
+  }];
 
   nixpkgs.config.chromium = {
     enableWideVine = true;
