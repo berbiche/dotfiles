@@ -24,6 +24,7 @@
     pwndbg
     python3Packages.binwalk
     shellcheck
+    sqlmap
     stegseek
     wireshark
     # volatility

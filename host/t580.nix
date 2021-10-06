@@ -66,6 +66,7 @@
   console.keyMap = "us";
 
   time.timeZone = "America/Montreal";
+  # time.timeZone = "Europe/Prague";
   location.provider = "manual";
 
   fileSystems."/" =
@@ -97,6 +98,7 @@
 
   networking.firewall.allowPing = true;
   #networking.firewall.allowedTCPPorts = [ 8000 ];
+  networking.firewall.allowedTCPPorts = [ 9000 9001 9002 ];
 
   hardware.opengl = {
     enable = true;
