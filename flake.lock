@@ -239,16 +239,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1630294414,
-        "narHash": "sha256-+FIN4w3dqb06ERQHUk78N/WZLKtdNJjnzBw44PQEJvM=",
+        "lastModified": 1633724791,
+        "narHash": "sha256-KERzlivd59Q6ih38IvBVSpafcFJFHYiREMqDXJeDvQU=",
         "owner": "berbiche",
         "repo": "home-manager",
-        "rev": "7c9b54ef6acab9ae2c06f6ec7f7f99503c392e5c",
+        "rev": "fcc173467eda8af80b273fc8d471e4de2d93b1f3",
         "type": "github"
       },
       "original": {
         "owner": "berbiche",
-        "ref": "neovim-initextra",
+        "ref": "my-custom-master-branch",
         "repo": "home-manager",
         "type": "github"
       }
@@ -338,15 +338,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1631730143,
-        "narHash": "sha256-A8PaUyZu5WVp+IojG5q+39rjf5x57OFDYmVoDFPZLlY=",
-        "owner": "LnL7",
+        "lastModified": 1633711635,
+        "narHash": "sha256-Inv2+S8xH4+tnT2bjZobGYV/9OuQoYbKYYsqO2/cGQc=",
+        "owner": "berbiche",
         "repo": "nix-darwin",
-        "rev": "e1a3f7292f085fd588d11f94ed0f47968c16df0c",
+        "rev": "8c87b2f86968a63f0e1ba70e6ca9ca5345ea931c",
         "type": "github"
       },
       "original": {
-        "owner": "LnL7",
+        "owner": "berbiche",
+        "ref": "stuff-i-want-merged",
         "repo": "nix-darwin",
         "type": "github"
       }

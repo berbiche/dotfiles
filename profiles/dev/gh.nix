@@ -2,12 +2,14 @@
   my.home = {
     programs.gh = {
       enable = true;
-      gitProtocol = "ssh";
+      settings.gitProtocol = "ssh";
       # prompt = "enabled";
-      aliases = {
+      settings.aliases = {
+        aliases = "alias list";
         co = "pr checkout";
         pv = "pr view";
         rc = ''!gh repo create "$(basename "$(pwd)")" "$@"'';
+        rcl = "repo clone";
       };
     };
   };

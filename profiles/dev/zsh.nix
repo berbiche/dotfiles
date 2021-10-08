@@ -176,7 +176,7 @@ in
             local cmd=(sudo nixos-rebuild switch --flake ~/dotfiles -v -L)
           ''}
           ${lib.optionalString pkgs.stdenv.isDarwin ''
-            local cmd=(sudo darwin-rebuild switch --flake ~/dotfiles -v -L)
+            local cmd=(darwin-rebuild switch --flake ~/dotfiles -v -L)
           ''}
           echo "''${cmd[@]}" "$@"
           "''${cmd[@]}" "$@"

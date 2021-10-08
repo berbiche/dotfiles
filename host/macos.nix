@@ -69,6 +69,30 @@
     TrackpadRightClick = true;
   };
 
+  homebrew.enable = true;
+  homebrew.brewPrefix = "/usr/local/Homebrew/bin";
+  homebrew.brews = [
+    "lsusb"
+    "pinentry"
+    "pinentry-mac"
+  ];
+  homebrew.casks = [
+    "alt-tab"
+    "caffeine"
+    "hiddenbar"
+    "karabiner-elements"
+    "keycastr"
+    "meetingbar"
+    "monitorcontrol"
+    "raycast"
+    "rectangle"
+    "scroll-reverser"
+    # "spotify"
+    "vagrant"
+    # "virtualbox"
+    "yubico-yubikey-personalization-gui"
+  ];
+
   my.home = { config, pkgs, ... }: {
     home.file."Applications/Home Manager Apps".source = let
       apps = pkgs.buildEnv {
@@ -77,6 +101,8 @@
         pathsToLink = "/Applications";
       };
     in "${apps}/Applications";
+
+    home.sessionPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ];
 
     programs.git.extraConfig = {
       "includeIf \"gitdir:~/dev/adgear/\"".path = toString (pkgs.writeText "git-includeif-work" ''

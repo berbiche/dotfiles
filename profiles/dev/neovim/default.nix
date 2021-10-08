@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
 {
+  imports = [ ./darwin.nix ];
+
   my.home = { config, osConfig, lib, pkgs, ... }: let
     shellAliases = rec {
       # The `-s` or `--remote` flag has to be specified last

@@ -7,11 +7,12 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     # nixpkgs.url = "github:berbiche/nixpkgs/fix-emacs-passthru";
     # nixpkgs.url = "git+file:///home/nicolas/dev/nixpkgs";
+    #nix-darwin.url = "github:LnL7/nix-darwin";
+    nix-darwin.url = "github:berbiche/nix-darwin/stuff-i-want-merged";
     master.url = "github:nixos/nixpkgs/master";
-    nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     # home-manager.url= "github:nix-community/home-manager";
-    home-manager.url= "github:berbiche/home-manager/neovim-initextra";
+    home-manager.url= "github:berbiche/home-manager/my-custom-master-branch";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/nur";
     my-nur = { url = "github:berbiche/nur-packages"; flake = false; };
@@ -79,6 +80,7 @@
 
     mkDarwinConfig = args:
       inputs.nix-darwin.lib.darwinSystem {
+        system = args.platform;
         modules = mkConfig ((removeAttrs args [ "platform" ]) // {
           isLinux = false;
           extraModules = [
