@@ -102,7 +102,7 @@
       };
     in "${apps}/Applications";
 
-    home.sessionPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ];
+    #home.sessionPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ];
 
     programs.git.extraConfig = {
       "includeIf \"gitdir:~/dev/adgear/\"".path = toString (pkgs.writeText "git-includeif-work" ''
