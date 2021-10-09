@@ -61,12 +61,6 @@ let
       version = "0.31.0";
       sha256 = "sha256-PsddtpwaK070LFtkOIP4ddE/SUmHgfLZZozjyYQHsz0=";
     };
-    neovim = buildVs {
-      name = "vscode-neovim";
-      publisher = "asvetliakov";
-      version = "0.0.78";
-      sha256 = "sha256-dyXuMITHoLZBOYtLo4Jknf4TkeCysiNGQWkqxMPlfyg=";
-    };
     wakatime = let
       wakatime =
         (buildVs {
@@ -84,6 +78,7 @@ let
   };
 
   extensions = with pkgs.vscode-extensions; [
+    asvetliakov.vscode-neovim
     bbenoist.nix
     redhat.vscode-yaml
     arrterian.nix-env-selector
