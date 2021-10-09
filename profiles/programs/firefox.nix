@@ -91,7 +91,8 @@ let
       "nglayout.initialpaint.delay" = 400;
 
       # Acceleration settings
-      "gfx.webrender.all" = true;
+      # Temporarily disable (2021-10-09)
+      "gfx.webrender.all" = false;
       # "layers.acceleration.force-enabled" = true;
 
       # Extension related settings
