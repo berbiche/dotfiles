@@ -65,7 +65,28 @@ in
       '');
     };
 
-    home.file.".mailcap".text = ''
+    home.file.".mailcap".text = let
+      setsid = "${pkgs.util-linux}/bin/setsid";
+      openfile = "${pkgs.writeShellScript "openfile" ''
+        # Helps open a file with xdg-open from mutt in a external program without weird side effects.
+        tempdir="''${TMPDIR:-$(mktemp -d)}"
+        file="$tempdir/$(basename "$1")"
+        [ "$(uname)" = "Darwin" ] && opener="open" || opener="${setsid} -f ${pkgs.xdg_utils}/bin/xdg-open"
+        mkdir -p "$tempdir"
+        cp -f "$1" "$file"
+        $opener "$file" >/dev/null 2>&1
+        find "''${tempdir:?}" -mtime +1 -type f -delete
+      ''}";
+    in ''
+      ${lib.optionalString false "text/html; ${pkgs.w3m}/bin/w3m -dump -T text/html -I %{charset} -O utf-8 %s; copiousoutut; description=HTML Text; nametemplate=%s.html"}
+
+
+      text/plain; $EDITOR %s ;
+      ${lib.optionalString true "text/html; ${openfile} %s ; nametemplate=%s.html"}
+      text/html; ${pkgs.lynx}/bin/lynx -assume_charset=%{charset} -display_charset=utf-8 -dump %s; nametemplate=%s.html; copiousoutput;
+      image/*; ${openfile} %s ;
+      application/pdf; ${openfile} %s ;
+      # application/pgp-encrypted; gpg -d '%s'; copiousoutput;
     '';
   };
 }
