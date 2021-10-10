@@ -45,11 +45,7 @@ in
       name = network;
       dns = [ "10.97.42.6" "10.10.10.2" ];
       matchConfig.Name = network;
-      # linkConfig.ActivationPolicy = "manual";
-      extraConfig = ''
-        [Link]
-        ActivationPolicy=manual
-      '';
+      linkConfig.ActivationPolicy = "manual";
       networkConfig = {
         Address = cfg.ipv4Address;
         Domains = [ "~tq.rs." "lan." ];
