@@ -80,6 +80,8 @@ let
       "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons" = false;
       # Disable recommend features as you browse
       "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features" = false;
+      # Force-enable xdg-desktop-portal for filepickers and other things
+      "widget.use-xdg-desktop-portal" = true;
 
       # Prevent the browser from requesting true fullscreen
       # This allows me to personally fullscreen or not something (e.g. Youtube)
