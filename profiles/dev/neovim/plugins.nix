@@ -57,17 +57,19 @@ in
       # Better wildmenu
       plugin = wilder-nvim;
       config = ''
-        call wilder#setup({'modes': [':', '/', '?']})
-        call wilder#set_option('pipeline', [
-          \ wilder#branch(
-          \   wilder#cmdline_pipeline({'fuzzy': 1, 'language': 'python'}),
-          \   wilder#python_search_pipeline(),
-          \ ),
-          \ ])
-        call wilder#set_option('renderer', wilder#popupmenu_renderer({
-          \ 'highlighter': [wilder#basic_highlighter()],
-          \ 'left': [wilder#popupmenu_devicons()],
-          \ }))
+        if !exists('g:vscode')
+          call wilder#setup({'modes': [':', '/', '?']})
+          call wilder#set_option('pipeline', [
+            \ wilder#branch(
+            \   wilder#cmdline_pipeline({'fuzzy': 1, 'language': 'python'}),
+            \   wilder#python_search_pipeline(),
+            \ ),
+            \ ])
+          call wilder#set_option('renderer', wilder#popupmenu_renderer({
+            \ 'highlighter': [wilder#basic_highlighter()],
+            \ 'left': [wilder#popupmenu_devicons()],
+            \ }))
+        endif
       '';
     }
     {
