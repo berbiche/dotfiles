@@ -331,7 +331,7 @@ in
 
       settings = [
         top-bar
-        bottom-bar
+        # bottom-bar
       ];
       style = builtins.readFile ./style.css;
     };
@@ -340,7 +340,6 @@ in
       # Temporary "fix" until https://github.com/Alexays/Waybar/issues/1205
       # is resolved
       Service.Environment = [ "PATH=/run/current-system/sw/bin" ];
-      Unit.X-Restart-Triggers = [ "${config.xdg.configFile."waybar/config".source}" ];
     };
   };
 }

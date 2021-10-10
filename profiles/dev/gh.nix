@@ -10,7 +10,8 @@
         pv = "pr view";
         # Mnemonic: pr mine
         prm = "pr list --author=berbiche";
-        rc = ''!gh repo create "$(basename "$(pwd)")" "$@"'';
+        # Create a repo for my user
+        rc = ''!gh repo create "''${PWD##*/}" "$@"'';
         rcl = "repo clone";
       };
     };
