@@ -146,6 +146,11 @@
         # nur = import inputs.nur { nurpkgs = final; pkgs = final; };
         my-nur = import inputs.my-nur { pkgs = final; };
         nixpkgs-wayland = inputs.nixpkgs-wayland.overlay final prev;
+        master = import inputs.master {
+          system = prev.system;
+          #overlays = self.overlays;
+          config = prev.config;
+        };
       };
     };
 

@@ -14,12 +14,14 @@ in
 
     services.dunst.enable = true;
     # https://github.com/dunst-project/dunst/pull/855
+    # https://github.com/dunst-project/dunst/pull/930
     services.dunst.package = pkgs.nixpkgs-wayland.dunst.overrideAttrs (old: {
       src = pkgs.fetchFromGitHub {
         owner = "dunst-project";
         repo = "dunst";
-        rev = "3e1b3064c1600f1feb928f32b462a2e27a0fbc70";
-        hash = "sha256-N7GrjA7qT1D5Fas4W6tE3hPI1hFVhSHtJw9Pxb/7a1k=";
+        rev = "72b2509d7fa80ab1f56c532a266e5a51063b2920";
+        # hash = "${lib.fakeHash}";
+        hash = "sha256-/8+5cOXLEjBGX8LUUgAk6KWhsN8JHVjaS3cgv1j6ao0=";
       };
     });
     services.dunst.iconTheme = {

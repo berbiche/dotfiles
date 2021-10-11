@@ -113,7 +113,7 @@ lib.mkMerge [
           gawk gnused jq wget
           pulseaudio # for pactl
           pamixer # volume control
-          volnoti # show a popup notification for the volume level
+          avizo # show a popup notification for the volume level
           sway # for swaymsg
           wl-clipboard # wl-copy/wl-paste
           fzf # menu
@@ -123,7 +123,6 @@ lib.mkMerge [
           notify-send_sh # from my overlays
           playerctl # to control mpris players
           util-linux # flock
-          my-nur.eww-wayland # 'eww open'
         ]);
       in "${
         # For the patchShebang phase

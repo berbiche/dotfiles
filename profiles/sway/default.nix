@@ -2,32 +2,81 @@
 
 {
   imports = [
+    # My actual Sway configuration (keybindings, etc.)
     ./sway-config
-    ./waybar
-    ./nwg-panel
-    ./eww
 
+    # Bar that displays active workspaces, running apps, a calendar, etc.
+    ./waybar
+
+    # Waybar with a Gnome-like look. Lacks all the native modules Waybar has.
+    ./nwg-panel
+
+    # No longer needed since I use avizo
+    # ./eww
+
+    # Displays a notification for volume/microphone/brightness changes
+    # with the script volume.sh
+    ./avizo.nix
+
+    # Displays notification
     ./dunst.nix
+
+    # Automatically changes the theme for my desktop based on the time
+    # of day and controls the gamma and brightness
     ./gammastep.nix
+
+    # Automatically lock my system after a set interval
     ./idle-service.nix
+
+    # Automatically setup my displays based on a set of profiles
     ./kanshi.nix
+
+    # Trackpad gestures handling to allow MacOS-like workspace switching
     ./libinput.nix
+
+    # Notification daemon
     # ./linux-notification-center.nix
+
+    # Notification daemon
     # ./mako.nix
+
+    # Shows a prompt to run some root stuff like certain systemctl calls
     ./polkit.nix
+
+    # Configuration that enables screensharing in Firefox and other programs
     ./screenshare.nix
+
+    # Sway's lockscreen configuration
     ./swaylock.nix
+
+    # User
     ./udiskie.nix
-    ./volnoti.nix
+
+    # Avizo but can only show volume level
+    # ./volnoti.nix
+
+    # Logout menu that is displayed with a special keybind
     ./wlogout.nix
-    ./wob.nix
+
+    # Like Avizo but much simpler and no longer needed
+    # ./wob.nix
+
+    # rofi/Dmenu for Wayland, application runner that supports binaries
+    # and desktop files
     ./wofi.nix
+
+    # Daemon to expose Sway settings like the cursor package and size.
+    # Required for proper scaling support of the cursor in XWayland apps
+    # when the display is scaled.
     ./xsettingsd.nix
+
     # ./gnome-session.nix
   ];
 
   services.xserver.displayManager.defaultSession = "sway";
 
+  # I don't use the Sway Home Manager module since it does not expose
+  # the session to my login manager
   programs.sway = {
     enable = true;
 
@@ -55,8 +104,7 @@
       export ELM_ENGINE=wayland_egl
       export ECORE_EVAS_ENGINE=wayland_egl
 
-      # Fix for some Java AWT applications (e.g. Android Studio),
-      # use this if they aren't displayed properly:
+      # Fix for some Java AWT applications (e.g. Android Studio)
       export _JAVA_AWT_WM_NONREPARENTING=1
 
       # TODO: remove once gnome-keyring exports SSH_AUTH_SOCK correctly
@@ -68,6 +116,7 @@
     '';
   };
 
+  # Displays keys being taped on the screen
   programs.wshowkeys.enable = true;
 
   my.home = { config, pkgs, lib, ... }: {

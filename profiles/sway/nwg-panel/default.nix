@@ -7,7 +7,7 @@ in
     options.programs.nwg-panel.enable = lib.mkEnableOption "nwg-panel";
 
     config = lib.mkIf config.programs.nwg-panel.enable {
-      home.packages = [ pkgs.my-nur.nwg-panel pkgs.my-nur.nwg-menu ];
+      home.packages = [ pkgs.nwg-panel pkgs.nwg-menu ];
 
       xdg.configFile."nwg-panel/config" = { source = ./config; force = true; };
       xdg.configFile."nwg-panel/menu-start.css" = { source = ./menu-start.css; force = true; };
@@ -26,9 +26,9 @@ in
         };
         Service = {
           Type = "simple";
-          ExecStart = "${pkgs.my-nur.nwg-panel}/bin/nwg-panel";
+          ExecStart = "${pkgs.nwg-panel}/bin/nwg-panel";
           Environment = [
-            "PATH=${lib.makeBinPath (with pkgs; [ playerctl curl gnome.nautilus curl ])}:$PATH"
+            "PATH=${lib.makeBinPath (with pkgs; [ playerctl curl gnome.nautilus ])}:$PATH"
           ];
           Restart = "on-failure";
           RestartSec = "1sec";
