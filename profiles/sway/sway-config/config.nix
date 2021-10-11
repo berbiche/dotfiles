@@ -71,12 +71,27 @@ let
     alacritty = "${pkgs.alacritty}/bin/alacritty";
     bitwarden = "${pkgs.bitwarden}/bin/bitwarden";
     brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl -m";
-    brightnessctl-wob = toString (pkgs.writeShellScript "brightnessctl-wob" ''
-      cut -d, -f4 | tr -d '%' |
-        if [ -p "${wobsocket}" ]; then
-          ${pkgs.coreutils}/bin/timeout --kill-after=5 5 ${pkgs.coreutils}/bin/cat > ${wobsocket} ;
-        fi
+    brightnessctl-avizo = toString (pkgs.writeShellScript "brightnessctl-avizo" ''
+      BACKGROUND=--background="rgba(204,102,102,0.8)"
+      TIME="5" # seconds
+      current="$(${pkgs.coreutils}/bin/cut -d, -f4 | ${pkgs.coreutils}/bin/tr -d '%')"
+      scaled="$(echo "scale=2; $current / 100.0" | ${pkgs.bc}/bin/bc)"
+      image=""
+      if [ "$current" -lt "34" ]; then
+        image="brightness_low"
+      elif [ "$current" -lt "67" ]; then
+        image="brightness_medium"
+      else
+        image="brightness_high"
+      fi
+      ${pkgs.avizo}/bin/avizo-client --image-resource="$image" --progress="$scaled" --time="$TIME" $BACKGROUND
     '');
+    # brightnessctl-wob = toString (pkgs.writeShellScript "brightnessctl-wob" ''
+    #   cut -d, -f4 | tr -d '%' |
+    #     if [ -p "${wobsocket}" ]; then
+    #       ${pkgs.coreutils}/bin/timeout --kill-after=5 5 ${pkgs.coreutils}/bin/cat > ${wobsocket} ;
+    #     fi
+    # '');
     emacsclient = "${config.programs.emacs.finalPackage}/bin/emacsclient -c";
     # Firefox from the overlay
     firefox = "${pkgs.firefox}/bin/firefox";

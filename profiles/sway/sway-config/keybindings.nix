@@ -72,8 +72,8 @@ makeNoRepeat (defaultKeybindings // {
   "--locked Scroll_Lock"           = makeRepeatable "exec ${getScript "volume.sh"} 'mic-mute'";
 
   # Brightness
-  "--locked XF86MonBrightnessUp"   = makeRepeatable "exec ${binaries.brightnessctl} set +10% | ${binaries.brightnessctl-wob}";
-  "--locked XF86MonBrightnessDown" = makeRepeatable "exec ${binaries.brightnessctl} --min-value=30 set 10%- | ${binaries.brightnessctl-wob}";
+  "--locked XF86MonBrightnessUp"   = makeRepeatable "exec ${binaries.brightnessctl} set +10% | ${binaries.brightnessctl-avizo}";
+  "--locked XF86MonBrightnessDown" = makeRepeatable "exec ${binaries.brightnessctl} --min-value=30 set 10%- | ${binaries.brightnessctl-avizo}";
 
   # Screenshot
   "--release Print"       = "exec ${getScript "screenshot.sh"} 'selection'";
