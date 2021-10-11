@@ -18,6 +18,7 @@
     ./screenshare.nix
     ./swaylock.nix
     ./udiskie.nix
+    ./volnoti.nix
     ./wlogout.nix
     ./wob.nix
     ./wofi.nix
