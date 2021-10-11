@@ -78,7 +78,7 @@ in
           inbox.farPattern = "";
           inbox.nearPattern = "";
           inbox.extraConfig.Expunge = "Both";
-          archive.farPattern = "[Gmail]/All mail";
+          archive.farPattern = "[Gmail]/All Mail";
           archive.nearPattern = "archive";
           sent.farPattern = "[Gmail]/Sent Mail";
           sent.nearPattern = "Sent";
