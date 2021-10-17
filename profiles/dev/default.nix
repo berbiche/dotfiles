@@ -12,7 +12,7 @@ in
 {
   imports = configs;
 
-  profiles.dev.wakatime.enable = true;
+  profiles.dev.wakatime.enable = lib.mkDefault true;
 
   my.home = { config, pkgs, ... }: {
     home.sessionVariables = {
@@ -64,7 +64,8 @@ in
       htop # shows running processes with sorting or filtering
       ctop # shows running containers (supports docker, mock, runc)
       docker-compose # a nice wrapper for docker to manage multiple docker containers (for one-off projects)
-      onefetch # neofetch for a git repository : lines of code, repo, etc.
+      # onefetch's libresolv dependency does not build on aarch64
+      (lib.mkIf (!(pkgs.stdenv.isAarch64 && pkgs.stdenv.isDarwin)) onefetch) # neofetch for a git repository : lines of code, repo, etc.
 
       ispell # spellchecking
 

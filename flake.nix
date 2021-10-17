@@ -40,7 +40,7 @@
   outputs = inputs @ { self, nixpkgs, ... }: let
     inherit (nixpkgs) lib;
 
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
 
     forAllPlatforms = f: lib.genAttrs platforms (platform: f platform);
 
@@ -129,6 +129,13 @@
         hostConfiguration = ./host/macos.nix;
         userConfiguration = ./user/nicolas.nix;
       };
+      m1 = mkDarwinConfig {
+        hostname = "m1";
+        username = "nberbiche";
+        platform = "aarch64-darwin";
+        hostConfiguration = ./host/m1.nix;
+        userConfiguration = ./user/nicolas.nix;
+      };
     };
 
     overlays = with lib; let
@@ -151,6 +158,32 @@
           #overlays = self.overlays;
           config = prev.config;
         };
+      };
+      x86_64-for-aarch64 = final: prev: let
+        inherit (prev) lib;
+        pkgs-amd64-darwin = import prev.path {
+          inherit (prev) config;
+          localSystem = "x86_64-darwin";
+        };
+      in optionalAttrs (prev.stdenv.isDarwin && prev.stdenv.isAarch64) {
+        #vscode = pkgs-amd64-darwin.vscode;
+        #vscode-extensions = pkgs-amd64-darwin.vscode-extensions;
+        #vscode-utils = pkgs-amd64-darwin.vscode-utils;
+        #vscode-with-extensions = pkgs-amd64-darwin.vscode-with-extensions;
+        #vscodium = pkgs-amd64-darwin.vscodium;
+        nix-index-unwrapped = prev.nix-index-unwrapped.overrideAttrs (drv: rec {
+          src = prev.fetchFromGitHub {
+            owner = "bennofs";
+            repo = "nix-index";
+            rev = "5a4b3c603b837ded17845c59227dd06312562782"; 
+            sha256 = "sha256:0ir9zjm49qx28a3hp0s3k6s90mjcddn8f86jyp7p3px91v4bma6c";
+          };
+          cargoDeps = drv.cargoDeps.overrideAttrs (lib.const {
+            #name = "${drv.name}-vendor.tar.gz";
+            inherit src;
+            outputHash = "sha256:0nqfcklkljgqpw4mzs2ak3p5dccgw8mxfchjkkj1zrrf4xg2mgld";
+          });
+        });
       };
     };
 

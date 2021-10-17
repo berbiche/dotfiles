@@ -113,7 +113,7 @@ let
 in
 {
   my.home = { config, ... }: {
-    programs.vscode = {
+    programs.vscode = lib.mkIf (! (pkgs.stdenv.isDarwin && pkgs.stdenv.isAarch64)){
       enable = true;
 
       package = finalPackage;

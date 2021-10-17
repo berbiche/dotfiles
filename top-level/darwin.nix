@@ -22,7 +22,7 @@
     # "/usr/bin/env"
   ];
 
-  nix.trustedUsers = [ "@admin" "nicolas" ];
+  nix.trustedUsers = [ "@admin" config.my.username ];
   nix.useDaemon = true;
   services.nix-daemon.enable = true;
 
