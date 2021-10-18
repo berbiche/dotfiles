@@ -173,10 +173,10 @@
         #vscodium = pkgs-amd64-darwin.vscodium;
         nix-index-unwrapped = prev.nix-index-unwrapped.overrideAttrs (drv: rec {
           src = prev.fetchFromGitHub {
-            owner = "bennofs";
+            owner = "berbiche";
             repo = "nix-index";
-            rev = "5a4b3c603b837ded17845c59227dd06312562782"; 
-            sha256 = "sha256:0ir9zjm49qx28a3hp0s3k6s90mjcddn8f86jyp7p3px91v4bma6c";
+            rev = "de7f7dce37a47bcc528e527580b12f6c1a87da25";
+            sha256 = "sha256-kExZMd1uhnOFiSqgdPpxp1txo+8MkgnMaGPIiTCCIQk=";
           };
           cargoDeps = drv.cargoDeps.overrideAttrs (lib.const {
             #name = "${drv.name}-vendor.tar.gz";
