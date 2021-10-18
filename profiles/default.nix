@@ -39,6 +39,7 @@ let
       default-linux = mkProfile (with self; [ core-linux dev graphical-linux programs sway ctf secrets ]);
     }
     // optionalAttrs isDarwin {
+      core-darwin = mkProfile [ ./core-darwin ];
       yabai = mkProfile [ ./yabai ];
     };
 in
