@@ -14,6 +14,12 @@ in
 
   profiles.dev.wakatime.enable = lib.mkDefault true;
 
+  fonts.fonts = with pkgs; [
+    anonymousPro
+    source-code-pro
+    nerdfonts
+  ];
+
   my.home = { config, pkgs, ... }: {
     home.sessionVariables = {
       LESS = "--RAW-CONTROL-CHARS --quit-if-one-screen";

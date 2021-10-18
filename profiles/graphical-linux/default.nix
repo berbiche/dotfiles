@@ -99,11 +99,8 @@
       noto-fonts-cjk
       noto-fonts-emoji
       ubuntu_font_family
-      anonymousPro
-      source-code-pro
       google-fonts
       liberation_ttf
-      nerdfonts
       hasklig
       powerline-fonts
       ttf_bitstream_vera
