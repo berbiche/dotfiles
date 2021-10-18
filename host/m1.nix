@@ -20,9 +20,11 @@
   system.defaults.loginwindow.LoginwindowText = "Property of Nicolas Berbiche";
 
   homebrew.enable = true;
+  homebrew.cleanup = "uninstall";
   homebrew.brewPrefix = "/opt/homebrew/bin";
   homebrew.brews = [ ];
   homebrew.casks = [
+    "docker"
     # "vagrant"
     # "virtualbox"
     #"yubico-yubikey-personalization-gui"
