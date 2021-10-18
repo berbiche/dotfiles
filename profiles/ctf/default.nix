@@ -15,8 +15,12 @@
     ghidra-bin
     # A better (faster) dirbuster: files/directory enumeration for many protocols
     gobuster
+    # Password cracker
+    hashcat
     # Modify hex data
     hexedit
+    # Password cracker
+    john
     # Extract 7z files and a lot of other stuff
     p7zip
     # Patch binaries using dynamic libs and other stuff
