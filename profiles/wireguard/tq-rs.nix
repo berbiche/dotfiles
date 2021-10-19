@@ -33,7 +33,7 @@ in
       };
       wireguardPeers = map (x: { wireguardPeerConfig = x; }) [{
         # AllowedIPs = [ "10.10.10.0/24" "10.97.1.0/24" "10.97.42.0/24" "10.36.25.0/24" "fc00:23:6::/64" ];
-        AllowedIPs = [ "10.10.10.0/24" "10.97.42.0/24" "10.36.25.0/24" "fc00:23:6::/64" ];
+        AllowedIPs = [ "10.10.10.0/24" "10.97.42.0/24" "10.97.1.0/24" "10.36.25.0/24" "fc00:23:6::/64" ];
         Endpoint = "dozer.qt.rs:51820";
         PersistentKeepalive = 25;
         PresharedKeyFile = "/private/wireguard/zion.preshared";
@@ -43,12 +43,12 @@ in
     systemd.network.networks.${network} = {
       enable = true;
       name = network;
-      dns = [ "10.97.42.6" "10.10.10.2" ];
+      dns = [ "10.97.42.6" "10.36.25.1" ];
       matchConfig.Name = network;
       linkConfig.ActivationPolicy = "manual";
       networkConfig = {
         Address = cfg.ipv4Address;
-        Domains = [ "~tq.rs." "lan." ];
+        Domains = [ "~tq.rs." "lan." "condo." ];
         DNSSEC = false;
       };
       routes = map (x: { routeConfig = x; }) [
@@ -57,6 +57,11 @@ in
         #   Destination = "10.97.1.0/24";
         #   GatewayOnLink = true;
         # }
+        {
+          Gateway = "10.10.10.1";
+          Destination = "10.97.1.0/24";
+          GatewayOnLink = true;
+        }
         {
           Gateway = "10.10.10.1";
           Destination = "10.97.42.0/24";
