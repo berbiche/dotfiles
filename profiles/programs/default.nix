@@ -22,7 +22,7 @@ in
       [
         ncdu
         element-desktop
-        youtube-dl
+        yt-dlp
       ]
       (lib.mkIf isLinux [
         fractal
