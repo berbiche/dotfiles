@@ -26,6 +26,7 @@ in
       ]
       (lib.mkIf isLinux [
         fractal
+        evince
         nwg-launchers
         bitwarden bitwarden-cli
         spotify
