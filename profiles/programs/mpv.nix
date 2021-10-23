@@ -18,6 +18,8 @@ lib.mkIf isLinux {
     keep-open=yes
     profile=gpu-hq
 
+    script-opts=ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp
+
     [profile-thinkpad]
     profile=gpu-hq
 
