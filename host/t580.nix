@@ -113,7 +113,8 @@
 
   virtualisation.libvirtd = {
     enable = true;
-    # qemuPackage = pkgs.qemu_kvm;
+    # qemu.package = pkgs.qemu_kvm;
+    qemu.runAsRoot = false;
   };
 
   services.printing.drivers = [ pkgs.hplip ];
