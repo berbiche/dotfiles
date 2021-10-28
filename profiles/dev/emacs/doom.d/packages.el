@@ -1,4 +1,5 @@
-;; -*- no-byte-compile: t; -*-
+;;; packages.el -*- lexical-binding: t; no-byte-compile: t; -*-
+
 ;;; Examples:
 ;; (package! some-package)
 ;; (package! another-package :recipe (:host github :repo "username/repo"))

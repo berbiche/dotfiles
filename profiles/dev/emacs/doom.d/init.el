@@ -1,10 +1,5 @@
-;;; init.el -*- lexical-binding: t; -*-
+;;; init.el -*- lexical-binding: t; no-byte-compile: t; -*-
 
-;; Copy this file to ~/.doom.d/init.el or ~/.config/doom/init.el ('doom install'
-;; will do this for you). The `doom!' block below controls what modules are
-;; enabled and in what order they will be loaded. Remember to run 'doom refresh'
-;; after modifying it.
-;;
 ;; More information about these modules (and what flags they support) can be
 ;; found in modules/README.org.
 
@@ -17,7 +12,7 @@
        company           ; the ultimate code completion backend
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
-       ivy               ; a search engine for love and life
+       (ivy +icons +fuzzy) ; a search engine for love and life
        ;;vertico           ; the search engine of the future
 
        :ui

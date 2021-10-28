@@ -1,18 +1,29 @@
-;;; .doom.d/config.el -*- lexical-binding: t; -*-
-;; Place your private configuration here
+;;; config.el -*- lexical-binding: t; no-byte-compile: t; -*-
 
 ;; themes are THE MOST important setting
 (require 'base16-theme)
 
-;; Fonts too
-;; (setq doom-theme 'base16-gruvbox-dark-hard
-(setq doom-theme 'base16-tomorrow-night-eighties
-      display-line-numbers-type 'relative)
+;; Works for the server, but changes the theme for all frames...
+;; (add-hook 'server-after-make-frame-hook
+;;           (lambda ()
+;;             (interactive)
+;;             (if (display-graphic-p (selected-frame))
+;;                 (setq doom-theme 'base16-tomorrow-night-eighties)
+;;               (setq doom-theme 'wombat))
+;;             (doom/reload-theme)))
+(if (display-graphic-p (selected-frame))
+    (setq doom-theme 'base16-tomorrow-night-eighties)
+  (setq doom-theme 'wombat))
+
+
+(setq display-line-numbers-type 'relative)
+
+;; Display 5 lines below/above when scrolling
+(setq scroll-margin 5)
 
 ;; (setq doom-font (font-spec :family "Iosevka" :size 16)
 ;;       doom-big-font (font-spec :family "Iosevka" :size 30)
 ;;       doom-variable-pitch-font (font-spec :family "Noto Sans" :size 14))
-
 ;; <=> >> >>= >>> <<< <- -> ->> <-> &&
 (setq doom-font (font-spec :family "Source Code Pro" :size 16)
       doom-big-font (font-spec :family "Source Code Pro" :size 30)
@@ -54,6 +65,11 @@
   "Toggle `show-trailing-whitespace'"
   (interactive)
   (setq show-trailing-whitespace (not show-trailing-whitespace)))
+
+(add-hook 'vterm-mode-hook (lambda ()
+                             (set (make-local-variable 'show-trailing-whitespace) nil)))
+(add-hook 'term-mode-hook (lambda ()
+                            (set (make-local-variable 'show-trailing-whitespace) nil)))
 
 ;; Lets drag stuff aroung using hjkl
 (map! :ne "C-S-k" #'drag-stuff-up)
