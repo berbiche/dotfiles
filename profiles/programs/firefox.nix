@@ -97,6 +97,8 @@ let
       "gfx.webrender.all" = false;
       # "layers.acceleration.force-enabled" = true;
 
+      "widget.wayland.async-clipboard.enabled" = true;
+
       # Extension related settings
       "extensions.ui.dictionary.hidden" = false;
       "extensions.ui.extension.hidden" = false;
