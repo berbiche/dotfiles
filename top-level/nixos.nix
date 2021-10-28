@@ -35,9 +35,9 @@
 
   # We need this to generate the sops host key
   services.openssh.enable = true;
-  services.openssh.openFirewall = false;
-  services.openssh.permitRootLogin = "no";
-  services.openssh.passwordAuthentication = false;
+  services.openssh.openFirewall = lib.mkDefault false;
+  services.openssh.permitRootLogin = lib.mkDefault "no";
+  services.openssh.passwordAuthentication = lib.mkDefault false;
 
   location.longitude = config.my.location.longitude;
   location.latitude = config.my.location.latitude;

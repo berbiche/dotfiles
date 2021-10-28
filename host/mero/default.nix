@@ -142,6 +142,11 @@
     57621 57622
   ];
 
+  services.openssh.enable = true;
+  services.openssh.openFirewall = true;
+  services.openssh.permitRootLogin = "no";
+  services.openssh.passwordAuthentication = true;
+
   virtualisation.libvirtd = {
     enable = true;
     qemuPackage = pkgs.qemu_kvm;

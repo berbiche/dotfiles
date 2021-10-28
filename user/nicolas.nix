@@ -44,6 +44,9 @@ lib.mkMerge [
         ++ (lib.optional config.virtualisation.libvirtd.enable "libvirtd")
         ;
       initialPassword = username;
+      openssh.authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIXqBarGejSu6/XzblEbsWocVCIyPxuQUCVLnMtnfrvi"
+      ];
     };
     users.groups.${username} = {
       gid = config.users.users.${username}.uid;
