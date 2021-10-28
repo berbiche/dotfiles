@@ -48,9 +48,12 @@ let
     logout-menu = "${wlogout}";
     audiocontrol = "${pavucontrol}";
     #menu = "${nwggrid} -n 10 -fp -b 121212E0";
-    menu = "${pkgs.bash}/bin/bash -c '${xfce4-appfinder} --disable-server'";
+    menu = "${pkgs.bash}/bin/bash -i -c '${xfce4-appfinder} --disable-server'";
     # Execute in bash shell to inherit shell variables
-    menu-wofi = "${pkgs.bash}/bin/bash -c '${wofi} --fork --show drun,run'";
+    menu-wofi = "${pkgs.bash}/bin/bash -i -c '${wofi} --fork --show drun,run'";
+    menu-rofi = "${pkgs.bash}/bin/bash -i -c ${pkgs.writeShellScript "rofi" ''
+      ${rofi} -show combi -combi-modi drun,run -display-drun ''' -display-combi 'Launch' -theme slate
+    ''}";
 
     on-startup-shutdown = pkgs.runCommandLocal "sway-on-startup-shutdown" {
       src = pkgs.fetchFromGitHub {
@@ -102,6 +105,7 @@ let
     signal-desktop = "${pkgs.signal-desktop}/bin/signal-desktop";
     nwggrid = "${pkgs.nwg-launchers}/bin/nwggrid";
     nwgbar = "${pkgs.nwg-launchers}/bin/nwgbar";
+    rofi = "${pkgs.rofi-wayland}/bin/rofi";
     spotify = "${pkgs.spotify}/bin/spotify";
     swaylock = "${pkgs.swaylock}/bin/swaylock";
     # swaymsg = "${config.wayland.windowManager.sway.package}/bin/swaymsg";
@@ -156,7 +160,8 @@ let
     inherit (binaries) terminal;
     modifier = "Mod4";
     floating.modifier = "Mod4";
-    menu = binaries.menu-wofi;
+    # menu = binaries.menu-wofi;
+    menu = binaries.menu-rofi;
 
     fonts = {
       names = [ "FontAwesome" "FontAwesome5Free" "Fira Sans" "DejaVu Sans Mono" ];

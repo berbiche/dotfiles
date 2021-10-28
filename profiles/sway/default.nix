@@ -63,7 +63,8 @@
 
     # rofi/Dmenu for Wayland, application runner that supports binaries
     # and desktop files
-    ./wofi.nix
+    # ./wofi.nix
+    ./rofi.nix
 
     # Daemon to expose Sway settings like the cursor package and size.
     # Required for proper scaling support of the cursor in XWayland apps
