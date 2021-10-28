@@ -350,6 +350,7 @@ in
     }
 
     # Statusbar
+    lualine-lsp-progress
     {
       plugin = lualine-nvim;
       config = ''
@@ -358,6 +359,9 @@ in
           options = {
             disabled_filetypes = { "NvimTree", "startify", "terminal", "coc-explorer" },
             theme = 'seoul256',
+            sections = {
+              lualine_c = { 'lsp_progress', },
+            },
           },
         }
       EOF

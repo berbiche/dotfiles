@@ -1,9 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ ... }:
 
 {
   imports = [ ./darwin.nix ];
 
-  my.home = { config, osConfig, lib, pkgs, ... }: let
+  my.home = { config, osConfig, lib, pkgs, inputs, ... }: let
     shellAliases = rec {
       # The `-s` or `--remote` flag has to be specified last
       # The `mktemp -u` flag will not create the file (otherwise neovim will refuse to replace it)
@@ -48,7 +48,7 @@
       withRuby = false;
 
       # From neovim-nightly input
-      # package = inputs.neovim-nightly.packages.${pkgs.system}.neovim-nightly;
+      # package = inputs.neovim-nightly.packages.${pkgs.system}.neovim;
       package = pkgs.neovim-unwrapped;
 
       extraPackages = with pkgs; [
@@ -154,12 +154,6 @@
         " Highlight trailing whitespace
         highlight TrailingWhitespace ctermbg=red guibg=red
         match TrailingWhitespace /\s\+$/
-
-        " nnoremap <leader>si :set spell!<CR>
-        " nnoremap <leader>l :set list!<CR>
-        " nnoremap <leader>S :%s//g<Left><Left>
-        " nnoremap <leader>m :set number!<CR>
-        " nnoremap <leader>n :set relativenumber!<CR>
 
         " Fix terminal escape char
         tnoremap <Esc> <C-\><C-n>
