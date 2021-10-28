@@ -107,6 +107,10 @@ lib.mkMerge [
       services.gnome-keyring.enable = true;
       services.gnome-keyring.components = [ "secrets" "ssh" ];
 
+      # Make sure to open the right port range
+      services.kdeconnect.enable = true;
+      services.kdeconnect.indicator = true;
+
       services.blueman-applet.enable = true;
       systemd.user.services.blueman-applet = {
         Unit.After = lib.mkForce [ "graphical-session-pre.target" ];
