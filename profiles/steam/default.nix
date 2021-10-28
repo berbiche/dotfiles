@@ -27,11 +27,16 @@
     };
   in [
     {
-      home.file.proton-ge-custom = {
-        recursive = true;
-        source = proton-ge;
-        target = ".steam/root/compatibilitytools.d/Proton-${version}";
-      };
+      home.activation.proton-ge-custom = ''
+        if [ ! -d "$HOME/.steam/root/compatibilitytools.d/Proton-${version}" ]; then
+          cp -rsv ${proton-ge} "$HOME/.steam/root/compatibilitytools.d/Proton-${version}"
+        fi
+      '';
+      # home.file.proton-ge-custom = {
+      #   recursive = true;
+      #   source = proton-ge;
+      #   target = ".steam/root/compatibilitytools.d/Proton-${version}";
+      # };
     }
   ];
 }
