@@ -39,6 +39,14 @@ in
       };
       default = {};
     };
+    theme.dark = mkOption {
+      type = types.str;
+      default = "";
+    };
+    theme.light = mkOption {
+      type = types.str;
+      default = "";
+    };
     colors = mkOption {
       type = with types; attrsOf (oneOf [ str int float ]);
       description = "Color profile for theming purposes.";
@@ -89,8 +97,10 @@ in
       # mkAliasDefinitions cannot be used for these options
       options.my.colors = options.my.colors;
       options.my.location = options.my.location;
+      options.my.theme = options.my.theme;
 
       config.my.location = mkDefault config.my.location;
+      config.my.theme = mkDefault config.my.theme;
     }];
   };
 

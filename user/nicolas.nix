@@ -4,6 +4,33 @@ let
   inherit (config.my) username;
 in
 lib.mkMerge [
+  {
+    my.location = {
+      latitude = 45.50;
+      longitude = 73.56;
+    };
+
+    # my.darkTheme = "Adwaita-dark";
+    # my.lightTheme = "Adwaita";
+    my.theme.dark = "Arc-Dark";
+    my.theme.light = "Arc";
+
+    my.home = { ... }: {
+      my.identity = {
+        name = "Nicolas Berbiche";
+        email = "nicolas@normie.dev";
+        # My GPG signing key
+        gpgSigningKey = "1D0261F6BCA46C6E";
+      };
+
+      # HomeManager config
+      # `man 5 home-configuration.nix`
+      manual.manpages.enable = true;
+
+      fonts.fontconfig.enable = lib.mkForce true;
+    };
+  }
+
   (lib.optionalAttrs isLinux {
     users.users.${username} = {
       createHome = true;
@@ -37,8 +64,9 @@ lib.mkMerge [
           # package = pkgs.gnome3.gnome-themes-extra;
         };
         theme = {
-          name = "Adwaita";
-          package = pkgs.gnome3.gnome-themes-extra;
+          # name = "Adwaita";
+          name = "Arc";
+          package = pkgs.arc-theme;
         };
         gtk2.extraConfig = ''
           gtk-cursor-theme-name="Adwaita"
@@ -60,9 +88,10 @@ lib.mkMerge [
         enable = true;
         platformTheme = "gnome";
         style = {
-          name = "Adwaita";
-          # package = config.gtk.theme.package;
-          package = pkgs.adwaita-qt;
+          # name = "Adwaita";
+          name = "gtk2";
+          package = config.gtk.theme.package;
+          # package = pkgs.adwaita-qt;
         };
       };
 
@@ -94,6 +123,10 @@ lib.mkMerge [
       services.playerctld.enable = false;
 
       home.packages = [
+        pkgs.gnome3.gnome-themes-extra
+        # pkgs.numix-gtk-theme
+        # pkgs.arc-theme
+        # pkgs.yaru-theme
         # Force Zoom to run on X11 for all the popups and everything
         (pkgs.zoom-us.overrideAttrs (old: {
           nativeBuildInputs = old.nativeBuildInputs or [] ++ [ pkgs.makeWrapper ];
@@ -137,26 +170,4 @@ lib.mkMerge [
     };
   })
   # </isLinux>
-
-  {
-    my.location = {
-      latitude = 45.50;
-      longitude = 73.56;
-    };
-
-    my.home = { ... }: {
-      my.identity = {
-        name = "Nicolas Berbiche";
-        email = "nicolas@normie.dev";
-        # My GPG signing key
-        gpgSigningKey = "1D0261F6BCA46C6E";
-      };
-
-      # HomeManager config
-      # `man 5 home-configuration.nix`
-      manual.manpages.enable = true;
-
-      fonts.fontconfig.enable = lib.mkForce true;
-    };
-  }
 ]

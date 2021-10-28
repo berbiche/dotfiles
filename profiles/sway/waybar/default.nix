@@ -117,7 +117,7 @@ let
         };
         exec = pkgs.writeShellScript "waybar-custom-dark-mode" ''
           ${xdg_data_dir}
-          if [[ "$(${gsettings} get org.gnome.desktop.interface gtk-theme)" = "'Adwaita'" ]]; then
+          if [[ "$(${gsettings} get org.gnome.desktop.interface gtk-theme)" = "'${config.my.theme.light}'" ]]; then
             echo ${lib.escapeShellArg lightMode}
           else
             echo ${lib.escapeShellArg darkMode}
@@ -135,10 +135,10 @@ let
         '';
         on-click = pkgs.writeShellScript "waybar-custom-dark-mode-on-click" ''
           ${xdg_data_dir}
-          if [[ "$(${gsettings} get org.gnome.desktop.interface gtk-theme)" = "'Adwaita'" ]]; then
-            ${gsettings} set org.gnome.desktop.interface gtk-theme Adwaita-dark
+          if [[ "$(${gsettings} get org.gnome.desktop.interface gtk-theme)" = "'${config.my.theme.light}'" ]]; then
+            ${gsettings} set org.gnome.desktop.interface gtk-theme ${config.my.theme.dark}
           else
-            ${gsettings} set org.gnome.desktop.interface gtk-theme Adwaita
+            ${gsettings} set org.gnome.desktop.interface gtk-theme ${config.my.theme.light}
           fi
         '';
       };

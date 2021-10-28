@@ -53,16 +53,16 @@
             case "$3" in
               night)
                 notify night
-                ${gsettings} set org.gnome.desktop.interface gtk-theme Adwaita-dark
+                ${gsettings} set org.gnome.desktop.interface gtk-theme ${config.my.theme.dark}
                 ;;
               daytime)
                 notify day
-                ${gsettings} set org.gnome.desktop.interface gtk-theme Adwaita
+                ${gsettings} set org.gnome.desktop.interface gtk-theme ${config.my.theme.light}
                 ;;
               transition)
                 if [ "$2" = "none" ]; then
                   notify night
-                  ${gsettings} set org.gnome.desktop.interface gtk-theme Adwaita-dark
+                  ${gsettings} set org.gnome.desktop.interface gtk-theme ${config.my.theme.dark}
                 fi
                 ;;
             esac
