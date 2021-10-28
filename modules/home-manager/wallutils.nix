@@ -40,7 +40,7 @@ in
         };
       };
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           enable = true;
           theme = "''${pkgs.gnome3.gnome-backgrounds}/share/backgrounds/gnome/adwaita-timed.xml";
@@ -71,7 +71,7 @@ in
         };
       };
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           enable = true;
           image = "https://source.unsplash.com/3840x2160/?mountains";

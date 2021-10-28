@@ -34,7 +34,7 @@ let
       };
       action = mkOption {
         type = str;
-        example = literalExample ''
+        example = literalExpression ''
           "$${pkgs.systemd}/bin/systemctl suspend-then-hibernate"
         '';
         description = "Action to invoke when clicking the button or using the associated keybind.";
@@ -84,7 +84,7 @@ let
         type = nullOr bool;
         default = null;
         defaultText = "null";
-        example = literalExample "true";
+        example = literalExpression "true";
         description = "Whether to make the button round.";
       };
     };
@@ -97,7 +97,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.wlogout;
-      defaultText = literalExample "pkgs.wlogout";
+      defaultText = literalExpression "pkgs.wlogout";
       description = "Package providing the <command>wlogout</command> program.";
     };
 
@@ -105,7 +105,7 @@ in
       type = types.attrsOf (types.listOf layoutType);
       default = { };
       defaultText = "{ }";
-      example = literalExample ''
+      example = literalExpression ''
         {
           # This is the default layout
           "layout" = [
@@ -157,7 +157,7 @@ in
     themes = mkOption {
       type = types.attrsOf (types.either types.lines types.path);
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           "style.css" = '''
             .lock {

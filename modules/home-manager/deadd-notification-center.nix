@@ -29,7 +29,7 @@ in
         Settings for the notification center.
         More information about the settings can be found on the project's homepage.
       '';
-      example = literalExample ''
+      example = literalExpression ''
         {
           notification-center = {
             marginTop = 30;

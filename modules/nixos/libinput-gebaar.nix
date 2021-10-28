@@ -37,12 +37,12 @@ in
     settings = mkOption {
       type = tomlFormat.type;
       default = { };
-      defaultText = literalExample "{}";
+      defaultText = literalExpression "{}";
       description = ''
         Settings for the Gebaar daemon.
         More information about settings can be found on the project's homepage.
       '';
-      example = literalExample ''
+      example = literalExpression ''
         {
           swipe.commands.three = {
             up = "''${pkgs.xdotool}/bin/xdotool key Control_L+equal";

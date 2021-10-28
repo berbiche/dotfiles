@@ -76,7 +76,7 @@ let
   mkCommandOption = x: mkOption {
     type = types.either types.str (types.listOf types.str);
     default = [ ];
-    example = literalExample ''
+    example = literalExpression ''
       [
         "''${pkgs.playerctl}/bin/playerctl --all-players pause"
         "''${pkgs.swaylock}/bin/swaylock -f"
@@ -94,15 +94,15 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.swayidle;
-      defaultText = literalExample "pkgs.swayidle";
+      defaultText = literalExpression "pkgs.swayidle";
       description = "Package to use.";
     };
 
     extraArgs = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      defaultText = literalExample "[ ]";
-      example = literalExample ''
+      defaultText = literalExpression "[ ]";
+      example = literalExpression ''
         [
           "-d"
           "-S seat0"
@@ -124,8 +124,8 @@ in
     timeout = mkOption {
       type = types.listOf timeoutSubmodule;
       default = [ ];
-      defaultText = literalExample "[ ]";
-      example = literalExample ''
+      defaultText = literalExpression "[ ]";
+      example = literalExpression ''
         [
           {
             timeout = 300;
