@@ -134,6 +134,9 @@ lib.mkMerge [
         # pkgs.numix-gtk-theme
         # pkgs.arc-theme
         # pkgs.yaru-theme
+
+        pkgs.thunderbird
+
         # Force Zoom to run on X11 for all the popups and everything
         (pkgs.zoom-us.overrideAttrs (old: {
           nativeBuildInputs = old.nativeBuildInputs or [] ++ [ pkgs.makeWrapper ];

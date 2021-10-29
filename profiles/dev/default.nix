@@ -72,6 +72,7 @@ in
       docker-compose # a nice wrapper for docker to manage multiple docker containers (for one-off projects)
       # onefetch's libresolv dependency does not build on aarch64
       (lib.mkIf (!(pkgs.stdenv.isAarch64 && pkgs.stdenv.isDarwin)) onefetch) # neofetch for a git repository : lines of code, repo, etc.
+      zellij # a terminal multiplexer
 
       ispell # spellchecking
 

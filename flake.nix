@@ -20,11 +20,14 @@
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    doom-emacs.url = "github:vlaci/nix-doom-emacs/develop";
+    # doom-emacs.url = "github:vlaci/nix-doom-emacs/develop";
+    doom-emacs.url = "github:he-la/nix-doom-emacs/develop";
     doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
     doom-emacs.inputs.nix-straight.follows = "nix-straight";
-    # Temporary fix for the emacs gcc package
-    nix-straight.url = "github:vlaci/nix-straight.el/a2379105b7506094a818de1486fa8f2525854149";
+    doom-emacs.inputs.doom-emacs.follows = "doom-emacs-source";
+    doom-emacs-source = { url = "github:hlissner/doom-emacs"; flake = false; };
+    # Pinned for now
+    nix-straight.url = "github:vlaci/nix-straight.el/e3f8aaff9ba889c6f2ee6c6d349736d21f21c685";
     nix-straight.flake = false;
     emacs-overlay.url = "github:nix-community/emacs-overlay";
 

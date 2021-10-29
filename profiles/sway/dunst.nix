@@ -13,17 +13,6 @@ in
     systemd.user.services.dunst.Service.UnsetEnvironment = [ "DISPLAY" ];
 
     services.dunst.enable = true;
-    # https://github.com/dunst-project/dunst/pull/855
-    # https://github.com/dunst-project/dunst/pull/930
-    services.dunst.package = pkgs.nixpkgs-wayland.dunst.overrideAttrs (old: {
-      src = pkgs.fetchFromGitHub {
-        owner = "dunst-project";
-        repo = "dunst";
-        rev = "72b2509d7fa80ab1f56c532a266e5a51063b2920";
-        # hash = "${lib.fakeHash}";
-        hash = "sha256-/8+5cOXLEjBGX8LUUgAk6KWhsN8JHVjaS3cgv1j6ao0=";
-      };
-    });
     services.dunst.iconTheme = {
       # name = "Papirus-Dark";
       name = "Papirus";

@@ -165,7 +165,7 @@
   services.openssh.enable = true;
   services.openssh.openFirewall = true;
   services.openssh.permitRootLogin = "no";
-  services.openssh.passwordAuthentication = true;
+  services.openssh.passwordAuthentication = false;
 
   virtualisation.libvirtd = {
     enable = true;
