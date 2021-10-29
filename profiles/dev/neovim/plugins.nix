@@ -37,6 +37,8 @@ in
     vim-surround
     vim-signify
     vim-sensible
+    # editorconfig support for indent style, etc.
+    editorconfig-nvim
     # Highlight TODO:, FIXME, HACK etc.
     todo-comments-nvim
     # Highlight ranges in the commandline such as :10,20
