@@ -1,7 +1,7 @@
-{ config, ... }:
+{ ... }:
 
 {
-  my.home = { config, pkgs, ... }: {
+  my.home = { config, lib, pkgs, ... }: {
     home.packages = with pkgs; [
       pavucontrol # Audio software
       playerctl # control MPRIS players
@@ -13,7 +13,8 @@
       glib.bin # for 'gio'
 
       # Programs
-      gnome3.nautilus # Gnome file manager
+      #gnome3.nautilus # Gnome file manager
+      cinnamon.nemo # Cinnamon's fork of Gnome's file manager
       gnome3.networkmanager-openconnect # OpenConnect plugin for NetworkManager
       gnome3.rhythmbox # Gnome music player
       gnome3.eog # Gnome image viewer
@@ -37,12 +38,15 @@
 
     # XDG configuration
     xdg.configFile."mimeapps.list".force = true;
-    xdg =  {
+    xdg.enable = true;
+    xdg.mimeApps = rec {
       enable = true;
-      mimeApps.enable = true;
 
-      mimeApps.defaultApplications = {
-        "inode/directory"               = [ "nautilus.desktop" "org.gnome.Nautilus.desktop" ];
+      # defaultApplications = lib.mapAttrs (_n: v: lib.head v) config.xdg.mimeApps.associations.added;
+      defaultApplications = config.xdg.mimeApps.associations.added;
+
+      associations.added = {
+        "inode/directory"               = [ "nemo.desktop" ];
         "x-scheme-handler/http"         = [ "firefox.desktop" ];
         "x-scheme-handler/https"        = [ "firefox.desktop" ];
         "x-scheme-handler/ftp"          = [ "firefox.desktop" ];
@@ -127,67 +131,18 @@
         "video/x-nsv"                   = [ "mpv.desktop" ];
         "video/x-ogm+ogg"               = [ "mpv.desktop" ];
         "video/x-theora+ogg"            = [ "mpv.desktop" ];
+        "x-scheme-handler/mailto"       = [ "thunderbird.desktop" ];
+        "x-scheme-handler/mid"          = [ "thunderbird.desktop" ];
+        "x-scheme-handler/news"         = [ "thunderbird.desktop" ];
+        "x-scheme-handler/snews"        = [ "thunderbird.desktop" ];
+        "x-scheme-handler/nttp"         = [ "thunderbird.desktop" ];
+        "x-scheme-handler/feed"         = [ "thunderbird.desktop" ];
+        "x-scheme-handler/webcal"       = [ "thunderbird.desktop" ];
+        "x-scheme-handler/webcals"      = [ "thunderbird.desktop" ];
+        "application/rss+xml"           = [ "thunderbird.desktop" ];
+        "application/x-extension-rss"   = [ "thunderbird.desktop" ];
       };
 
-      mimeApps.associations.added = {
-        "image/png"                     = [ "org.gnome.eog.desktop" ];
-        "x-scheme-handler/http"         = [ "firefox.desktop" ];
-        "x-scheme-handler/https"        = [ "firefox.desktop" ];
-        "x-scheme-handler/ftp"          = [ "firefox.desktop" ];
-        "x-scheme-handler/chrome"       = [ "firefox.desktop" ];
-        "text/html"                     = [ "firefox.desktop" ];
-        "application/x-extension-htm"   = [ "firefox.desktop" ];
-        "application/x-extension-html"  = [ "firefox.desktop" ];
-        "application/x-extension-shtml" = [ "firefox.desktop" ];
-        "application/xhtml+xml"         = [ "firefox.desktop" ];
-        "application/x-extension-xhtml" = [ "firefox.desktop" ];
-        "application/x-extension-xht"   = [ "firefox.desktop" ];
-        "text/plain"                    = [ "code-url-handler.desktop" "emacs.desktop" "nvim.desktop" "org.gnome.gedit.desktop" ];
-        "application/pdf"               = [ "org.gnome.Evince.desktop" "firefox.desktop" "chromium-browser.desktop" "draw.desktop" ];
-        "video/x-matroska"              = [ "mpv.desktop" "org.gnome.Totem.desktop" ];
-        "text/x-c++src"                 = [ "emacs.desktop" "firefox.desktop" "nvim.desktop" "org.gnome.gedit.desktop" ];
-        "text/x-diff"                   = [ "emacs.desktop" "firefox.desktop" "org.gnome.gedit.desktop" ];
-        "application/x-compressed-tar"  = [ "org.gnome.Nautilus.desktop" "org.gnome.FileRoller.desktop" ];
-        "application/xml"               = [ "code-url-handler.desktop" ];
-        "image/bmp"                     = [ "org.gnome.eog.desktop" ];
-        "image/gif"                     = [ "org.gnome.eog.desktop" ];
-        "image/jpg"                     = [ "org.gnome.eog.desktop" ];
-        "image/pjpeg"                   = [ "org.gnome.eog.desktop" ];
-        "image/tiff"                    = [ "org.gnome.eog.desktop" ];
-        "image/x-bmp"                   = [ "org.gnome.eog.desktop" ];
-        "image/x-gray"                  = [ "org.gnome.eog.desktop" ];
-        "image/x-icb"                   = [ "org.gnome.eog.desktop" ];
-        "image/x-ico"                   = [ "org.gnome.eog.desktop" ];
-        "image/x-png"                   = [ "org.gnome.eog.desktop" ];
-        "image/x-portable-anymap"       = [ "org.gnome.eog.desktop" ];
-        "image/x-portable-bitmap"       = [ "org.gnome.eog.desktop" ];
-        "image/x-portable-graymap"      = [ "org.gnome.eog.desktop" ];
-        "image/x-portable-pixmap"       = [ "org.gnome.eog.desktop" ];
-        "image/x-xbitmap"               = [ "org.gnome.eog.desktop" ];
-        "image/x-xpixmap"               = [ "org.gnome.eog.desktop" ];
-        "image/x-pcx"                   = [ "org.gnome.eog.desktop" ];
-        "image/svg+xml"                 = [ "org.gnome.eog.desktop" ];
-        "image/svg+xml-compressed"      = [ "org.gnome.eog.desktop" ];
-        "image/vnd.wap.wbmp"            = [ "org.gnome.eog.desktop" ];
-        "image/x-icns"                  = [ "org.gnome.eog.desktop" ];
-        "audio/vorbis"                  = [ "rhythmbox.desktop" ];
-        "audio/x-vorbis"                = [ "rhythmbox.desktop" ];
-        "audio/x-scpls"                 = [ "rhythmbox.desktop" ];
-        "audio/x-mp3"                   = [ "rhythmbox.desktop" ];
-        "audio/x-mpeg"                  = [ "rhythmbox.desktop" ];
-        "audio/mpeg"                    = [ "rhythmbox.desktop" ];
-        "audio/x-mpegurl"               = [ "rhythmbox.desktop" ];
-        "audio/x-flac"                  = [ "rhythmbox.desktop" ];
-        "audio/mp4"                     = [ "rhythmbox.desktop" ];
-        "audio/x-it"                    = [ "rhythmbox.desktop" ];
-        "audio/x-mod"                   = [ "rhythmbox.desktop" ];
-        "audio/x-s3m"                   = [ "rhythmbox.desktop" ];
-        "audio/x-stm"                   = [ "rhythmbox.desktop" ];
-        "audio/x-xm"                    = [ "rhythmbox.desktop" ];
-        "audio/midi"                    = [ "mpv.desktop" ];
-        "application/zip"               = [ "org.gnome.Nautilus.desktop" ];
-        "video/mp4"                     = [ "firefox.desktop" "mpv.desktop" ];
-      };
     };
   };
 }
