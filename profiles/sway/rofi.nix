@@ -28,5 +28,20 @@
       #   sorting-method = "name";
       # };
     };
+
+    xdg.configFile."rofi/themes" = let
+      rofi-themes = pkgs.fetchFromGitHub {
+        owner = "davatorium";
+        repo = "rofi-themes";
+        rev = "bfdde8e7912ad50a468c721b29b448c1ec5fa5e3";
+        sha256 = "sha256-w/AE1o8vIZdD0jAi7++gdlmApGjeyDv6CD4xxrD9Fsw=";
+      };
+    in {
+      recursive = true;
+      source = pkgs.runCommandLocal "rofi-themes" { src = rofi-themes; } ''
+        mkdir -p "$out"
+        cp -rs --no-clobber --no-preserve=mode "$src/Official Themes/." "$src/User Themes/." "$out"
+      '';
+    };
   };
 }
