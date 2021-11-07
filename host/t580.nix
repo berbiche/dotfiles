@@ -56,7 +56,9 @@
       enable = true;
       # My disk is encrypted so editor isn't that big of a security risk
       editor = true;
-      consoleMode = "auto";
+      # Hidpi screen, use the 80x50 console mode for a bigger font
+      # This is the only way to do it atm with systemd-boot
+      consoleMode = "1";
     };
   };
 
@@ -92,6 +94,7 @@
 
   nix.maxJobs = 6;
   powerManagement.enable = true;
+  powerManagement.powertop.enable = true;
   powerManagement.cpuFreqGovernor = "powersave";
   # powerManagement.cpuFreqGovernor = "performance";
   services.thermald.enable = true;
