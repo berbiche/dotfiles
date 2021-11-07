@@ -124,7 +124,7 @@ let
           fi
           ${gsettings} monitor org.gnome.desktop.interface gtk-theme | \
             ${stdbuf} -o0 ${awk} '{
-              if ($2 ~ /'\'''Adwaita'\'''/) {
+              if ($2 ~ /'\'''${config.my.theme.light}'\'''/) {
                 print ${escape lightMode}
               }
               else {
@@ -152,9 +152,10 @@ let
         interval = 60;
         format = "{:%a %d %b %H:%M}";
         tooltip = true;
+        align = 1.0;
         tooltip-format = ''
           <big>{:%Y %B}</big>
-          <tt><small>{calendar}</small></tt>
+          <span font_desc="Anonymice Nerd Font" size='large'>{calendar}</span>
         '';
       };
 
