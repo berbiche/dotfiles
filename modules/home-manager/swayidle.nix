@@ -198,7 +198,7 @@ in
         Environment = [ "PATH=${dirOf pkgs.stdenv.shell}:$PATH" ];
         ExecStart = finalCommand;
       };
-      Install.WantedBy = [ "graphical-session.target" ];
+      Install.WantedBy = [ "sway-session.target" ];
     };
   };
 }
