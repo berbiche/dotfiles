@@ -3,7 +3,7 @@
 {
   imports = [
     ./user.nix
-    ./xserver.nix
+    # ./xserver.nix
   ];
 
   environment.systemPackages = with pkgs; [
@@ -18,9 +18,28 @@
   services.xserver.enable = true;
   services.xserver.displayManager.lightdm = {
     enable = true;
+    # background = pkgs.nixos-artwork.wallpapers.dracula.gnomeFilePath;
+    background = pkgs.nixos-artwork.wallpapers.nineish-dark-gray.gnomeFilePath;
     greeters.enso = {
-      enable = true;
+      enable = false;
       blur = true;
+    };
+    greeters.mini = {
+      enable = true;
+      user = config.my.username;
+      extraConfig = ''
+        [greeter]
+        show-password-label = true
+        show-image-on-all-monitors = true
+        password-input-width = 40
+
+        [greeter-hotkeys]
+        session-key = e
+
+        [greeter-theme]
+        background-image-size = contain
+        #background-image = "${config.users.users.${config.my.username}.home}/Pictures/wallpaper/current"
+      '';
     };
   };
 

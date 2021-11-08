@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   my.home.systemd.user.services.udiskie = {
@@ -18,7 +18,7 @@
           --no-automount \
           --tray \
           --appindicator \
-          --file-manager nautilus
+          --file-manager ${config.my.defaults.file-explorer}
       '';
       Restart = "on-failure";
       RestartSec = "1sec";

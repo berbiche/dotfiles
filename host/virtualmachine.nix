@@ -1,8 +1,5 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{ config, lib, pkgs, profiles, modulesPath, ... }:
 
-let
-  profiles = import ../profiles { isLinux = true; };
-in
 {
   imports = (with profiles; [
     default-linux

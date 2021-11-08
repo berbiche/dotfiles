@@ -2,7 +2,7 @@
 
 {
   my.home = { config, options, lib, pkgs, ... }: let
-    swayConfig = config.lib.my.callWithDefaults ./config.nix { inherit config options; };
+    swayConfig = lib.myLib.callWithDefaults ./config.nix { inherit config options; };
   in {
     home.packages = with pkgs; [
       # oblogout alternative

@@ -41,13 +41,14 @@ in
 
       wget # I prefer using curl but still useful for one-off things
       curl # make advanced http requests, fetch files, etc.
+      ouch # a generic compressor/decompressor tool
       httpie # like curl/wget with a simpler cli interface
       aria # curl/wget on steroid to download files using different protocols
       lsof # shows information about opened files by processes, useful for debugging
       gitFull # contains extra stuff that I don't remember
       rsync # copy files localy and remotely
       nmap # scanner for CTF and my local network
-      telnet # still rarely useful
+      netcat-gnu # better than telnet
       tcpdump # see packet flows on interfaces to debug stuff
       dnsutils # dns lookups
       mtr # interactive traceroute that updates continuously
@@ -62,7 +63,7 @@ in
       bat # a better alternative to cat with syntax highlighting
       procs # an alternative to ps to view all currently running processes (static view)
       sd # replace lines in files or lines in stdin without the "annoying" syntax of sed or awk
-      du-dust # a rewrite of du in Rust with a tree-like listing and usage graph
+      du-dust # du with a tree-like listing and usage graph
       tokei # shows the number of lines of code in a folder for each language
       manix # lookup a nix function documentation or a NixOS/Home Manager option documentation
       bottom # `btm` is an htop/gotop/... alternative

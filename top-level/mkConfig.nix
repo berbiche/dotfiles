@@ -39,7 +39,6 @@ let
     my.username = username;
   };
 in [
-  ./lib.nix
   ./module.nix
   ./home-manager.nix
   ../cachix.nix

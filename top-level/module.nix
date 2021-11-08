@@ -1,22 +1,10 @@
-{ config, options, lib, isLinux, ... }:
+{ config, pkgs, options, lib, isLinux, ... }:
 
 with lib;
 with builtins;
 
-let
-  filesInDir = directory:
-    let
-      files = readDir directory;
-      filteredFiles = filterAttrs (n: v: hasSuffix "nix" n && n != "default.nix") files;
-      toPath = map (x: directory + "/${x}");
-    in
-    assert isPath directory;
-    if pathExists directory then
-      toPath (attrNames filteredFiles)
-    else [];
-in
 {
-  imports = if isLinux then filesInDir ../modules/nixos else filesInDir ../modules/darwin;
+  imports = if isLinux then myLib.filesInDir ../modules/nixos else myLib.filesInDir ../modules/darwin;
 
   options.my = {
     username = mkOption {
@@ -25,28 +13,52 @@ in
       example = "nicolas";
       readOnly = true;
     };
+
+    # Aliases `my.home` to `home-manager.users.${config.my.username}`.
+    # This only aliases the option, the logic to copy the configuration
+    # is below in the `config` section.
     home = mkOption {
       type = options.home-manager.users.type.functor.wrapped;
     };
+
     location = mkOption {
-      type = types.submodule {
+      type = types.nullOr (types.submodule {
         options.longitude = mkOption {
           type = types.float;
         };
         options.latitude = mkOption {
           type = types.float;
         };
-      };
-      default = {};
+      });
+      default = null;
     };
+
     theme.dark = mkOption {
       type = types.str;
-      default = "";
+      default = "Adwaita-dark";
     };
+
     theme.light = mkOption {
       type = types.str;
-      default = "";
+      default = "Adwaita";
     };
+
+    defaults.file-explorer = mkOption {
+      type = types.oneOf [ types.path types.str types.package ];
+      default = "${pkgs.cinnamon.nemo}/bin/nemo";
+      defaultText = literalExpression ''"''${pkgs.cinnamon.nemo}/bin/nemo"'';
+      apply = toString;
+      description = "File explorer to use in different applications";
+    };
+
+    defaults.terminal = mkOption {
+      type = types.oneOf [ types.path types.str types.package ];
+      default = "${pkgs.alacritty}/bin/alacritty";
+      defaultText = literalExpression ''"''${pkgs.alacritty}/bin/alacritty"'';
+      apply = toString;
+      description = "File explorer to use in different applications";
+    };
+
     colors = mkOption {
       type = with types; attrsOf (oneOf [ str int float ]);
       description = "Color profile for theming purposes.";
@@ -77,7 +89,7 @@ in
     home-manager.users.${config.my.username} = mkAliasDefinitions options.my.home;
 
     home-manager.sharedModules = [{
-      imports = filesInDir ../modules/home-manager;
+      imports = myLib.filesInDir ../modules/home-manager;
 
       options.my.identity = {
         name = mkOption {
@@ -98,9 +110,11 @@ in
       options.my.colors = options.my.colors;
       options.my.location = options.my.location;
       options.my.theme = options.my.theme;
+      options.my.defaults = options.my.defaults;
 
-      config.my.location = mkDefault config.my.location;
-      config.my.theme = mkDefault config.my.theme;
+      config.my.location = mkForce config.my.location;
+      config.my.theme = mkForce config.my.theme;
+      config.my.defaults = mkForce config.my.defaults;
     }];
   };
 

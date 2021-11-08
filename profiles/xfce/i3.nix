@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   services.xserver.windowManager.i3 = {
@@ -15,9 +15,9 @@
       mod = config.xsession.windowManager.i3.config.modifier;
 
       binaries = rec {
-        terminal = "${alacritty} --working-directory ${config.home.homeDirectory}";
+        terminal = "${config.my.defaults.terminal} --working-directory ${config.home.homeDirectory}";
         floating-term = "${terminal} --class='floating-term'";
-        explorer = nautilus;
+        explorer = "${config.my.defaults.file-explorer}";
         browser = firefox;
         browser-private = "${browser} --private-window";
         browser-work-profile = "${browser} -P job";
@@ -35,7 +35,6 @@
         brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
         emacsclient = "${config.programs.emacs.finalPackage}/bin/emacsclient -c";
         firefox = "${pkgs.firefox}/bin/firefox";
-        nautilus = "${pkgs.gnome3.nautilus}/bin/nautilus";
         pavucontrol = "${pkgs.pavucontrol}/bin/pavucontrol";
         playerctl = "${pkgs.playerctl}/bin/playerctl";
         element-desktop = "${pkgs.element-desktop}/bin/element-desktop";

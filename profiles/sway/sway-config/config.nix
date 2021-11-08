@@ -1,8 +1,6 @@
 { config, options, lib, pkgs, ... }:
 
 let
-  inherit (config.lib.my) callWithDefaults;
-
   mkCommand = commands: lib.concatStringsSep "; \\\n" commands;
 
   mkFloatingNoBorder = { criteria, extraCommands ? [] }: {
@@ -35,7 +33,7 @@ let
   binaries = rec {
     terminal = "${alacritty} --working-directory ${config.home.homeDirectory}";
     floating-term = "${terminal} --class='floating-term'";
-    explorer = "${nautilus}";
+    explorer = "${config.my.defaults.file-explorer}";
     browser = pkgs.writeScript "firefox" ''
       export MOZ_DBUS_REMOTE=1
       export MOZ_ENABLE_WAYLAND=1
@@ -48,10 +46,11 @@ let
     logout-menu = "${wlogout}";
     audiocontrol = "${pavucontrol}";
     #menu = "${nwggrid} -n 10 -fp -b 121212E0";
-    menu = "${pkgs.bash}/bin/bash -i -c '${xfce4-appfinder} --disable-server'";
-    # Execute in bash shell to inherit shell variables
-    menu-wofi = "${pkgs.bash}/bin/bash -i -c '${wofi} --fork --show drun,run'";
-    menu-rofi = "${pkgs.bash}/bin/bash -i -c ${pkgs.writeShellScript "rofi" ''
+    #menu = "${pkgs.bash}/bin/bash -i -c '${xfce4-appfinder} --disable-server'";
+    fullscreen-menu = "${pkgs.bash}/bin/bash -l -c '${nwggrid-client}'";
+    # Execute in "login" bash shell to inherit shell variables
+    menu-wofi = "${pkgs.bash}/bin/bash -l -c '${wofi} --fork --show drun,run'";
+    menu-rofi = "${pkgs.bash}/bin/bash -l -c ${pkgs.writeShellScript "rofi" ''
       ${rofi} -show combi -combi-modi drun,run -display-drun ''' -display-combi 'Launch' -theme slate
     ''}";
 
@@ -98,7 +97,8 @@ let
     emacsclient = "${config.programs.emacs.finalPackage}/bin/emacsclient -c";
     # Firefox from the overlay
     firefox = "${pkgs.firefox}/bin/firefox";
-    nautilus = "${pkgs.gnome3.nautilus}/bin/nautilus";
+    nwggrid-client = "${pkgs.nwg-launchers}/bin/nwggrid -client";
+    nwggrid-server = "${pkgs.nwg-launchers}/bin/nwggrid-server";
     pavucontrol = "${pkgs.pavucontrol}/bin/pavucontrol";
     playerctl = "${pkgs.playerctl}/bin/playerctl '--player=spotify,mpv'";
     element-desktop = "${pkgs.element-desktop}/bin/element-desktop";
@@ -154,6 +154,9 @@ let
 
     # We want to execute this last otherwise Waybar doesn't read the workspace names correctly
     exec ${binaries.on-startup-shutdown}/bin/session.sh --with-cleanup
+
+    # Switch to first workspace on start
+    exec swaymsg workspace number 1
   '';
 
   swayConfig = with workspaces; {
@@ -174,7 +177,7 @@ let
         background = color;
         # Default colors
         text = "#ffffff";
-        indicator = "#000000";
+        indicator = color;
         childBorder = color;
       };
       # focusedInactive = let color = "${config.my.colors.color8}c0"; in {
@@ -237,6 +240,7 @@ let
     floating.criteria = [
       { app_id = "floating-term"; }
       { app_id = "org.gnome.Nautilus"; }
+      { app_id = "nemo"; }
       { title = "feh.*/Pictures/screenshots/.*"; }
       { app_id = "firefox"; title = "Developer Tools"; }
     ];
@@ -245,13 +249,15 @@ let
       { command = binaries.element-desktop; }
       { command = binaries.spotify; }
       { command = binaries.signal-desktop; }
+      { command = binaries.nwggrid-server; }
       {
         always = true;
         command = let
           gsettings = "${pkgs.glib.bin}/bin/gsettings";
           gnome-schema = "org.gnome.desktop.interface";
         in toString (pkgs.writeShellScript "sway-gsettings" ''
-          ${gsettings} set "${gnome-schema}" gtk-theme ${config.gtk.theme.name}
+          ## Commented out because this doesn't follow the day/night theme logic
+          # ${gsettings} set "${gnome-schema}" gtk-theme ${config.gtk.theme.name}
           ${gsettings} set "${gnome-schema}" icon-theme ${config.gtk.iconTheme.name}
           ${gsettings} set "${gnome-schema}" cursor-theme ${config.xsession.pointerCursor.name}
           ${gsettings} set "${gnome-schema}" cursor-size ${toString config.xsession.pointerCursor.size}
@@ -260,11 +266,11 @@ let
       # { command = binaries.bitwarden; }
     ];
 
-    keybindings = callWithDefaults ./keybindings.nix {
+    keybindings = lib.myLib.callWithDefaults ./keybindings.nix {
       inherit config binaries options workspaces;
     };
 
-    modes = callWithDefaults ./modes.nix {
+    modes = lib.myLib.callWithDefaults ./modes.nix {
       inherit config binaries;
     };
 

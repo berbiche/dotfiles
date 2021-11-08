@@ -177,6 +177,10 @@ lib.mkMerge [
           done
         ''
       }";
+      lib.my = {
+        getScript = name: "${config.home.file."scripts".source}/${name}";
+      };
+
     };
   })
   # </isLinux>

@@ -39,6 +39,6 @@
   services.openssh.permitRootLogin = lib.mkDefault "no";
   services.openssh.passwordAuthentication = lib.mkDefault false;
 
-  location.longitude = config.my.location.longitude;
-  location.latitude = config.my.location.latitude;
+  location.longitude = lib.mkIf (config.my.location != null) config.my.location.longitude;
+  location.latitude = lib.mkIf (config.my.location != null) config.my.location.latitude;
 }

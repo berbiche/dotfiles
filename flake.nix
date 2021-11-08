@@ -41,7 +41,7 @@
   };
 
   outputs = inputs @ { self, nixpkgs, ... }: let
-    inherit (nixpkgs) lib;
+    lib = self.lib nixpkgs;
 
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
 
@@ -77,6 +77,7 @@
         pkgs = nixpkgsFor.${platform};
         specialArgs = specialArgs {
           inherit inputs;
+          lib = self.lib nixpkgsFor.${platform};
           isLinux = true;
         };
       };
@@ -86,12 +87,7 @@
         system = args.platform;
         modules = mkConfig ((removeAttrs args [ "platform" ]) // {
           isLinux = false;
-          extraModules = [
-            ./top-level/darwin.nix
-            {
-              nixpkgs.overlays = nixpkgsFor."${args.platform}".overlays;
-            }
-          ];
+          extraModules = [ ./top-level/darwin.nix ];
         });
         # This has to be passed here otherwise nix-darwin tries
         # to use its own very old nixpkgs
@@ -101,11 +97,17 @@
           # and if I override everything then nix-darwin can no longer
           # get it's own `self`
           inputs = inputs // { darwin = inputs.nix-darwin; };
+          pkgs = nixpkgsFor.${args.platform}.pkgs;
+          lib = self.lib nixpkgsFor.${args.platform};
           isLinux = false;
         };
       };
 
   in {
+    lib = pkgs:
+      (import ./top-level/lib.nix { lib = pkgs.lib; pkgs = pkgs; })
+        .extend (_: _: { inherit (inputs.home-manager.lib) hm; } );
+
     nixosConfigurations = {
       mero = mkLinuxConfig {
         hostname = "mero";
@@ -148,6 +150,7 @@
         value = import (./overlays + "/${name}");
       }) overlayFiles');
     in overlayFiles // {
+      lib = _: prev: { lib = self.lib prev; };
       nixpkgs-wayland = inputs.nixpkgs-wayland.overlay;
       emacs = inputs.emacs-overlay.overlay;
       # neovim-nightly = inputs.neovim-nightly.overlay;

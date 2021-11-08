@@ -1,4 +1,4 @@
-{ config, inputs, isLinux, rootPath, ... }:
+{ config, lib, inputs, isLinux, rootPath, ... }:
 
 {
   nix.nixPath = [
@@ -11,7 +11,7 @@
     verbose = true;
   };
   home-manager.extraSpecialArgs = {
-    inherit inputs rootPath;
+    inherit inputs rootPath lib;
     isLinux = isLinux;
     isDarwin = !isLinux;
   };
