@@ -156,7 +156,7 @@ let
     exec ${binaries.on-startup-shutdown}/bin/session.sh --with-cleanup
 
     # Switch to first workspace on start
-    exec swaymsg workspace number 1
+    exec swaymsg workspace "${WS1}"
   '';
 
   swayConfig = with workspaces; {
@@ -194,7 +194,7 @@ let
         background = color;
         text = "#e6e6e6";
         # Default color
-        indicator = "#292d2e";
+        indicator = color;
         childBorder = color;
       };
       urgent = let color = "${config.my.colors.colorF}"; in {
@@ -207,7 +207,7 @@ let
       };
     };
 
-    focus.newWindow = "focus";
+    focus.newWindow = "smart";
     gaps = {
       inner = 5;
       smartGaps = false; # Always display gaps
