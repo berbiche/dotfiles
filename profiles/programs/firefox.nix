@@ -50,11 +50,14 @@ let
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1646329
       "media.ffmpeg.vaapi.enabled" = true;
       "media.ffmpeg.low-latency.enabled" = true;
-      "media.navigator.mediadatadecoder_vpx_enable" = true;
+      "media.navigator.mediadatadecoder_vpx_enabled" = true;
+      # Disable Firefox's VP8/VP9 software decoder to use VA-API
+      "media.ffvpx.enabled" = false;
+      "media.hardware-video-decoding.enabled" = true;
 
       # Allow websites to output to a specific audio device
       # Leaks available audio devices (fingerprinting)
-      "media.setsinkid.enable" = true;
+      "media.setsinkid.enabled" = true;
 
       # UI settings
       "browser.uidensity" = 1;
@@ -94,9 +97,10 @@ let
 
       # Acceleration settings
       # Temporarily disable (2021-10-09)
-      "gfx.webrender.all" = false;
+      "gfx.webrender.all" = true;
       # "layers.acceleration.force-enabled" = true;
 
+      # Fix clipboard hanging with drag-n-drop
       "widget.wayland.async-clipboard.enabled" = true;
 
       # Extension related settings
