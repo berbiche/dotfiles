@@ -3,6 +3,9 @@
 {
   imports = [
     ./user.nix
+    ./dconf.nix
+    ./noisetorch.nix
+    ./fonts.nix
     # ./xserver.nix
   ];
 
@@ -47,8 +50,6 @@
   services.gnome.gnome-keyring.enable = true;
   programs.seahorse.enable = true;
 
-  programs.dconf.enable = true;
-
   services.xserver.libinput.enable = true;
   services.xserver.layout = "us";
 
@@ -72,36 +73,17 @@
 
   services.printing.enable = true;
 
+  # Discover devices on local network (printers, etc.)
   services.avahi.enable = true;
   services.avahi.nssmdns = true;
   services.printing.browsing = true;
 
+  # Bluetooth
   services.blueman.enable = true;
 
   # Logitech
   hardware.logitech.wireless.enable = true;
   hardware.logitech.wireless.enableGraphical = true;
-
-  # Microphone noise remover
-  programs.noisetorch.enable = true;
-  home-manager.sharedModules = [{
-    systemd.user.services.noisetorch = {
-      Unit = {
-        Description = "noisetorch oneshot loading of microphone suppressor";
-        After = lib.optionals config.profiles.pipewire.enable [ "pipewire.service" ]
-          ++ lib.optionals config.hardware.pulseaudio.enable [ "pulseaudio.service" ];
-        Requisite = lib.optionals config.profiles.pipewire.enable [ "pipewire.service" ]
-          ++ lib.optionals config.hardware.pulseaudio.enable [ "pulseaudio.service" ];
-        PartOf = [ "graphical-session.target" ];
-      };
-      Service = {
-        Type = "oneshot";
-        ExecStart = "${config.programs.noisetorch.package}/bin/noisetorch -i";
-        RemainAfterExit = true;
-      };
-      Install.WantedBy = [ "graphical-session.target" ];
-    };
-  }];
 
   nixpkgs.config.chromium = {
     enableWideVine = true;
@@ -109,31 +91,4 @@
     enablePepperFlash = false;
   };
 
-  fonts = {
-    fontDir.enable = true;
-    enableDefaultFonts = true;
-
-    fonts = with pkgs; [
-      noto-fonts
-      noto-fonts-cjk
-      noto-fonts-emoji
-      ubuntu_font_family
-      google-fonts
-      liberation_ttf
-      hasklig
-      powerline-fonts
-      ttf_bitstream_vera
-    ];
-
-    fontconfig = {
-      enable = true;
-      hinting.enable = true;
-      cache32Bit = true;
-      defaultFonts = {
-        serif = [ "Ubuntu" ];
-        sansSerif = [ "Ubuntu" ];
-        monospace = [ "Ubuntu" ];
-      };
-    };
-  };
 }
