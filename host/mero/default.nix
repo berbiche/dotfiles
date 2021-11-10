@@ -113,6 +113,11 @@
     fsType = "ntfs";
     options = [ "auto" "nofail" "noatime" "nodiratime" "uid=1000" "gid=1000" "dmask=007" "fmask=007" "big_writes" ];
   };
+  fileSystems."/mnt/fast and furious" = {
+    device = "/dev/disk/by-uuid/700451CB045194C6";
+    fsType = "ntfs";
+    options = [ "auto" "nofail" "noatime" "nodiratime" "discard" "uid=1000" "gid=1000" "dmask=007" "fmask=007" "big_writes" ];
+  };
 
   swapDevices = [{
     device = "/swapfile";
@@ -177,4 +182,8 @@
 
   # Enable xbox controller
   hardware.xpadneo.enable = true;
+
+  my.home = { config, lib, pkgs, ... }: {
+    home.packages = [ pkgs.glpaper ];
+  };
 }
