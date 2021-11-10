@@ -7,8 +7,10 @@
 window#waybar {
 	color: #d8dee9;
 	/*background: rgba(76,86,106,0.7);*/
-	background: none;
+	/* background: none; */
+	padding: 4px;
 	border-radius: 4px;
+	min-height: 16px;
 }
 
 /* Base styling for modules */

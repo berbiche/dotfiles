@@ -8,8 +8,8 @@ let
     doCheck = false;
     dontUnpack = true;
     strictDeps = false;
-    buildInputs = with pkgs; [ gtk3 playerctl ];
-    nativeBuildInputs = with pkgs; [ gobject-introspection wrapGAppsHook ];
+    buildInputs = [ pkgs.gtk3 pkgs.playerctl ];
+    nativeBuildInputs = [ pkgs.gobject-introspection pkgs.wrapGAppsHook ];
     propagatedBuildInputs = [ pkgs.python3Packages.pygobject3 ];
     installPhase = ''
       install -Dm0755 $src $out/bin/spotify
@@ -17,11 +17,13 @@ let
   };
 
   margin = 5;
-  layer = "bottom";
+  layer = "top";
+  width = 1400;
 
   top-bar = {
     inherit layer;
     position = "top";
+    width = width;
     margin-top = margin;
     margin-right = margin;
     margin-left = margin;
@@ -37,22 +39,22 @@ let
       "custom/dark-mode"
     ];
     modules-center = [
-      "cpu"
-      "custom/separator"
-      "memory"
-      "custom/separator"
+      # "cpu"
+      # "custom/separator"
+      # "memory"
+      # "custom/separator"
       "clock"
-      "custom/separator"
-      "disk#1"
-      "custom/separator"
-      "battery"
+      # "custom/separator"
+      # "disk#1"
+      # "custom/separator"
+      # "battery"
     ];
     modules-right = [
       "tray"
-      "custom/separator"
-      "network"
-      "custom/separator"
-      "backlight"
+      # "custom/separator"
+      # "network"
+      # "custom/separator"
+      # "backlight"
       "custom/separator"
       "pulseaudio"
       "custom/separator"
