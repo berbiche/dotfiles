@@ -9,7 +9,9 @@
     obs
   ];
 
-  environment.systemPackages = with pkgs; [];
+  environment.systemPackages = [
+    pkgs.intel-gpu-tools # sudo intel_gpu_top
+  ];
 
   wireguard."tq.rs".enable = true;
   wireguard."tq.rs".ipv4Address = "10.10.10.4/24";
