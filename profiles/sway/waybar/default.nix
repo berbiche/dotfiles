@@ -18,7 +18,7 @@ let
 
   margin = 5;
   layer = "top";
-  width = 1400;
+  width = 1200;
 
   top-bar = {
     inherit layer;
@@ -33,21 +33,19 @@ let
       "sway/workspaces"
       "custom/separator"
       "sway/mode"
-      "custom/separator"
-      "idle_inhibitor"
-      "custom/separator"
-      "custom/dark-mode"
     ];
     modules-center = [
       # "cpu"
       # "custom/separator"
       # "memory"
       # "custom/separator"
+      "idle_inhibitor"
+      "custom/separator"
       "clock"
+      "custom/separator"
+      "custom/dark-mode"
       # "custom/separator"
       # "disk#1"
-      # "custom/separator"
-      # "battery"
     ];
     modules-right = [
       "tray"
@@ -55,6 +53,8 @@ let
       # "network"
       # "custom/separator"
       # "backlight"
+      "custom/separator"
+      "battery"
       "custom/separator"
       "pulseaudio"
       "custom/separator"
