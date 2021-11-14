@@ -148,6 +148,9 @@ lib.mkMerge [
         # (import inputs.master { inherit (pkgs) config system; }).discord
         pkgs.discord
         pkgs.teams
+
+        # From my overlays
+        pkgs.cheminot-ets
       ];
 
       # Copy the scripts folder
