@@ -3,6 +3,8 @@
 {
   imports = [ inputs.home-manager.darwinModules.home-manager ];
 
+  my.defaults.file-explorer = "";
+
   nix.nixPath = [
     "nixpkgs=${pkgs.path}"
     "darwin=${inputs.nix-darwin}"

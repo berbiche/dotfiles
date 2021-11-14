@@ -3,6 +3,9 @@
 with lib;
 with builtins;
 
+let
+  inherit (pkgs.stdenv.hostPlatform) isLinux isDarwin;
+in
 {
   imports = if isLinux then myLib.filesInDir ../modules/nixos else myLib.filesInDir ../modules/darwin;
 
@@ -45,8 +48,10 @@ with builtins;
 
     defaults.file-explorer = mkOption {
       type = types.oneOf [ types.path types.str types.package ];
-      default = "${pkgs.cinnamon.nemo}/bin/nemo";
-      defaultText = literalExpression ''"''${pkgs.cinnamon.nemo}/bin/nemo"'';
+      default = mkIf isLinux "${pkgs.cinnamon.nemo}/bin/nemo";
+      defaultText = literalExpression ''
+        lib.mkIf pkgs.stdenv.hostPlatform.isLinux "''${pkgs.cinnamon.nemo}/bin/nemo"
+      '';
       apply = toString;
       description = "File explorer to use in different applications";
     };

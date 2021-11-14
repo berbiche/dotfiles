@@ -25,6 +25,7 @@
   homebrew.brews = [ ];
   homebrew.casks = [
     "docker"
+    "kitty"
     # "vagrant"
     # "virtualbox"
     #"yubico-yubikey-personalization-gui"
