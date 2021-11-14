@@ -58,7 +58,7 @@ in
       fzf # used in scripts as a fuzzy matcher for passed inputs as well as `kill -9 <tab><tab>` completion
       ripgrep # grep with some nice defaults
       hexyl # binary viewer like xxd (kinda sucks though)
-      tree # file list tree
+      #tree # file list tree
       bc # terminal calculator though I prefer using a python repl or `python -c 'print(39**25)'`
       bat # a better alternative to cat with syntax highlighting
       procs # an alternative to ps to view all currently running processes (static view)
