@@ -1,21 +1,7 @@
 { config, osConfig, lib, pkgs, ... }:
 
-let
-  toPlugin = n: v: pkgs.vimUtils.buildVimPluginFrom2Nix { pname = n; version = "unstable"; src = v; };
-
-  myPlugins = lib.mapAttrsToList toPlugin {
-  };
-
-  fterm-nvim = toPlugin "fterm.nvim" (pkgs.fetchFromGitHub {
-    owner = "numToStr";
-    repo = "FTerm.nvim";
-    rev = "024c76c577718028c4dd5a670552117eef73e69a";
-    sha256 = "sha256-Ooan02z82m6hFmwSJDP421QuUqOfjH55X7OwJ5Pixe0=";
-  });
-in
 {
   programs.neovim.plugins = with pkgs.vimPlugins; [ ]
-  ++ myPlugins
   ++ [
     {
       # Notifications display
