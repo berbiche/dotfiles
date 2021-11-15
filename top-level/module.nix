@@ -3,9 +3,6 @@
 with lib;
 with builtins;
 
-let
-  inherit (pkgs.stdenv.hostPlatform) isLinux isDarwin;
-in
 {
   imports = if isLinux then myLib.filesInDir ../modules/nixos else myLib.filesInDir ../modules/darwin;
 
@@ -48,10 +45,6 @@ in
 
     defaults.file-explorer = mkOption {
       type = types.oneOf [ types.path types.str types.package ];
-      default = mkIf isLinux "${pkgs.cinnamon.nemo}/bin/nemo";
-      defaultText = literalExpression ''
-        lib.mkIf pkgs.stdenv.hostPlatform.isLinux "''${pkgs.cinnamon.nemo}/bin/nemo"
-      '';
       apply = toString;
       description = "File explorer to use in different applications";
     };
@@ -92,6 +85,8 @@ in
 
   config = {
     home-manager.users.${config.my.username} = mkAliasDefinitions options.my.home;
+
+    my.defaults.file-explorer = mkIf isLinux "${pkgs.cinnamon.nemo}/bin/nemo";
 
     home-manager.sharedModules = [{
       imports = myLib.filesInDir ../modules/home-manager;
