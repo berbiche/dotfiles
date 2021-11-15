@@ -4,6 +4,7 @@
   imports = [
     ./boot.nix
     ./services.nix
+    ./yubikey.nix
   ];
 
   networking.networkmanager.enable = true;
