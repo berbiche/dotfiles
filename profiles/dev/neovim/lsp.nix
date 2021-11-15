@@ -150,6 +150,8 @@
         lua <<EOF
           local cmp = require("cmp")
           local lspkind = require("lspkind")
+          local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+
           cmp.setup {
             confirmation = { default_behavior = cmp.ConfirmBehavior.Replace },
             formatting = {
@@ -166,7 +168,7 @@
               end,
             },
             mapping = {
-              ["<cr>"] = cmp.mapping.confirm(),
+              ["<tab>"] = cmp.mapping.confirm({ select = true }),
               ["<C-p>"] = cmp.mapping.select_prev_item(),
               ["<C-n>"] = cmp.mapping.select_next_item(),
               ["<C-Space>"] = cmp.mapping.complete(),
@@ -180,11 +182,8 @@
           }
           require("cmp_nvim_lsp").setup()
 
-          require("nvim-autopairs.completion.cmp").setup {
-            map_cr = true,
-            map_complete = true,
-            auto_select = true,
-          }
+          -- Automatically insert parenthesis after confirming
+          cmp.event:on( 'confirm_done', cmp_autopairs.on_confirm_done({  map_char = { tex = ''' } }))
         EOF
       '';
     }

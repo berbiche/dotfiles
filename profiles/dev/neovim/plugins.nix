@@ -46,7 +46,14 @@ in
     # Automatically close pairs of symbols like {}, [], (), "", etc.
     {
       plugin = nvim-autopairs;
-      config = "lua require('nvim-autopairs').setup { check_ts = true, }";
+      config = ''
+        lua <<EOF
+          require('nvim-autopairs').setup {
+            check_ts = true,
+            disable_filetype = { "TelescopePrompt", "NvimTree", "startify", "terminal", "coc-explorer" }
+          }
+        EOF
+      '';
     }
     # Automatically source the .envrc (integration with direnv)
     direnv-vim
@@ -359,7 +366,7 @@ in
       lua <<EOF
         require("lualine").setup {
           options = {
-            disabled_filetypes = { "NvimTree", "startify", "terminal", "coc-explorer" },
+            disabled_filetypes = { "TelescopePrompt", "NvimTree", "startify", "terminal", "coc-explorer" },
             theme = 'seoul256',
             sections = {
               lualine_c = { 'lsp_progress', },
@@ -388,7 +395,6 @@ in
         let g:nvim_tree_gitignore = 1
         let g:nvim_tree_git_hl = 1
         let g:nvim_tree_highlight_opened_files = 1
-        let g:nvim_tree_ignore = ['.git', 'result']
 
         lua <<EOF
           require('nvim-tree').setup {
@@ -398,6 +404,9 @@ in
               ignore_list = {'startify', 'dashboard'},
             },
             lsp_diagnostics = enable,
+            filters = {
+              custom = { '.git', 'result', },
+            },
           }
 
           function _G.tree_toggle()
