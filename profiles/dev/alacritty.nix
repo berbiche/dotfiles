@@ -23,8 +23,8 @@ in
         };
 
         padding = {
-          x = 2;
-          y = 2;
+          x = 10;
+          y = 10;
         };
 
         decorations = "full";
