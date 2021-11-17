@@ -8,6 +8,7 @@
         aliases = "alias list";
         co = "pr checkout";
         pv = "pr view";
+        prc = "pr create";
         # Mnemonic: pr mine
         prm = "pr list --author=berbiche";
         # Create a repo for my user
