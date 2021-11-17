@@ -6,6 +6,10 @@
 
   programs.steam.enable = true;
 
+  hardware.opengl.enable = true;
+  hardware.opengl.driSupport32Bit = true;
+  hardware.opengl.driSupport = true;
+
   nixpkgs.overlays = [
     (final: prev: {
       steam = prev.steam.override {
@@ -20,10 +24,10 @@
     ++ lib.optionals config.services.pipewire.enable [ pipewire ];
 
   home-manager.sharedModules = let
-    version = "6.14-GE-2";
+    version = "6.21-GE-2";
     proton-ge = fetchTarball {
       url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${version}/Proton-${version}.tar.gz";
-      sha256 = "sha256:18hfag1nzj6ldy0ign2yjfzfms0w23vmcykgl8h1dfk0xjaql8gk";
+      sha256 = "sha256:0j39i19m1djkc0g1a4jq4bhihyz9rn2s4rk46rgqyvvd80rdky71";
     };
   in [
     {
