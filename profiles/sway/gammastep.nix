@@ -24,10 +24,10 @@
     xdg.configFile."gammastep/config.ini".text = ''
       [general]
       temp-day=6500
-      temp-night=4000
+      temp-night=4500
       fade=1
       gamma-day=0.8:0.7:0.8
-      gamma-night=0.6
+      gamma-night=0.7
       location-provider=manual
       adjustment-method=wayland
 
