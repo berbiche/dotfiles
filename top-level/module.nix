@@ -33,6 +33,11 @@ with builtins;
       default = null;
     };
 
+    theme.package = mkOption {
+      type = types.package;
+      default = pkgs.gnome-themes-standard;
+    };
+
     theme.dark = mkOption {
       type = types.str;
       default = "Adwaita-dark";

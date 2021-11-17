@@ -12,8 +12,15 @@ lib.mkMerge [
 
     # my.darkTheme = "Adwaita-dark";
     # my.lightTheme = "Adwaita";
-    my.theme.dark = "Arc-Dark";
-    my.theme.light = "Arc";
+
+    # pkgs.numix-gtk-theme
+    # pkgs.arc-theme
+    # pkgs.yaru-theme
+    my.theme.package = pkgs.materia-theme;
+    # my.theme.dark = "Arc-Dark";
+    # my.theme.light = "Arc";
+    my.theme.dark = "Materia-dark-compact";
+    my.theme.light = "Materia-light-compact";
 
     my.home = { ... }: {
       my.identity = {
@@ -52,24 +59,23 @@ lib.mkMerge [
       gid = config.users.users.${username}.uid;
     };
 
-    qt5 = {
-      enable = true;
-      platformTheme = "gnome";
-      style = "adwaita";
-    };
+    # qt5 = {
+    #   enable = true;
+    #   platformTheme = "gtk";
+    #   style = "gtk2";
+    # };
 
     my.home = { config, pkgs, inputs, ... }: {
       gtk = {
         enable = true;
         iconTheme = {
           name = "Adwaita";
-          # Covered by the theme package below
-          # package = pkgs.gnome3.gnome-themes-extra;
+          package = pkgs.gnome.adwaita-icon-theme;
         };
         theme = {
           # name = "Adwaita";
-          name = "Arc";
-          package = pkgs.arc-theme;
+          name = config.my.theme.light;
+          package = config.my.theme.package;
         };
         gtk2.extraConfig = ''
           gtk-cursor-theme-name="Adwaita"
@@ -130,11 +136,6 @@ lib.mkMerge [
       services.playerctld.enable = false;
 
       home.packages = [
-        pkgs.gnome3.gnome-themes-extra
-        # pkgs.numix-gtk-theme
-        # pkgs.arc-theme
-        # pkgs.yaru-theme
-
         pkgs.thunderbird
 
         # Force Zoom to run on X11 for all the popups and everything
