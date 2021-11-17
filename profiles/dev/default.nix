@@ -105,6 +105,10 @@ in
       insomnia # GUI tool to test http APIs, alternative to postman and hoppscotch (formerly postwoman)
     ];
 
+    programs.zsh.enable = true;
+    programs.bash.enable = true;
+    programs.fish.enable = true;
+
     # Preview directory content and find directory to `cd` to
     programs.broot = {
       enable = true;

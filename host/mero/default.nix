@@ -4,7 +4,7 @@
   imports = with profiles; [
     base
     default-linux
-    kinect
+    # kinect
     obs
     steam
     wireguard
@@ -184,6 +184,6 @@
   hardware.xpadneo.enable = true;
 
   my.home = { config, lib, pkgs, ... }: {
-    home.packages = [ pkgs.glpaper ];
+    home.packages = [ pkgs.glpaper pkgs.wf-recorder ];
   };
 }
