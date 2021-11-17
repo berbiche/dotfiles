@@ -25,7 +25,8 @@ let
       secrets = mkProfile [ ./secrets ];
     }
     // optionalAttrs isLinux {
-      core-linux = mkProfile [ ./core-linux ./pipewire ./email ];
+      core-linux = mkProfile [ ./core-linux ./pipewire ];
+      email = mkProfile [ ./email ];
       gnome = mkProfile [ ./gnome ];
       graphical-linux = mkProfile [ ./graphical-linux ];
       kde = mkProfile [ ./kde ];
