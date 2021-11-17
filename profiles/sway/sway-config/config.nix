@@ -171,39 +171,36 @@ let
       size = 9.0;
     };
 
-    colors = rec {
-      focused = let color = "${config.my.colors.color8}"; in {
-        border = color;
-        background = color;
-        # Default colors
-        text = "#ffffff";
-        indicator = color;
-        childBorder = color;
+    colors = let
+      darkblue = "#08052b";
+      lightblue = "#5294e2";
+      urgrentred = "#e53935";
+      white = "#ffffff";
+      black = "#000000";
+      darkgrey = "#373c4a";
+      grey = "#b0b5bd";
+      mediumgrey = "#8b8b8b";
+      yellowbrown = "#e1b700";
+    in rec {
+      focused = {
+        border = lightblue;
+        background = darkblue;
+        text = white;
+        indicator = lightblue;
+        childBorder = mediumgrey;
       };
-      # focusedInactive = let color = "${config.my.colors.color8}c0"; in {
-      #   border = color;
-      #   background = color;
-      #   # Default colors
-      #   text = "#ffffff";
-      #   indicator = "#484e50";
-      #   childBorder = color;
-      # };
-      focusedInactive = unfocused;
-      unfocused = let color = "${config.my.colors.color9Darker}c0"; in {
-        border = color;
-        background = color;
-        text = "#e6e6e6";
-        # Default color
-        indicator = color;
-        childBorder = color;
+      focusedInactive = focused // {
+        border = darkblue;
+        text = grey;
+        childBorder = black;
       };
-      urgent = let color = "${config.my.colors.colorF}"; in {
-        border = color;
-        background = color;
-        # Default colors
-        text = "#ffffff";
-        indicator = "#900000";
-        childBorder = color;
+      unfocused = focusedInactive // {
+        childBorder = darkgrey;
+      };
+      urgent = focused // {
+        border = urgrentred;
+        background = urgrentred;
+        childBorder = yellowbrown;
       };
     };
 
@@ -216,8 +213,8 @@ let
       # window.hideEdgeBorders = "smart_no_gaps";
     };
     window = {
-      titlebar = false;
-      border = 3;
+      titlebar = true;
+      border = 1;
     };
     floating = {
       titlebar = true;
