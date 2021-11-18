@@ -49,6 +49,7 @@ in
         "iocharset=utf8" "workgroup=WORKGROUP"
         "uid=${toString config.users.users.${cfg.user}.uid}" "gid=${toString config.users.groups.${cfg.group}.gid}"
         "credentials=${config.sops.secrets.smb-public-share.path}"
+        "vers=3.1.1"
       ];
     };
   };
