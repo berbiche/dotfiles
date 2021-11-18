@@ -1,16 +1,18 @@
 * {
-	font-size: 11px;
-	/* color: #d8dee9; */
-	font-family: "Roboto", "FontAwesome", "Font Awesome";
+  font-size: 11px;
+  /* color: #d8dee9; */
+  font-family: "Roboto", "FontAwesome", "Font Awesome";
 }
 
 window#waybar {
-	color: #d8dee9;
-	/*background: rgba(76,86,106,0.7);*/
-	/* background: none; */
-	padding: 4px;
-	border-radius: 4px;
-	min-height: 16px;
+  color: #d8dee9;
+  /* Match Materia-Dark's background color */
+  background: #181818;
+  /*background: rgba(76,86,106,0.7);*/
+  /* background: none; */
+  padding: 4px;
+  border-radius: 4px;
+  min-height: 16px;
 }
 
 /* Base styling for modules */
@@ -33,76 +35,76 @@ window#waybar {
 #custom-reboot,
 #taskbar,
 #tray {
-	padding: 0px 7px 0px 7px;
-	text-shadow: 1px 1px 1px #2e3440;
-	border-radius: 4px;
+  padding: 0px 7px 0px 7px;
+  text-shadow: 1px 1px 1px #2e3440;
+  border-radius: 4px;
 }
 
 /* Separator */
 #custom-separator {
-	color: #d8dee9;
-	background: none;
-	padding: 0px;
-	opacity: 0;
+  color: #d8dee9;
+  background: none;
+  padding: 0px;
+  opacity: 0;
 }
 
 /* TOP BAR (left)*/
 #workspaces {
-	padding: 0px;
+  padding: 0px;
 }
 #workspaces button {
-	padding: 0px 5px 0px 5px;
-	color: #d8dee9;
+  padding: 0px 5px 0px 5px;
+  color: #d8dee9;
 }
 #workspaces button.focused {
-	border-radius: 4px;
-	/*background: rgba(180, 142, 173, 0.7);*/
-	background: rgba(94,129,172,0.7);
+  border-radius: 4px;
+  /*background: rgba(180, 142, 173, 0.7);*/
+  background: rgba(94,129,172,0.7);
 }
 
 #idle_inhibitor {
-	margin: 0px;
+  margin: 0px;
 }
 
 #mode {
-	background: rgba(191, 97, 106, 0.7);
+  background: rgba(191, 97, 106, 0.7);
 }
 
 /* TOP BAR (right/center) */
 #disk#1,
 #memory {
-	padding-right: 3px;
+  padding-right: 3px;
 }
 
 #clock {
-	background: rgba(94,129,172,0.7);
+  background: rgba(94,129,172,0.7);
 }
 
 
 /* BOTTOM BAR (left to right)*/
 #custom-weather {
-	padding-top: 5px;
-	padding-bottom: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 #taskbar {
-	padding-left: 0px;
+  padding-left: 0px;
 }
 #taskbar button {
-	color: #d8dee9;
-	border-radius: 4px;
-	padding-left: 5px;
-	padding-right: 5px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	text-shadow: 1px 1px 1px #2e3440;
+  color: #d8dee9;
+  border-radius: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  text-shadow: 1px 1px 1px #2e3440;
 }
 #taskbar button.active {
-	/*background: rgba(180, 142, 173, 0.7);*/
-	background: rgba(94, 129, 172, 0.7);
+  /*background: rgba(180, 142, 173, 0.7);*/
+  background: rgba(94, 129, 172, 0.7);
 }
 
 #custom-spotify {
-	/* background: rgba(94, 129, 172, 0.7); */
-	background: green;
+  /* background: rgba(94, 129, 172, 0.7); */
+  background: green;
 }

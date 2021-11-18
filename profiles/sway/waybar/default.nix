@@ -1,69 +1,52 @@
-{ config, lib, pkgs, inputs, ... }:
+{ ... }:
 
-let
-  spotify = pkgs.python3Packages.buildPythonApplication {
-    name = "spotify.py";
-    src = ./spotify.py;
-    format = "other";
-    doCheck = false;
-    dontUnpack = true;
-    strictDeps = false;
-    buildInputs = [ pkgs.gtk3 pkgs.playerctl ];
-    nativeBuildInputs = [ pkgs.gobject-introspection pkgs.wrapGAppsHook ];
-    propagatedBuildInputs = [ pkgs.python3Packages.pygobject3 ];
-    installPhase = ''
-      install -Dm0755 $src $out/bin/spotify
-    '';
-  };
+{
+  my.home = { config, lib, pkgs, ... }: let
+    margin = 5;
+    layer = "top";
+    width = 1200;
 
-  margin = 5;
-  layer = "top";
-  width = 1200;
+    custom-modules = import ./custom-modules.nix { inherit config lib pkgs; };
 
-  top-bar = {
-    inherit layer;
-    position = "top";
-    width = width;
-    margin-top = margin;
-    margin-right = margin;
-    margin-left = margin;
-    # margin-bottom = margin;
+    top-bar = {
+      inherit layer;
+      position = "top";
+      width = width;
+      margin-top = margin;
+      margin-right = margin;
+      margin-left = margin;
+      # margin-bottom = margin;
 
-    modules-left = [
-      "sway/workspaces"
-      "custom/separator"
-      "sway/mode"
-    ];
-    modules-center = [
-      # "cpu"
-      # "custom/separator"
-      # "memory"
-      # "custom/separator"
-      "idle_inhibitor"
-      "custom/separator"
-      "clock"
-      "custom/separator"
-      "custom/dark-mode"
-      # "custom/separator"
-      # "disk#1"
-    ];
-    modules-right = [
-      "tray"
-      # "custom/separator"
-      # "network"
-      # "custom/separator"
-      # "backlight"
-      "custom/separator"
-      "battery"
-      "custom/separator"
-      "pulseaudio"
-      "custom/separator"
-      "custom/reboot"
-      "custom/separator"
-      "custom/shutdown"
-    ];
+      spacing = 8;
 
-    modules = {
+      modules-left = [
+        "sway/workspaces"
+        "sway/mode"
+      ];
+      modules-center = [
+        # "cpu"
+        # "custom/separator"
+        # "memory"
+        # "custom/separator"
+        "idle_inhibitor"
+        "clock"
+        "custom/dark-mode"
+        # "custom/separator"
+        # "disk#1"
+      ];
+      modules-right = [
+        # "custom/separator"
+        # "network"
+        "pulseaudio"
+        "backlight"
+        "battery"
+        "custom/reboot"
+        "custom/shutdown"
+        "tray"
+      ];
+
+      inherit (custom-modules) "custom/separator" "custom/dark-mode" "custom/reboot" "custom/shutdown" "custom/do-not-disturb";
+
       "sway/workspaces" = {
         disable-scroll = true;
         all-outputs = true;
@@ -90,64 +73,9 @@ let
         };
       };
 
-      "custom/dark-mode" =  let
-        awk = "${pkgs.gawk}/bin/awk";
-        gsettings = "${pkgs.glib.bin}/bin/gsettings";
-        stdbuf = "${pkgs.coreutils}/bin/stdbuf";
-        escape = x: ''"${lib.escape [ ''"'' ] x}"'';
-        darkMode = builtins.toJSON {
-          text = "Dark";
-          alt = "dark";
-          tooltip = "Toggle light theme";
-          class = "dark";
-        };
-        lightMode = builtins.toJSON {
-          text = "Light";
-          alt = "light";
-          tooltip = "Toggle dark theme";
-          class = "light";
-        };
-        xdg_data_dir = ''
-          export XDG_DATA_DIRS="${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}''${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS"
-        '';
-      in {
-        return-type = "json";
-        format = "{icon}";
-        format-icons = {
-          light = ""; # fontawesome.com/cheatsheet sun f185
-          dark = ""; # fontawesome.com/cheatsheet moon f186
-        };
-        exec = pkgs.writeShellScript "waybar-custom-dark-mode" ''
-          ${xdg_data_dir}
-          if [[ "$(${gsettings} get org.gnome.desktop.interface gtk-theme)" = "'${config.my.theme.light}'" ]]; then
-            echo ${lib.escapeShellArg lightMode}
-          else
-            echo ${lib.escapeShellArg darkMode}
-          fi
-          ${gsettings} monitor org.gnome.desktop.interface gtk-theme | \
-            ${stdbuf} -o0 ${awk} '{
-              if ($2 ~ /'\'''${config.my.theme.light}'\'''/) {
-                print ${escape lightMode}
-              }
-              else {
-                print ${escape darkMode}
-              }
-            }'
-            # ${pkgs.jq}/bin/jq --unbuffered --compact-output
-        '';
-        on-click = pkgs.writeShellScript "waybar-custom-dark-mode-on-click" ''
-          ${xdg_data_dir}
-          if [[ "$(${gsettings} get org.gnome.desktop.interface gtk-theme)" = "'${config.my.theme.light}'" ]]; then
-            ${gsettings} set org.gnome.desktop.interface gtk-theme ${config.my.theme.dark}
-          else
-            ${gsettings} set org.gnome.desktop.interface gtk-theme ${config.my.theme.light}
-          fi
-        '';
-      };
-
       "tray" = {
-        icon-size = 14;
-        spacing = 10;
+        icon-size = 12;
+        spacing = 8;
       };
 
       "clock" = {
@@ -182,7 +110,8 @@ let
 
       "battery" = {
         interval = 30;
-        format = "{icon} {capacity:2}%";
+        format = "{icon} {capacity:2}% ({time})";
+        format-time = "{H}:{M}";
         format-icons = [ "" "" "" "" "" ];
         states = {
           good = 95;
@@ -233,60 +162,22 @@ let
         on-click = "${pkgs.pavucontrol}/bin/pavucontrol";
       };
 
-      "custom/reboot" = {
-        format = "";
-        tooltip = false;
-        on-click = pkgs.writeShellScript "reboot.sh" ''
-          ${pkgs.gnome3.zenity}/bin/zenity --question --text "Are you sure you want to reboot?" \
-            --title 'Reboot?' \
-            --window-icon warning \
-            --timeout 10 \
-            --height 100 --width 200 &
-          pid=$!
-          swaymsg "[pid=$pid] floating enable, focus"
-          if wait $pid; then
-            systemctl reboot
-          fi
-        '';
-      };
-
-      "custom/shutdown" = {
-        format = "";
-        tooltip = false;
-        on-click = pkgs.writeShellScript "shutdown.sh" ''
-          ${pkgs.gnome3.zenity}/bin/zenity --question --text "Are you sure you want to shutdown?" \
-            --title 'Shutdown?' \
-            --window-icon warning \
-            --timeout 10 \
-            --height 100 --width 200 &
-          pid=$!
-          swaymsg "[pid=$pid] floating enable, focus"
-          if wait $pid; then
-            systemctl poweroff
-          fi
-        '';
-      };
-
-      "custom/separator" = {
-        format = "";
-        tooltip = false;
-	    };
     };
-  };
 
-  bottom-bar = {
-    inherit layer;
-    position = "bottom";
-    # margin-top = margin;
-    margin-right = margin;
-    margin-left = margin;
-    margin-bottom = margin;
+    bottom-bar = {
+      inherit layer;
+      position = "bottom";
+      # margin-top = margin;
+      margin-right = margin;
+      margin-left = margin;
+      margin-bottom = margin;
 
-    modules-left = [ "custom/weather" "wlr/taskbar" ];
-    # modules-center = [ "sway/window" ];
-    modules-right = [ "custom/spotify" ];
+      modules-left = [ "custom/weather" "wlr/taskbar" ];
+      # modules-center = [ "sway/window" ];
+      modules-right = [ "custom/spotify" ];
 
-    modules = {
+      inherit (custom-modules) "custom/weather" "custom/spotify";
+
       "wlr/taskbar" = {
         all-outputs = false;
         format = "{icon} {title:.18}..";
@@ -300,33 +191,9 @@ let
       # "sway/window" = {
       #   max-length = 120;
       # };
-
-      "custom/spotify" = rec {
-        return-type = "json";
-        format = " {}";
-        restart-interval = 10;
-        exec = "${spotify}/bin/spotify";
-        on-click = "${pkgs.sway}/bin/swaymsg -q '[class=Spotify] focus'";
-        on-click-right = "${pkgs.playerctl}/bin/playerctl play-pause --player=spotify";
-        on-click-middle = on-click-right;
-      };
-
-      "custom/weather" = {
-        interval = 1800;
-        exec = pkgs.writeShellScript "weather.sh" ''
-          ${pkgs.curl}/bin/curl -s 'https://wttr.in/?format="%C,+%t'
-        '';
-      };
-
-      # "custom/separator" = {
-      #   format = "";
-      #   tooltip = false;
-	    # };
     };
-  };
-in
-{
-  my.home = { config, ... }: {
+  in
+  {
     programs.waybar = {
       package = pkgs.nixpkgs-wayland.waybar;
 
