@@ -149,7 +149,6 @@ in
       enableZshIntegration = true;
       enableFishIntegration = true;
       nix-direnv.enable = true;
-      nix-direnv.enableFlakes = true;
       config = {
         global.disable_stdin = true;
         global.strict_env = true;
