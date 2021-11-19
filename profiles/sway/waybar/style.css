@@ -4,12 +4,14 @@
   font-family: "Roboto", "FontAwesome", "Font Awesome";
 }
 
+button {
+  min-width: 0;
+}
+
 window#waybar {
   color: #d8dee9;
   /* Match Materia-Dark's background color */
   background: #181818;
-  /*background: rgba(76,86,106,0.7);*/
-  /* background: none; */
   padding: 4px;
   border-radius: 4px;
   min-height: 16px;
@@ -22,6 +24,8 @@ window#waybar {
 #idle_inhibitor,
 #custom-weather,
 #pulseaudio,
+#pulseaudio#volume,
+#pulseaudio#microphone,
 #memory,
 #cpu,
 #clock,
@@ -30,22 +34,26 @@ window#waybar {
 #disk,
 #custom-spotify,
 #custom-dark-mode,
-#custom-separator,
 #custom-shutdown,
 #custom-reboot,
+#custom-do-not-disturb,
 #taskbar,
 #tray {
-  padding: 0px 7px 0px 7px;
+  padding: 0 3px 0 3px;
   text-shadow: 1px 1px 1px #2e3440;
   border-radius: 4px;
 }
 
-/* Separator */
-#custom-separator {
-  color: #d8dee9;
-  background: none;
-  padding: 0px;
-  opacity: 0;
+#clock {
+  padding: 0 7px 0 7px;
+}
+
+#pulseaudio {
+  color: #2aa198;
+}
+
+#battery {
+  color: #859900;
 }
 
 /* TOP BAR (left)*/
@@ -59,7 +67,8 @@ window#waybar {
 #workspaces button.focused {
   border-radius: 4px;
   /*background: rgba(180, 142, 173, 0.7);*/
-  background: rgba(94,129,172,0.7);
+  /* background: rgba(94,129,172,0.7); */
+  background: rgba(82, 148, 226, 1);
 }
 
 #idle_inhibitor {
@@ -71,13 +80,14 @@ window#waybar {
 }
 
 /* TOP BAR (right/center) */
-#disk#1,
+/* #disk#1,
 #memory {
   padding-right: 3px;
-}
+} */
 
 #clock {
-  background: rgba(94,129,172,0.7);
+  /* background: rgba(94,129,172,0.7); */
+  background: rgba(82, 148, 226, 1);
 }
 
 
@@ -101,7 +111,8 @@ window#waybar {
 }
 #taskbar button.active {
   /*background: rgba(180, 142, 173, 0.7);*/
-  background: rgba(94, 129, 172, 0.7);
+  /* background: rgba(94, 129, 172, 0.7); */
+  background: rgba(82, 148, 226, 1);
 }
 
 #custom-spotify {

@@ -6,10 +6,12 @@
     layer = "top";
     width = 1200;
 
+    spacing = 8;
+
     custom-modules = import ./custom-modules.nix { inherit config lib pkgs; };
 
     top-bar = {
-      inherit layer;
+      inherit layer spacing;
       position = "top";
       width = width;
       margin-top = margin;
@@ -17,35 +19,31 @@
       margin-left = margin;
       # margin-bottom = margin;
 
-      spacing = 8;
-
       modules-left = [
         "sway/workspaces"
         "sway/mode"
       ];
       modules-center = [
         # "cpu"
-        # "custom/separator"
         # "memory"
-        # "custom/separator"
         "idle_inhibitor"
         "clock"
         "custom/dark-mode"
-        # "custom/separator"
         # "disk#1"
       ];
       modules-right = [
-        # "custom/separator"
+        "custom/do-not-disturb"
+        "pulseaudio#volume"
+        "pulseaudio#microphone"
         # "network"
-        "pulseaudio"
         "backlight"
         "battery"
-        "custom/reboot"
-        "custom/shutdown"
+        # "custom/reboot"
+        # "custom/shutdown"
         "tray"
       ];
 
-      inherit (custom-modules) "custom/separator" "custom/dark-mode" "custom/reboot" "custom/shutdown" "custom/do-not-disturb";
+      inherit (custom-modules) "custom/dark-mode" "custom/reboot" "custom/shutdown" "custom/do-not-disturb";
 
       "sway/workspaces" = {
         disable-scroll = true;
@@ -110,8 +108,8 @@
 
       "battery" = {
         interval = 30;
-        format = "{icon} {capacity:2}% ({time})";
-        format-time = "{H}:{M}";
+        format = "{icon} {capacity:2}%{time}";
+        format-time = " ({H}:{M:2})";
         format-icons = [ "" "" "" "" "" ];
         states = {
           good = 95;
@@ -140,32 +138,43 @@
         on-click = "network-manager";
       };
 
-      "pulseaudio" = {
+      "pulseaudio#volume" = {
         scroll-step = "10%";
-        format = "{icon} {volume}% {format_source}";
+        format = "{icon} {volume}%";
         format-source = " {volume}%";
-        format-source-muted = "";
-        #format-bluetooth = " {volume}";
-        format-bluetooth = "{icon} {volume}% {format_source}";
-        format-bluetooth-muted = " {icon} {format_source}";
-        format-muted = "婢 {format_source}";
+        format-source-muted = " 0%";
+        format-bluetooth = "{icon} {volume}%";
+        format-bluetooth-muted = "婢 {icon}";
+        format-muted = "婢 0%";
         format-icons = {
-          headphones = "";
-          headset = "";
-          phone = "";
+          # headphones = "";
+          # hands-free = "";
+          # headset = "";
+          # phone = "";
           default = [
-            ""
-            ""
+            # "婢"
+            # ""
             ""
           ];
         };
         on-click = "${pkgs.pavucontrol}/bin/pavucontrol";
       };
 
+      "pulseaudio#microphone" = {
+        scroll-step = "0%";
+        format = "{format_source}";
+        format-source = " {volume}%";
+        format-source-muted = " 0%";
+        on-scroll-up = "";
+        on-scroll-down = "";
+        on-click = "${pkgs.pavucontrol}/bin/pavucontrol";
+        on-right-click = "${config.lib.my.getScript "volume.sh"} mic-mute";
+      };
+
     };
 
     bottom-bar = {
-      inherit layer;
+      inherit layer spacing;
       position = "bottom";
       # margin-top = margin;
       margin-right = margin;
@@ -203,7 +212,7 @@
         top-bar
         # bottom-bar
       ];
-      style = builtins.readFile ./style.css;
+      style = ./style.css;
     };
 
     systemd.user.services.waybar = lib.mkIf config.programs.waybar.enable {

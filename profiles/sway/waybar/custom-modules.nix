@@ -19,11 +19,6 @@ let
   };
 in
 {
-  "custom/separator" = {
-    format = "";
-    tooltip = false;
-  };
-
   "custom/reboot" = {
     format = "";
     tooltip = false;
@@ -59,16 +54,21 @@ in
   };
 
   "custom/do-not-disturb" = {
-    return-type = "";
+    return-type = "json";
     format = "{icon}";
     format-icons = {
       true = ""; # fontawesome.com/v5/cheatsheet bell f0f3
       false = ""; # fontawesome.com/v5/cheatsheet bell-slash f1f6
     };
     interval = "once";
-    exec = "${config.services.dunst.package}/bin/dunstctl is-paused";
+    exec = pkgs.writeShellScript "do-not-disturb" ''
+      status="$(${config.services.dunst.package}/bin/dunstctl is-paused)"
+      ${pkgs.jq}/bin/jq --compact-output -n --argjson status "$status" '{class: $status | tostring, alt: $status | tostring, tooltip: "Toggle do not disturb"}'
+    '';
     exec-on-event = true;
-    on-click = "${config.services.dunst.package}/bin/dunstctl set-paused toggle";
+    on-click = pkgs.writeShellScript "do-not-disturb" ''
+      ${config.services.dunst.package}/bin/dunstctl set-paused toggle
+    '';
   };
 
   "custom/dark-mode" =  let

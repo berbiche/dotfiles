@@ -9,12 +9,17 @@
     # ./xserver.nix
   ];
 
-  environment.systemPackages = with pkgs; [
-    polkit
-    polkit_gnome
-    (hunspellWithDicts [
-      hunspellDicts.en_CA-large
-      hunspellDicts.fr-any
+  environment.systemPackages = with pkgs; lib.mkMerge [
+    [
+      polkit
+      polkit_gnome
+      (hunspellWithDicts [
+        hunspellDicts.en_CA-large
+        hunspellDicts.fr-any
+      ])
+    ]
+    (lib.mkIf config.networking.networkmanager.enable [
+      networkmanagerapplet
     ])
   ];
 
