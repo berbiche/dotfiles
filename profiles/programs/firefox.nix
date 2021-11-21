@@ -11,6 +11,14 @@ let
       # Chromecast support through a native extension
       enableFXCastBridge = true;
     };
+    extraPolicies = {
+      DontCheckDefaultBrowser = true;
+      DisablePocket = true;
+      DisableTelemetry = true;
+      DisableFirefoxStudies = true;
+      DisableProfileRefresh = true;
+      DisableSetDesktopBackground = true;
+    };
   };
 
   makeProfile = { id, settings ? null, default ? false }: {
