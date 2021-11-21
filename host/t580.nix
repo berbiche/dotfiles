@@ -52,7 +52,6 @@
     timeout = 10;
     efi = {
       canTouchEfiVariables = true;
-      efiSysMountPoint = "/boot/efi";
     };
     systemd-boot = {
       enable = true;
@@ -73,26 +72,50 @@
   # time.timeZone = "Europe/Prague";
   location.provider = "manual";
 
+  services.btrfs.autoScrub.enable = true;
+
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/a9cbb95c-523c-4e81-90f1-33b0f4557a32";
-    fsType = "ext4";
-    options = [ "noatime" "nodiratime" "discard" ];
+    device = "/dev/disk/by-label/nixos";
+    fsType = "btrfs";
+    options = [ "subvol=nixos" "compress=zstd" "noatime" "nodiratime" "discard" ];
   };
 
   boot.initrd.luks.devices."nixos-enc" = {
-    device = "/dev/disk/by-uuid/5322a183-e08e-4a0a-a6bb-3ecd50516370";
+    device = "/dev/disk/by-partlabel/nixos-enc";
     allowDiscards = true;
     # https://wiki.archlinux.org/title/Dm-crypt/Specialties#Disable_workqueue_for_increased_solid_state_drive_(SSD)_performance
     # TLDR: performance improvement on my SSD
     bypassWorkqueues = true;
   };
 
-  fileSystems."/boot/efi" = {
+  fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/A54A-B011";
     fsType = "vfat";
   };
 
-  # swapDevices = [{ device = "/dev/disk/by-uuid/4881627c-6d34-4add-bc3c-d3a0608370f6"; }];
+  fileSystems."/home" = {
+    device = "/dev/disk/by-label/nixos";
+    fsType = "btrfs";
+    options = [ "subvol=nixos/home" "compress=zstd" "noatime" "nodiratime" "discard" ];
+  };
+ 
+  boot.initrd.luks.devices."blackarch" = {
+    device = "/dev/disk/by-partlabel/blackarch_enc";
+    # TLDR: performance improvement on my SSD
+    bypassWorkqueues = true;
+    allowDiscards = true;
+  };
+  system.activationScripts."blackarch-permissions".text = ''
+    echo "chowning /dev/mapper/blackarch to qemu-libvirtd:qemu-libvirtd"
+    if [ -b /dev/mapper/blackarch ]; then
+      chown -v qemu-libvirtd:libvirtd /dev/mapper/blackarch
+      if [ $? -ne 0 ]; then
+        echo "Failed to chown /dev/mapper/blackarch"
+      fi
+    else
+      echo "could not chown /dev/mapper/blackarch"
+    fi
+  '';
 
   nix.maxJobs = 6;
   powerManagement.enable = true;

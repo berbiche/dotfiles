@@ -1,16 +1,22 @@
 keys:
 - &mine 328820E009708FDD29C08DBA1D0261F6BCA46C6E
 - &mero 0DAC6AEF24C04C867FA1B0516D96FCE616772081
-- &thixxos 1BAB840E7B780C7B908E0FC979B575163EF90D10
+- &t580 52ef90d0ba179584d6e7e301286c057facc4004e
 creation_rules:
 - path_regex: 'secrets/smb-public-share.txt$'
   key_groups:
   - pgp:
     - *mine
     - *mero
-    - *thixxos
+    - *t580
 - path_regex: 'secrets/merovingian.ya?ml$'
   key_groups:
   - pgp:
     - *mine
     - *mero
+- path_regex: 'secrets/wakatime.cfg'
+  key_groups:
+  - pgp:
+    - *mine
+    - *mero
+    - *t580
