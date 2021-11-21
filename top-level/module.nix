@@ -84,6 +84,9 @@ with builtins;
         colorD = "#81a2be";
         colorE = "#b294bb";
         colorF = "#a3685a";
+
+        color11 = "#5294E2";
+        color12 = "#08052B";
       };
     };
   };
