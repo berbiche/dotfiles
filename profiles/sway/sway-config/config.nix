@@ -238,6 +238,8 @@ let
       { app_id = "floating-term"; }
       { app_id = "org.gnome.Nautilus"; }
       { app_id = "nemo"; }
+      { app_id = "file-roller"; title = "Extract"; }
+      { app_id = "file-roller"; title = "Compress"; }
       { title = "feh.*/Pictures/screenshots/.*"; }
       { app_id = "firefox"; title = "Developer Tools"; }
     ];
