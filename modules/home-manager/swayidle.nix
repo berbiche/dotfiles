@@ -146,9 +146,9 @@ in
       '';
     };
 
-    before-sleep = mkCommandOption "Commands to execute before sleeping.";
+    beforeSleep = mkCommandOption "Commands to execute before sleeping.";
 
-    after-resume = mkCommandOption "Commands to execute after resuming from sleep.";
+    afterResume = mkCommandOption "Commands to execute after resuming from sleep.";
 
     lock = mkCommandOption "Commands to execute after the session is locked.";
 
@@ -159,11 +159,11 @@ in
     formatCommand = cmd: commands:
       optionalString (commands != []) (concatMapStringsSep "\n" (x: "${cmd} ${commandToStr x}") commands);
 
-    finalConfig = pkgs.writeText "swayidle-config" ''
+    finalConfig = ''
       ${optionalString (cfg.idlehint != null) "idlehint ${durationToSecond cfg.idlehint}"}
       ${concatMapStringsSep "\n" timeoutToStr cfg.timeout}
-      ${formatCommand "before-sleep" cfg.before-sleep}
-      ${formatCommand "after-resume" cfg.after-resume}
+      ${formatCommand "before-sleep" cfg.beforeSleep}
+      ${formatCommand "after-resume" cfg.afterResume}
       ${formatCommand "lock" cfg.lock}
       ${formatCommand "unlock" cfg.unlock}
     '';
@@ -172,13 +172,13 @@ in
       "${cfg.package}/bin/swayidle"
       (optionalString cfg.wait-for-command-completion "-w")
       (escapeShellArgs cfg.extraArgs)
-      "-C ${finalConfig}"
+      "-C ${config.xdg.configFile."swayidle/config".source}"
     ];
   in
   mkIf cfg.enable {
     home.packages = [ cfg.package ];
 
-    xdg.configFile."swayidle/config".source = finalConfig;
+    xdg.configFile."swayidle/config".text = finalConfig;
 
     systemd.user.services.swayidle = {
       Unit = {
@@ -195,8 +195,8 @@ in
         Restart = "on-failure";
         RestartSec = "1sec";
         # Scripts started by swayidle are executed with 'sh -c'
-        Environment = [ "PATH=${dirOf pkgs.stdenv.shell}:$PATH" ];
-        ExecStart = finalCommand;
+        # The service is started with a login shell to inherit the environment
+        ExecStart = "${pkgs.runtimeShell} -l -c ${escapeShellArg finalCommand}";
       };
       Install.WantedBy = [ "sway-session.target" ];
     };

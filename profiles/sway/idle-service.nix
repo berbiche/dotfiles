@@ -25,7 +25,7 @@
         }
       ];
 
-      before-sleep = [
+      beforeSleep = [
         "${playerctl} ${withPlayerctld} pause"
         "${dunstctl} set-paused true"
         "${swaylock} -f"
