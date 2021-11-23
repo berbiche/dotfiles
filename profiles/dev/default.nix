@@ -103,6 +103,8 @@ in
 
       #jetbrains.idea-community # IDE that I don't use anymore, even for Java development
       insomnia # GUI tool to test http APIs, alternative to postman and hoppscotch (formerly postwoman)
+
+      pv # view status of pipes (bandwidth, etc.)
     ];
 
     programs.zsh.enable = true;
