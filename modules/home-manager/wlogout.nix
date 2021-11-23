@@ -126,7 +126,7 @@ in
               circular = true;
             }
           ];
-          # This can be used with `wlogout --layout $${config.xdg.configFile."wlogout/another-layout".source}`
+          # This can be used with `wlogout --layout "$XDG_CONFIG_HOME/wlogout/another-layout"`
           "another-layout" = [
             {
               label = "action-1";

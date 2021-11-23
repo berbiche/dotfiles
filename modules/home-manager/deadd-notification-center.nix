@@ -201,10 +201,9 @@ in
       Service = {
         Type = "dbus";
         BusName = "org.freedesktop.Notifications";
-        # We need locale from glibc
+        # We need locale from glibc (and to inherit the $PATH)
         # See https://github.com/phuhl/linux_notification_center/issues/63
-        Environment = [ "PATH=${lib.makeBinPath [ pkgs.glibc ]}:$PATH" ];
-        ExecStart = "${cfg.package}/bin/deadd-notification-center";
+        ExecStart = "${pkgs.runtimeShell} -l -c ${cfg.package}/bin/deadd-notification-center";
         Restart = "always";
         RestartSec = "1sec";
       };
