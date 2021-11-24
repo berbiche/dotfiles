@@ -21,15 +21,18 @@
     hexedit
     # Password cracker
     john
+    nmap
     # Extract 7z files and a lot of other stuff
     p7zip
     # Patch binaries using dynamic libs and other stuff
     patchelf
     pwndbg
     python3Packages.binwalk
+    rustscan
     shellcheck
     sqlmap
     stegseek
+    unzip # for binwalk
     wireshark
     # volatility
   ];
