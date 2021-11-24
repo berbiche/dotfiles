@@ -158,6 +158,10 @@ Setup:
 1. `sudo nix run nixpkgs#ssh-to-pgp -- -i /etc/ssh/ssh_host_rsa_key -o secrets/hosts/"$(hostname -s)".asc`
 2. Copy the fingerprint to `.sops.yaml`
 
+### pam_u2f
+
+1. `pamu2fcfg -i pam://$(hostname -s) -o pam://$(hostname -s) >~/.config/Yubico/u2f_keys`
+
 ### ZSH
 
 Many aliases are defined in my ZSH config that replaces default commands.
