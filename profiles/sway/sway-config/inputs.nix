@@ -28,6 +28,11 @@ shitty-keyboards // {
     tap = "enabled";
     natural_scroll = "enabled";
     middle_emulation = "enabled";
+    pointer_accel = "-0.1";
+    scroll_factor = "0.5";
+    scroll_method = "two_finger";
+    # Number of fingers for each "button": 1: left; 2: right; 3: middle
+    tab_button_map = "lrm";
   };
 
   # iKBC new Poker II
