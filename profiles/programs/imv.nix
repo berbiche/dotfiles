@@ -1,7 +1,7 @@
 { config, pkgs, lib, isLinux, ... }:
 
 let
-  wallpaperDir = toString config.programs.swaylock.imageFolder;
+  wallpaperImage = toString config.programs.swaylock.imagePath;
 in
 lib.optionalAttrs isLinux {
   # Image Viewer that I only plan on using to set my wallpaper
@@ -10,7 +10,7 @@ lib.optionalAttrs isLinux {
   # https://old.reddit.com/r/swaywm/comments/auxspz/how_to_change_your_wallpaper_on_the_fly/
   xdg.configFile."imv/config".text = ''
     [binds]
-    <Shift+W> = exec ln -sf "$imv_current_file" ${wallpaperDir}/current && swaymsg output "*" background ${wallpaperDir}/current fit
+    <Shift+W> = exec ln -sf "$imv_current_file" ${wallpaperImage} && swaymsg output "*" background ${wallpaperImage} fit
 
     h = prev
     l = next

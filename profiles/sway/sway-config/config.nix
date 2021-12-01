@@ -27,7 +27,7 @@ let
   OUTPUT-LAPTOP = "eDP-1";
 
   # Sway variables
-  imageFolder = toString config.programs.swaylock.imageFolder;
+  imagePath = toString config.programs.swaylock.imagePath;
 
   binaries = rec {
     terminal = "${alacritty} --working-directory ${config.home.homeDirectory}";
@@ -211,7 +211,7 @@ let
     workspaceAutoBackAndForth = false;
 
     output = {
-      "*" = { bg = "${imageFolder}/current center"; };
+      "*" = { bg = "${imagePath} center"; };
       "eDP-1" = {
         mode = "3840x2160@60Hz";
         scale_filter = "smart";

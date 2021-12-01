@@ -32,28 +32,26 @@ let
   };
 in
 {
-  my.home = {
-    services.kanshi = {
-      enable = true;
+  services.kanshi = {
+    enable = true;
 
-      profiles = lib.foldl' (lib.mergeAttrs) {} [
-        configs
-        # All the same configurations with the laptop screen disabled when using the docking station
-        (lib.mapAttrs' (n: v: lib.nameValuePair "${n}-disable-laptop" (genDisableLaptop v)) configs)
-        # Extra configurations
-        {
-          # This profile force enables the laptop screen for unknown configurations
-          # This profile is the fallback configuration for the laptop (since attrsets in Nix are ordered)
-          zzz-fallback-laptop.outputs = [
-            (displays.laptop // { status = "enable"; }) # Force enable laptop screen
-            { criteria = "*"; mode = "1920x1080"; }
-          ];
-        }
-      ];
-    };
+    profiles = lib.mkMerge [
+      configs
+      # All the same configurations with the laptop screen disabled when using the docking station
+      (lib.mapAttrs' (n: v: lib.nameValuePair "${n}-disable-laptop" (genDisableLaptop v)) configs)
+      # Extra configurations
+      {
+        # This profile force enables the laptop screen for unknown configurations
+        # This profile is the fallback configuration for the laptop (since attrsets in Nix are ordered)
+        zzz-fallback-laptop.outputs = [
+          (displays.laptop // { status = "enable"; }) # Force enable laptop screen
+          { criteria = "*"; mode = "1920x1080"; }
+        ];
+      }
+    ];
+  };
 
-    systemd.user.services.kanshi = {
-      Unit.ConditionEnvironment = "WAYLAND_DISPLAY";
-    };
+  systemd.user.services.kanshi = {
+    Unit.ConditionEnvironment = "WAYLAND_DISPLAY";
   };
 }

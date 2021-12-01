@@ -1,38 +1,37 @@
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
-  my.home = {
-    home.packages = [ pkgs.avizo ];
+  home.packages = [ pkgs.avizo ];
 
-    wayland.windowManager.sway = {
-      config.startup = [{
-        command = "${pkgs.avizo}/bin/avizo-service";
-      }];
+  # wayland.windowManager.sway = {
+  #   config.startup = [{
+  #     command = "${pkgs.avizo}/bin/avizo-service";
+  #   }];
+  # };
+
+  systemd.user.services.avizo = {
+    Unit = {
+      Description = "Lightweight notification daemon for Wayland";
+      PartOf = [ "graphical-session.target" ];
+      # Requisite = [ "dbus.service" ];
+      After = [ "graphical-session.target" # "dbus.service"
+              ];
     };
 
-    # systemd.user.services.avizo = {
-    #   Unit = {
-    #     Description = "Lightweight notification daemon for Wayland";
-    #     PartOf = [ "graphical-session.target" ];
-    #     Requisite = [ "dbus.service" ];
-    #     After = [ "graphical-session.target" "xdg-desktop-portal.service" "dbus.service" ];
-    #   };
+    Service = {
+      Type = "dbus";
+      BusName = "org.danb.avizo.service";
 
-    #   Service = {
-    #     # Type = "dbus";
-    #     # BusName = "org.danb.avizo.service";
+      # Changed to `Type = simple` to prevent waiting for the busname to appear
+      # because Avizo waits for xdg-desktop-portal to start
+      # which takes a long time
+      # Type = "simple";
 
-    #     # Changed to `Type = simple` to prevent waiting for the busname to appear
-    #     # because Avizo waits for xdg-desktop-portal to start
-    #     # which takes a long time
-    #     Type = "simple";
+      ExecStart = "${pkgs.avizo}/bin/avizo-service";
+      Restart = "on-failure";
+      RestartSec = 1;
+    };
 
-    #     ExecStart = "${pkgs.avizo}/bin/avizo-service";
-    #     Restart = "on-failure";
-    #     RestartSec = 1;
-    #   };
-
-    #   Install.WantedBy = [ "sway-session.target" ];
-    # };
+    Install.WantedBy = [ "sway-session.target" ];
   };
 }

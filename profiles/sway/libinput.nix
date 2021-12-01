@@ -14,42 +14,46 @@
 
 let
   # Introduce a sleep in every ydotool command for better compatibility with Sway
-  ydotool = "${pkgs.ydotool}/bin/ydotool sleep 200 ,";
+  ydotool = "${pkgs.ydotool}/bin/ydotool sleep 100 ,";
 in
 {
-  my.home.home.packages = [ pkgs.ydotool ];
+  options.profiles.sway.libinput.enable = lib.mkEnableOption "libinput gesture configuration";
 
-  services.gebaar-libinput = {
-    enable = true;
+  config = lib.mkIf config.profiles.sway.libinput.enable {
+    my.home.home.packages = [ pkgs.ydotool ];
 
-    # ydotool.enable = true;
+    services.gebaar-libinput = {
+      enable = true;
 
-    # This configuration is tightly related to my Sway `keybindings.nix`
-    # This configuration also uses "natural scrolling" where in
-    # swiping and moving your fingers moves the content, not the viewport
-    # (like MacOS)
-    settings = {
-      swipe.commands.four = {
-        # Go to next workspace when swiping left with 4 fingers
-        left = "${ydotool} key Super_L+o";
-        # Go to previous workspace when swiping right with 4 fingers
-        right = "${ydotool} key Super_L+i";
+      # ydotool.enable = true;
+
+      # This configuration is tightly related to my Sway `keybindings.nix`
+      # This configuration also uses "natural scrolling" where in
+      # swiping and moving your fingers moves the content, not the viewport
+      # (like MacOS)
+      settings = {
+        swipe.commands.four = {
+          # Go to next workspace when swiping left with 4 fingers
+          left = "${ydotool} key Super_L+o";
+          # Go to previous workspace when swiping right with 4 fingers
+          right = "${ydotool} key Super_L+i";
+        };
+        swipe.commands.three = {
+          up = "${ydotool} key Super_L+p";
+        };
+        swipe.settings = {
+          threshold = 0.5;
+          one_shot = true;
+          trigger_on_release = false;
+        };
+
+        ##### Not currently supported by Gebaar
+        # # Gesture for Firefox
+        # # Go to next page in history when swiping left with 2 fingers
+        # gesture swipe left 2  ${ydotool} key Alt_L+Right
+        # # Go to previous page in history when swiping right with 2 fingers
+        # gesture swipe right 2 ${ydotool} key Alt_L+Left
       };
-      swipe.commands.three = {
-        up = "${ydotool} key Super_L+p";
-      };
-      swipe.settings = {
-        threshold = 0.5;
-        one_shot = true;
-        trigger_on_release = false;
-      };
-
-      ##### Not currently supported by Gebaar
-      # # Gesture for Firefox
-      # # Go to next page in history when swiping left with 2 fingers
-      # gesture swipe left 2  ${ydotool} key Alt_L+Right
-      # # Go to previous page in history when swiping right with 2 fingers
-      # gesture swipe right 2 ${ydotool} key Alt_L+Left
     };
   };
 }
