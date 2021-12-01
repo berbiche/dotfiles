@@ -110,6 +110,8 @@ in
           # Shows all commits since last fetched ORIG_HEAD
           # https://git.wiki.kernel.org/index.php/Aliases
           lc = "log ORIG_HEAD.. --stat --no-merges";
+          # Shows all local commits ahead of FETCH_HEAD
+          llc = "log FETCH_HEAD.. --stat --no-merges";
           # stash list pretty https://stackoverflow.com/a/38826108
           sl = lib.concatStrings [
             "stash list --pretty=format:'"

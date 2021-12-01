@@ -87,7 +87,7 @@
     allowDiscards = true;
   };
   system.activationScripts."blackarch-permissions".text = ''
-    echo "chowning /dev/mapper/blackarch to qemu-libvirtd:qemu-libvirtd"
+    echo "chowning /dev/mapper/blackarch to qemu-libvirtd:libvirtd"
     if [ -b /dev/mapper/blackarch ]; then
       chown -v qemu-libvirtd:libvirtd /dev/mapper/blackarch
       if [ $? -ne 0 ]; then

@@ -28,20 +28,14 @@ let
 
   # Sway variables
   imageFolder = toString config.programs.swaylock.imageFolder;
-  wobsocket = "$XDG_RUNTIME_DIR/wob.sock";
 
   binaries = rec {
     terminal = "${alacritty} --working-directory ${config.home.homeDirectory}";
     floating-term = "${terminal} --class='floating-term'";
     explorer = "${config.my.defaults.file-explorer}";
-    browser = pkgs.writeScript "firefox" ''
-      export MOZ_DBUS_REMOTE=1
-      export MOZ_ENABLE_WAYLAND=1
-      ${firefox} "$@"
-    '';
-    browser-private = "${browser} --private-window";
-    browser-work-profile = "${browser} -P job";
-    # lock = "${swaylock} -f -c 0f0f0ff0 -i ${imageFolder}/current";
+    browser = "env MOZ_DBUS_REMOTE=1 MOZ_ENABLE_WAYLAND=1 ${firefox}";
+    browser-private = "${firefox} --private-window";
+    browser-work-profile = "${firefox} -P job";
     lock = "${pkgs.systemd}/bin/loginctl lock-session";
     logout-menu = "${wlogout}";
     audiocontrol = "${pavucontrol}";
@@ -58,11 +52,11 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "alebastr";
         repo = "sway-systemd";
-        rev = "v0.1.2";
-        hash = "sha256-dQrCT9S36ebwMzNf7Xfu4914wCEPEA02VnneyaUm1U8=";
+        rev = "0e87499359f2d5258f369531f88cc225ebd7cf48";
+        hash = "sha256-HCNYWrEIqgnVkIEjcWkTmO34v0QwqujIlpkfeYgqBjQ=";
       };
       nativeBuildInputs = [ pkgs.makeWrapper ];
-      BINS = lib.makeBinPath (with pkgs; [ systemd dbus sway ]);
+      BINS = lib.makeBinPath [ pkgs.systemd pkgs.dbus pkgs.sway ];
     } ''
       mkdir -p $out/bin
       install -Dm755 $src/src/session.sh $out/bin/session.sh
@@ -70,7 +64,7 @@ let
       wrapProgram $out/bin/session.sh --set PATH "$BINS"
     '';
 
-    alacritty = "${pkgs.alacritty}/bin/alacritty";
+    alacritty = "${config.programs.alacritty.package}/bin/alacritty";
     bitwarden = "${pkgs.bitwarden}/bin/bitwarden";
     brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl -m";
     brightnessctl-avizo = toString (pkgs.writeShellScript "brightnessctl-avizo" ''
@@ -88,15 +82,8 @@ let
       fi
       ${pkgs.avizo}/bin/avizo-client --image-resource="$image" --progress="$scaled" --time="$TIME" $BACKGROUND
     '');
-    # brightnessctl-wob = toString (pkgs.writeShellScript "brightnessctl-wob" ''
-    #   cut -d, -f4 | tr -d '%' |
-    #     if [ -p "${wobsocket}" ]; then
-    #       ${pkgs.coreutils}/bin/timeout --kill-after=5 5 ${pkgs.coreutils}/bin/cat > ${wobsocket} ;
-    #     fi
-    # '');
     emacsclient = "${config.programs.emacs.finalPackage}/bin/emacsclient -c";
-    # Firefox from the overlay
-    firefox = "${pkgs.firefox}/bin/firefox";
+    firefox = "${config.programs.firefox.package}/bin/firefox";
     nwggrid-client = "${pkgs.nwg-launchers}/bin/nwggrid -client";
     nwggrid-server = "${pkgs.nwg-launchers}/bin/nwggrid-server";
     pavucontrol = "${pkgs.pavucontrol}/bin/pavucontrol";
@@ -105,14 +92,14 @@ let
     signal-desktop = "${pkgs.signal-desktop}/bin/signal-desktop";
     nwggrid = "${pkgs.nwg-launchers}/bin/nwggrid";
     nwgbar = "${pkgs.nwg-launchers}/bin/nwgbar";
-    rofi = "${pkgs.rofi-wayland}/bin/rofi";
+    rofi = "${config.programs.rofi.package}/bin/rofi";
     spotify = "${pkgs.spotify}/bin/spotify";
     swaylock = "${pkgs.swaylock}/bin/swaylock";
     # swaymsg = "${config.wayland.windowManager.sway.package}/bin/swaymsg";
     swaymsg = "${pkgs.sway}/bin/swaymsg";
     wl-paste = "${pkgs.wl-clipboard}/bin/wl-paste";
     # vvvv Requires my wlogout overlay
-    wlogout = "${pkgs.wlogout}/bin/wlogout -p layer-shell";
+    wlogout = "${config.programs.wlogout.package}/bin/wlogout -p layer-shell";
     wofi = "${pkgs.wofi}/bin/wofi";
     xfce4-appfinder = "${pkgs.xfce.xfce4-appfinder}/bin/xfce4-appfinder";
   };
@@ -168,7 +155,7 @@ let
 
     fonts = {
       names = [ "FontAwesome" "FontAwesome5Free" "Fira Sans" "DejaVu Sans Mono" ];
-      size = 9.0;
+      size = 10.0;
     };
 
     colors = let

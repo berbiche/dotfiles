@@ -98,7 +98,13 @@
     fsType = "btrfs";
     options = [ "subvol=nixos/home" "compress=zstd" "noatime" "nodiratime" "discard" ];
   };
- 
+
+  fileSystems."/private" = {
+    device = "/dev/disk/by-label/nixos";
+    fsType = "btrfs";
+    options = [ "subvol=nixos/private" "compress=zstd" "noatime" "nodiratime" "discard" ];
+  };
+
   boot.initrd.luks.devices."blackarch" = {
     device = "/dev/disk/by-partlabel/blackarch_enc";
     # TLDR: performance improvement on my SSD
@@ -106,7 +112,7 @@
     allowDiscards = true;
   };
   system.activationScripts."blackarch-permissions".text = ''
-    echo "chowning /dev/mapper/blackarch to qemu-libvirtd:qemu-libvirtd"
+    echo "chowning /dev/mapper/blackarch to qemu-libvirtd:libvirtd"
     if [ -b /dev/mapper/blackarch ]; then
       chown -v qemu-libvirtd:libvirtd /dev/mapper/blackarch
       if [ $? -ne 0 ]; then

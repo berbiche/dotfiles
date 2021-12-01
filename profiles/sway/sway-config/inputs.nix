@@ -32,7 +32,7 @@ shitty-keyboards // {
     scroll_factor = "0.5";
     scroll_method = "two_finger";
     # Number of fingers for each "button": 1: left; 2: right; 3: middle
-    tab_button_map = "lrm";
+    tap_button_map = "lrm";
   };
 
   # iKBC new Poker II

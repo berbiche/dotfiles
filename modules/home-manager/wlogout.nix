@@ -186,7 +186,7 @@ in
       }) cfg.layouts;
 
       cssFiles = mapAttrs' (file: theme: nameValuePair "wlogout/${file}" (
-        if isPath theme then
+        if isPath theme || isStorePath theme then
           { source = theme; }
         else
           { text = theme; }
