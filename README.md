@@ -2,15 +2,19 @@
 
 My configuration for the various tools I use.
 
-**This README needs a thorough rewrite.**
-**All instructions are out-of-date.**
+~~**This README needs a thorough rewrite.**~~
+~~**All instructions are out-of-date.**~~
 
-I use [Sway](https://swaywm.org) (a tiling window manager running on Wayland) on NixOS on both my laptop and my desktop.
+I use [Sway](https://swaywm.org) (a tiling window manager running on Wayland)
+on NixOS on both my laptop and my desktop.
 
-This repository lives under `$HOME/dotfiles` and I use [home-manager](https://github.com/rycee/home-manager) to manage
-my configuration files and my packages.
+I also have two macbooks for work (M1 and Intel).
 
-I use Gnome Keyring to manage my secrets (SSH, GPG) and to have a graphical prompt to unlock my keys.
+This repository lives under `$HOME/dotfiles` and I use [Home Manager](https://github.com/rycee/home-manager)
+to manage my configuration files and my packages.
+
+I use Gnome Keyring to manage my secrets (SSH, GPG) and to have a graphical prompt
+to unlock my keys.
 
 ## Structure
 
@@ -30,11 +34,23 @@ My configuration is organized as follows:
 
 - `./modules`: this is where I define my custom modules.
 
-   These modules are loaded automatically depending on the platform
-   by `./top-level/module.nix`
+  These modules are loaded automatically depending on the platform
+  by `./top-level/module.nix`
 
-- `./cachix`: this folder is owned by cachix and serves to fetch binary files from
-  trusted sources without having to build packages (substituers).
+- `./profiles`: configurations for my tools, desktop environment and other stuff.
+
+  Most configurations work with NixOS and nix-darwin but some are exclusive to each
+  platform.
+
+  I am currently in the process of rewriting some of these configurations to be compatible
+  with a standalone Home Manager installation.
+
+- `./cachix`: this folder is owned by cachix and serves to configure substituers.
+
+  Substituers are sources that will be used to lookup binary packages to minimise
+  local rebuilds.
+
+- `./secrets`: secrets managed with sops and [`sops-nix`](https://github.com/Mic92/sops-nix).
 
 ## Initial setup
 
@@ -45,42 +61,52 @@ My configuration is organized as follows:
     $ cd dotfiles
     ```
 
-If you are already using Nix >= 2.4 and have `experimental-features = nix-command flakes` in your `/etc/nix/nix.conf`,
-then you won't need to do the next steps and can jump directly to building.
+    If you are already using Nix >= 2.4 and have `experimental-features = nix-command flakes`
+    in your `/etc/nix/nix.conf`, then you won't need to do the next steps and
+    can jump directly to building.
 
-2. Enter the nix shell
+1. Enter the nix shell
 
     ``` console
     $ nix-shell
     ```
 
-3. Build the system (in this case the `merovingian` host)
+1. Build the system
+
+  3.1. Build the system (in this case the `mero` host)
 
     ``` console
-    $ rebuild switch --flake '.#merovingian' -v -L
+    $ rebuild switch --flake '.#mero' -v -L
     ```
 
 ## Building
 
-If the new system configuration has been built once before, then you don't need to use the nix-shell
+If the new system configuration has been built once before, then you don't need to
+use the nix-shell.
 
 1. Rebuild the system
 
-    - On NixOS (in this case the `merovingian` host)
+    - On NixOS (in this case the `mero` host)
 
         ``` console
-        $ sudo nixos-rebuild switch --flake '.#merovingian' -v -L
-        buulding the system configuration...
+        $ sudo nixos-rebuild switch --flake '.#mero' -v -L
+        building the system configuration...
         ```
 
-        This is also aliased to the command `nrsf` in my shells.
+        This command is also aliased to the command `nrsf` in my ZSH shell.
 
     - On Darwin
 
         ``` console
-        $ sudo darwin-rebuild switch --flake '.#PC335' -v -L
+        $ darwin-rebuild switch --flake '.#PC335' -v -L
         building the system configuration...
         ```
+
+        Note this command **SHOULD NOT** be run with root with my configuration.
+
+        `nix-darwin` will automatically request superuser permissions as required.
+
+        This command is also aliased to the command `nrsf` in my ZSH shell.
 
 ## Updating
 
@@ -98,14 +124,14 @@ If the new system configuration has been built once before, then you don't need 
 
 2. Rebuild per instructions in the [Building](#building) section
 
-## Add a Cachix cache
+## Adding a Cachix cache
 
 ``` console
 $ cachix use <name> -d . -m nixos
 ```
 
-The `-d` flag makes cachix operate on the current directory for its `cachix.nix` and `/cachix` folder
-while the `-m` flag forces cachix to only modify the two files mentionned before.
+The `-d` flag instructs cachix to use the current folder as the base folder instead of `/etc/nixos`
+while the `-m` flag forces cachix to only create nix files under `./cachix` (and to update `./cachix.nix`).
 
 ## Darwin
 
@@ -169,10 +195,8 @@ Many aliases are defined in my ZSH config that replaces default commands.
 - [exa](https://github.com/ogham/exa) (ls with --tree and other goodies)
 - [bat](https://github.com/sharkdp/bat) (cat with syntax highlighting and pagination)
 - [ripgrep](https://github.com/BurntSushi/ripgrep) (opiniated grep with defaults applied, claims to be faster than grep)
-- [ripgrep-all](https://github.com/phiresky/ripgrep-all) (grep inside PDFs, E-Books, zip, etc.)
 - [fd](https://github.com/sharkdp/fd) (find with a much more intuitive syntax to me though I use them interchangeably)
-- [tldr](https://github.com/tldr-pages/tldr) (super simple manpage consisting of examples)
-- [neofetch](https://github.com/dylanaraps/neofetch) (print system information to your terminal)
+- [neofetch](https://github.com/dylanaraps/neofetch) (get basic system information from the terminal)
 - [starship](https://github.com/starship/starship) (cool shell prompt with git, nodejs, rust, go, etc. support)
 - [hexyl](https://sharkdp/hexyl) (cli hex viewer, an alternative to xxd)
 
