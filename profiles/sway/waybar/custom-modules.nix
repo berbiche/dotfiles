@@ -62,8 +62,11 @@ in
     };
     interval = "once";
     exec = pkgs.writeShellScript "do-not-disturb" ''
-      status="$(${config.services.dunst.package}/bin/dunstctl is-paused)"
-      ${pkgs.jq}/bin/jq --compact-output -n --argjson status "$status" '{class: $status | tostring, alt: $status | tostring, tooltip: "Toggle do not disturb"}'
+      status="false"
+      if ${pkgs.procps-ng}/bin/pgrep dunst >/dev/null; then
+        status="$(${config.services.dunst.package}/bin/dunstctl is-paused)"
+      fi
+      echo '{class: "'"$status"'", alt: "'"$status"'", tooltip: "Toggle do not disturb"}'
     '';
     exec-on-event = true;
     on-click = pkgs.writeShellScript "do-not-disturb" ''
