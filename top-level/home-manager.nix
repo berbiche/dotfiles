@@ -23,15 +23,6 @@
       # See https://github.com/nix-community/home-manager/pull/1656
       systemd.user.startServices = "sd-switch";
 
-      systemd.user.targets.tray = lib.mkIf isLinux {
-        Unit = {
-          # Description = "";
-          Documentation = [ "man:systemd.special(7)" ];
-          BindsTo = [ "graphical-session.target" ];
-          Wants = [ "graphical-session-pre.target" ];
-          After = [ "graphical-session-pre.target" ];
-        };
-      };
     }
   ];
 }

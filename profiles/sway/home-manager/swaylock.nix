@@ -23,9 +23,9 @@ in
       # color=173f3f
 
       # Integrated display
-      image=eDP-1:${cfg.imageFolder}/current
-      image=DP-1:${cfg.imageFolder}/current
-      image=:${cfg.imageFolder}/current
+      image=eDP-1:${cfg.imagePath}
+      image=DP-1:${cfg.imagePath}
+      image=:${cfg.imagePath}
 
       indicator-caps-lock
       show-keyboard-layout

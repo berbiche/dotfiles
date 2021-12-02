@@ -3,8 +3,6 @@
 {
   home.packages = [ pkgs.gammastep ];
 
-  services.gammastep.enable = true;
-
   services.gammastep = {
     enable = true;
     tray = true;
@@ -14,7 +12,7 @@
     longitude = config.my.location.longitude;
 
     temperature.day = 6500;
-    temperature.night = 6500;
+    temperature.night = 4500;
   };
 
   services.gammastep.settings = {

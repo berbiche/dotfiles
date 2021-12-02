@@ -1,28 +1,23 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
+let
+  swayConfig = lib.myLib.callWithDefaults ./sway-config/config.nix { inherit config options; };
+in
 {
-  imports = [
-    # Trackpad gestures handling to allow MacOS-like workspace switching
-    ./libinput.nix
-
-    # Configuration that enables screensharing in Firefox and other programs
-    ./screenshare.nix
-
-    # ./gnome-session.nix
+  home.packages = with pkgs; [
+    qt5.qtwayland
+    wl-clipboard
+    wdisplays
+    brightnessctl
+    grim
+    slurp
+    swaylock
   ];
 
-  my.home = { imports = [ ./home-manager ]; };
-
-  services.xserver.displayManager.defaultSession = "sway";
-
-  profiles.sway.libinput.enable = true;
-
-  # I don't use the Sway Home Manager module since it does not expose
-  # the session to my login manager
-  my.home.wayland.windowManager.sway.package = lib.mkForce null;
-
-  programs.sway = {
+  wayland.windowManager.sway = {
     enable = true;
+
+    inherit (swayConfig) config extraConfig;
 
     wrapperFeatures = {
       # Fixes GTK applications under Sway
@@ -32,12 +27,14 @@
       base = true;
     };
 
-    extraPackages = with pkgs; [ qt5.qtwayland ];
+    # We handle the on-startup ourselves now
+    systemdIntegration = false;
+    xwayland = true;
 
     extraOptions = [ "--verbose" ];
 
     extraSessionCommands = ''
-      # needs qt5.qtwayland in systemPackages
+      # needs `qt5.qtwayland` in packages
       export QT_QPA_PLATFORM=wayland
       export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
 
@@ -56,11 +53,8 @@
       # TODO: remove once gnome-keyring exports SSH_AUTH_SOCK correctly
       : ''${XDG_RUNTIME_DIR=/run/user/$(id -u)}
       if [ -S  "''${XDG_RUNTIME_DIR}/keyring/ssh" ]; then
-        export SSH_AUTH_SOCK=''${XDG_RUNTIME_DIR}/keyring/ssh
+        export SSH_AUTH_SOCK="''${XDG_RUNTIME_DIR}/keyring/ssh"
       fi
     '';
   };
-
-  # Displays keys being taped on the screen
-  programs.wshowkeys.enable = true;
 }
