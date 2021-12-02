@@ -2,7 +2,7 @@
   my.home = {
     programs.gh = {
       enable = true;
-      settings.gitProtocol = "ssh";
+      settings.git_protocol = "ssh";
       # prompt = "enabled";
       settings.aliases = {
         aliases = "alias list";
