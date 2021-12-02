@@ -64,7 +64,7 @@
       in
       lib.fix args;
 
-    # Returns a list of Nix modules
+    # mkConfig :: (args :: {}) -> [ modules ]
     mkConfig = import ./top-level/mkConfig.nix;
 
     mkLinuxConfig = args@{ platform, hostname, ... }:
@@ -194,25 +194,25 @@
     };
 
     devShell = forAllPlatforms (platform: let
-        pkgs = nixpkgsFor.${platform};
-        sops = inputs.sops-nix.packages.${platform};
-      in pkgs.mkShell {
-        nativeBuildInputs = with pkgs; [
-          git nixFlakes
-          sops.sops-import-keys-hook
-        ];
+      pkgs = nixpkgsFor.${platform};
+      sops = inputs.sops-nix.packages.${platform};
+    in pkgs.mkShell {
+      nativeBuildInputs = with pkgs; [
+        git nixFlakes
+        sops.sops-import-keys-hook
+      ];
 
-        NIX_CONF_DIR = let
-          current = lib.optionalString (builtins.pathExists /etc/nix/nix.conf) (builtins.readFile /etc/nix/nix.conf);
-          nixConf = pkgs.writeTextDir "etc/nix.conf" ''
-            ${current}
-            experimental-features = nix-command flakes
-          '';
-        in "${nixConf}/etc";
+      NIX_CONF_DIR = let
+        current = lib.optionalString (builtins.pathExists /etc/nix/nix.conf) (builtins.readFile /etc/nix/nix.conf);
+        nixConf = pkgs.writeTextDir "etc/nix.conf" ''
+          ${current}
+          experimental-features = nix-command flakes
+        '';
+      in "${nixConf}/etc";
 
-        sopsPGPKeyDirs = [
-          "./secrets/hosts"
-        ];
-      });
+      sopsPGPKeyDirs = [
+        "./secrets/hosts"
+      ];
+    });
   };
 }

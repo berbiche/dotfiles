@@ -23,7 +23,7 @@ let
 
     nixpkgs.config.allowUnfree = allowUnfree;
     nix = {
-      package = pkgs.nixUnstable;
+      package = pkgs.nix_2_4;
       extraOptions = ''
         experimental-features = nix-command flakes
         keep-outputs = true
