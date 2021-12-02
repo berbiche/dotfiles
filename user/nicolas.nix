@@ -7,7 +7,7 @@ lib.mkMerge [
   {
     my.location = {
       latitude = 45.50;
-      longitude = 73.56;
+      longitude = -73.56;
     };
 
     # my.darkTheme = "Adwaita-dark";
