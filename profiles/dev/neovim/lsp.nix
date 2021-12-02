@@ -123,6 +123,13 @@
           lsp.gopls.setup { on_attach = on_attach_trouble, }
           -- Terraform
           lsp.terraformls.setup { on_attach = on_attach_trouble, }
+          -- Zig
+          lsp.zls.setup {
+            on_attach = function(a, bufnr)
+              vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+              on_attach_trouble(a, bufnr)
+            end,
+          }
           --[[ Vim
           lsp.vimls.setup {
             on_attach = on_attach,
@@ -192,5 +199,9 @@
       plugin = trouble-nvim;
       config = "lua require'trouble'.setup()";
     }
+
+
+    # Language specific packages
+    zig-vim
   ];
 }
