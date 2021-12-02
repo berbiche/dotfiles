@@ -75,8 +75,10 @@ in
           ".vagrant/"
           "~."
           ".DS_STORE"
+          ".DS_Store"
           "*.swp"
           "kubeconfig"
+          ".direnv/"
         ];
 
         aliases = lib.mapAttrs (_n: toString) rec {
