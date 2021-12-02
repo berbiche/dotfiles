@@ -23,6 +23,9 @@
       # See https://github.com/nix-community/home-manager/pull/1656
       systemd.user.startServices = "sd-switch";
 
+      # This should be the default setting because
+      # inheriting the PATH from the environment during the activation is impure
+      home.emptyActivationPath = true;
     }
   ];
 }
