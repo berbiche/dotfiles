@@ -66,7 +66,7 @@ in
       if ${pkgs.procps-ng}/bin/pgrep dunst >/dev/null; then
         status="$(${config.services.dunst.package}/bin/dunstctl is-paused)"
       fi
-      echo '{class: "'"$status"'", alt: "'"$status"'", tooltip: "Toggle do not disturb"}'
+      echo '{"class": "'"$status"'", "alt": "'"$status"'", "tooltip": "Toggle do not disturb"}'
     '';
     exec-on-event = true;
     on-click = pkgs.writeShellScript "do-not-disturb" ''
