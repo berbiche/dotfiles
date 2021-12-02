@@ -14,7 +14,29 @@ let
   # Inlined lib.fix
   fix = f: let x = f x; in x;
 
-  mkProfile = imports: { ... }: { inherit imports; };
+  mkProfile = imports: let
+    # Flattens the list of imports recursively
+    flattenImports = imports:
+      builtins.foldl' (a: b: a ++ (if builtins.isList b then flattenImports b else [ b ])) [ ] imports;
+  in {
+    imports = flattenImports imports;
+  };
+
+  # Constructs an attrset of profiles that export a `home-manager` folder
+  # or a `home-manager.nix` file.
+  homeManagerImports = profiles: let
+    inherit (builtins) attrNames filter foldl' pathExists;
+    hm = x:
+      let y = x + "/home-manager"; in
+      if pathExists y then y
+      else if pathExists (y + ".nix") then y + ".nix"
+      else null;
+  in
+    foldl' (a: b: let
+      imports = filter (x: x != null) (map hm profiles.${b}.imports);
+    in a // optionalAttrs (imports != [ ]) {
+      ${b} = { inherit imports; };
+    }) { } (attrNames profiles);
 
   profiles = self:
     {
@@ -42,6 +64,10 @@ let
     // optionalAttrs isDarwin {
       core-darwin = mkProfile [ ./core-darwin ];
       yabai = mkProfile [ ./yabai ];
+    }
+    // {
+      # Home Manager profiles
+      home-manager = homeManagerImports self;
     };
 in
   fix profiles
