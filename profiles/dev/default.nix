@@ -18,6 +18,7 @@ in
     anonymousPro
     source-code-pro
     nerdfonts
+    emacs-all-the-icons-fonts
   ];
 
   my.home = { config, pkgs, ... }: {
