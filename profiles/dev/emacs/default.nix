@@ -8,8 +8,10 @@ in
 lib.mkMerge [
   {
     my.home = lib.mkMerge [
-      { imports = [ inputs.doom-emacs.hmModule ]; }
-      {
+      ({ config, ... }: let
+        DOOMLOCALDIR = "${config.xdg.dataHome}/doom";
+        DOOMDIR = "${config.xdg.configHome}/doom";
+      in {
         # Extra packages that are already part of my config
         # won't be duplicated
         # Of course, all of these packages can be overriden
@@ -48,25 +50,38 @@ lib.mkMerge [
           go gocode goimports golangci-lint gore
         ];
 
-        programs.doom-emacs = {
+        programs.emacs = {
           enable = true;
-
-          doomPrivateDir = ./doom.d;
-
-          emacsPackage = lib.mkMerge [
+          package = lib.mkMerge [
             (lib.mkIf isLinux pkgs.emacsPgtk)
             (lib.mkIf isDarwin pkgs.emacs)
           ];
-
-          extraConfig = ''
-            (setq ispell-program-name "hunspell")
-            ${lib.optionalString enableWakaTime ''
-              (global-wakatime-mode t)
-              (setq wakatime-cli-path "${pkgs.wakatime}/bin/wakatime")
-            ''}
-          '';
         };
-      }
+
+        home.sessionVariables = {
+          inherit DOOMLOCALDIR DOOMDIR;
+        };
+        systemd.user.sessionVariables = {
+          inherit DOOMLOCALDIR DOOMDIR;
+        };
+
+        home.sessionPath = [ "${config.xdg.configHome}/emacs/bin" ];
+
+        xdg.configFile."doom" = {
+          recursive = true;
+          source = ./doom.d;
+          force = true;
+        };
+
+        xdg.configFile."emacs" = {
+          source = pkgs.applyPatches {
+            name = "doom-emacs-source";
+            src = inputs.doom-emacs-source;
+            patches = [ ./doom.d/disable_install_hooks.patch ];
+          };
+          recursive = true;
+        };
+      })
       # user systemd service for Linux
       (lib.mkIf isLinux {
         services.emacs = {

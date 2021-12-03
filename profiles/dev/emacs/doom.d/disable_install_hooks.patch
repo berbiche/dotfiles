@@ -1,0 +1,15 @@
+diff --git a/core/cli/install.el b/core/cli/install.el
+index ac77879..881c317 100644
+--- a/core/cli/install.el
++++ b/core/cli/install.el
+@@ -73,8 +73,8 @@ name. e.g.
+     (print! "Regenerating autoloads files")
+     (doom-autoloads-reload)
+ 
+-    (print! "Deploying commit-msg and pre-push git hooks")
+-    (doom-cli--ci-deploy-hooks)
++    ;; (print! "Deploying commit-msg and pre-push git hooks")
++    ;; (doom-cli--ci-deploy-hooks)
+ 
+     (cond (nofonts-p)
+           (IS-WINDOWS
