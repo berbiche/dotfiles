@@ -26,6 +26,8 @@
       # This should be the default setting because
       # inheriting the PATH from the environment during the activation is impure
       home.emptyActivationPath = true;
+      # Home Manager's activation script fails on Darwin because it cannot run `nix-build`
+      home.extraActivationPath = [ config.nix.package ];
     }
   ];
 }

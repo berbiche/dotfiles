@@ -3,43 +3,47 @@
 {
   imports = [ inputs.home-manager.darwinModules.home-manager ];
 
-  my.defaults.file-explorer = "";
+  options.sops = lib.mkSinkUndeclaredOptions { };
 
-  nix.nixPath = [
-    "nixpkgs=${pkgs.path}"
-    "darwin=${inputs.nix-darwin}"
-  ];
-  nix.sandboxPaths = [
-    # Necessary
-    "/System/Library/Frameworks"
-    # Necessary
-    "/System/Library/PrivateFrameworks"
-    # Probably necessary
-    "/usr/lib"
-    # Likely necessary
-    # "/private/tmp"
-    # Likely necessary
-    # "/private/var/tmp"
-    # This seems very impure
-    # "/usr/bin/env"
-  ];
+  config = {
+    my.defaults.file-explorer = "";
 
-  nix.trustedUsers = [ "@admin" config.my.username ];
-  nix.useDaemon = true;
-  services.nix-daemon.enable = true;
+    nix.nixPath = [
+      "nixpkgs=${pkgs.path}"
+      "darwin=${inputs.nix-darwin}"
+    ];
+    nix.sandboxPaths = [
+      # Necessary
+      "/System/Library/Frameworks"
+      # Necessary
+      "/System/Library/PrivateFrameworks"
+      # Probably necessary
+      "/usr/lib"
+      # Likely necessary
+      # "/private/tmp"
+      # Likely necessary
+      # "/private/var/tmp"
+      # This seems very impure
+      # "/usr/bin/env"
+    ];
 
-  nix.gc.user = "root";
+    nix.trustedUsers = [ "@admin" config.my.username ];
+    nix.useDaemon = true;
+    services.nix-daemon.enable = true;
 
-  # Disable useless warning about NIX_PATH with a flake configuration
-  system.checks.verifyNixPath = false;
+    nix.gc.user = "root";
 
-  users.nix.configureBuildUsers = true;
+    # Disable useless warning about NIX_PATH with a flake configuration
+    system.checks.verifyNixPath = false;
 
-  # system.darwinVersion = lib.mkForce (
-  #   "darwin" + toString config.system.stateVersion + "." + inputs.nix-darwin.shortRev);
-  # system.darwinRevision = inputs.nix-darwin.rev;
-  # system.nixpkgsVersion =
-  #   "${nixpkgs.lastModifiedDate or nixpkgs.lastModified}.${nixpkgs.shortRev}";
-  # system.nixpkgsRelease = lib.version;
-  # system.nixpkgsRevision = nixpkgs.rev;
+    users.nix.configureBuildUsers = true;
+
+    # system.darwinVersion = lib.mkForce (
+    #   "darwin" + toString config.system.stateVersion + "." + inputs.nix-darwin.shortRev);
+    # system.darwinRevision = inputs.nix-darwin.rev;
+    # system.nixpkgsVersion =
+    #   "${nixpkgs.lastModifiedDate or nixpkgs.lastModified}.${nixpkgs.shortRev}";
+    # system.nixpkgsRelease = lib.version;
+    # system.nixpkgsRevision = nixpkgs.rev;
+  };
 }

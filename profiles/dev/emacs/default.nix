@@ -61,14 +61,13 @@ lib.mkMerge [
         home.sessionVariables = {
           inherit DOOMLOCALDIR DOOMDIR;
         };
-        systemd.user.sessionVariables = {
+        systemd.user.sessionVariables = lib.mkIf isLinux {
           inherit DOOMLOCALDIR DOOMDIR;
         };
 
         home.sessionPath = [ "${config.xdg.configHome}/emacs/bin" ];
 
         xdg.configFile."doom" = {
-          recursive = true;
           source = ./doom.d;
           force = true;
         };
@@ -79,7 +78,6 @@ lib.mkMerge [
             src = inputs.doom-emacs-source;
             patches = [ ./doom.d/disable_install_hooks.patch ];
           };
-          recursive = true;
         };
       })
       # user systemd service for Linux
