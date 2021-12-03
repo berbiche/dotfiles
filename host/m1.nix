@@ -26,6 +26,7 @@
   homebrew.casks = [
     "docker"
     "kitty"
+    "gcenx/wine/unofficial-wineskin"
     # "vagrant"
     # "virtualbox"
     #"yubico-yubikey-personalization-gui"

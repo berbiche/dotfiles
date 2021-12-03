@@ -16,6 +16,7 @@
     AppleShowAllExtensions = true;
     _FXShowPosixPathInTitle = true;
     FXEnableExtensionChangeWarning = false;
+    CreateDesktop = false;
   };
 
   system.defaults.dock = {
