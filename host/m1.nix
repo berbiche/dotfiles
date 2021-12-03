@@ -27,6 +27,7 @@
     "docker"
     "kitty"
     "gcenx/wine/unofficial-wineskin"
+    "spotify"
     # "vagrant"
     # "virtualbox"
     #"yubico-yubikey-personalization-gui"

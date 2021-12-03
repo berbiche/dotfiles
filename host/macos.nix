@@ -25,5 +25,6 @@
   homebrew.casks = [
     "vagrant"
     "yubico-yubikey-personalization-gui"
+    "virtualbox"
   ];
 }

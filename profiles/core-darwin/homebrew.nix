@@ -2,6 +2,7 @@
 
 {
   homebrew.enable = lib.mkDefault true;
+  homebrew.cleanup = lib.mkDefault "uninstall";
   homebrew.brews = [
     "lsusb"
     "pinentry"
@@ -18,7 +19,5 @@
     "raycast"               # Spotlight alternative that works with the /nix/store apps
     "rectangle"             # Window-manager on top of Aqua
     "scroll-reverser"       # Inverse scroll for external mouse
-
-    "spotify"
   ];
 }
