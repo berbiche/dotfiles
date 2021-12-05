@@ -9,7 +9,6 @@
         "...." = "../../../";
         "....." = "../../../../";
       };
-      shellAliases = config.programs.zsh.shellAliases;
     };
   };
 }
