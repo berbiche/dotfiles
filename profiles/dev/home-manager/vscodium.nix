@@ -1,11 +1,9 @@
-{ config, lib, pkgs, isLinux, ... }:
+moduleArgs@{ config, lib, pkgs, ... }:
 
 let
-  buildVs = ref@{ license ? null, ... }:
-    pkgs.vscode-utils.buildVscodeMarketplaceExtension {
-      mktplcRef = builtins.removeAttrs ref [ "license" ];
-      meta = lib.optionalAttrs (license != null) { inherit license; };
-    };
+  inherit (pkgs.stdenv.hostPlatform) isAarch64 isDarwin isLinux;
+
+  osConfig = moduleArgs.osConfig or { };
 
   # Replaces VSCodium's open-vsx with Microsoft's extension gallery
   # This is temporary
@@ -36,47 +34,6 @@ let
     '';
   });
 
-  my-vscode-packages = {
-    editorconfig = buildVs {
-      name = "editorconfig";
-      publisher = "editorconfig";
-      version = "0.16.4";
-      sha256 = "sha256-j+P2oprpH0rzqI0VKt0JbZG19EDE7e7+kAb3MGGCRDk=";
-    };
-    erlang = buildVs {
-      name = "erlang";
-      publisher = "pgourlain";
-      version = "0.6.9";
-      sha256 = "sha256-ZoG6dKZcBGOui7LTEFgS/kMlM7jnlWiEdqcT5PF2b30=";
-    };
-    firefox-debugger = buildVs {
-      name = "vscode-firefox-debug";
-      publisher = "firefox-devtools";
-      version = "2.9.2";
-      sha256 = "sha256-0Cdc7i+MFiKUlVzoJvW9njT+WkuYWtylFyXg+OmUoaY=";
-    };
-    java-debugger = buildVs {
-      name = "vscode-java-debug";
-      publisher = "vscjava";
-      version = "0.31.0";
-      sha256 = "sha256-PsddtpwaK070LFtkOIP4ddE/SUmHgfLZZozjyYQHsz0=";
-    };
-    wakatime = let
-      wakatime =
-        (buildVs {
-          name = "vscode-wakatime";
-          publisher = "WakaTime";
-          version = "5.0.1";
-          sha256 = "YY0LlwFKeQiicNTGS5uifa9+cvr2NlFyKifM9VN2omo=";
-        }).overrideAttrs (old: {
-          postInstall = old.postInstall or "" + ''
-            mkdir -p "$out/${old.installPrefix}/wakatime-cli"
-            ln -sT "${pkgs.wakatime}/bin/wakatime" "$out/${old.installPrefix}/wakatime-cli/wakatime-cli"
-          '';
-        });
-    in lib.mkIf config.profiles.dev.wakatime.enable wakatime;
-  };
-
   extensions = with pkgs.vscode-extensions; [
     asvetliakov.vscode-neovim
     bbenoist.nix
@@ -91,14 +48,19 @@ let
     davidanson.vscode-markdownlint
     # PDF preview using PDF.js
     tomoki1207.pdf
+
+    # My packages
+    berbiche.editorconfig
+    berbiche.erlang
+    berbiche.firefox-debugger
+    berbiche.java-debugger
   ]
-  ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
+  ++ lib.optionals isLinux [
     ms-vsliveshare.vsliveshare
-    # Broken
-    # ms-python.python
+    ms-python.python
     llvm-org.lldb-vscode
   ]
-  ++ lib.attrValues my-vscode-packages;
+  ++ lib.optional (osConfig.profiles.dev.wakatime.enable or false) berbiche.wakatime;
 
   package = vscodium;
   # package = pkgs.vscode;
@@ -111,9 +73,9 @@ let
       inherit (package) pname version;
     });
 in
-{
-  my.home = { config, ... }: {
-    programs.vscode = lib.mkIf (! (pkgs.stdenv.isDarwin && pkgs.stdenv.isAarch64)){
+lib.mkMerge [
+  {
+    programs.vscode = lib.mkIf (!(isDarwin && isAarch64)) {
       enable = true;
 
       package = finalPackage;
@@ -157,7 +119,9 @@ in
 
       ];
     };
-  } // lib.optionalAttrs isLinux {
+  }
+
+  (lib.mkIf isLinux {
     xdg.mimeApps = let
       desktopFile =
         if finalPackage.pname == "vscode"
@@ -175,5 +139,5 @@ in
         "x-scheme-handler/code-url-handler" = [ desktopFile ];
       };
     };
-  };
-}
+  })
+]

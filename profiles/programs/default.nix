@@ -20,7 +20,6 @@ in
 
     home.packages = with pkgs; lib.mkMerge [
       [
-        ncdu
         element-desktop
         yt-dlp
       ]
