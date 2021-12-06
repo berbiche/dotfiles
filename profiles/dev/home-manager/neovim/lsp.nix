@@ -126,7 +126,7 @@
           -- Zig
           lsp.zls.setup {
             on_attach = function(a, bufnr)
-              vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+              -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
               on_attach_trouble(a, bufnr)
             end,
           }
@@ -202,6 +202,9 @@
 
 
     # Language specific packages
-    zig-vim
+    {
+      plugin = zig-vim;
+      config = "let g:zig_fmt_autosave = 0";
+    }
   ];
 }

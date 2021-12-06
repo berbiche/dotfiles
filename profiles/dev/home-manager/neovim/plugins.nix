@@ -29,6 +29,13 @@
     todo-comments-nvim
     # Highlight ranges in the commandline such as :10,20
     range-highlight-nvim
+    # UI configuration
+    {
+      plugin = dressing-nvim;
+      config = ''
+        lua require('dressing').setup {}
+      '';
+    }
     # Automatically close pairs of symbols like {}, [], (), "", etc.
     {
       plugin = nvim-autopairs;
@@ -87,11 +94,22 @@
         " let g:sneak#map_netrw = 0
       '';
     }
+    nui-nvim
+    {
+      plugin = searchbox-nvim;
+      config = ''
+        lua <<EOF
+          local map = vim.api.nvim_set_keymap
+          map("n", "<leader>sh", "<cmd>lua require('searchbox').replace()<CR>", {noremap=true})
+          map("v", "<leader>sh", "<cmd>lua require('searchbox').replace()<CR>", {noremap=true})
+        EOF
+      '';
+    }
     {
       plugin = BufOnly-vim;
       config = ''
-        nnoremap <leader>bk :BufOnly<CR>
-        nnoremap <leader>bK :BufOnly!<CR>
+        nnoremap <leader>bo :BufOnly<CR>
+        nnoremap <leader>bo :BufOnly!<CR>
       '';
     }
     {
@@ -378,7 +396,6 @@
       plugin = nvim-tree-lua;
       config = ''
         let g:nvim_tree_add_trailing = 1
-        let g:nvim_tree_gitignore = 1
         let g:nvim_tree_git_hl = 1
         let g:nvim_tree_highlight_opened_files = 1
 
@@ -388,6 +405,10 @@
             update_focused_file = {
               enable = true,
               ignore_list = {'startify', 'dashboard'},
+            },
+            git = {
+              enable = true,
+              ignore = true,
             },
             lsp_diagnostics = enable,
             filters = {
