@@ -28,9 +28,9 @@
     # Optimize (hardlink duplicates) store automatically
     autoOptimiseStore = true;
 
-    # Reduce IOnice and CPU niceness of the build daemon
-    daemonIONiceLevel = 3;
-    daemonNiceLevel = 10;
+    # Make the daemon and builders low priority to have a responding system while building
+    daemonIOSchedClass = "idle";
+    daemonCPUSchedPolicy = "idle";
   };
 
   # We need this to generate the sops host key
