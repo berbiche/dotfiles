@@ -157,13 +157,18 @@
           config = prev.config;
         };
       };
+      darwin = final: prev: prev.lib.optionalAttrs (prev.stdenv.hostPlatform.isDarwin) {
+        # The package always fails to build on Darwin,
+        # so just disable it and use the cask instead
+        kitty = prev.runCommandLocal "dummy" { } "mkdir -p $out";
+      };
       x86_64-for-aarch64 = final: prev: let
         inherit (prev) lib;
         pkgs-amd64-darwin = import prev.path {
           inherit (prev) config;
           localSystem = "x86_64-darwin";
         };
-      in optionalAttrs (prev.stdenv.isDarwin && prev.stdenv.isAarch64) {
+      in optionalAttrs (prev.stdenv.hostPlatform.isDarwin && prev.stdenv.hostPlatform.isAarch64) {
         #vscode = pkgs-amd64-darwin.vscode;
         #vscode-extensions = pkgs-amd64-darwin.vscode-extensions;
         #vscode-utils = pkgs-amd64-darwin.vscode-utils;
