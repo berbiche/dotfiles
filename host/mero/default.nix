@@ -48,6 +48,14 @@
     #options amdgpu dc=0
   '';
 
+  # https://www/spinics.net/lists/usb/msg02644.html
+  # Hopefully this will fix usb issues with my nested usb docks (4 level of nesting)
+  # Sometimes I can't use my keyboard when booting because usb read errors
+  environment.etc."modprobe.d/custom-usb.conf".text = ''
+    # options usbcore old_scheme_first=y
+    options usbcore use_both_schemes=y
+  '';
+
   hardware.video.hidpi.enable = false;
 
   # Boot loader settings
