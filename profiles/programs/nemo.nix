@@ -2,9 +2,27 @@
 
 let
   inherit (pkgs.stdenv.targetPlatform) isDarwin isLinux;
+
+  # Remove services that make Nemo hide most of my devices...
+  gvfs = pkgs.runCommandLocal "gvfs-remove-junk" { } ''
+    mkdir -p "$out"/share/dbus-1
+    cp --no-preserve=mode -r "${pkgs.gnome.gvfs}"/share/{systemd,dbus-1} "$out"/share/.
+    for file in "$out"/share/systemd/user/gvfs-*; do
+      case "$(basename "$file")" in
+        gvfs-daemon*|gvfs-metadata*) ;;
+        *) rm "$file" ;;
+      esac
+    done
+    for file in "$out"/share/dbus-1/services/*; do
+      case "$(basename "$file")" in
+        *Daemon*|*Metadata*) ;;
+        *) rm "$file" ;;
+      esac
+    done
+  '';
 in
 lib.mkIf isLinux {
-  home.packages = [ pkgs.gnome.file-roller ];
+  home.packages = [ pkgs.gnome.file-roller gvfs ];
 
   xdg.dataFile."nemo/actions/extract-here.nemo_action".text = ''
     [Nemo Action]
