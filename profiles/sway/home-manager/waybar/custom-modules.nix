@@ -57,14 +57,18 @@ in
     return-type = "json";
     format = "{icon}";
     format-icons = {
-      true = ""; # fontawesome.com/v5/cheatsheet bell f0f3
-      false = ""; # fontawesome.com/v5/cheatsheet bell-slash f1f6
+      disabled = ""; # fontawesome.com/v5/cheatsheet bell f0f3
+      enabled  = ""; # fontawesome.com/v5/cheatsheet bell-slash f1f6
     };
     interval = "once";
     exec = pkgs.writeShellScript "do-not-disturb" ''
-      status="false"
+      status="disabled"
       if ${pkgs.procps-ng}/bin/pgrep dunst >/dev/null; then
-        status="$(${config.services.dunst.package}/bin/dunstctl is-paused)"
+        if [ "$(${config.services.dunst.package}/bin/dunstctl is-paused)" = "true" ]; then
+          status="enabled"
+        else
+          status="disabled"
+        fi
       fi
       echo '{"class": "'"$status"'", "alt": "'"$status"'", "tooltip": "Toggle do not disturb"}'
     '';
