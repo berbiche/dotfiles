@@ -4,7 +4,6 @@
   imports = with profiles; [
     base
     default-linux
-    # kinect
     obs
     steam
     wireguard
@@ -52,8 +51,13 @@
   # Hopefully this will fix usb issues with my nested usb docks (4 level of nesting)
   # Sometimes I can't use my keyboard when booting because usb read errors
   environment.etc."modprobe.d/custom-usb.conf".text = ''
-    # options usbcore old_scheme_first=y
+    options usbcore old_scheme_first=y
     options usbcore use_both_schemes=y
+  '';
+
+  # Hide devices from Nemo/Nautilus
+  services.udev.extraRules = ''
+     SUBSYSTEM=="block", ENV{ID_FS_UUID}=="7F25-9A66", ENV={UDISKS_IGNORE}="1"
   '';
 
   hardware.video.hidpi.enable = false;

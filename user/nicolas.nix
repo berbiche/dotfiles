@@ -122,14 +122,8 @@ lib.mkMerge [
       services.kdeconnect.indicator = true;
 
       services.blueman-applet.enable = true;
-      systemd.user.services.blueman-applet = {
-        Unit.After = lib.mkForce [ "graphical-session-pre.target" ];
-      };
       # Started with libindicator if `xsession.preferStatusNotifierItems = true`
       services.network-manager-applet.enable = true;
-      systemd.user.services.network-manager-applet = {
-        Unit.After = lib.mkForce [ "graphical-session-pre.target" ];
-      };
 
       # Playerctl smart daemon to stop the "last player"
       # supposedly smarter than the default play-pause behavior
@@ -138,6 +132,10 @@ lib.mkMerge [
 
       home.packages = [
         pkgs.thunderbird
+
+        pkgs.pantheon.elementary-files
+        pkgs.pantheon.elementary-icon-theme
+        pkgs.pantheon.elementary-music
 
         # Force Zoom to run on X11 for all the popups and everything
         (pkgs.zoom-us.overrideAttrs (old: {

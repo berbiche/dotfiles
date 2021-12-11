@@ -51,6 +51,7 @@
 
       associations.added = {
         "inode/directory"               = [ "nemo.desktop" ];
+        "application/pdf"               = [ "org.gnome.Evince.desktop" "firefox.desktop" ];
         "x-scheme-handler/http"         = [ "firefox.desktop" ];
         "x-scheme-handler/https"        = [ "firefox.desktop" ];
         "x-scheme-handler/ftp"          = [ "firefox.desktop" ];

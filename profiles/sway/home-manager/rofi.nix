@@ -20,7 +20,7 @@
     matching = "fuzzy";
 
     run-command = "${pkgs.sway}/bin/swaymsg exec -- {cmd}";
-    drun-url-launher = "${pkgs.sway}/bin/swaymsg -- ${pkgs.xdg_utils}/bin/xdg-open";
+    drun-url-launcher = "${pkgs.sway}/bin/swaymsg -- ${pkgs.xdg_utils}/bin/xdg-open";
 
     # file-browser = {
     #   directories-first = true;

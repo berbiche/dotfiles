@@ -42,6 +42,8 @@ makeNoRepeat (defaultKeybindings // {
   "${modifier}+p"            = "exec ${binaries.fullscreen-menu}";
   "${modifier}+Semicolon"    = "exec ${binaries.emacsclient}";
 
+  "${modifier}+Shift+space"  = "floating toggle, border normal";
+
   "${modifier}+Shift+d" = "kill";
   "${modifier}+Shift+c" = "exec ${getScript "sway-reload.sh"}";
 
@@ -132,8 +134,8 @@ makeNoRepeat (defaultKeybindings // {
   "${modifier}+Alt+w" = "exec '${getScript "sway_move_workspace_to_other_screen.sh"}'";
 
   # Fullscren inhibits focus
-  "${modifier}+f"       = "fullscreen, inhibit_idle focus";
-  "${modifier}+Shift+f" = "fullscreen global, inhibit_idle focus";
+  "${modifier}+f"       = "fullscreen, inhibit_idle fullscreen";
+  "${modifier}+Shift+f" = "fullscreen global, inhibit_idle fullscreen";
 
   "${modifier}+z"       = "focus child";
   "${modifier}+Shift+z" = "focus parent";

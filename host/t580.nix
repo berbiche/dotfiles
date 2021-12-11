@@ -4,9 +4,9 @@
   imports = with profiles; [
     base
     default-linux
+    obs
     steam
     wireguard
-    obs
   ];
 
   environment.systemPackages = [

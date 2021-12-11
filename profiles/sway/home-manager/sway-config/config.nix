@@ -315,6 +315,10 @@ let
         { con_mark = "_social.*"; }
         { con_mark = "_music-player.*"; }
       ])
+      {
+        criteria.app_id = "pdfarranger";
+        command = "floating enable";
+      }
     ];
 
     bars = lib.mkForce [];
