@@ -197,5 +197,7 @@
 
   my.home = { config, lib, pkgs, ... }: {
     home.packages = [ pkgs.glpaper pkgs.wf-recorder ];
+
+    profiles.steam.enableProtonGE = true;
   };
 }

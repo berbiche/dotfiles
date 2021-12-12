@@ -169,6 +169,6 @@
   services.clight.enable = false;
 
   my.home = { config, lib, pkgs, ... }: {
-    programs.emacs.package = lib.mkForce pkgs.emacsPgtk;
+    profiles.steam.enableProtonGE = true;
   };
 }

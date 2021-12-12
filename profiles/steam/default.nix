@@ -30,17 +30,21 @@
       sha256 = "sha256:0j39i19m1djkc0g1a4jq4bhihyz9rn2s4rk46rgqyvvd80rdky71";
     };
   in [
-    {
-      home.activation.proton-ge-custom = ''
-        if [ ! -d "$HOME/.steam/root/compatibilitytools.d/Proton-${version}" ]; then
-          cp -rsv ${proton-ge} "$HOME/.steam/root/compatibilitytools.d/Proton-${version}"
-        fi
-      '';
+    ({ config, lib, pkgs, ... }: {
+      options.profiles.steam.enableProtonGE = lib.mkEnableOption "using Proton-Ge-Custom";
+
+      config = lib.mkIf config.profiles.steam.enableProtonGE {
+        home.activation.proton-ge-custom = ''
+          if [ ! -d "$HOME/.steam/root/compatibilitytools.d/Proton-${version}" ]; then
+            cp -rsv ${proton-ge} "$HOME/.steam/root/compatibilitytools.d/Proton-${version}"
+          fi
+        '';
+      };
       # home.file.proton-ge-custom = {
       #   recursive = true;
       #   source = proton-ge;
       #   target = ".steam/root/compatibilitytools.d/Proton-${version}";
       # };
-    }
+    })
   ];
 }
