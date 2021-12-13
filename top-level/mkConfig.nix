@@ -14,7 +14,7 @@ in
 , extraModules ? [ ]
 }:
 let
-  defaults = { config, pkgs, lib, ... }: {
+  defaults = { config, pkgs, lib, inputs, ... }: {
     imports = [ hostConfiguration userConfiguration ] ++ extraModules;
 
     environment.systemPackages = [ pkgs.cachix ];
@@ -28,7 +28,18 @@ let
         experimental-features = nix-command flakes
         keep-outputs = true
         keep-derivations = true
+
+        # Override the global registry because it should never have existed
+        flake-registry = ${builtins.toFile "flake-registry" (builtins.toJSON { version = 2; flakes = [ ]; })}
       '';
+      registry = {
+        nixpkgs.flake = inputs.nixpkgs;
+        nur = {
+          from = { type = "indirect"; id = "nur"; };
+          to = { type = "github"; owner = "berbiche"; repo = "nur-flake-wrapper"; };
+          exact = true;
+        };
+      };
       # Automatic GC of nix files
       gc = {
         automatic = true;

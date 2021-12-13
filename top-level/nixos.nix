@@ -14,13 +14,7 @@
     trustedUsers = [ "root" "@wheel" ];
 
     registry = {
-      nixpkgs.flake = inputs.nixpkgs;
       nixpkgs-wayland.flake = inputs.nixpkgs-wayland;
-      nur = {
-        from = { type = "indirect"; id = "nur"; };
-        to = { type = "github"; owner = "berbiche"; repo = "nur-flake-wrapper"; };
-        exact = true;
-      };
     };
 
     # Run monthly garbage collection to reduce store size
