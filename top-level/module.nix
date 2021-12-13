@@ -37,15 +37,21 @@ with builtins;
       type = types.package;
       default = pkgs.gnome-themes-standard;
     };
-
     theme.dark = mkOption {
       type = types.str;
       default = "Adwaita-dark";
     };
-
     theme.light = mkOption {
       type = types.str;
       default = "Adwaita";
+    };
+    theme.cursor.name = mkOption {
+      type = types.str;
+      example = "Adwaita";
+    };
+    theme.cursor.size = mkOption {
+      type = types.ints.positive;
+      example = 24;
     };
 
     defaults.file-explorer = mkOption {

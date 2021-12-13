@@ -21,6 +21,8 @@ lib.mkMerge [
     # my.theme.light = "Arc";
     my.theme.dark = "Materia-dark-compact";
     my.theme.light = "Materia-light-compact";
+    my.theme.cursor.name = "Adwaita";
+    my.theme.cursor.size = 24;
 
     my.home = { ... }: {
       my.identity = {
@@ -70,8 +72,8 @@ lib.mkMerge [
       gtk = {
         enable = true;
         iconTheme = {
-          name = "Adwaita";
-          package = pkgs.gnome.adwaita-icon-theme;
+          name = "Papirus";
+          package = pkgs.papirus-icon-theme;
         };
         theme = {
           # name = "Adwaita";
@@ -79,18 +81,18 @@ lib.mkMerge [
           package = config.my.theme.package;
         };
         gtk2.extraConfig = ''
-          gtk-cursor-theme-name="Adwaita"
-          gtk-cursor-theme-size="24"
+          gtk-cursor-theme-name="${config.my.theme.cursor.name}"
+          gtk-cursor-theme-size="${toString config.my.theme.cursor.size}"
         '';
         gtk3.extraConfig = {
-          "gtk-cursor-theme-name" = "Adwaita";
-          "gtk-cursor-theme-size" = 24;
+          "gtk-cursor-theme-name" = "${config.my.theme.cursor.name}";
+          "gtk-cursor-theme-size" = config.my.theme.cursor.size;
         };
       };
       xsession.pointerCursor = {
         package = pkgs.gnome3.gnome-themes-extra;
-        name = "Adwaita";
-        size = 24;
+        name = "${config.my.theme.cursor.name}";
+        size = config.my.theme.cursor.size;
       };
       xsession.preferStatusNotifierItems = true;
 
