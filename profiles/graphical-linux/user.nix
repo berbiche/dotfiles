@@ -10,6 +10,9 @@
 
       ffmpeg
 
+      # Video player
+      haruna
+
       glib.bin # for 'gio'
 
       # Programs
@@ -45,12 +48,10 @@
     xdg.enable = true;
     xdg.mimeApps = rec {
       enable = true;
-
       # defaultApplications = lib.mapAttrs (_n: v: lib.head v) config.xdg.mimeApps.associations.added;
       defaultApplications = config.xdg.mimeApps.associations.added;
-
       associations.added = {
-        "inode/directory"               = [ "nemo.desktop" ];
+        "inode/directory"               = [ "nemo.desktop" "emacs.desktop" "codium.desktop" ];
         "application/pdf"               = [ "org.gnome.Evince.desktop" "firefox.desktop" ];
         "x-scheme-handler/http"         = [ "firefox.desktop" ];
         "x-scheme-handler/https"        = [ "firefox.desktop" ];
@@ -104,38 +105,38 @@
         "audio/x-s3m"                   = [ "rhythmbox.desktop" ];
         "audio/x-stm"                   = [ "rhythmbox.desktop" ];
         "audio/x-xm"                    = [ "rhythmbox.desktop" ];
-        "video/flv"                     = [ "mpv.desktop" ];
-        "video/mp2t"                    = [ "mpv.desktop" ];
-        "video/mp4"                     = [ "mpv.desktop" ];
-        "video/mp4v-es"                 = [ "mpv.desktop" ];
-        "video/mpeg"                    = [ "mpv.desktop" ];
-        "video/msvideo"                 = [ "mpv.desktop" ];
-        "video/ogg"                     = [ "mpv.desktop" ];
-        "video/quicktime"               = [ "mpv.desktop" ];
-        "video/vivo"                    = [ "mpv.desktop" ];
-        "video/vnd.divx"                = [ "mpv.desktop" ];
-        "video/vnd.rn-realvideo"        = [ "mpv.desktop" ];
-        "video/vnd.vivo"                = [ "mpv.desktop" ];
-        "video/webm"                    = [ "mpv.desktop" ];
-        "video/x-anim"                  = [ "mpv.desktop" ];
-        "video/x-avi"                   = [ "mpv.desktop" ];
-        "video/x-flc"                   = [ "mpv.desktop" ];
-        "video/x-fli"                   = [ "mpv.desktop" ];
-        "video/x-flic"                  = [ "mpv.desktop" ];
-        "video/x-flv"                   = [ "mpv.desktop" ];
-        "video/x-m4v"                   = [ "mpv.desktop" ];
-        "video/x-matroska"              = [ "mpv.desktop" ];
-        "video/x-mpeg"                  = [ "mpv.desktop" ];
-        "video/x-ms-asf"                = [ "mpv.desktop" ];
-        "video/x-ms-asx"                = [ "mpv.desktop" ];
-        "video/x-ms-wm"                 = [ "mpv.desktop" ];
-        "video/x-ms-wmv"                = [ "mpv.desktop" ];
-        "video/x-ms-wmx"                = [ "mpv.desktop" ];
-        "video/x-ms-wvx"                = [ "mpv.desktop" ];
-        "video/x-msvideo"               = [ "mpv.desktop" ];
-        "video/x-nsv"                   = [ "mpv.desktop" ];
-        "video/x-ogm+ogg"               = [ "mpv.desktop" ];
-        "video/x-theora+ogg"            = [ "mpv.desktop" ];
+        "video/flv"                     = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/mp2t"                    = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/mp4"                     = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/mp4v-es"                 = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/mpeg"                    = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/msvideo"                 = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/ogg"                     = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/quicktime"               = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/vivo"                    = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/vnd.divx"                = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/vnd.rn-realvideo"        = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/vnd.vivo"                = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/webm"                    = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/x-anim"                  = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/x-avi"                   = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/x-flc"                   = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/x-fli"                   = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/x-flic"                  = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/x-flv"                   = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/x-m4v"                   = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/x-matroska"              = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/x-mpeg"                  = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/x-ms-asf"                = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/x-ms-asx"                = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/x-ms-wm"                 = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/x-ms-wmv"                = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/x-ms-wmx"                = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/x-ms-wvx"                = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/x-msvideo"               = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/x-nsv"                   = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/x-ogm+ogg"               = [ "org.kde.haruna.desktop" "mpv.desktop" ];
+        "video/x-theora+ogg"            = [ "org.kde.haruna.desktop" "mpv.desktop" ];
         "x-scheme-handler/mailto"       = [ "thunderbird.desktop" ];
         "x-scheme-handler/mid"          = [ "thunderbird.desktop" ];
         "x-scheme-handler/news"         = [ "thunderbird.desktop" ];

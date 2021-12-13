@@ -3,21 +3,23 @@
 let
   mkCommand = commands: lib.concatStringsSep "; \\\n" commands;
 
+  # Helpers for `for_window` commands
+  mkFloatingBorder = { criteria, extraCommands ? [ ] }: {
+    inherit criteria;
+    command = mkCommand ([ "floating enable" "border normal" ] ++ extraCommands);
+  };
   mkFloatingNoBorder = { criteria, extraCommands ? [] }: {
     inherit criteria;
     command = mkCommand ([ "floating enable" "border none" ] ++ extraCommands);
   };
-
   mkFloatingSticky = criteria: {
     inherit criteria;
     command = mkCommand [ "floating enable" "sticky enable" ];
   };
-
   mkInhibitFullscreen = criteria: {
     inherit criteria;
     command = "inhibit_idle fullscreen";
   };
-
   mkMarkSocial = name: criteria: {
     inherit criteria;
     command = "mark \"_social_${name}\"";
@@ -41,10 +43,10 @@ let
     audiocontrol = "${pavucontrol}";
     #menu = "${nwggrid} -n 10 -fp -b 121212E0";
     #menu = "${pkgs.bash}/bin/bash -i -c '${xfce4-appfinder} --disable-server'";
-    fullscreen-menu = "${pkgs.bash}/bin/bash -l -c '${nwggrid-client}'";
+    fullscreen-menu = "${pkgs.bash}/bin/bash -lc '${nwggrid-client}'";
     # Execute in "login" bash shell to inherit shell variables
-    menu-wofi = "${pkgs.bash}/bin/bash -l -c '${wofi} --fork --show drun,run'";
-    menu-rofi = "${pkgs.bash}/bin/bash -l -c ${pkgs.writeShellScript "rofi" ''
+    menu-wofi = "${pkgs.bash}/bin/bash -lc '${wofi} --fork --show drun,run'";
+    menu-rofi = "${pkgs.bash}/bin/bash -lc ${pkgs.writeShellScript "rofi" ''
       ${rofi} -show combi -combi-modi drun,run -display-drun ''' -display-combi 'Launch' -theme slate
     ''}";
 
@@ -315,10 +317,10 @@ let
         { con_mark = "_social.*"; }
         { con_mark = "_music-player.*"; }
       ])
-      {
-        criteria.app_id = "pdfarranger";
-        command = "floating enable";
-      }
+      (map (x: mkFloatingBorder { criteria = x; }) [
+        { app_id = "pdfarranger"; }
+        { app_id = "org.kde.haruna"; }
+      ])
     ];
 
     bars = lib.mkForce [];
