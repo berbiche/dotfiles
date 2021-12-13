@@ -29,6 +29,19 @@ in
       ZSH_AUTOSUGGEST_COMPLETION_IGNORE = "*/nix/store/*|rsync *|scp *|*/tmp/*";
     };
 
+    plugins = [
+      {
+        src = pkgs.fetchFromGitHub {
+          owner = "zimfw";
+          repo = "completion";
+          rev = "db079f405397a9dc9af93883e47d8adff817e3b1";
+          hash = "sha256-LNVKj/85zkYPjpfDDhlxErwFmjVY/vwr07GBQJGUU+0=";
+        };
+        name = "completion";
+        file = "init.zsh";
+      }
+    ];
+
     initExtra = ''
       # Hello message
       (
@@ -70,7 +83,6 @@ in
       zstyle ':completion:*' cache-path "${config.xdg.cacheHome}/zsh/completion-cache"
       # Fish-like completion (https://unix.stackexchange.com/a/467852)
       zmodload zsh/complist
-      zstyle ':completion:*' menu yes select search
 
       # Important
       WORDCHARS=''${WORDCHARS//[\/&.;_-]}                                 # Don't consider certain characters part of the word
