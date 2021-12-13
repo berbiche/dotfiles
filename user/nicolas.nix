@@ -115,7 +115,7 @@ lib.mkMerge [
       # Passwords and stuff
       # Disabled: https://github.com/nix-community/home-manager/issues/1454
       services.gnome-keyring.enable = true;
-      services.gnome-keyring.components = [ "secrets" "ssh" ];
+      services.gnome-keyring.components = [ "secrets" ];
 
       # Make sure to open the right port range
       services.kdeconnect.enable = true;

@@ -14,25 +14,27 @@ in
       my.home = {
         # gnome3 pinentry unbroken in my Sway setup with
         # dbus-update-activation-environment from 'on-startup-shutdown' script
-        home.file.".gnupg/gpg-agent.conf".text = ''
-          pinentry-program ${pkgs.pinentry.gnome3}/bin/pinentry
-          # pinentry-program ${pkgs.pinentry.qt}/bin/pinentry
-        '';
-        services.gpg-agent.pinentryFlavor = "gnome3";
-        # services.gpg-agent.pinentryFlavor = "qt";
+        # home.file.".gnupg/gpg-agent.conf".text = lib.mkAfter ''
+        #   pinentry-program ${pkgs.pinentry.gnome3}/bin/pinentry
+        #   # pinentry-program ${pkgs.pinentry.qt}/bin/pinentry
+        # '';
+        services.gpg-agent = {
+          pinentryFlavor = "gnome3";
+          enable = true;
+          enableSshSupport = true;
+        };
       };
     })
     (mkIf isDarwin {
       # pinentry-mac is not packaged on nixpkgs
-      my.home.home.file.".gnupg/gpg-agent.conf".text = ''
+      my.home.home.file.".gnupg/gpg-agent.conf".text = lib.mkAfter ''
         pinentry-program /usr/local/bin/pinentry-mac
       '';
     })
     {
       my.home = { config, ... }: {
         services.gpg-agent = {
-          enable = false;
-          enableSshSupport = false;
+          enable = lib.mkDefault false;
         };
 
         programs.gpg = {
@@ -41,7 +43,6 @@ in
             inherit (config.my.identity) gpgSigningKey;
             hasGpgSigningKey = gpgSigningKey != null;
           in {
-            use-agent = false;
             default-key = mkIf hasGpgSigningKey "0x${gpgSigningKey}";
             trusted-key = mkIf hasGpgSigningKey "0x${gpgSigningKey}";
           };
