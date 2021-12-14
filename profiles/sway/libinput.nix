@@ -40,6 +40,8 @@ in
         };
         swipe.commands.three = {
           up = "${ydotool} key Super_L+p";
+          right = "${pkgs.sway}/bin/swaymsg focus left";
+          left = "${pkgs.sway}/bin/swaymsg focus right";
         };
         swipe.settings = {
           threshold = 0.5;
