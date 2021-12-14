@@ -202,6 +202,26 @@ let
   };
 in
 lib.mkIf isLinux {
+  xdg.desktopEntries = lib.mkIf isLinux {
+    # Wrapped firefox desktop application
+    firefox = {
+      name = "Firefox";
+      exec = "/usr/bin/env MOZ_DBUS_REMOTE=1 MOZ_ENABLE_WAYLAND=1 MOZ_USE_XINPUT2=1 firefox %u";
+      categories = [ "Application" "Network" "WebBrowser" ];
+      icon = "firefox";
+      genericName = "Web Browser";
+      mimeType = [ "x-scheme-handler/unknown" "x-scheme-handler/about" "text/html" "text/xml" "application/xhtml+xml" "application/vnd.mozilla.xul+xml" "x-scheme-handler/http" "x-scheme-handler/https" "x-scheme-handler/ftp" ];
+    };
+    thunderbird = {
+      name = "Thunderbird";
+      exec = "/usr/bin/env MOZ_DBUS_REMOTE=1 MOZ_ENABLE_WAYLAND=1 MOZ_USE_XINPUT2=1 thunderbird %U";
+      categories = [ "Network" "WebBrowser" ];
+      icon = "thunderbird";
+      genericName = "Web Browser";
+      mimeType = [ "x-scheme-handler/mailto" ];
+    };
+  };
+
   # Fix Firefox. See <https://mastransky.wordpress.com/2020/03/16/wayland-x11-how-to-run-firefox-in-mixed-environment/>
   home.sessionVariables = {
     MOZ_DBUS_REMOTE = "1";
