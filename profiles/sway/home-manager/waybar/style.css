@@ -48,13 +48,13 @@ window#waybar {
   padding: 0 7px 0 7px;
 }
 
-#pulseaudio {
+/* #pulseaudio {
   color: #2aa198;
-}
+} */
 
-#battery {
+/* #battery {
   color: #859900;
-}
+} */
 
 /* TOP BAR (left)*/
 #workspaces {

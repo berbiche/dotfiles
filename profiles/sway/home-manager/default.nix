@@ -17,6 +17,9 @@
 
     # Displays notification
     ./dunst.nix
+    ./swaync
+    # ./linux-notification-center.nix
+    # ./mako.nix
 
     # Automatically changes the theme for my desktop based on the time
     # of day and controls the gamma and brightness
@@ -27,12 +30,6 @@
 
     # Automatically setup my displays based on a set of profiles
     ./kanshi.nix
-
-    # Notification daemon
-    # ./linux-notification-center.nix
-
-    # Notification daemon
-    # ./mako.nix
 
     # Shows a prompt to run some root stuff like certain systemctl calls
     ./polkit.nix
@@ -87,4 +84,7 @@
 
   programs.waybar.enable = true;
   programs.nwg-panel.enable = false;
+
+  services.dunst.enable = false;
+  services.sway-notification-center.enable = true;
 }

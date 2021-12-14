@@ -167,7 +167,7 @@ let
       on-scroll-up = "";
       on-scroll-down = "";
       on-click = "${pkgs.pavucontrol}/bin/pavucontrol";
-      on-right-click = "${config.lib.my.getScript "volume.sh"} mic-mute";
+      on-click-right = "${config.lib.my.getScript "volume.sh"} mic-mute";
     };
 
   };
@@ -192,8 +192,8 @@ let
       # icon-theme = "DarK-svg";
       icon-size = 12;
       on-click = "activate";
-      on-middle-click = "close";
-      on-right-click = "minimize";
+      on-click-middle = "close";
+      on-click-right = "minimize";
     };
 
     # "sway/window" = {

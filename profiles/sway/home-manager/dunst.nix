@@ -11,7 +11,7 @@ in
 {
   systemd.user.services.dunst.Service.UnsetEnvironment = [ "DISPLAY" ];
 
-  services.dunst.enable = true;
+  # services.dunst.enable = true;
   services.dunst.iconTheme = {
     # name = "Papirus-Dark";
     name = "Papirus";

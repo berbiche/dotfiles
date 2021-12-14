@@ -53,7 +53,34 @@ in
     '';
   };
 
-  "custom/do-not-disturb" = {
+  # "custom/do-not-disturb" = {
+  #   return-type = "json";
+  #   format = "{icon}";
+  #   format-icons = {
+  #     disabled = ""; # fontawesome.com/v5/cheatsheet bell f0f3
+  #     enabled  = ""; # fontawesome.com/v5/cheatsheet bell-slash f1f6
+  #   };
+  #   interval = "once";
+  #   exec = pkgs.writeShellScript "do-not-disturb" ''
+  #     status="disabled"
+  #     if ${pkgs.procps-ng}/bin/pgrep dunst >/dev/null; then
+  #       if [ "$(${config.services.dunst.package}/bin/dunstctl is-paused)" = "true" ]; then
+  #         status="enabled"
+  #       else
+  #         status="disabled"
+  #       fi
+  #     fi
+  #     echo '{"class": "'"$status"'", "alt": "'"$status"'", "tooltip": "Toggle do not disturb"}'
+  #   '';
+  #   exec-on-event = true;
+  #   on-click = pkgs.writeShellScript "do-not-disturb" ''
+  #     ${config.services.dunst.package}/bin/dunstctl set-paused toggle
+  #   '';
+  # };
+
+  "custom/do-not-disturb" = let
+    swaync-client = "${config.services.sway-notification-center.package}/bin/swaync-client";
+  in {
     return-type = "json";
     format = "{icon}";
     format-icons = {
@@ -63,8 +90,8 @@ in
     interval = "once";
     exec = pkgs.writeShellScript "do-not-disturb" ''
       status="disabled"
-      if ${pkgs.procps-ng}/bin/pgrep dunst >/dev/null; then
-        if [ "$(${config.services.dunst.package}/bin/dunstctl is-paused)" = "true" ]; then
+      if ${pkgs.procps-ng}/bin/pgrep swaync >/dev/null; then
+        if [ "$(${swaync-client} --get-dnd --skip-wait)" = "true" ]; then
           status="enabled"
         else
           status="disabled"
@@ -74,7 +101,10 @@ in
     '';
     exec-on-event = true;
     on-click = pkgs.writeShellScript "do-not-disturb" ''
-      ${config.services.dunst.package}/bin/dunstctl set-paused toggle
+      ${swaync-client} --toggle-dnd --skip-wait
+    '';
+    on-click-right = pkgs.writeShellScript "open-sway-notification-center" ''
+      ${swaync-client} --toggle-panel --skip-wait
     '';
   };
 
