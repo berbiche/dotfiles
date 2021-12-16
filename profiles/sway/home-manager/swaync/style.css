@@ -147,3 +147,16 @@
 .floating-notifications {
   background: transparent;
 }
+
+
+/*
+ * My modifications
+ */
+
+.control-center {
+  border-radius: 10px;
+}
+
+scrolledwindow {
+  margin-bottom: 10px;
+}
