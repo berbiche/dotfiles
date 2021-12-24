@@ -87,6 +87,10 @@ lib.mkMerge [
         b = "branch -vv";
         bn = "checkout -b";
         ch = "checkout";
+        cp = "cherry-pick";
+        cpe = "cherry-pick --edit";
+        cpc = "cherry-pick --continue";
+        cpa = "cherry-pick --abort";
         d = "diff";
         dc = "diff --cached";
         f = "fetch --prune";

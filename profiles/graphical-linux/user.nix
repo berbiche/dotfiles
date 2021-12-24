@@ -3,40 +3,39 @@
 {
   my.home = { config, lib, pkgs, ... }: {
     home.packages = with pkgs; [
-      pavucontrol # Audio software
-      playerctl # control MPRIS players
-      libnotify # `notify-send` notifications to test mako
-      dex # execute .desktop files
-
+      # Audio software
+      pavucontrol
+      # control MPRIS players
+      playerctl
+      # `notify-send` notifications to test mako
+      libnotify
+      # execute .desktop files
+      dex
+      # Video/Audio encoding software
       ffmpeg
-
       # Video player
       haruna
-
-      glib.bin # for 'gio'
-
-      # Programs
+      # Calculator
+      nasc
+      # for 'gio'
+      glib.bin
       #gnome3.nautilus # Gnome file manager
       cinnamon.nemo # Cinnamon's fork of Gnome's file manager
       gnome3.networkmanager-openconnect # OpenConnect plugin for NetworkManager
       gnome3.rhythmbox # Gnome music player
       gnome3.eog # Gnome image viewer
       gnome3.seahorse # Gnome Keyring secret management
-
       # Virtualization software
       gnome3.gnome-boxes
       virt-manager
       vagrant
-
       # Torrent client
       qbittorrent
-
+      transmission-remote-gtk
       # Minecraft client
       multimc
-
       # Merge pdfs and other stuff
       pdfarranger
-
       # Companion for the fxcast firefox extension
       # How to use: `fx_cast_bridge -p 9556 -d`
       fx_cast_bridge
@@ -51,7 +50,7 @@
       # defaultApplications = lib.mapAttrs (_n: v: lib.head v) config.xdg.mimeApps.associations.added;
       defaultApplications = config.xdg.mimeApps.associations.added;
       associations.added = {
-        "inode/directory"               = [ "nemo.desktop" "emacs.desktop" "codium.desktop" ];
+        "inode/directory"               = [ "nemo.desktop" "emacs.desktop" "codium.desktop" "nautilus.desktop" ];
         "application/pdf"               = [ "org.gnome.Evince.desktop" "firefox.desktop" ];
         "x-scheme-handler/http"         = [ "firefox.desktop" ];
         "x-scheme-handler/https"        = [ "firefox.desktop" ];
@@ -90,21 +89,21 @@
         "image/svg+xml-compressed"      = [ "org.gnome.eog.desktop" ];
         "image/vnd.wap.wbmp"            = [ "org.gnome.eog.desktop" ];
         "image/x-icns"                  = [ "org.gnome.eog.desktop" ];
-        "audio/x-vorbis+ogg"            = [ "rhythmbox.desktop" ];
-        "audio/vorbis"                  = [ "rhythmbox.desktop" ];
-        "audio/x-vorbis"                = [ "rhythmbox.desktop" ];
-        "audio/x-scpls"                 = [ "rhythmbox.desktop" ];
-        "audio/x-mp3"                   = [ "rhythmbox.desktop" ];
-        "audio/x-mpeg"                  = [ "rhythmbox.desktop" ];
-        "audio/mpeg"                    = [ "rhythmbox.desktop" ];
-        "audio/x-mpegurl"               = [ "rhythmbox.desktop" ];
-        "audio/x-flac"                  = [ "rhythmbox.desktop" ];
-        "audio/mp4"                     = [ "rhythmbox.desktop" ];
-        "audio/x-it"                    = [ "rhythmbox.desktop" ];
-        "audio/x-mod"                   = [ "rhythmbox.desktop" ];
-        "audio/x-s3m"                   = [ "rhythmbox.desktop" ];
-        "audio/x-stm"                   = [ "rhythmbox.desktop" ];
-        "audio/x-xm"                    = [ "rhythmbox.desktop" ];
+        "audio/x-vorbis+ogg"            = [ "rhythmbox.desktop" "io.elementary.music.desktop" ];
+        "audio/vorbis"                  = [ "rhythmbox.desktop" "io.elementary.music.desktop" ];
+        "audio/x-vorbis"                = [ "rhythmbox.desktop" "io.elementary.music.desktop" ];
+        "audio/x-scpls"                 = [ "rhythmbox.desktop" "io.elementary.music.desktop" ];
+        "audio/x-mp3"                   = [ "rhythmbox.desktop" "io.elementary.music.desktop" ];
+        "audio/x-mpeg"                  = [ "rhythmbox.desktop" "io.elementary.music.desktop" ];
+        "audio/mpeg"                    = [ "rhythmbox.desktop" "io.elementary.music.desktop" ];
+        "audio/x-mpegurl"               = [ "rhythmbox.desktop" "io.elementary.music.desktop" ];
+        "audio/x-flac"                  = [ "rhythmbox.desktop" "io.elementary.music.desktop" ];
+        "audio/mp4"                     = [ "rhythmbox.desktop" "io.elementary.music.desktop" ];
+        "audio/x-it"                    = [ "rhythmbox.desktop" "io.elementary.music.desktop" ];
+        "audio/x-mod"                   = [ "rhythmbox.desktop" "io.elementary.music.desktop" ];
+        "audio/x-s3m"                   = [ "rhythmbox.desktop" "io.elementary.music.desktop" ];
+        "audio/x-stm"                   = [ "rhythmbox.desktop" "io.elementary.music.desktop" ];
+        "audio/x-xm"                    = [ "rhythmbox.desktop" "io.elementary.music.desktop" ];
         "video/flv"                     = [ "org.kde.haruna.desktop" "mpv.desktop" ];
         "video/mp2t"                    = [ "org.kde.haruna.desktop" "mpv.desktop" ];
         "video/mp4"                     = [ "org.kde.haruna.desktop" "mpv.desktop" ];

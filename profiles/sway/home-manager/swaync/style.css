@@ -160,3 +160,53 @@
 scrolledwindow {
   margin-bottom: 10px;
 }
+
+/*
+ * Overshoot shouldn't display on my monitor since I don't use a touch device
+ */
+overshoot {
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+overshoot.top {
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+overshoot.left {
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+overshoot.right {
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+overshoot.left:backdrop {
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+overshoot.right:backdrop {
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+overshoot.top:backdrop {
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+overshoot.bottom:backdrop {
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+undershoot {
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+

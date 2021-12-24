@@ -95,5 +95,7 @@ in
     insomnia # GUI tool to test http APIs, alternative to postman and hoppscotch (formerly postwoman)
 
     pv # view status of pipes (bandwidth, etc.)
+
+    marker # markdown editor
   ];
 }

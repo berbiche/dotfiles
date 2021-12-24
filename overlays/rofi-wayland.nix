@@ -1,5 +1,6 @@
 let
-  version = "1.7.0+wayland1";
+  version = "1.7.2+wayland1";
+  hash = "sha256-INFYHOVjBNj8ks4UjKnxLW8mL7h1c8ySFPS/rUxOWwo=";
 in
 final: prev: {
   rofi-wayland = (prev.rofi.override {
@@ -12,7 +13,7 @@ final: prev: {
         owner = "lbonn";
         repo = "rofi";
         rev = "${version}";
-        sha256 = "sha256-x+kgbd7pBCWDf7czJMlk2HzbwnnF/ix8NPr3mSmB1MA=";
+        hash = "${hash}";
         fetchSubmodules = true;
       };
     });
