@@ -1,5 +1,5 @@
 * {
-  font-size: 11px;
+  font-size: 12px;
   /* color: #d8dee9; */
   font-family: "Roboto", "FontAwesome", "Font Awesome";
 }
@@ -13,8 +13,10 @@ window#waybar {
   /* Match Materia-Dark's background color */
   background: #181818;
   padding: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
   border-radius: 4px;
-  min-height: 16px;
+  /* min-height: 20px; */
 }
 
 /* Base styling for modules */

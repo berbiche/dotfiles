@@ -4,6 +4,7 @@ let
   margin = 5;
   layer = "top";
   width = 1200;
+  height = 22;
 
   spacing = 8;
 
@@ -11,8 +12,8 @@ let
 
   top-bar = {
     inherit layer spacing;
+    inherit height width;
     position = "top";
-    width = width;
     margin-top = margin;
     margin-right = margin;
     margin-left = margin;
