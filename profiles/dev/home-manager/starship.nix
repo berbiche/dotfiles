@@ -10,7 +10,7 @@
       format = lib.concatStrings [
         "$nix_shell"
         # "$username:$hostname "
-        # "$hostname "
+        "$hostname "
         "$directory"
         # "$kubernetes"
         "$git_branch"
@@ -87,7 +87,7 @@
       };
 
       hostname = {
-        ssh_only = false;
+        ssh_only = true;
         format = "[$hostname]($style)";
       };
 
