@@ -45,14 +45,5 @@
       systemd.user.sessionVariables = tmpdirs;
       home.sessionVariables = tmpdirs;
     })
-    {
-      # Allow moving alsa audio sources
-      # This is useful with certain Steam games
-      home.file.".alsoftrc".text = ''
-        [pulse]
-        allow-moves = true
-      '';
-      home.file.".alsoftrc".force = true;
-    }
   ];
 }

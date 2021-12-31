@@ -1,6 +1,18 @@
 { ... }:
 
 {
+  home-manager.sharedModules = [
+    {
+      # Allow moving alsa audio sources
+      # This is useful with certain Steam games
+      home.file.".alsoftrc".text = ''
+        [pulse]
+        allow-moves = true
+      '';
+      home.file.".alsoftrc".force = true;
+    }
+  ];
+
   my.home = { config, lib, pkgs, ... }: {
     home.packages = with pkgs; [
       # Audio software
