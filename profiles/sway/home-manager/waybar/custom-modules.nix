@@ -100,10 +100,10 @@ in
       echo '{"class": "'"$status"'", "alt": "'"$status"'", "tooltip": "Toggle do not disturb"}'
     '';
     exec-on-event = true;
-    on-click = pkgs.writeShellScript "do-not-disturb" ''
+    on-click-right = pkgs.writeShellScript "do-not-disturb" ''
       ${swaync-client} --toggle-dnd --skip-wait
     '';
-    on-click-right = pkgs.writeShellScript "open-sway-notification-center" ''
+    on-click = pkgs.writeShellScript "open-sway-notification-center" ''
       ${swaync-client} --toggle-panel --skip-wait
     '';
   };
