@@ -4,7 +4,7 @@ let
   margin = 5;
   layer = "top";
   width = 1200;
-  height = 22;
+  height = 30;
 
   spacing = 8;
 
@@ -100,7 +100,8 @@ let
 
     "backlight" = {
       device = "intel_backlight";
-      format = "{icon} {percent:2}%";
+      # format = "{icon} {percent:2}%";
+      format = " {percent:2}%";
       format-icons = [ "ﯦ" "ﯧ" ];
       on-scroll-up = "${pkgs.brightnessctl}/bin/brightnessctl set +5%";
       on-scroll-down = "${pkgs.brightnessctl}/bin/brightnessctl set 5%-";

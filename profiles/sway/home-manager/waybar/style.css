@@ -3,6 +3,7 @@
   /* color: #d8dee9; */
   font-family: "Roboto", "FontAwesome", "Font Awesome";
   font-weight: normal;
+  min-height: 14px;
 }
 
 button {
@@ -10,22 +11,23 @@ button {
 }
 
 window#waybar {
-  /* color: #d8dee9; */
-  /* Match Materia-Dark's background color */
-  /* background: #181818; */
-  padding: 4px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 4px;
   border: 1px solid @theme_fg_color;
-  /* min-height: 20px; */
+  border-radius: 4px;
+  min-height: 22px;
+}
+window#waybar .modules-left,
+window#waybar .modules-center,
+window#waybar .modules-right {
+  /* Somehow, the border is not accounted for, so a margin needs to be added */
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 window#waybar .modules-left {
-  margin-left: 1px;
+  margin-left: 5px;
 }
 window#waybar .modules-right {
-  margin-right: 1px;
+  margin-right: 5px;
 }
 
 /* Base styling for modules */
@@ -50,27 +52,15 @@ window#waybar .modules-right {
 #custom-do-not-disturb,
 #taskbar,
 #tray {
-  margin-top: 1px;
-  margin-bottom: 1px;
   padding: 0 3px 0 3px;
   border-radius: 4px;
 }
 
 #clock {
-  margin-top: 1px;
-  margin-bottom: 1px;
   padding: 0 7px 0 7px;
   background: rgba(82, 148, 226, 1);
   /* background: rgba(94,129,172,0.7); */
 }
-
-/* #pulseaudio {
-  color: #2aa198;
-} */
-
-/* #battery {
-  color: #859900;
-} */
 
 /* TOP BAR (left)*/
 #workspaces {
@@ -86,9 +76,9 @@ window#waybar .modules-right {
   background: rgba(82, 148, 226, 1);
 }
 
-#idle_inhibitor {
+/* #idle_inhibitor, #custom-do-not-disturb {
   margin: 0px;
-}
+} */
 
 #mode {
   background: rgba(191, 97, 106, 0.7);
