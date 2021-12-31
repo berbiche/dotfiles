@@ -2,6 +2,7 @@
   font-size: 12px;
   /* color: #d8dee9; */
   font-family: "Roboto", "FontAwesome", "Font Awesome";
+  font-weight: normal;
 }
 
 button {
@@ -9,14 +10,22 @@ button {
 }
 
 window#waybar {
-  color: #d8dee9;
+  /* color: #d8dee9; */
   /* Match Materia-Dark's background color */
-  background: #181818;
+  /* background: #181818; */
   padding: 4px;
   padding-left: 10px;
   padding-right: 10px;
   border-radius: 4px;
+  border: 1px solid @theme_fg_color;
   /* min-height: 20px; */
+}
+
+window#waybar .modules-left {
+  margin-left: 1px;
+}
+window#waybar .modules-right {
+  margin-right: 1px;
 }
 
 /* Base styling for modules */
@@ -41,13 +50,18 @@ window#waybar {
 #custom-do-not-disturb,
 #taskbar,
 #tray {
+  margin-top: 1px;
+  margin-bottom: 1px;
   padding: 0 3px 0 3px;
-  text-shadow: 1px 1px 1px #2e3440;
   border-radius: 4px;
 }
 
 #clock {
+  margin-top: 1px;
+  margin-bottom: 1px;
   padding: 0 7px 0 7px;
+  background: rgba(82, 148, 226, 1);
+  /* background: rgba(94,129,172,0.7); */
 }
 
 /* #pulseaudio {
@@ -64,7 +78,6 @@ window#waybar {
 }
 #workspaces button {
   padding: 0px 5px 0px 5px;
-  color: #d8dee9;
 }
 #workspaces button.focused {
   border-radius: 4px;
@@ -87,11 +100,6 @@ window#waybar {
   padding-right: 3px;
 } */
 
-#clock {
-  /* background: rgba(94,129,172,0.7); */
-  background: rgba(82, 148, 226, 1);
-}
-
 
 /* BOTTOM BAR (left to right)*/
 #custom-weather {
@@ -103,7 +111,7 @@ window#waybar {
   padding-left: 0px;
 }
 #taskbar button {
-  color: #d8dee9;
+  /* color: #d8dee9; */
   border-radius: 4px;
   padding-left: 5px;
   padding-right: 5px;
