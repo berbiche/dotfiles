@@ -47,7 +47,7 @@ let
     # Execute in "login" bash shell to inherit shell variables
     menu-wofi = "${pkgs.bash}/bin/bash -lc '${wofi} --fork --show drun,run'";
     menu-rofi = "${pkgs.bash}/bin/bash -lc ${pkgs.writeShellScript "rofi" ''
-      ${rofi} -show combi -combi-modi drun,run -display-drun ''' -display-combi 'Launch' -theme slate
+      ${rofi} -show drun -modi drun,run,calc,emoji -display-drun 'Launch' -theme slate
     ''}";
 
     on-startup-shutdown = pkgs.runCommandLocal "sway-on-startup-shutdown" {
@@ -94,7 +94,7 @@ let
     signal-desktop = "${pkgs.signal-desktop}/bin/signal-desktop";
     nwggrid = "${pkgs.nwg-launchers}/bin/nwggrid";
     nwgbar = "${pkgs.nwg-launchers}/bin/nwgbar";
-    rofi = "${config.programs.rofi.package}/bin/rofi";
+    rofi = "${config.programs.rofi.finalPackage}/bin/rofi";
     spotify = "${pkgs.spotify}/bin/spotify";
     swaylock = "${pkgs.swaylock}/bin/swaylock";
     # swaymsg = "${config.wayland.windowManager.sway.package}/bin/swaymsg";
