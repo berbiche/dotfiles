@@ -30,7 +30,6 @@ in
         bitwarden bitwarden-cli
         spotify
         signal-desktop
-        chromium
         libreoffice
       ])
       (lib.mkIf isDarwin [
