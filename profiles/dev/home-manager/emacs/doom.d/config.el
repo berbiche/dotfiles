@@ -32,6 +32,9 @@
 ;; Always softwrap
 (global-visual-line-mode t)
 
+;; Override line highlighting foreground
+(set-face-foreground 'hl-line 'unspecified)
+
 ;; Disable clipboard manager hanging for a few seconds on Wayland
 (setq x-select-enable-clipboard-manager nil)
 

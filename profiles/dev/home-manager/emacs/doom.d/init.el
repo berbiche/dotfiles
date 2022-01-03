@@ -64,7 +64,7 @@
        vc                ; version-control and Emacs, sitting in a tree
 
        :term
-       ;;eshell            ; the elisp shell that works everywhere 
+       ;;eshell            ; the elisp shell that works everywhere
        ;;shell             ; simple shell REPL for Emacs
        ;;term              ; basic terminal emulator for Emacs
        vterm             ; the best terminal emulation in Emacs
@@ -179,7 +179,7 @@
 
        :email
        ;;(mu4e +org +gmail)
-       (notmuch)
+       ;;(notmuch)
        ;;(wanderlust +gmail)
 
        ;; Applications are complex and opinionated modules that transform Emacs
@@ -195,18 +195,3 @@
        ;;literate
        (default +bindings +smartparens))
 
-; (custom-set-variables
-;  ;; custom-set-variables was added by Custom.
-;  ;; If you edit it by hand, you could mess it up, so be careful.
-;  ;; Your init file should contain only one such instance.
-;  ;; If there is more than one, they won't work right.
-;  '(custom-safe-themes
-;    (quote
-;     ("ca0a98b766b64d98c24084e2fd2b74b795286a0ff322f53459fe60684c2fcffb" "d8e3a2b8c72c3cb52d070a5e1969849197488b92d7211cc86c97e033239fdde2" "5784d048e5a985627520beb8a101561b502a191b52fa401139f4dd20acb07607" default)))
-;  '(js-indent-level 2))
-; (custom-set-faces
-;  ;; custom-set-faces was added by Custom.
-;  ;; If you edit it by hand, you could mess it up, so be careful.
-;  ;; Your init file should contain only one such instance.
-;  ;; If there is more than one, they won't work right.
-;  )
