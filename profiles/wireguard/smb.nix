@@ -40,7 +40,7 @@ in
     ];
 
     fileSystems."/mnt/public-share" = {
-      device = "//truenas.node.tq.rs/public-share";
+      device = "//truenas.node.tq.rs/homes";
       fsType = "cifs";
       options = [
         "noauto" # "noatime" "nodiratime"
