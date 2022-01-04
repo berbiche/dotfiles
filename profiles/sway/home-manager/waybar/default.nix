@@ -26,7 +26,7 @@ let
     modules-center = [
       # "cpu"
       # "memory"
-      "idle_inhibitor"
+      "inhibitor"
       "clock"
       "custom/dark-mode"
       # "disk#1"
@@ -63,7 +63,8 @@ let
       format = "<span style=\"italic\">{}</span>";
     };
 
-    "idle_inhibitor" = {
+    "inhibitor" = {
+      what = [ "idle" ];
       format = "{icon}";
       format-icons = {
         activated = "聯";
