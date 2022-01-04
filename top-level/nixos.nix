@@ -32,6 +32,9 @@
   services.openssh.openFirewall = lib.mkDefault false;
   services.openssh.permitRootLogin = lib.mkDefault "no";
   services.openssh.passwordAuthentication = lib.mkDefault false;
+  services.openssh.extraConfig = ''
+    StreamLocalBindUnlink yes
+  '';
 
   location.longitude = lib.mkIf (config.my.location != null) config.my.location.longitude;
   location.latitude = lib.mkIf (config.my.location != null) config.my.location.latitude;
