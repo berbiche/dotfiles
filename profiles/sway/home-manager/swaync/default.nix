@@ -8,7 +8,7 @@
       timeout = 10;
       timeout-low = 10;
       timeout-critical = 10;
-      keyboard_shortcuts = false;
+      keyboard-shortcuts = false;
       image-visibility = "when-available";
     };
 

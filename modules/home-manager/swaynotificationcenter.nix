@@ -63,9 +63,11 @@ in
 
     systemd.user.services.swaync = {
       Unit = {
-        Description = "SwayNotificationCenter";
+        Description = "SwayNotificationCenter notification daemon";
         PartOf = [ "graphical-session.target" ];
         After = [ "graphical-session.target" ];
+        Requisite = [ "graphical-session.target"];
+        ConditionEnvironment = [ "WAYLAND_DISPLAY" ];
       };
       Service = {
         Type = "dbus";
@@ -73,7 +75,7 @@ in
         # We don't pass the path to the nix store configuration file to allow reloading
         # without restarting the service
         ExecStart = "${cfg.package}/bin/swaync";
-        ExecReload = "${cfg.package}/bin/swaync-client -R";
+        ExecReload = "${cfg.package}/bin/swaync-client --reload-config --reload-css";
         Restart = "on-failure";
         RestartSec = "1sec";
       };
