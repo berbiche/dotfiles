@@ -69,11 +69,10 @@
 
   systemd.user.targets.tray = {
     Unit = {
-      # Description = "";
+      Description = "Home Manager System Tray";
       Documentation = [ "man:systemd.special(7)" ];
       BindsTo = [ "graphical-session.target" ];
-      Wants = [ "graphical-session-pre.target" ];
-      After = [ "graphical-session-pre.target" ];
+      Requires = [ "graphical-session-pre.target" ];
     };
   };
 
