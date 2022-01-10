@@ -23,4 +23,10 @@ in
   ];
 
   services.emacs.enable = lib.mkIf isDarwin true;
+
+  environment.pathsToLink = [ "/share/zsh" "/share/fish" ];
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+  };
 }
