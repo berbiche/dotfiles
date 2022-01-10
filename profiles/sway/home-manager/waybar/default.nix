@@ -72,7 +72,7 @@ let
     };
 
     "tray" = {
-      icon-size = 12;
+      icon-size = 16;
       spacing = 8;
     };
 

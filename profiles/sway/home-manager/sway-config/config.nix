@@ -143,7 +143,7 @@ let
 
     fonts = {
       names = [ "FontAwesome" "FontAwesome5Free" "Fira Sans" "DejaVu Sans Mono" ];
-      size = 10.0;
+      size = 11.0;
     };
 
     colors = let
