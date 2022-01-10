@@ -46,7 +46,6 @@
 
         [greeter-theme]
         background-image-size = contain
-        #background-image = "${config.users.users.${config.my.username}.home}/Pictures/wallpaper/current"
       '';
     };
   };
@@ -85,6 +84,7 @@
 
   # Bluetooth
   services.blueman.enable = true;
+  home-manager.sharedModules = [{ services.mpris-proxy.enable = true; }];
 
   # Logitech
   hardware.logitech.wireless.enable = true;
