@@ -6,30 +6,48 @@ in
 lib.mkMerge [
   {
     my.location = {
-      latitude = 45.50;
-      longitude = -73.56;
+      latitude = 45.508;
+      longitude = -73.597;
     };
-
-    # my.darkTheme = "Adwaita-dark";
-    # my.lightTheme = "Adwaita";
-
-    # pkgs.numix-gtk-theme
-    # pkgs.arc-theme
-    # pkgs.yaru-theme
-    my.theme.package = pkgs.materia-theme;
-    # my.theme.dark = "Arc-Dark";
-    # my.theme.light = "Arc";
-    my.theme.dark = "Materia-dark-compact";
-    my.theme.light = "Materia-light-compact";
-    my.theme.cursor.name = "Adwaita";
-    my.theme.cursor.size = 24;
 
     my.home = { ... }: {
       my.identity = {
         name = "Nicolas Berbiche";
         email = "nicolas@normie.dev";
-        # My GPG signing key
         gpgSigningKey = "1D0261F6BCA46C6E";
+      };
+
+      # pkgs.numix-gtk-theme
+      # pkgs.arc-theme
+      # pkgs.yaru-theme
+      my.theme.package = pkgs.materia-theme;
+      # my.theme.dark = "Arc-Dark";
+      # my.theme.light = "Arc";
+      my.theme.dark = "Materia-dark-compact";
+      my.theme.light = "Materia-light-compact";
+      my.theme.cursor.name = "Adwaita";
+      my.theme.cursor.size = 24;
+
+      my.colors = {
+        color0 = "#1d1f21";
+        color1 = "#282a2e";
+        color2 = "#373b41";
+        color3 = "#969896";
+        color4 = "#b4b7b4";
+        color5 = "#c5c8c6";
+        color6 = "#e0e0e0";
+        color7 = "#ffffff";
+        color8 = "#cc6666";
+        color9 = "#de935f";
+        color9Darker = "#ba7c50";
+        colorA = "#f0c674";
+        colorB = "#b5bd68";
+        colorC = "#8abeb7";
+        colorD = "#81a2be";
+        colorE = "#b294bb";
+        colorF = "#a3685a";
+        color11 = "#5294E2";
+        color12 = "#08052B";
       };
 
       # HomeManager config
@@ -82,7 +100,7 @@ lib.mkMerge [
         };
         gtk2.extraConfig = ''
           gtk-cursor-theme-name="${config.my.theme.cursor.name}"
-          gtk-cursor-theme-size="${toString config.my.theme.cursor.size}"
+          gtk-cursor-theme-size=${toString config.my.theme.cursor.size}
         '';
         gtk3.extraConfig = {
           "gtk-cursor-theme-name" = "${config.my.theme.cursor.name}";
@@ -98,7 +116,7 @@ lib.mkMerge [
 
       qt = {
         enable = true;
-        platformTheme = "gnome";
+        platformTheme = "gtk";
         style = {
           # name = "Adwaita";
           name = "gtk2";

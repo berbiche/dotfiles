@@ -33,27 +33,6 @@ with builtins;
       default = null;
     };
 
-    theme.package = mkOption {
-      type = types.package;
-      default = pkgs.gnome-themes-standard;
-    };
-    theme.dark = mkOption {
-      type = types.str;
-      default = "Adwaita-dark";
-    };
-    theme.light = mkOption {
-      type = types.str;
-      default = "Adwaita";
-    };
-    theme.cursor.name = mkOption {
-      type = types.str;
-      example = "Adwaita";
-    };
-    theme.cursor.size = mkOption {
-      type = types.ints.positive;
-      example = 24;
-    };
-
     defaults.file-explorer = mkOption {
       type = types.oneOf [ types.path types.str types.package ];
       apply = toString;
@@ -68,33 +47,6 @@ with builtins;
       description = "File explorer to use in different applications";
     };
 
-    colors = mkOption {
-      type = with types; attrsOf (oneOf [ str int float ]);
-      description = "Color profile for theming purposes.";
-      default = {
-        # Stolen from Tristan's config
-        color0 = "#1d1f21";
-        color1 = "#282a2e";
-        color2 = "#373b41";
-        color3 = "#969896";
-        color4 = "#b4b7b4";
-        color5 = "#c5c8c6";
-        color6 = "#e0e0e0";
-        color7 = "#ffffff";
-        color8 = "#cc6666";
-        color9 = "#de935f";
-        color9Darker = "#ba7c50";
-        colorA = "#f0c674";
-        colorB = "#b5bd68";
-        colorC = "#8abeb7";
-        colorD = "#81a2be";
-        colorE = "#b294bb";
-        colorF = "#a3685a";
-
-        color11 = "#5294E2";
-        color12 = "#08052B";
-      };
-    };
   };
 
   config = {
@@ -121,14 +73,39 @@ with builtins;
         };
       };
       # mkAliasDefinitions cannot be used for these options
-      options.my.colors = options.my.colors;
       options.my.location = options.my.location;
-      options.my.theme = options.my.theme;
       options.my.defaults = options.my.defaults;
 
+      options.my.theme = {
+        package = mkOption {
+          type = types.package;
+          default = pkgs.gnome-themes-standard;
+        };
+        dark = mkOption {
+          type = types.str;
+          default = "Adwaita-dark";
+        };
+        light = mkOption {
+          type = types.str;
+          default = "Adwaita";
+        };
+        cursor.name = mkOption {
+          type = types.str;
+          example = "Adwaita";
+        };
+        cursor.size = mkOption {
+          type = types.ints.positive;
+          example = 24;
+        };
+      };
+
+      options.my.colors = mkOption {
+        type = with types; attrsOf (oneOf [ str int float ]);
+        description = "Color profile for theming purposes.";
+      };
+
       config.my.location = mkForce config.my.location;
-      config.my.theme = mkForce config.my.theme;
-      config.my.defaults = mkForce config.my.defaults;
+      config.my.defaults = mkDefault config.my.defaults;
     }];
   };
 
