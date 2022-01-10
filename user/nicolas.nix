@@ -165,7 +165,6 @@ lib.mkMerge [
           '';
         }))
         # Temporary
-        # (import inputs.master { inherit (pkgs) config system; }).discord
         pkgs.discord
         pkgs.teams
 

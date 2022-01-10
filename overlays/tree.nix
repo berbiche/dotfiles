@@ -1,3 +1,3 @@
 final: prev: {
-  inherit (prev.master) tree;
+  # inherit (prev.master) tree;
 }
