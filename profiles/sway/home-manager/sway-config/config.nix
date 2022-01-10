@@ -69,21 +69,7 @@ let
     alacritty = "${config.programs.alacritty.package}/bin/alacritty";
     bitwarden = "${pkgs.bitwarden}/bin/bitwarden";
     brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl -m";
-    brightnessctl-avizo = toString (pkgs.writeShellScript "brightnessctl-avizo" ''
-      BACKGROUND=--background="rgba(204,102,102,0.8)"
-      TIME="5" # seconds
-      current="$(${pkgs.coreutils}/bin/cut -d, -f4 | ${pkgs.coreutils}/bin/tr -d '%')"
-      scaled="$(echo "scale=2; $current / 100.0" | ${pkgs.bc}/bin/bc)"
-      image=""
-      if [ "$current" -lt "34" ]; then
-        image="brightness_low"
-      elif [ "$current" -lt "67" ]; then
-        image="brightness_medium"
-      else
-        image="brightness_high"
-      fi
-      ${pkgs.avizo}/bin/avizo-client --image-resource="$image" --progress="$scaled" --time="$TIME" $BACKGROUND
-    '');
+    brightnessctl-avizo = config.lib.my.getScript "brightnessctl-avizo.sh";
     emacsclient = "${config.programs.emacs.finalPackage}/bin/emacsclient -c";
     firefox = "${config.programs.firefox.package}/bin/firefox";
     nwggrid-client = "${pkgs.nwg-launchers}/bin/nwggrid -client";

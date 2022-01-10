@@ -1,37 +1,19 @@
 { config, lib, pkgs, ... }:
 
 {
-  home.packages = [ pkgs.avizo ];
+  services.avizo = {
+    enable = true;
 
-  # wayland.windowManager.sway = {
-  #   config.startup = [{
-  #     command = "${pkgs.avizo}/bin/avizo-service";
-  #   }];
-  # };
-
-  systemd.user.services.avizo = {
-    Unit = {
-      Description = "Lightweight notification daemon for Wayland";
-      PartOf = [ "graphical-session.target" ];
-      # Requisite = [ "dbus.service" ];
-      After = [ "graphical-session.target" # "dbus.service"
-              ];
+    settings.default = {
+      time = 5.0;
+      width = 200;
+      height = 150;
+      padding = 20;
+      block-height = 20;
+      block-spacing = 0;
+      background = "rgba(66, 66, 66, 0.9)";
+      foreground = "rgba(255, 255, 255, 1)";
+      y-offset = 0.95;
     };
-
-    Service = {
-      Type = "dbus";
-      BusName = "org.danb.avizo.service";
-
-      # Changed to `Type = simple` to prevent waiting for the busname to appear
-      # because Avizo waits for xdg-desktop-portal to start
-      # which takes a long time
-      # Type = "simple";
-
-      ExecStart = "${pkgs.avizo}/bin/avizo-service";
-      Restart = "on-failure";
-      RestartSec = 1;
-    };
-
-    Install.WantedBy = [ "sway-session.target" ];
   };
 }

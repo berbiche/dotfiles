@@ -175,7 +175,7 @@ lib.mkMerge [
       # Copy the scripts folder
       home.file."scripts".source = let
         path = lib.makeBinPath (with pkgs; [
-          gawk gnused jq wget
+          gawk gnused jq wget bc
           pulseaudio # for pactl
           pamixer # volume control
           avizo # show a popup notification for the volume level
