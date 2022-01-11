@@ -34,11 +34,6 @@ in
       format = "binary";
     };
 
-    systemd.tmpfiles.rules = [
-      #Type Path              Mode User        Group        Age Argument
-      "d    /mnt/public-share 0770 ${cfg.user} ${cfg.group} -   -"
-    ];
-
     fileSystems."/mnt/public-share" = {
       device = "//truenas.node.tq.rs/homes";
       fsType = "cifs";

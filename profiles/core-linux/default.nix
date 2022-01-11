@@ -20,10 +20,13 @@
   # Set automatic hibernation image size to prevent "not enough memory"
   # errors when trying to hibernate, even though the swapfile is as big as
   # the amount of ram I have...
-  systemd.tmpfiles.rules = [
-    #Type Path                  Mode User Group Age Argument
-    "w    /sys/power/image_size -    -    -     -   0"
-    "d    %T/user               0777 0    0     -   -"
+  systemd.tmpfiles.rules = let
+    my-uid = toString config.users.users.${config.my.username}.uid;
+  in [
+    #Type Path                  Mode User      Group     Age Argument
+    "w    /sys/power/image_size -    -         -         -   0"
+    "d    %T/user               0777 0         0         -   -"
+    "d    %T/user/${my-uid}     0770 ${my-uid} ${my-uid} -   -"
   ];
 
   # Set default dns servers
@@ -33,16 +36,14 @@
   home-manager.sharedModules = [
     (let
       tmpdirs = rec {
-        TMP = "/tmp/user/$(id -u)/";
-        TEMP = TMP;
-        TMPDIR = TMP;
-        TEMPDIR = TMP;
+        # Nix attributes are ordered by name and TMP needs to be at the top
+        " TMP" = "/tmp/user/$(id -u)";
+        TEMP = "/tmp/user/$(id -u)/";
+        TMP = "$TEMP";
+        TMPDIR = "$TEMP";
+        TEMPDIR = "$TEMP";
       };
     in {
-      systemd.user.tmpfiles.rules = [
-        #Type Path         Mode User Group Age Argument
-        "D    /tmp/user/%U 0770 -    -     -   -"
-      ];
       systemd.user.sessionVariables = tmpdirs;
       home.sessionVariables = tmpdirs;
     })
