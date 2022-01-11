@@ -86,6 +86,8 @@ let
   };
 in
 {
+  disabledModules = [ "services/swayidle.nix" ];
+
   options.services.swayidle = {
     enable = mkEnableOption "idle manager for Wayland";
 
