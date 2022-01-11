@@ -11,6 +11,10 @@ lib.mkMerge [
       gpgSigningKey = "1D0261F6BCA46C6E";
     };
 
+    # Nix GL issues...
+    my.defaults.terminal = "/usr/bin/kitty";
+    my.defaults.file-explorer = "${pkgs.cinnamon.nemo}/bin/nemo";
+
     # pkgs.numix-gtk-theme
     # pkgs.arc-theme
     # pkgs.yaru-theme
@@ -20,6 +24,9 @@ lib.mkMerge [
     my.theme.dark = "Materia-dark-compact";
     my.theme.light = "Materia-light-compact";
     my.theme.cursor.name = "Adwaita";
+
+    my.terminal.fontSize = 12.0;
+    my.terminal.fontName = "MesloLGS Nerd Font Mono";
     my.theme.cursor.size = 24;
 
     my.colors = {

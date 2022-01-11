@@ -17,6 +17,9 @@ lib.mkMerge [
         gpgSigningKey = "1D0261F6BCA46C6E";
       };
 
+      my.defaults.terminal = "${pkgs.alacritty}/bin/alacritty";
+      my.defaults.file-explorer = lib.mkIf isLinux "${pkgs.cinnamon.nemo}/bin/nemo";
+
       # pkgs.numix-gtk-theme
       # pkgs.arc-theme
       # pkgs.yaru-theme
@@ -27,6 +30,12 @@ lib.mkMerge [
       my.theme.light = "Materia-light-compact";
       my.theme.cursor.name = "Adwaita";
       my.theme.cursor.size = 24;
+
+      my.terminal.fontSize = 12.0;
+      my.terminal.fontName = lib.mkMerge [
+        (lib.mkIf isDarwin "Menlo")
+        (lib.mkIf (!isDarwin) "MesloLGS Nerd Font Mono")
+      ];
 
       my.colors = {
         color0 = "#1d1f21";

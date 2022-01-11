@@ -56,7 +56,7 @@ with builtins;
 
     home-manager.sharedModules = [{
       imports = (myLib.filesInDir ../modules/home-manager) ++ [ ./home-manager-options.nix ];
-      
+
       config.my.location = mkForce config.my.location;
       config.my.defaults = mkDefault config.my.defaults;
     }];

@@ -3,11 +3,8 @@
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
 
-  defaultFontSize = 13.0;
-  defaultFont = lib.mkMerge [
-    (lib.mkIf isDarwin "Menlo")
-    (lib.mkIf (!isDarwin) "Iosevka")
-  ];
+  defaultFontSize = config.my.terminal.fontSize;
+  defaultFont = config.my.terminal.fontName;
 in
 {
   programs.alacritty.enable = true;
@@ -43,13 +40,13 @@ in
     font = {
       size = defaultFontSize;
       normal.family = defaultFont;
-      # normal.style = "Regular";
+      normal.style = "Regular";
       bold.family = defaultFont;
-      # bold.style = "Bold";
+      bold.style = "Bold";
       italic.family = defaultFont;
-      # italic.style = "Italic";
+      italic.style = "Italic";
       bold_italic.family = defaultFont;
-      # bold_italic.style = "Bold Italic";
+      bold_italic.style = "Bold Italic";
     };
 
     # Colors (Tomorrow Night Bright)
@@ -106,7 +103,7 @@ in
       enabled = [
         {
           regex = "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:|git\\\\+ssh:)[^\\u0000-\\u001F\\u007F-\\u009F<>\"\\\\s{-}\\\\^⟨⟩`]+";
-          command = "xdg-open";
+          command = if isDarwin then "open" else "xdg-open";
           post_processing = true;
           mouse = {
             enabled = true;
@@ -130,10 +127,5 @@ in
 
     # Send ESC (\x1b) before characters when alt is pressed.
     alt_send_esc = true;
-
-    # key_bindings = [
-    #   { key = "Space";  mods = "Shift|Control"; mode = "Vi"; action = "ScrollToBottom";          }
-    #   { key = "Space";  mods = "Shift|Control";              action = "ToggleViMode";            }
-    # ];
   };
 }

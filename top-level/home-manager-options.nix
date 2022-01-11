@@ -67,6 +67,9 @@ with lib;
     };
   };
 
+  options.my.terminal.fontSize = mkOption { type = types.float; };
+  options.my.terminal.fontName = mkOption { type = types.str; };
+
   options.my.colors = mkOption {
     type = with types; attrsOf (oneOf [ str int float ]);
     description = "Color profile for theming purposes.";
