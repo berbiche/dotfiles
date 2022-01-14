@@ -109,7 +109,8 @@ let
 
     "battery" = {
       interval = 30;
-      format = "{icon} {capacity:2}%{time}";
+      # format = "{icon} {capacity:2}%{time}";
+      format = "{icon} {capacity:2}%";
       format-time = " ({H}:{M:2})";
       format-icons = [ "" "" "" "" "" ];
       states = {
@@ -219,7 +220,7 @@ in
   systemd.user.services.waybar = lib.mkIf config.programs.waybar.enable {
     # Temporary "fix" until https://github.com/Alexays/Waybar/issues/1205
     # is resolved
-    Service.Environment = [ "PATH=${lib.makeBinPath [ "/run/current-system/sw" "${config.home.profileDirectory}" ]}" ];
+    Service.Environment = [ "PATH=${lib.makeBinPath [ "/run/current-system/sw" config.home.profileDirectory ]}" ];
     Install.WantedBy = lib.mkForce [ "sway-session.target" ];
   };
 }
