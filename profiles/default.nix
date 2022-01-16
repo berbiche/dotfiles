@@ -17,7 +17,13 @@ let
   mkProfile = imports: let
     # Flattens the list of imports recursively
     flattenImports = imports:
-      builtins.foldl' (a: b: a ++ (if builtins.isList b then flattenImports b else [ b ])) [ ] imports;
+      builtins.foldl' (a: b: a ++ (
+        if builtins.isList b
+        then flattenImports b
+        else if builtins.isAttrs b && b ? imports
+        then flattenImports b.imports
+        else [ b ])
+      ) [ ] imports;
   in {
     imports = flattenImports imports;
   };
@@ -25,10 +31,12 @@ let
   # Constructs an attrset of profiles that export a `home-manager` folder
   # or a `home-manager.nix` file.
   homeManagerImports = profiles: let
-    inherit (builtins) attrNames filter foldl' pathExists;
-    hm = x:
-      let y = x + "/home-manager"; in
-      if pathExists y then y
+    inherit (builtins) attrNames filter foldl' isAttrs pathExists;
+    hm = x: let
+      y = x + "/home-manager";
+    in
+      if isAttrs x then null
+      else if pathExists y then y
       else if pathExists (y + ".nix") then y + ".nix"
       else null;
   in
@@ -64,10 +72,12 @@ let
     // optionalAttrs isDarwin {
       core-darwin = mkProfile [ ./core-darwin ];
       yabai = mkProfile [ ./yabai ];
-    }
-    // {
-      # Home Manager profiles
-      home-manager = homeManagerImports self;
     };
+
+  profiles' = fix profiles;
 in
-  fix profiles
+  profiles' // {
+    home-manager = let x = homeManagerImports profiles'; in
+      # Yeah.... :)
+      builtins.trace ("Available HM profiles: " + (builtins.toString (builtins.attrNames x))) x;
+  }

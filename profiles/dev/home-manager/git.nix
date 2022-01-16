@@ -1,4 +1,4 @@
-{ config, lib, pkgs, osConfig, ... }:
+moduleArgs@{ config, lib, pkgs, ... }:
 
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
@@ -13,6 +13,8 @@ let
     __toString = _: "!f(){ ${y}; }; f";
     unwrapped = y;
   };
+
+  osConfig = moduleArgs.osConfig or { };
 in
 lib.mkMerge [
   (lib.mkIf (isLinux && (config.services.gnome-keyring.enable || osConfig.services.gnome.gnome-keyring.enable or false)) {

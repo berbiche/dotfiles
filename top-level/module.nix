@@ -55,55 +55,8 @@ with builtins;
     my.defaults.file-explorer = mkIf isLinux "${pkgs.cinnamon.nemo}/bin/nemo";
 
     home-manager.sharedModules = [{
-      imports = myLib.filesInDir ../modules/home-manager;
-
-      options.my.identity = {
-        name = mkOption {
-          type = types.str;
-          description = "Fullname";
-        };
-        email = mkOption {
-          type = types.str;
-          description = "Email";
-        };
-        gpgSigningKey = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = "Primary GPG signing key";
-        };
-      };
-      # mkAliasDefinitions cannot be used for these options
-      options.my.location = options.my.location;
-      options.my.defaults = options.my.defaults;
-
-      options.my.theme = {
-        package = mkOption {
-          type = types.package;
-          default = pkgs.gnome-themes-standard;
-        };
-        dark = mkOption {
-          type = types.str;
-          default = "Adwaita-dark";
-        };
-        light = mkOption {
-          type = types.str;
-          default = "Adwaita";
-        };
-        cursor.name = mkOption {
-          type = types.str;
-          example = "Adwaita";
-        };
-        cursor.size = mkOption {
-          type = types.ints.positive;
-          example = 24;
-        };
-      };
-
-      options.my.colors = mkOption {
-        type = with types; attrsOf (oneOf [ str int float ]);
-        description = "Color profile for theming purposes.";
-      };
-
+      imports = (myLib.filesInDir ../modules/home-manager) ++ [ ./home-manager-options.nix ];
+      
       config.my.location = mkForce config.my.location;
       config.my.defaults = mkDefault config.my.defaults;
     }];

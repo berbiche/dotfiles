@@ -1,5 +1,8 @@
-{ config, osConfig, lib, pkgs, ... }:
+moduleArgs@{ config, lib, pkgs, ... }:
 
+let
+  osConfig = moduleArgs.osConfig or { };
+in
 {
   programs.neovim.plugins = with pkgs.vimPlugins; [ ]
   ++ [
@@ -474,7 +477,7 @@
       '';
     }
   ]
-  ++ lib.optional osConfig.profiles.dev.wakatime.enable {
+  ++ lib.optional (osConfig.profiles.dev.wakatime.enable or false) {
     plugin = vim-wakatime;
     optional = true;
     config = ''

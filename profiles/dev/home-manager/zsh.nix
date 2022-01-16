@@ -154,6 +154,12 @@ in
         echo "''${cmd[@]}" "$@"
         "''${cmd[@]}" "$@"
       }
+
+      hmsf() {
+        local cmd=(home-manager switch --flake ~/dotfiles -v)
+        echo "''${cmd[@]}" "$@"
+        "''${cmd[@]}" "$@"
+      }
     '';
   };
 }

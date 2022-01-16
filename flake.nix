@@ -95,6 +95,42 @@
         };
       };
 
+    # Linux-only Home Manager configurations
+    mkHomeManagerConfig = args@{ platform, username, extraProfiles ? [ ], ... }:
+      inputs.home-manager.lib.homeManagerConfiguration (let
+        pkgs = nixpkgsFor."x86_64-linux";
+        isLinux = true;
+        profiles = import ./profiles { inherit isLinux; };
+        extraProfiles' = map (x: profiles.home-manager.${x}) extraProfiles;
+      in rec {
+        inherit (args) username;
+        inherit pkgs; # to pull in my overlays
+        system = args.platform;
+        homeDirectory = args.homeDirectory or "/home/${args.username}";
+        stateVersion = "22.05";
+        extraSpecialArgs = rec {
+          inherit inputs isLinux;
+          lib = self.lib pkgs;
+          rootPath = ./.;
+          isDarwin = !isLinux;
+        };
+        configuration = { ... }: {
+          imports = with profiles.home-manager; [
+            dev
+          ]
+          ++ extraProfiles';
+        };
+        extraModules = [
+          ./top-level/home-manager-options.nix
+          (args.hostConfiguration or { })
+          (args.userConfiguration or { })
+          {
+            targets.genericLinux.enable = true;
+            programs.home-manager.enable = true;
+          }
+        ];
+      });
+
   in {
     lib = pkgs:
       (import ./top-level/lib.nix { lib = pkgs.lib; pkgs = pkgs; })
@@ -132,6 +168,16 @@
         platform = "aarch64-darwin";
         hostConfiguration = ./host/m1.nix;
         userConfiguration = ./user/nicolas.nix;
+      };
+    };
+
+    homeConfigurations = {
+      blackarch = mkHomeManagerConfig {
+        hostname = "blackarch";
+        username = "hobbit";
+        platform = "x86_64-linux";
+        #hostConfiguration = ./host/blackarch;
+        userConfiguration = ./user/hobbit.nix;
       };
     };
 
