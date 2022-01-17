@@ -34,7 +34,7 @@
       #gnome3.nautilus # Gnome file manager
       cinnamon.nemo # Cinnamon's fork of Gnome's file manager
       gnome3.networkmanager-openconnect # OpenConnect plugin for NetworkManager
-      gnome3.rhythmbox # Gnome music player
+      rhythmbox # Gnome music player
       gnome3.eog # Gnome image viewer
       gnome3.seahorse # Gnome Keyring secret management
       # Virtualization software
@@ -45,7 +45,7 @@
       qbittorrent
       transmission-remote-gtk
       # Minecraft client
-      multimc
+      polymc
       # Merge pdfs and other stuff
       pdfarranger
       # Companion for the fxcast firefox extension

@@ -85,6 +85,8 @@ in
     erlang-ls
 
   ] ++ lib.optionals isLinux [
+    nix-top # status of packages being built
+
     # Broken: 2021-07-10
     # pipr # interactive tool to write pipelines
     # bubblewrap # required by pipr
