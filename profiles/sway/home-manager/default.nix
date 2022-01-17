@@ -71,8 +71,8 @@
     Unit = {
       Description = "Home Manager System Tray";
       Documentation = [ "man:systemd.special(7)" ];
-      BindsTo = [ "graphical-session.target" ];
-      Requires = [ "graphical-session-pre.target" ];
+      Requires = [ "sway-session.target" ];
+      After = [ "sway-session.target" ];
     };
   };
 

@@ -21,7 +21,7 @@
       home.stateVersion = "22.05";
       # Use the new systemd service activation/deactivation tool
       # See https://github.com/nix-community/home-manager/pull/1656
-      systemd.user.startServices = "sd-switch";
+      # systemd.user.startServices = "sd-switch";
 
       # This should be the default setting because
       # inheriting the PATH from the environment during the activation is impure

@@ -35,6 +35,7 @@ window#waybar .modules-right {
 #mode,
 #window,
 #idle_inhibitor,
+#inhibitor,
 #custom-weather,
 #pulseaudio,
 #pulseaudio#volume,

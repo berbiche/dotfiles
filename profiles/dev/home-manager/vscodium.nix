@@ -83,9 +83,11 @@ lib.mkMerge [
       extensions = [];
 
       userSettings = {
+        "editor.bracketPairColorization.enabled" = true;
         "editor.cursorSmoothCaretAnimation" = true;
         "editor.fontFamily" = "'Source Code Pro', 'Anonymous Pro', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'";
         "editor.fontSize" = 15;
+        "editor.guides.bracketPairs" = true;
         "editor.rulers" = [ 80 100 120 ];
         "editor.smoothScrolling" = true;
         "editor.stablePeek" = true;

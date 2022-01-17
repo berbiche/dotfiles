@@ -121,17 +121,17 @@ let
     # workspace "${WS7}" output ""
 
     # Enable/Disable the output when closing the lid (e.g. when using a dock)
-    bindswitch --locked lid:on  output ${OUTPUT-LAPTOP} disable
-    bindswitch --locked lid:off output ${OUTPUT-LAPTOP} enable
+    bindswitch --reload --locked lid:on  output ${OUTPUT-LAPTOP} disable
+    bindswitch --reload --locked lid:off output ${OUTPUT-LAPTOP} enable
 
     # Set default cursor size
-    seat seat0 xcursor_theme ${config.xsession.pointerCursor.name} ${toString config.xsession.pointerCursor.size}
+    seat default xcursor_theme ${config.xsession.pointerCursor.name} ${toString config.xsession.pointerCursor.size}
 
     # We want to execute this last otherwise Waybar doesn't read the workspace names correctly
     exec ${binaries.on-startup-shutdown}/bin/session.sh --with-cleanup
 
     # Switch to first workspace on start
-    exec swaymsg workspace "${WS1}"
+    workspace "${WS1}"
   '';
 
   swayConfig = with workspaces; {
