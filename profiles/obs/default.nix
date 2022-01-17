@@ -8,7 +8,7 @@
   '';
 
   my.home.programs.obs-studio = {
-    enable = true;
+    enable = false;
     plugins = with pkgs.obs-studio-plugins; [
       pkgs.nixpkgs-wayland.obs-wlrobs
       obs-move-transition

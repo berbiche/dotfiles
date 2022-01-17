@@ -9,7 +9,7 @@ let
     icon = "firefox";
     cfg = {
       # Chromecast support through a native extension
-      enableFXCastBridge = true;
+      enableFXCastBridge = false;
     };
     extraPolicies = {
       DontCheckDefaultBrowser = true;

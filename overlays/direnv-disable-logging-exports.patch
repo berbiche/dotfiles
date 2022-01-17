@@ -1,7 +1,7 @@
-diff --git a/cmd_export.go b/cmd_export.go
+diff --git a/internal/cmd/cmd_export.go b/internal/cmd/cmd_export.go
 index a534c8c..ba8d120 100644
---- a/cmd_export.go
-+++ b/cmd_export.go
+--- a/internal/cmd/cmd_export.go
++++ b/internal/cmd/cmd_export.go
 @@ -89,10 +89,6 @@ func exportCommand(currentEnv Env, args []string, config *Config) (err error) {
  		}
  	}

@@ -50,7 +50,7 @@
       pdfarranger
       # Companion for the fxcast firefox extension
       # How to use: `fx_cast_bridge -p 9556 -d`
-      fx_cast_bridge
+      # fx_cast_bridge
     ];
 
 
