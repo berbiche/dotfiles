@@ -211,10 +211,10 @@ in
 
     systemd.enable = true;
 
-    settings = [
-      top-bar
-      # bottom-bar
-    ];
+    settings = {
+      inherit top-bar;
+      # inherit bottom-bar;
+    };
     style = ./style.css;
   };
 

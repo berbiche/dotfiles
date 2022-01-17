@@ -245,14 +245,6 @@
         sops.sops-import-keys-hook
       ];
 
-      NIX_CONF_DIR = let
-        current = lib.optionalString (builtins.pathExists /etc/nix/nix.conf) (builtins.readFile /etc/nix/nix.conf);
-        nixConf = pkgs.writeTextDir "etc/nix.conf" ''
-          ${current}
-          experimental-features = nix-command flakes
-        '';
-      in "${nixConf}/etc";
-
       sopsPGPKeyDirs = [
         "./secrets/hosts"
       ];
