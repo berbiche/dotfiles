@@ -51,6 +51,8 @@
     {
       plugin = nvim-lspconfig;
       config = ''
+        " autocmd CursorHold * lua vim.diagnostic.open_float()
+
         lua <<EOF
           local lsp = require('lspconfig')
           local lspkind = require('lspkind')
@@ -64,11 +66,11 @@
               -- ["<space>e"] = "Trouble lsp_workspace_diagnostics",
               ["<space>bf"] = "lua vim.lsp.buf.formatting()",
               -- ["<space>r"] = "Trouble lsp_references",
-              ["[d"] = "lua vim.lsp.diagnostic.goto_prev()",
-              ["]d"] = "lua vim.lsp.diagnostic.goto_next()",
+              ["[d"] = "lua vim.diagnostic.goto_prev()",
+              ["]d"] = "lua vim.diagnostic.goto_next()",
               ga = "lua vim.lsp.buf.code_action()",
               gd = "lua vim.lsp.buf.definition()",
-              ge = "lua vim.lsp.diagnostic.show_line_diagnostics()",
+              ge = "lua vim.diagnostic.open_float()",
               gr = "lua vim.lsp.buf.rename()",
               gt = "lua vim.lsp.buf.type_definition()",
             }

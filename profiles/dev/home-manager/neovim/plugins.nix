@@ -9,8 +9,25 @@ in
     {
       # Notifications display
       plugin = nvim-notify;
-      config = ''lua vim.notify = require("notify")'';
+      config = ''
+        lua <<EOF
+          local notify = require("notify")
+          -- vim.notify = notify
+          notify.setup({
+            stages = 'fade',
+            render = 'minimal',
+          })
+        EOF
+      '';
     }
+    # {
+    #   plugin = desktop-notify-nvim;
+    #   config = ''
+    #     lua <<EOF
+    #       vim.notify = require("desktop_notify").notify_send;
+    #     EOF
+    #   '';
+    # }
     # https://github.com/neovim/neovim/issues/12587
     FixCursorHold-nvim
     {
@@ -23,15 +40,31 @@ in
     }
     gruvbox-nvim # theme
     vim-indent-object
-    vim-surround
     vim-signify
     vim-sensible
+    {
+      plugin = vim-sandwich; # replaces vim-surround
+      config = ''
+        " Use surround.vim keymaps since the default keymap breaks vim-sneak
+        runtime macros/sandwich/keymap/surround.vim
+      '';
+    }
     # editorconfig support for indent style, etc.
     editorconfig-nvim
     # Highlight TODO:, FIXME, HACK etc.
-    todo-comments-nvim
+    {
+      plugin = todo-comments-nvim;
+      config = ''
+        lua require('todo-comments').setup {}
+      '';
+    }
     # Highlight ranges in the commandline such as :10,20
-    range-highlight-nvim
+    {
+      plugin = range-highlight-nvim;
+      config = ''
+        lua require('range-highlight').setup {}
+      '';
+    }
     # UI configuration
     {
       plugin = dressing-nvim;
@@ -213,13 +246,14 @@ in
     {
       plugin = sqlite-lua;
       config = ''
-        let g:sqlite_clib_path = '${pkgs.sqlite.out}/lib/libsqlite3${pkgs.hostPlatform.extensions.sharedLibrary}'
+        let g:sqlite_clib_path = '${lib.getLib pkgs.sqlite}/lib/libsqlite3${pkgs.hostPlatform.extensions.sharedLibrary}'
       '';
     }
     telescope-project-nvim
     telescope-frecency-nvim
     # telescope-fzy-native-nvim
     telescope-fzf-native-nvim
+    telescope-file-browser-nvim
     {
       plugin = telescope-nvim;
       config = ''
@@ -270,6 +304,8 @@ in
           ts.load_extension('fzf')
           ts.load_extension('frecency')
           ts.load_extension('project')
+          ts.load_extension('file_browser')
+          ts.load_extension('notify')
 
           local map = vim.api.nvim_set_keymap
           local opts = { noremap = true, silent = true }
@@ -278,7 +314,7 @@ in
           -- map("n", "<leader><.>", "<cmd>lua require('telescope.builtin').find_files({ cwd = vim.fn.expand('%:p:h')})<CR>", opts)
 
           -- Create new file with <C-e> in file_browser
-          map("n", "<leader>.", "<cmd>lua require('telescope.builtin').file_browser({ cwd = vim.fn.expand('%:p:h') })<CR>", opts)
+          map("n", "<leader>.", "<cmd>lua require('telescope').extensions.file_browser.file_browser({ cwd = vim.fn.expand('%:p:h') })<CR>", opts)
 
           for _, v in pairs({",", "b,", "bi"}) do
             map("n", "<leader>"..v, "<cmd>lua require('telescope.builtin').buffers()<CR>", opts)

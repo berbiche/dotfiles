@@ -17,8 +17,8 @@ in {
     searchbox-nvim = toPlugin "searchbox.nvim" (prev.fetchFromGitHub {
       owner = "VonHeikemen";
       repo = "searchbox.nvim";
-      rev = "3b625cfd99c4e6046abfde9c13e295ddf18eee08";
-      sha256 = "sha256-iy7c9jDkY4ZLvVlJsUJ95uPwArKGtnpI+OiLkdzQ0Tw=";
+      rev = "7acd43d00d52cbe5ea9869c97e87e08357745c93";
+      sha256 = "sha256-Woon/lMbrKysog00WwA3Z0///LiKDyffeH/upkSL7OE=";
     });
 
     dressing-nvim = toPlugin "dressing.nvim" (prev.fetchFromGitHub {
@@ -26,6 +26,13 @@ in {
       repo = "dressing.nvim";
       rev = "683f23ceb1349bb4de402e681daf1176040b28cd";
       sha256 = "sha256-4IrRHlxUhLhLlxbydR/GSBfN5hoLd4m9UhaygMApkz0=";
+    });
+
+    desktop-notify-nvim = toPlugin "desktop-notify-nvim" (prev.fetchFromGitHub {
+      owner = "HiPhish";
+      repo = "desktop-notify-nvim";
+      rev = "e1e684226d9b4a7313439bc7dd1be09d72bfb839";
+      sha256 = "sha256-cT5XxqGF3RNpQiVn0MXZUFd0PMnBPcE7ioegfqCiUnM=";
     });
   });
 }

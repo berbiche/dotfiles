@@ -149,6 +149,10 @@ in
       :nnoremap Q <nop>
 
 
+      " Highlight yanked text
+      au TextYankPost * silent! lua vim.highlight.on_yank()
+
+
       " Disables automatic commenting on newline if previous line is a comment
       " autocmd FileType * setlocal formatoptions-=c formatoptions-=r
 
