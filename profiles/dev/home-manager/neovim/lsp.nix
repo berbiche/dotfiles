@@ -132,6 +132,11 @@
               on_attach_trouble(a, bufnr)
             end,
           }
+          -- YAML
+          lsp.yamlls.setup {
+            on_attach = on_attach_trouble,
+            -- settings = { yaml = { schemas = { ["https://..."] } } },
+          }
           --[[ Vim
           lsp.vimls.setup {
             on_attach = on_attach,
@@ -145,6 +150,8 @@
           lsp.bashls.setup {
             on_attach = on_attach,
           }
+          -- Diagnostic-ls
+          lsp.diagnosticls.setup { }
         EOF
       '';
     }

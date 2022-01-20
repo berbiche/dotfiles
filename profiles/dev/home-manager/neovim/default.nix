@@ -22,7 +22,6 @@ let
 in
 {
   imports = [
-    # ./coc.nix
     ./plugins.nix
     ./tree-sitter.nix
     ./lsp.nix
@@ -52,15 +51,8 @@ in
     # package = inputs.neovim-nightly.packages.${pkgs.system}.neovim;
     package = pkgs.neovim-unwrapped;
 
-    extraPackages = with pkgs; [
-      nodePackages.bash-language-server
-      # For clangd
-      clang-tools
-      nodePackages.typescript-language-server
-      rnix-lsp
-      rust-analyzer
-      shellcheck
-    ];
+    # Language servers are configured in profies/dev/home-manager/lsp.nix
+    extraPackages = with pkgs; [ ];
 
     initExtra = ''
       " Default settings

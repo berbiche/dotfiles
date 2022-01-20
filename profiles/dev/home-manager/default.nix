@@ -82,7 +82,6 @@ in
     (python3.withPackages (ps: with ps; [ ptpython ipython ]))
     erlang
     rebar3
-    erlang-ls
 
   ] ++ lib.optionals isLinux [
     nix-top # status of packages being built
