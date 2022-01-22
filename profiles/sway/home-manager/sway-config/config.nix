@@ -32,7 +32,7 @@ let
   imagePath = toString config.programs.swaylock.imagePath;
 
   binaries = rec {
-    terminal = "${alacritty} --working-directory ${config.home.homeDirectory}";
+    terminal = "${config.my.defaults.terminal} --working-directory ${config.home.homeDirectory}";
     floating-term = "${terminal} --class='floating-term'";
     explorer = "${config.my.defaults.file-explorer}";
     browser = "env MOZ_DBUS_REMOTE=1 MOZ_ENABLE_WAYLAND=1 ${firefox}";

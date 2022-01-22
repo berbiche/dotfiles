@@ -51,13 +51,16 @@
     {
       plugin = nvim-lspconfig;
       config = ''
-        " autocmd CursorHold * lua vim.diagnostic.open_float()
+        " Display diagnostics only when hovering
+        autocmd CursorHold * lua vim.diagnostic.open_float(nil, {focus = false, scope='cursor'})
 
         lua <<EOF
           local lsp = require('lspconfig')
           local lspkind = require('lspkind')
 
           lspkind.init()
+
+          vim.diagnostic.config({ virtual_text = false })
 
           local function on_attach(_, buf)
             local map = {
@@ -206,7 +209,9 @@
 
     {
       plugin = trouble-nvim;
-      config = "lua require'trouble'.setup()";
+      config = ''
+        lua require'trouble'.setup{}
+      '';
     }
 
 

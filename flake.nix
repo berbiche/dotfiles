@@ -248,6 +248,13 @@
       sopsPGPKeyDirs = [
         "./secrets/hosts"
       ];
+
+      NIX_CONF_DIR = (pkgs.writeTextDir "etc/nix.conf" ''
+        experimental-features = nix-command flakes
+
+        !include /etc/nix/nix.conf
+        # include /etc/nix/doesnt-exist-nix.conf
+      '') + "/etc";
     });
   };
 }
