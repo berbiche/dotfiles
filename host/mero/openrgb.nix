@@ -6,16 +6,17 @@
   services.udev.packages = [ pkgs.openrgb ];
   environment.systemPackages = [ pkgs.openrgb ];
 
-  systemd.services.openrgb = let
-    configFile = ./Lights-off.orp;
-  in {
+  environment.etc."openrgb/default-profile.orp".source = ./Lights-off.orp;
+
+  systemd.services.openrgb = {
     wantedBy = [ "default.target" ];
     script = ''
-    ${pkgs.openrgb}/bin/openrgb --noautoconnect --server --server-port 43321 --profile ${configFile}
+      ${pkgs.openrgb}/bin/openrgb --noautoconnect --profile /etc/openrgb/default-profile.orp
     '';
     serviceConfig = {
+      Type = "oneshot";
       RemainAfterExit = true;
     };
-    restartTriggers = [ configFile ];
+    restartTriggers = [ "/etc/openrgb/default-profile.orp" ];
   };
 }
