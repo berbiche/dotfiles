@@ -69,7 +69,7 @@ let
     alacritty = "${config.programs.alacritty.package}/bin/alacritty";
     bitwarden = "${pkgs.bitwarden}/bin/bitwarden";
     brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl -m";
-    brightnessctl-avizo = config.lib.my.getScript "brightnessctl-avizo.sh";
+    brightnessctl-avizo = config.lib.my.getScript "brightness-avizo.sh";
     emacsclient = "${config.programs.emacs.finalPackage}/bin/emacsclient -c";
     firefox = "${config.programs.firefox.package}/bin/firefox";
     nwggrid-client = "${pkgs.nwg-launchers}/bin/nwggrid -client";

@@ -1,5 +1,4 @@
-#!/usr/bin/env nix-shell
-#!nix-shell -i bash -p sway jq coreutils fzf
+#!/usr/bin/env bash
 set -o pipefail
 
 swaymsg -t get_outputs |

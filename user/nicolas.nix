@@ -211,7 +211,12 @@ lib.mkMerge [
         ''
       }";
       lib.my = {
-        getScript = name: "${config.home.file."scripts".source}/${name}";
+        # Instead of using the path in the nix store, return the relative path of the script in my configuration
+        # This makes it possible to update scripts without reloading my Sway configuration
+        getScript = name:
+          assert lib.assertMsg (builtins.pathExists (./scripts + "/${name}"))
+            "The specified script '${name}' does not exist in the 'scripts/' folder";
+          "${config.home.homeDirectory}/${config.home.file."scripts".target}/${name}";
       };
 
     };
