@@ -7,7 +7,7 @@
   # $ darwin-rebuild changelog
   system.stateVersion = 4;
 
-  nix.maxJobs = 6;
+  nix.settings.max-jobs = 6;
 
   environment.systemPackages = [ pkgs.vagrant pkgs.gnupg ];
 

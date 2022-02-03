@@ -155,6 +155,8 @@ lib.mkMerge [
       # Started with libindicator if `xsession.preferStatusNotifierItems = true`
       services.network-manager-applet.enable = true;
 
+      services.plex-mpv-shim.enable = true;
+
       # Playerctl smart daemon to stop the "last player"
       # supposedly smarter than the default play-pause behavior
       # Disabled (2021-08-09) because it's not possible to ignore certain players (e.g. Firefox)

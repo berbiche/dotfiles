@@ -27,7 +27,7 @@ in
     # Broken (2021-09-06)
     # powershell # for some rare one-off scripts and tests
     tig # navigate a git repository's log and commits in a TUI, provides sorting, filtering, etc.
-    clang # for the binary tools it offers?
+    (lib.lowPrio clang) # for the binary tools it offers?
 
     wget # I prefer using curl but still useful for one-off things
     curl # make advanced http requests, fetch files, etc.

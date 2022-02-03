@@ -2,7 +2,7 @@
 
 {
   programs.chromium.enable = lib.mkIf pkgs.stdenv.hostPlatform.isLinux true;
-  programs.chromium.package = pkgs.chromium.override {
+  programs.chromium.package = pkgs.ungoogled-chromium.override {
     commandLineArgs = lib.concatStringsSep " " [
       "--disk-cache=$XDG_RUNTIME_DIR/chromium-cache"
       "--no-default-browser-check"

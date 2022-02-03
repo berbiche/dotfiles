@@ -8,7 +8,7 @@
     nodePackages.bash-language-server
     nodePackages.diagnostic-languageserver
     # For clangd
-    clang-tools
+    (lib.lowPrio clang-tools)
     nodePackages.typescript-language-server
     rnix-lsp
     rust-analyzer

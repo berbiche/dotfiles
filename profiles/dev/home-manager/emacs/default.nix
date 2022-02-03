@@ -17,7 +17,7 @@ lib.mkMerge [
       nixfmt
 
       # C/cpp
-      clang-tools # for clangd
+      (lib.lowPrio clang-tools) # for clangd
 
       # Markdown exporting
       mdl pandoc

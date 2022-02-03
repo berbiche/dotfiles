@@ -1,10 +1,10 @@
 
 {
   nix = {
-    binaryCaches = [
+    settings.substituters = [
       "https://nixpkgs-wayland.cachix.org"
     ];
-    binaryCachePublicKeys = [
+    settings.trusted-public-keys = [
       "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
     ];
   };

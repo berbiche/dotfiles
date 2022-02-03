@@ -20,6 +20,8 @@ in
         lines = 0;
       };
 
+      opacity = 0.8;
+
       padding = {
         x = 5;
         y = 5;
@@ -86,8 +88,6 @@ in
       duration = 200;
       color = "0xffffff";
     };
-
-    background_opacity = 0.8;
 
     mouse_bindings = [
       { mouse = "Middle"; action = "PasteSelection"; }

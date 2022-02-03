@@ -125,7 +125,7 @@
     fi
   '';
 
-  nix.maxJobs = 6;
+  nix.settings.max-jobs = 6;
   powerManagement.enable = true;
   powerManagement.powertop.enable = true;
   powerManagement.cpuFreqGovernor = "powersave";

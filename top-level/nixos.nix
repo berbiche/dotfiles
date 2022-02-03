@@ -10,8 +10,8 @@
       # Pin nixpkgs for older Nix tools (nix-shell, nix repl, etc.)
       "nixpkgs=${pkgs.path}"
     ];
-    allowedUsers = [ "root" "@wheel" ];
-    trustedUsers = [ "root" "@wheel" ];
+    settings.allowed-users = [ "root" "@wheel" ];
+    settings.trusted-users = [ "root" "@wheel" ];
 
     registry = {
       nixpkgs-wayland.flake = inputs.nixpkgs-wayland;
@@ -19,12 +19,13 @@
 
     # Run monthly garbage collection to reduce store size
     gc.dates = "monthly";
-    # Optimize (hardlink duplicates) store automatically
-    autoOptimiseStore = true;
 
     # Make the daemon and builders low priority to have a responding system while building
     daemonIOSchedClass = "idle";
     daemonCPUSchedPolicy = "idle";
+
+    # Optimize (hardlink duplicates) store automatically
+    settings.auto-optimise-store = true;
   };
 
   # We need this to generate the sops host key

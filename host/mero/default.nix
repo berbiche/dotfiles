@@ -142,7 +142,7 @@
     size = 32768;
   }];
 
-  nix.maxJobs = lib.mkDefault 16;
+  nix.settings.max-jobs = lib.mkDefault 16;
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_CA.UTF-8";
