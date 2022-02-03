@@ -1,17 +1,22 @@
 #!/usr/bin/env bash
 
-usage="\
+set -o pipefail
+
+usage() {
+  # Multiline Bashism
+  echo >&2 "
 Usage:
-  $(basename "$0") [OPTION...] {selection,screen,everything} - take a screenshot under Wayland
+  $(basename "$0") [OPTION...] {everything,selection,screen,window}
 
   -?|--help  show this help text
 
-Where:
+where:
   selection   take a screenshot of a range to be selected
   window      take a screenshot of the currently focused window
   screen      take a screenshot of the active output
-  everything  take a screenshot of the entire desktop \
+  everything  take a screenshot of the entire desktop\
 "
+}
 
 output_file="$(xdg-user-dir SCREENSHOTS)/$(date +'%Y')/$(date +'%m')/$(date +'%Y-%m-%d-%H.%M.%S').png"
 
@@ -34,22 +39,38 @@ main() {
       print_everything
       ;;
     -?|--help)
-      echo "$usage" >&2
+      usage
       exit
       ;;
     *)
-      echo "$usage" >&2
+      usage
       exit 1
       ;;
   esac
 
   if [ $? -eq 0 ]; then
-    post_process
+    notify
+    copy_clipboard
   fi
 }
 
+# Flameshot version 11.0.0 has a regression where if the screenshot
+# is cancelled it does not return an exit code > 0
+_flameshot() {
+  # Basically, this greps stderr for the string "aborted" and returns an unsuccesful
+  # exit code if found. In all cases stdout is left untouched
+  # which allows processing of stdout
+  { flameshot "$@" --path "$output_file" 2>&1 1>&3 | {
+      if grep -qs "aborted"; then
+        echo "Screenshot cancelled"
+        return 1;
+      fi
+    }
+  } 3>&1
+}
+
 create_dir() {
-  mkdir -p $(dirname "$output_file")
+  mkdir -m 0750 -p "$(dirname "$output_file")"
 }
 
 # $1: notification title
@@ -64,14 +85,12 @@ copy_clipboard() {
   wl-copy < "$output_file"
 }
 
-post_process() {
-  notify
-  copy_clipboard
-}
-
 print_selection() {
   create_dir
-  eval "$slurp" | grim -g- "$output_file"
+  _flameshot gui
+
+  # old code:
+  # eval "$slurp" | grim -g- "$output_file"
 }
 
 print_window() {
@@ -83,12 +102,21 @@ print_window() {
 print_active_screen() {
   create_dir
   local output=$(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name')
-  grim -o $output "$output_file"
+  # How does Qt and flameshot handle Wayland screen numbers?
+  # Looking at the source code: https://github.com/flameshot-org/flameshot/blob/5ab76e233bfe6835649cc27fa9c68bc185a6b0b8/src/core/controller.cpp#L345-L363
+  # it doesn't seem to support selecting a screen by it's name at this time
+  _flameshot screen
+
+  # old code:
+  # grim -o $output "$output_file"
 }
 
 print_everything() {
   create_dir
-  grim -c "$output_file"
+  _flameshot full
+
+  # old code:
+  # grim -c "$output_file"
 }
 
 main "$1"

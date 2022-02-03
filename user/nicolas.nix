@@ -190,6 +190,7 @@ lib.mkMerge [
           pamixer # volume control
           avizo # show a popup notification for the volume level
           sway # for swaymsg
+          flameshot
           wl-clipboard # wl-copy/wl-paste
           fzf # menu
           wofi # menu

@@ -37,7 +37,7 @@
     extraOptions = [ "--verbose" ];
 
     extraSessionCommands = ''
-      # needs qt5.qtwayland in systemPackages
+      # needs qt5.qtwayland in extraPackages
       export QT_QPA_PLATFORM=wayland
       export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
 
@@ -53,11 +53,13 @@
       # Fix for some Java AWT applications (e.g. Android Studio)
       export _JAVA_AWT_WM_NONREPARENTING=1
 
-      # TODO: remove once gnome-keyring exports SSH_AUTH_SOCK correctly
-      : ''${XDG_RUNTIME_DIR=/run/user/$(id -u)}
-      if [ -S  "''${XDG_RUNTIME_DIR}/keyring/ssh" ]; then
-        export SSH_AUTH_SOCK=''${XDG_RUNTIME_DIR}/keyring/ssh
-      fi
+      # Workaround xdg-desktop-portal not having the right XDG_CURRENT_DESKTOP
+      export XDG_CURRENT_DESKTOP=sway XDG_SESSION_TYPE=wayland XDG_SESSION_DESKTOP=sway
+
+      # Export required DBUS variables for XDG desktop portals
+      # if [ ! -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+        ${pkgs.dbus}/bin/dbus-update-activation-environment XDG_SESSION_TYPE XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP
+      # fi
     '';
   };
 

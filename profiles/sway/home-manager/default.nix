@@ -52,9 +52,6 @@
 
     # Logout menu that is displayed with a special keybind
     ./wlogout.nix
-
-    # Screenshot tool
-    ./flameshot.nix
   ];
 
   # Disable reloading Sway on every change
@@ -89,4 +86,6 @@
 
   services.dunst.enable = false;
   services.sway-notification-center.enable = true;
+
+  home.packages = [ pkgs.flameshot ];
 }
