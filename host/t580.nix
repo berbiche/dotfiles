@@ -45,6 +45,8 @@
 
   # high-resolution display
   hardware.video.hidpi.enable = true;
+  # I only use X for lightdm, so I can set it globally here instead.
+  services.xserver.dpi = 192;
   boot.kernel.sysctl."dev.i915.perf_stream_paranoid" = 0;
 
   boot.plymouth.enable = true;
