@@ -21,6 +21,11 @@
   profiles.smb.secretFile = rootPath + "/secrets/smb-public-share.txt";
 
   profiles.pipewire.enable = true;
+  profiles.pipewire.enableLowLatency = true;
+  profiles.pipewire.loopbackTargets = [
+    "alsa_output.pci-0000_0e_00.4.analog-stereo"
+    "alsa_output.usb-SteelSeries_SteelSeries_Arctis_7-00.stereo-game"
+  ];
 
   profiles.steam.wine.enable = true;
 
