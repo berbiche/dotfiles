@@ -5,6 +5,6 @@ final: prev: {
     # https://github.com/electron/electron/issues/32487,
     # https://github.com/vector-im/element-web/issues/20467,
     # https://github.com/electron/electron/pull/32603
-    useWayland = final.lib.versionAtLeast final.electron.version "16.0.7";
+    useWayland = final.lib.versionAtLeast final.electron.version "16.0.8";
   };
 }

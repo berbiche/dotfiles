@@ -5,7 +5,7 @@ assert (
   if isLinux != isDarwin then
     true
   else
-    builtins.trace "profiles: isLinux and isDarwin are mutually exclusive" false
+    builtins.throw "profiles: isLinux and isDarwin are mutually exclusive"
   );
 
 let

@@ -143,8 +143,8 @@ lib.mkMerge [
       };
 
       # Passwords and stuff
-      # Disabled: https://github.com/nix-community/home-manager/issues/1454
       services.gnome-keyring.enable = true;
+      # I use gpg-agent for ssh and gpg, so only use it for secrets
       services.gnome-keyring.components = [ "secrets" ];
 
       # Make sure to open the right port range
@@ -163,18 +163,12 @@ lib.mkMerge [
       home.packages = [
         pkgs.thunderbird
 
-        pkgs.pantheon.elementary-files
-        pkgs.pantheon.elementary-icon-theme
+        # pkgs.pantheon.elementary-files
+        # pkgs.pantheon.elementary-icon-theme
         pkgs.pantheon.elementary-music
 
-        # Force Zoom to run on X11 for all the popups and everything
-        (pkgs.zoom-us.overrideAttrs (old: {
-          nativeBuildInputs = old.nativeBuildInputs or [] ++ [ pkgs.makeWrapper ];
-          postFixup = old.postFixup or "" + ''
-            wrapProgram $out/bin/zoom --set QT_QPA_PLATFORM xcb
-          '';
-        }))
         # Temporary
+        pkgs.zoom-us
         pkgs.discord
         pkgs.teams
 

@@ -33,8 +33,8 @@ let
     ];
     modules-right = [
       "custom/do-not-disturb"
-      "pulseaudio#volume"
       "pulseaudio#microphone"
+      "pulseaudio#volume"
       # "network"
       "backlight"
       "battery"
