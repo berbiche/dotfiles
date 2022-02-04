@@ -57,9 +57,15 @@
       export XDG_CURRENT_DESKTOP=sway XDG_SESSION_TYPE=wayland XDG_SESSION_DESKTOP=sway
 
       # Export required DBUS variables for XDG desktop portals
-      # if [ ! -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+      if [ ! -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
         ${pkgs.dbus}/bin/dbus-update-activation-environment XDG_SESSION_TYPE XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP
-      # fi
+      fi
+
+      # NOTE: Instead of using the solution below, I use `bash -lc` in my Sway exec calls
+      # Source HM's var, they can always be changed
+      # hm_session="/etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh"
+      # [ -f "$hm_session" ] && . "$hm_session"
+      # unset __HM_SESS_VARS_SOURCED
     '';
   };
 

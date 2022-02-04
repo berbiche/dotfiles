@@ -8,6 +8,9 @@ let
     up
     down;
 
+  # Wrapper around `exec` to always use a login shell (and inherit environment variables)
+  exec = n: "exec ${lib.escapeShellArg pkgs.bash}/bin/bash -lc ${lib.escapeShellArg (toString n)}";
+
   # This is a terrible idea, but I know what I'm doing
   # I want to reuse the default keybindings while overriding the default flags
   # passed to Sway's `bindsym`. See `makeNoRepeat`.
@@ -37,18 +40,18 @@ let
 in
 makeNoRepeat (defaultKeybindings // {
   # Some defaults from Sway are included for the sake of self documentation
-  "${modifier}+Return"       = "exec ${binaries.terminal}";
-  "${modifier}+Shift+Return" = "exec ${binaries.floating-term}";
-  "${modifier}+p"            = "exec ${binaries.fullscreen-menu}";
-  "${modifier}+Semicolon"    = "exec ${binaries.emacsclient}";
+  "${modifier}+Return"       = exec binaries.terminal;
+  "${modifier}+Shift+Return" = exec binaries.floating-term;
+  "${modifier}+p"            = exec binaries.fullscreen-menu;
+  "${modifier}+Semicolon"    = exec binaries.emacsclient;
 
   "${modifier}+Shift+space"  = "floating toggle, border normal";
 
   "${modifier}+Shift+d" = "kill";
-  "${modifier}+Shift+c" = "exec ${getScript "sway-reload.sh"}";
+  "${modifier}+Shift+c" = exec (getScript "sway-reload.sh");
 
-  "${modifier}+Backspace"      = "exec ${binaries.lock}";
-  "${modifier}+Ctrl+Backspace" = "exec ${binaries.logout-menu}";
+  "${modifier}+Backspace"      = exec binaries.lock;
+  "${modifier}+Ctrl+Backspace" = exec binaries.logout-menu;
 
   # Keybinds for modes defined in `modes.nix`
   "${modifier}+r" = "mode resize";
@@ -63,41 +66,41 @@ makeNoRepeat (defaultKeybindings // {
   "${modifier}+Shift+e" = null;
 
   # Pasting (might not work)
-  "--release Shift+Insert" = "exec '${binaries.wl-paste} --primary'";
+  "--release Shift+Insert" = exec "${binaries.wl-paste} --primary";
 
   # Volume stuff
-  "--locked XF86AudioRaiseVolume"  = makeRepeatable "exec ${getScript "volume.sh"} 'increase'";
-  "--locked XF86AudioLowerVolume"  = makeRepeatable "exec ${getScript "volume.sh"} 'decrease'";
-  "--locked XF86AudioMute"         = makeRepeatable "exec ${getScript "volume.sh"} 'toggle-mute'";
-  "--locked XF86AudioMicMute"      = makeRepeatable "exec ${getScript "volume.sh"} 'mic-mute'";
-  "--locked ${modifier}+Backslash" = makeRepeatable "exec ${getScript "volume.sh"} 'mic-mute'";
-  "--locked Scroll_Lock"           = makeRepeatable "exec ${getScript "volume.sh"} 'mic-mute'";
+  "--locked XF86AudioRaiseVolume"  = makeRepeatable (exec "${getScript "volume.sh"} 'increase'");
+  "--locked XF86AudioLowerVolume"  = makeRepeatable (exec "${getScript "volume.sh"} 'decrease'");
+  "--locked XF86AudioMute"         = makeRepeatable (exec "${getScript "volume.sh"} 'toggle-mute'");
+  "--locked XF86AudioMicMute"      = makeRepeatable (exec "${getScript "volume.sh"} 'mic-mute'");
+  "--locked ${modifier}+Backslash" = makeRepeatable (exec "${getScript "volume.sh"} 'mic-mute'");
+  "--locked Scroll_Lock"           = makeRepeatable (exec "${getScript "volume.sh"} 'mic-mute'");
 
   # Brightness
-  "--locked XF86MonBrightnessUp"   = makeRepeatable "exec ${binaries.brightnessctl} set +10% | ${binaries.brightnessctl-avizo}";
-  "--locked XF86MonBrightnessDown" = makeRepeatable "exec ${binaries.brightnessctl} --min-value=30 set 10%- | ${binaries.brightnessctl-avizo}";
+  "--locked XF86MonBrightnessUp"   = makeRepeatable (exec "${binaries.brightnessctl} set +10% | ${binaries.brightnessctl-avizo}");
+  "--locked XF86MonBrightnessDown" = makeRepeatable (exec "${binaries.brightnessctl} --min-value=30 set 10%- | ${binaries.brightnessctl-avizo}");
 
   # Screenshot
-  "--release Print"       = "exec ${getScript "screenshot.sh"} 'selection'";
-  "--release Alt+Print"   = "exec ${getScript "screenshot.sh"} 'window'";
-  "--release Shift+Print" = "exec ${getScript "screenshot.sh"} 'screen'";
-  "--release Ctrl+Print"  = "exec ${getScript "screenshot.sh"} 'everything'";
+  "--release Print"       = (exec "${getScript "screenshot.sh"} 'selection'");
+  "--release Alt+Print"   = (exec "${getScript "screenshot.sh"} 'window'");
+  "--release Shift+Print" = (exec "${getScript "screenshot.sh"} 'screen'");
+  "--release Ctrl+Print"  = (exec "${getScript "screenshot.sh"} 'everything'");
 
   # Explorer
-  "XF86Explorer"            = "exec ${binaries.explorer}";
-  "${modifier}+Slash"       = "exec ${binaries.explorer}";
-  "${modifier}+Shift+Slash" = "exec ${binaries.explorer}";
+  "XF86Explorer"            = (exec binaries.explorer);
+  "${modifier}+Slash"       = (exec binaries.explorer);
+  "${modifier}+Shift+Slash" = (exec binaries.explorer);
 
   # Browser
-  "${modifier}+n"       = "exec ${binaries.browser}";
-  "${modifier}+Shift+n" = "exec ${binaries.browser-private}";
-  "${modifier}+Ctrl+n"  = "exec ${binaries.browser-work-profile}";
+  "${modifier}+n"       = (exec binaries.browser);
+  "${modifier}+Shift+n" = (exec binaries.browser-private);
+  "${modifier}+Ctrl+n"  = (exec binaries.browser-work-profile);
 
   # MPRIS
-  "--locked XF86AudioPause" = "exec ${binaries.playerctl} ${withPlayerctld} pause";
-  "--locked XF86AudioPlay"  = "exec ${binaries.playerctl} ${withPlayerctld} play";
+  "--locked XF86AudioPause" = (exec "${binaries.playerctl} ${withPlayerctld} pause");
+  "--locked XF86AudioPlay"  = (exec "${binaries.playerctl} ${withPlayerctld} play");
   # Toggle play/pause for the focused? MPRIS instance with PauseBreak
-  "--locked Pause"          = "exec ${binaries.playerctl} ${withPlayerctld} play-pause";
+  "--locked Pause"          = (exec "${binaries.playerctl} ${withPlayerctld} play-pause");
 
   # Preserve the moving window behavior of being repeatable
   # I'd like to make this only repeatable for floating windows
@@ -129,9 +132,9 @@ makeNoRepeat (defaultKeybindings // {
   "${modifier}+Ctrl+u"  = "move container to workspace back_and_forth; workspace back_and_forth";
 
   # Move workspace to other screens
-  "${modifier}+Shift+w" = "exec alacritty --class 'floating-term' --command bash '${getScript "sway_move_workspace_to_screen.sh"}'";
+  "${modifier}+Shift+w" = (exec "alacritty --class 'floating-term' --command bash '${getScript "sway_move_workspace_to_screen.sh"}'");
   # Move workspace to another screen
-  "${modifier}+Alt+w" = "exec '${getScript "sway_move_workspace_to_other_screen.sh"}'";
+  "${modifier}+Alt+w" = (exec (getScript "sway_move_workspace_to_other_screen.sh"));
 
   # Fullscren inhibits focus
   "${modifier}+f"       = "fullscreen, inhibit_idle fullscreen";
