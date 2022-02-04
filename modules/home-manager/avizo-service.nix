@@ -51,7 +51,7 @@ in
       Unit = {
         Description = "Lightweight notification daemon for Wayland";
         PartOf = [ "graphical-session.target" ];
-        After = [ "graphical-session.target" ];
+        After = [ "graphical-session-pre.target" ];
       };
 
       Service = {

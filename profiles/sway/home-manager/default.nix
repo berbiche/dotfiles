@@ -61,9 +61,8 @@
     Unit = {
       Description = "sway compositor session";
       Documentation = [ "man:systemd.special(7)" ];
-      BindsTo = [ "graphical-session.target" ];
-      Wants = [ "graphical-session-pre.target" ];
-      After = [ "graphical-session-pre.target" ];
+      BindsTo = [ "graphical-session.target" "tray.target" ];
+      Requires = [ "graphical-session-pre.target" ];
     };
   };
 
@@ -71,8 +70,7 @@
     Unit = {
       Description = "Home Manager System Tray";
       Documentation = [ "man:systemd.special(7)" ];
-      Requires = [ "sway-session.target" ];
-      After = [ "sway-session.target" ];
+      Requires = [ "graphical-session-pre.target" ];
     };
   };
 
