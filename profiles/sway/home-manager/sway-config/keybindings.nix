@@ -40,8 +40,8 @@ let
 in
 makeNoRepeat (defaultKeybindings // {
   # Some defaults from Sway are included for the sake of self documentation
-  "${modifier}+Return"       = exec binaries.terminal;
-  "${modifier}+Shift+Return" = exec binaries.floating-term;
+  "${modifier}+Return"       = "exec ${binaries.terminal}";
+  "${modifier}+Shift+Return" = "exec ${binaries.floating-term}";
   "${modifier}+p"            = exec binaries.fullscreen-menu;
   "${modifier}+Semicolon"    = exec binaries.emacsclient;
 
