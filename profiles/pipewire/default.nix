@@ -43,9 +43,10 @@ in
       services.pipewire.config.pipewire = {
         "properties" = {
           "default.clock.rate" = 48000;
-          "default.clock.quantum" = 64;
+          "default.clock.quantum" = 1024;
           "default.clock.min-quantum" = 32;
-          "default.clock.max-quantum" = 64;
+          # Can't be set too low with my devices unfortunately
+          "default.clock.max-quantum" = 8192;
         };
         "context.modules" = [
           {
@@ -65,8 +66,8 @@ in
       services.pipewire.config.pipewire-pulse = {
         "context.properites"."log.level" = logLevel.DEBUG;
         "stream.properties" = {
-          "node.latency" = "32/48000";
-          "resample.quality" = 1;
+          # "node.latency" = "32/48000";
+          "resample.quality" = 10;
         };
         "context.modules" = [
           {
@@ -90,10 +91,15 @@ in
             args = {
               "pulse.min.req" = "32/48000";
               "pulse.default.req" = "32/48000";
-              "pulse.max.req" = "32/48000";
+              "pulse.max.req" = "4096/48000";
+              "pulse.default.frag" = "96000/48000";
+              "pulse.max.frag" = "96000/48000";
               "pulse.min.quantum" = "32/48000";
-              "pulse.max.quantum" = "32/48000";
+              "pulse.max.quantum" = "8192/48000";
               "server.address" = [ "unix:native" ];
+              "vm.overrides" = {
+                "pulse.max.quantum" = "8192/48000";
+              };
             };
           }
         ];
