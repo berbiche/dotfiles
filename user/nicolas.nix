@@ -204,6 +204,8 @@ lib.mkMerge [
           for i in $out/*; do
             wrapProgram $i --prefix PATH : ${path}
           done
+          # Remove wrapped binaries
+          find "$out"/bin -maxdepth 1 -name ".*-wrapped" -type l -delete
         ''
       }";
       lib.my = {
