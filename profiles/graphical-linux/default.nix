@@ -6,6 +6,7 @@
     ./dconf.nix
     ./noisetorch.nix
     ./fonts.nix
+    ./opensnitch.nix
     # ./xserver.nix
   ];
 
@@ -68,7 +69,7 @@
   # for things that support polkit
   security.polkit.enable = true;
 
-  services.flatpak.enable = true;
+  services.flatpak.enable = false;
   xdg = {
     icons.enable = true;
     portal.enable = true;
@@ -89,11 +90,4 @@
   # Logitech
   hardware.logitech.wireless.enable = true;
   hardware.logitech.wireless.enableGraphical = true;
-
-  nixpkgs.config.chromium = {
-    enableWideVine = true;
-    enableVaapi = true;
-    enablePepperFlash = false;
-  };
-
 }
