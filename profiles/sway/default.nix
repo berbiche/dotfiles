@@ -53,9 +53,6 @@
       # Fix for some Java AWT applications (e.g. Android Studio)
       export _JAVA_AWT_WM_NONREPARENTING=1
 
-      # Workaround xdg-desktop-portal not having the right XDG_CURRENT_DESKTOP
-      export XDG_CURRENT_DESKTOP=sway XDG_SESSION_TYPE=wayland XDG_SESSION_DESKTOP=sway
-
       # Export required DBUS variables for XDG desktop portals
       if [ ! -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
         ${pkgs.dbus}/bin/dbus-update-activation-environment XDG_SESSION_TYPE XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP

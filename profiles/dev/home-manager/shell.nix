@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-      inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
+  inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
 in
 {
   programs.zsh.enable = true;
@@ -12,6 +12,7 @@ in
     "..."     = "cd ../..";
     "...."    = "cd ../../..";
     "....."   = "cd ../../../..";
+    e         = "$EDITOR";
     ls        = "${pkgs.exa}/bin/exa --color=auto --group-directories-first --classify";
     lst       = "${ls} --tree";
     la        = "${ls} --all";

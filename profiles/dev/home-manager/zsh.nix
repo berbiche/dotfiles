@@ -120,6 +120,21 @@ in
       zle -N _zsh_cli_fg
       bindkey '^Z' _zsh_cli_fg
 
+      #
+      # From https://www.zsh.org/mla/users/2007/msg00976.html
+      # Author: Mikael Magnusson
+      _space_toggle() {
+        if [[ $BUFFER[1] != " " ]]; then
+          BUFFER=" $BUFFER"
+          (( CURSOR+=1 ))
+        else
+          (( CURSOR-=1 ))
+          BUFFER=$BUFFER[2,-1]
+        fi
+      }
+      zle -N _space_toggle
+      bindkey '^[z' _space_toggle
+
       up-line-or-local-history() {
           zle set-local-history 1
           zle up-line-or-history
