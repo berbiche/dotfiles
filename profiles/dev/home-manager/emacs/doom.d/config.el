@@ -49,7 +49,7 @@
 (setq projectile-project-search-path '("~/dev/"))
 
 ;; Set notmuch backend to mbsync
-(setq +notmuch-sync-backend 'mbsync)
+; (setq +notmuch-sync-backend 'mbsync)
 
 ;; Make treemacs rename use a minibuffer
 (setq treemacs-read-string-input 'from-minibuffer)
@@ -135,3 +135,8 @@
   :mode "\\.jsonnet\\'"
   :config
   (set-electric! 'jsonnet-mode :chars '(?\n ?: ?{ ?})))
+
+(use-package! vala-mode
+  :defer t
+  :mode "\\.vala\\'"
+  :hook (lambda () (lsp)))

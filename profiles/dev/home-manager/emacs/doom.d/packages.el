@@ -11,3 +11,4 @@
 ; (package! ox-reveal)
 (package! wakatime-mode)
 (package! jsonnet-mode)
+(package! vala-mode)
