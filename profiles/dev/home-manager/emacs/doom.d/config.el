@@ -139,4 +139,4 @@
 (use-package! vala-mode
   :defer t
   :mode "\\.vala\\'"
-  :hook (lambda () (lsp)))
+  :hook (vala-mode . (lambda () (lsp))))

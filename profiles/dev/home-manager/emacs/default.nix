@@ -5,52 +5,24 @@ let
 
   DOOMLOCALDIR = "${config.xdg.dataHome}/doom";
   DOOMDIR = "${config.xdg.configHome}/doom";
+
+  emacsWithPackages = package:
+    (pkgs.emacsPackagesGen package).emacsWithPackages (epkgs: [
+      epkgs.vterm
+    ]);
 in
 lib.mkMerge [
   {
-    # Extra packages that are already part of my config
-    # won't be duplicated
-    # Of course, all of these packages can be overriden
-    # by direnv (envrc)
     home.packages = with pkgs; [
-      # Nix
-      nixfmt
-
-      # C/cpp
-      (lib.lowPrio clang-tools) # for clangd
-
       # Markdown exporting
       mdl pandoc
-
-      # Python LSP setup
-      # nodePackages.pyright
-      # pipenv
-      # (python3.withPackages (ps: with ps; [
-      #   black isort pyflakes pytest
-      # ]))
-
-      # JavaScript
-      # nodePackages.typescript-language-server
-
-      # Bash
-      nodePackages.bash-language-server shellcheck
-
-      # Rust
-      cargo cargo-audit cargo-edit clippy rust-analyzer rustfmt
-
-      # Erlang and Elixir
-      erlang-ls
-      # beamPackages.elixir beamPackages.elixir_ls
-
-      # Go
-      go gocode goimports golangci-lint gore
     ];
 
     programs.emacs = {
       enable = true;
       package = lib.mkMerge [
-        (lib.mkIf isLinux pkgs.emacsPgtk)
-        (lib.mkIf isDarwin pkgs.emacsUnstable)
+        (lib.mkIf isLinux (emacsWithPackages pkgs.emacsPgtk))
+        (lib.mkIf isDarwin (emacsWithPackages pkgs.emacsUnstable))
       ];
     };
 
@@ -85,6 +57,8 @@ lib.mkMerge [
       client.enable = false;
     };
 
+    # Only start after graphical session because of missing DISPLAY/WAYLAND_DISPLAY
+    # environment variable
     systemd.user.services.emacs = {
       Unit.PartOf = [ "graphical-session.target" ];
       Unit.After = [ "graphical-session-pre.target" ];
