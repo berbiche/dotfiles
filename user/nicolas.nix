@@ -199,15 +199,14 @@ lib.mkMerge [
       in "${
         # For the patchShebang phase
         pkgs.runCommandLocal "sway-scripts" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
-          cp --no-preserve=mode -T -r "${./scripts}" $out
-          chmod +x $out/*
-          for i in $out/*; do
-            wrapProgram $i --prefix PATH : ${path}
+          mkdir -p "$out"/bin
+          cp --no-preserve=mode -T -r "${./scripts}" "$out"/_bin
+          chmod +x "$out"/_bin/*
+          for i in "$out"/_bin/*; do
+            makeWrapper "$i" "$out"/bin/"$(basename $i)" --prefix PATH : ${path}
           done
-          # Remove wrapped binaries
-          find "$out"/bin -maxdepth 1 -name ".*-wrapped" -type l -delete
         ''
-      }";
+      }/bin";
       lib.my = {
         # Instead of using the path in the nix store, return the relative path of the script in my configuration
         # This makes it possible to update scripts without reloading my Sway configuration
