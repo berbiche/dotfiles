@@ -1,11 +1,11 @@
 final: prev: {
   swaynotificationcenter = prev.swaynotificationcenter.overrideAttrs (drv: {
-    version = "unstable-2022-02-06";
+    version = "unstable-2022-02-20";
     src = prev.fetchFromGitHub {
       owner = "ErikReider";
       repo = "SwayNotificationCenter";
-      rev = "8d717d51f68f831411da0e1a7c92ae5fc5e280ef";
-      hash = "sha256-fN0x6zL/qjvXzhfeHg969q+n+BtJ9WOK1OdRaQHVYUw=";
+      rev = "223e78a0a7e92944f2cc0e8efad6bd240cf453e4";
+      hash = "sha256-kALxeDkalN7q3SsA/YTkOJ82zGX6qVZVYao0Etaec+4=";
     };
     patches = drv.patches or [] ++ [
       # (fetchpatch {
