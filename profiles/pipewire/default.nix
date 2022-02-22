@@ -34,7 +34,7 @@ in
           {
             path = "/bin/sh";
             args = pkgs.writeShellScript "combine-sink" ''
-              ${pkgs.pulseaudio}/bin/pactl load-module module-combine-sink channels=2 channel_map=front-left,front-right slaves=${escapeShellArg (concatStringsSep "," cfg.loopbackTargets)}
+              ${pkgs.pulseaudio}/bin/pactl load-module module-combine-sink sink_name=combine sink_properties=device.description='Combined Output' format=s16le rate=48000 channels=2 channel_map=front-left,front-right slaves=${escapeShellArg (concatStringsSep "," cfg.loopbackTargets)}
             '';
           }
         ];
