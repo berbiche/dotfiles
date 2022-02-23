@@ -1,4 +1,4 @@
 final: prev: {
   # A Python dependency is broken
-  pdfarranger = prev.runCommandLocal "broken-pdfarranger" { } ''mkdir "$out"'';
+  # pdfarranger = prev.runCommandLocal "broken-pdfarranger" { } ''mkdir "$out"'';
 }
