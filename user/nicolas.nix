@@ -22,13 +22,17 @@ lib.mkMerge [
       my.defaults.file-explorer = lib.mkIf isLinux "${pkgs.cinnamon.nemo}/bin/nemo";
 
       # pkgs.numix-gtk-theme
-      # pkgs.arc-theme
       # pkgs.yaru-theme
-      my.theme.package = pkgs.materia-theme;
-      # my.theme.dark = "Arc-Dark";
+      # my.theme.package = pkgs.arc-theme;
       # my.theme.light = "Arc";
-      my.theme.dark = "Materia-dark-compact";
-      my.theme.light = "Materia-light-compact";
+      # my.theme.dark = "Arc-Dark";
+      # my.theme.package = pkgs.materia-theme;
+      # my.theme.light = "Materia-light-compact";
+      # my.theme.dark = "Materia-dark-compact";
+      my.theme.package = pkgs.orchis-theme;
+      my.theme.light = "Orchis";
+      my.theme.dark = "Orchis-dark";
+
       my.theme.cursor.name = "Adwaita";
       my.theme.cursor.size = 24;
 
