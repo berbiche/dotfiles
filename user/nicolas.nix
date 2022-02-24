@@ -36,6 +36,9 @@ lib.mkMerge [
       my.theme.cursor.name = "Adwaita";
       my.theme.cursor.size = 24;
 
+      my.theme.icon.name = "Papirus";
+      my.theme.icon.package = pkgs.papirus-icon-theme;
+
       my.terminal.fontSize = 12.0;
       my.terminal.fontName = lib.mkMerge [
         (lib.mkIf isDarwin "Menlo")
@@ -73,6 +76,7 @@ lib.mkMerge [
   }
 
   (lib.optionalAttrs isLinux {
+    programs.zsh.enable = true; # required if `users.shell == zsh`
     users.users.${username} = {
       createHome = true;
       isNormalUser = true;
@@ -104,11 +108,10 @@ lib.mkMerge [
       gtk = {
         enable = true;
         iconTheme = {
-          name = "Papirus";
-          package = pkgs.papirus-icon-theme;
+          name = config.my.theme.icon.name;
+          package = config.my.theme.icon.package;
         };
         theme = {
-          # name = "Adwaita";
           name = config.my.theme.light;
           package = config.my.theme.package;
         };

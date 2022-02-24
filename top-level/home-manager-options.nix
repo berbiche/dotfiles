@@ -65,6 +65,14 @@ with lib;
       type = types.ints.positive;
       example = 24;
     };
+    icon.name = mkOption {
+      type = types.str;
+      example = "Papirus";
+    };
+    icon.package = mkOption {
+      type = types.package;
+      example = lib.literalExpression "pkgs.papirus-icon-theme";
+    };
   };
 
   options.my.terminal.fontSize = mkOption { type = types.float; };

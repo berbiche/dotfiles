@@ -14,15 +14,13 @@ in
   my.defaults.terminal = "/usr/bin/kitty";
   my.defaults.file-explorer = "${pkgs.cinnamon.nemo}/bin/nemo";
 
-  # pkgs.numix-gtk-theme
-  # pkgs.arc-theme
-  # pkgs.yaru-theme
   my.theme.package = pkgs.materia-theme;
-  # my.theme.dark = "Arc-Dark";
-  # my.theme.light = "Arc";
   my.theme.dark = "Materia-dark-compact";
   my.theme.light = "Materia-light-compact";
   my.theme.cursor.name = "Adwaita";
+
+  my.theme.icon.name = "Papirus";
+  my.theme.icon.package = pkgs.papirus-icon-theme;
 
   my.terminal.fontSize = 12.0;
   my.terminal.fontName = "MesloLGS Nerd Font Mono";
@@ -59,11 +57,10 @@ in
   gtk = {
     enable = true;
     iconTheme = {
-      name = "Papirus";
-      package = pkgs.papirus-icon-theme;
+      name = config.my.theme.icon.name;
+      package = config.my.theme.icon.package;
     };
     theme = {
-      # name = "Adwaita";
       name = config.my.theme.light;
       package = config.my.theme.package;
     };

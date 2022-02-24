@@ -174,10 +174,9 @@
     homeConfigurations = {
       blackarch = mkHomeManagerConfig {
         hostname = "blackarch";
-        username = "hobbit";
+        username = "blackarch";
         platform = "x86_64-linux";
-        #hostConfiguration = ./host/blackarch;
-        userConfiguration = ./user/hobbit.nix;
+        hostConfiguration = ./host/blackarch.nix;
       };
     };
 
