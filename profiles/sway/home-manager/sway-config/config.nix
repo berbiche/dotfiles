@@ -170,6 +170,7 @@ let
         childBorder = black;
       };
       unfocused = focusedInactive // {
+        border = darkgrey;
         childBorder = darkgrey;
       };
       urgent = focused // {
@@ -223,7 +224,6 @@ let
       { command = binaries.element-desktop; }
       { command = binaries.spotify; }
       { command = binaries.signal-desktop; }
-      { command = binaries.nwggrid-server; always = true; }
       {
         always = true;
         command = let
@@ -280,6 +280,7 @@ let
         { app_id = "xfce4-appfinder"; }
         { instance = "xfce4-appfinder"; }
         { app_id = "zenity"; }
+        { app_id = "pdfarranger"; }
       ])
       (mkFloatingNoBorder {
         criteria = { app_id = "blueman-manager"; };
@@ -304,9 +305,12 @@ let
         { con_mark = "_music-player.*"; }
       ])
       (map (x: mkFloatingBorder { criteria = x; }) [
-        { app_id = "pdfarranger"; }
         { app_id = "org.kde.haruna"; }
       ])
+      {
+        criteria = { floating = ""; app_id = "firefox"; };
+        command = "border none";
+      }
     ];
 
     bars = lib.mkForce [];
