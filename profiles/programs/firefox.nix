@@ -3,7 +3,6 @@
 let
   inherit (pkgs.stdenv.targetPlatform) isDarwin isLinux;
 
-  # firefox versions available in nixpkgs-mozilla are already wrapped
   wrappedFirefox = pkgs.firefox-beta-bin.override {
     desktopName = "Firefox";
     icon = "firefox";
@@ -12,12 +11,16 @@ let
       enableFXCastBridge = false;
     };
     extraPolicies = {
-      DontCheckDefaultBrowser = true;
-      DisablePocket = true;
-      DisableTelemetry = true;
+      AppAutoUpdate = false;
+      DisableAppUpdate = true;
+      ManualAppUpdateOnly = true;
+
       DisableFirefoxStudies = true;
+      DisablePocket = true;
       DisableProfileRefresh = true;
       DisableSetDesktopBackground = true;
+      DisableTelemetry = true;
+      DontCheckDefaultBrowser = true;
     };
   };
 
@@ -26,6 +29,9 @@ let
     isDefault = default;
     # Many of these settings have been taken from https://github.com/ghacksuserjs/ghacks-user.js
     settings = {
+      "app.update.auto" = false;
+      "app.update.checkInstallTime" = false;
+
       "general.useragent.locale" = "en-CA";
       "browser.search.region" = "CA";
       "browser.search.isUS" = false;
@@ -139,7 +145,6 @@ let
       # "geo.provider.network.url" = "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%";
       # Use OS geolocation provider
       "geo.provider.use_gpsd" = true;
-      "browser.ping-centre.telemetry" = false;
       "extensions.webcompat-reporter.enabled" = false;
       # Don't try to be smart about DNS requests (do not append a `.com`)
       "browser.fixup.alternate.enabled" = false;
@@ -188,6 +193,13 @@ let
       "experiments.enabled" = false;
       "experiments.supported" = false;
       "extensions.pocket.enabled" = false;
+      "toolkit.telemetry.coverage.opt-out" = true;
+      "toolkit.coverage.opt-out" = true;
+      "toolkit.coverage.endpoint.base" = "";
+      "browser.ping-centre.telemetry" = false;
+      "breakpad.reportURL" = "";
+      "browser.tabs.crashReporting.sendReport" = false;
+      "browser.crashReports.unsubmittedCheck.autoSubmit2" = false;
 
       # Extra security settings
       # 0=don't allow sub-resources to open HTTP authentication credentials dialogs
