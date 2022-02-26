@@ -12,7 +12,7 @@
       "--document-user-activation-required"
       # Enable Wayland support
       "--enable-features=UseOzonePlatform"
-      "--ozone-platform=wayland"
+      "--ozone-platform-hint=auto"
       # Disable global Google login
       "--disable-sync-preferences"
       # Reader mode
