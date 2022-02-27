@@ -19,7 +19,6 @@ in
       my.defaults.file-explorer = "";
 
       nix.nixPath = [
-        "nixpkgs=${pkgs.path}"
         "darwin=${inputs.nix-darwin}"
       ];
       nix.sandboxPaths = [
@@ -47,14 +46,6 @@ in
       system.checks.verifyNixPath = false;
 
       users.nix.configureBuildUsers = true;
-
-      # system.darwinVersion = lib.mkForce (
-      #   "darwin" + toString config.system.stateVersion + "." + inputs.nix-darwin.shortRev);
-      # system.darwinRevision = inputs.nix-darwin.rev;
-      # system.nixpkgsVersion =
-      #   "${nixpkgs.lastModifiedDate or nixpkgs.lastModified}.${nixpkgs.shortRev}";
-      # system.nixpkgsRelease = lib.version;
-      # system.nixpkgsRevision = nixpkgs.rev;
     }
     {
       nix.maxJobs = lib.mkIf (nixCfg ? max-jobs) nixCfg.max-jobs;

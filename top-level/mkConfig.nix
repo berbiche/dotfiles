@@ -45,7 +45,17 @@ let
         automatic = true;
         options = "--delete-older-than 10d";
       };
+      nixPath = [
+        # Point to a stable path so system updates immediately update
+        "nixpkgs=/run/current-system/nixpkgs"
+      ];
     };
+
+    # Link nixpkgs path to /run/current-system/nixpkgs
+    system.extraSystemBuilderCmds = ''
+      ln -s ${lib.escapeShellArg pkgs.path} "$out"/nixpkgs
+    '';
+
     # My custom user settings
     my.username = username;
   };

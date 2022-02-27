@@ -6,10 +6,6 @@
   ];
 
   nix = {
-    nixPath = [
-      # Pin nixpkgs for older Nix tools (nix-shell, nix repl, etc.)
-      "nixpkgs=${pkgs.path}"
-    ];
     settings.allowed-users = [ "root" "@wheel" ];
     settings.trusted-users = [ "root" "@wheel" ];
 
