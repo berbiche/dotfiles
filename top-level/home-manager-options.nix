@@ -67,7 +67,6 @@ with lib;
     };
     cursor.package = mkOption {
       type = types.package;
-      default = pkgs.gnome.gnome-themes-extra;
       example = literalExpression "pkgs.gnome.gnome-themes-extra";
     };
     icon.name = mkOption {
