@@ -11,7 +11,7 @@
     # beamPackages.elixir beamPackages.elixir_ls
 
     # Go
-    go gocode goimports golangci-lint gore
+    go gocode gotools golangci-lint gore
 
     # Nix
     nixfmt

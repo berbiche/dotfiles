@@ -63,7 +63,7 @@ in
   #   interval = "once";
   #   exec = pkgs.writeShellScript "do-not-disturb" ''
   #     status="disabled"
-  #     if ${pkgs.procps-ng}/bin/pgrep dunst >/dev/null; then
+  #     if ${pkgs.procps}/bin/pgrep dunst >/dev/null; then
   #       if [ "$(${config.services.dunst.package}/bin/dunstctl is-paused)" = "true" ]; then
   #         status="enabled"
   #       else
@@ -90,7 +90,7 @@ in
     interval = "once";
     exec = pkgs.writeShellScript "do-not-disturb" ''
       status="disabled"
-      if ${pkgs.procps-ng}/bin/pgrep swaync >/dev/null; then
+      if ${pkgs.procps}/bin/pgrep swaync >/dev/null; then
         if [ "$(${swaync-client} --get-dnd --skip-wait)" = "true" ]; then
           status="enabled"
         else

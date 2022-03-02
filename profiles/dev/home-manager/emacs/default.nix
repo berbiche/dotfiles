@@ -7,7 +7,7 @@ let
   DOOMDIR = "${config.xdg.configHome}/doom";
 
   emacsWithPackages = package:
-    (pkgs.emacsPackagesGen package).emacsWithPackages (epkgs: [
+    (pkgs.emacsPackagesFor package).emacsWithPackages (epkgs: [
       epkgs.vterm
     ]);
 in
