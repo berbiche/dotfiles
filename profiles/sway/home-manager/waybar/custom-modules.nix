@@ -110,8 +110,8 @@ in
 
   "custom/dark-mode" =  let
     awk = "${pkgs.gawk}/bin/awk";
-    gsettings = "${pkgs.glib.bin}/bin/gsettings";
     stdbuf = "${pkgs.coreutils}/bin/stdbuf";
+    dbus-monitor = "${lib.getBin pkgs.dbus}/bin/dbus-monitor";
     escape = x: ''"${lib.escape [ ''"'' ] x}"'';
     darkMode = builtins.toJSON {
       text = "Dark";
@@ -125,9 +125,6 @@ in
       tooltip = "Toggle dark theme";
       class = "light";
     };
-    xdg_data_dir = ''
-      export XDG_DATA_DIRS="${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}''${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS"
-    '';
   in {
     return-type = "json";
     format = "{icon}";
@@ -135,31 +132,23 @@ in
       light = ""; # fontawesome.com/v5/cheatsheet sun f185
       dark = ""; # fontawesome.com/v5/cheatsheet moon f186
     };
+    exec-on-event = true;
     exec = pkgs.writeShellScript "waybar-custom-dark-mode" ''
-      ${xdg_data_dir}
-      if [[ "$(${gsettings} get org.gnome.desktop.interface gtk-theme)" = "'${config.my.theme.light}'" ]]; then
-        echo ${lib.escapeShellArg lightMode}
-      else
-        echo ${lib.escapeShellArg darkMode}
-      fi
-      ${gsettings} monitor org.gnome.desktop.interface gtk-theme | \
-        ${stdbuf} -o0 ${awk} '{
-          if ($2 ~ /'\'''${config.my.theme.light}'\'''/) {
-            print ${escape lightMode}
-          }
-          else {
-            print ${escape darkMode}
-          }
-        }'
-        # ${pkgs.jq}/bin/jq --unbuffered --compact-output
+      ${dbus-monitor} --session "type='signal',sender='nl.whynothugo.darkman',interface='nl.whynothugo.darkman',path='/nl/whynothugo/darkman',member='ModeChanged'" --monitor |
+          ${stdbuf} -o0 ${awk} '
+            /member=ModeChanged/ {
+              getline;
+              if ($2 ~ "light") {
+                print ${escape lightMode}
+              }
+              else {
+                print ${escape darkMode}
+              }
+            }
+          '
     '';
     on-click = pkgs.writeShellScript "waybar-custom-dark-mode-on-click" ''
-      ${xdg_data_dir}
-      if [[ "$(${gsettings} get org.gnome.desktop.interface gtk-theme)" = "'${config.my.theme.light}'" ]]; then
-        ${gsettings} set org.gnome.desktop.interface gtk-theme ${config.my.theme.dark}
-      else
-        ${gsettings} set org.gnome.desktop.interface gtk-theme ${config.my.theme.light}
-      fi
+      ${pkgs.darkman}/bin/darkman toggle
     '';
   };
 

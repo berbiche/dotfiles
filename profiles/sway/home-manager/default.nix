@@ -25,6 +25,9 @@
     # of day and controls the gamma and brightness
     ./gammastep.nix
 
+    # Automatically changes the theme for my desktop based on the time
+    ./darkman.nix
+
     # Automatically lock my system after a set interval
     ./idle-service.nix
 
