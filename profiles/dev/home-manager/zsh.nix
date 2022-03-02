@@ -12,6 +12,8 @@ in
     enableSyntaxHighlighting = true;
     dotDir = ".config/zsh";
 
+    defaultKeymap = "emacs";
+
     history = {
       expireDuplicatesFirst = true;
       ignoreDups = true;
@@ -88,7 +90,6 @@ in
       WORDCHARS=''${WORDCHARS//[\/&.;_-]}                                 # Don't consider certain characters part of the word
 
       ## Keybindings section
-      bindkey -e
       bindkey '^[[7~' beginning-of-line                               # Home key
       bindkey '^[[H' beginning-of-line                                # Home key
       if [[ "''${terminfo[khome]}" != "" ]]; then
