@@ -8,10 +8,10 @@
       Unit = {
         Description = "noisetorch oneshot loading of microphone suppressor";
         After = [ "graphical-session.target" ]
-          ++ lib.optionals config.profiles.pipewire.enable [ "pipewire.service" ]
+          ++ lib.optionals config.profiles.pipewire.enable [ "pipewire.service" "pipewire-pulse.service" ]
           ++ lib.optionals config.hardware.pulseaudio.enable [ "pulseaudio.service" ];
         Requisite = [ "graphical-session.target" ]
-          ++ lib.optionals config.profiles.pipewire.enable [ "pipewire.service" ]
+          ++ lib.optionals config.profiles.pipewire.enable [ "pipewire.service" "pipewire-pulse.service" ]
           ++ lib.optionals config.hardware.pulseaudio.enable [ "pulseaudio.service" ];
         PartOf = [ "graphical-session.target" ];
       };
@@ -20,7 +20,7 @@
         ExecStart = "${nixosConfig.security.wrapperDir}/${nixosConfig.security.wrappers.noisetorch.program} -i";
         RemainAfterExit = true;
       };
-      Install.WantedBy = [ "graphical-session.target" ];
+      Install.WantedBy = [ "pipewire-pulse.service" ];
     };
   })];
 }
