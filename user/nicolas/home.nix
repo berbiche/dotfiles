@@ -145,6 +145,7 @@ in
     # Temporary
     pkgs.zoom-us
     pkgs.discord
+    pkgs.discord-canary
     pkgs.teams
 
     # From my overlays
