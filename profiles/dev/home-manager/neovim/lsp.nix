@@ -49,6 +49,9 @@
       '';
     }
     {
+      plugin = SchemaStore-nvim;
+    }
+    {
       plugin = nvim-lspconfig;
       config = ''
         " Display diagnostics only when hovering
@@ -139,6 +142,15 @@
           lsp.yamlls.setup {
             on_attach = on_attach_trouble,
             -- settings = { yaml = { schemas = { ["https://..."] } } },
+          }
+          -- JSON
+          lsp.jsonls.setup {
+            on_attach = on_attach_trouble,
+            settings = {
+              json = {
+                schemas = require('schemastore').json.schemas(),
+              }
+            }
           }
           --[[ Vim
           lsp.vimls.setup {

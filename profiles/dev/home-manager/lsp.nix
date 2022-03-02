@@ -40,5 +40,7 @@
     vala-language-server
     # YAML
     yaml-language-server
+    # JSON, HTML, CSS    (I only care about JSON)
+    nodePackages.vscode-langservers-extracted
   ];
 }

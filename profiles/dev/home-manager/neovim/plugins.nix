@@ -380,16 +380,6 @@ in
       '';
     }
     {
-      ## For coc-explorer
-      plugin = vim-devicons;
-      config = ''
-        let g:webdevicons_enable = 1
-        let g:webdevicons_enable_airline_statusline = 1
-        let g:webdevicons_enable_startify = 1
-        let g:DevIconsEnableFoldersOpenClose = 1
-      '';
-    }
-    {
       ## For telescope
       plugin = nvim-web-devicons;
       config = ''
