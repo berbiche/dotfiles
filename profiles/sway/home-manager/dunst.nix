@@ -13,9 +13,8 @@ in
 
   # services.dunst.enable = true;
   services.dunst.iconTheme = {
-    # name = "Papirus-Dark";
-    name = "Papirus";
-    package = pkgs.papirus-icon-theme;
+    name = config.my.theme.icon.name;
+    package = config.my.theme.icon.package;
     size = "64x64";
   };
   services.dunst.settings = {

@@ -17,14 +17,16 @@ in
   my.theme.package = pkgs.materia-theme;
   my.theme.dark = "Materia-dark-compact";
   my.theme.light = "Materia-light-compact";
-  my.theme.cursor.name = "Adwaita";
 
   my.theme.icon.name = "Papirus";
   my.theme.icon.package = pkgs.papirus-icon-theme;
 
   my.terminal.fontSize = 12.0;
   my.terminal.fontName = "MesloLGS Nerd Font Mono";
+
+  my.theme.cursor.name = "Adwaita";
   my.theme.cursor.size = 24;
+  my.theme.cursor.package = pkgs.gnome.gnome-themes-extra;
 
   my.colors = {
     color0 = "#1d1f21";
@@ -74,7 +76,7 @@ in
     };
   };
   xsession.pointerCursor = {
-    package = pkgs.gnome3.gnome-themes-extra;
+    package = config.my.theme.cursor.package;
     name = "${config.my.theme.cursor.name}";
     size = config.my.theme.cursor.size;
   };

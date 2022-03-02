@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
@@ -65,13 +65,18 @@ with lib;
       type = types.ints.positive;
       example = 24;
     };
+    cursor.package = mkOption {
+      type = types.package;
+      default = pkgs.gnome.gnome-themes-extra;
+      example = literalExpression "pkgs.gnome.gnome-themes-extra";
+    };
     icon.name = mkOption {
       type = types.str;
       example = "Papirus";
     };
     icon.package = mkOption {
       type = types.package;
-      example = lib.literalExpression "pkgs.papirus-icon-theme";
+      example = literalExpression "pkgs.papirus-icon-theme";
     };
   };
 
@@ -81,5 +86,15 @@ with lib;
   options.my.colors = mkOption {
     type = with types; attrsOf (oneOf [ str int float ]);
     description = "Color profile for theming purposes.";
+  };
+
+  config = let
+    themeCfg = config.my.theme;
+  in {
+    home.packages = [
+      themeCfg.cursor.package
+      themeCfg.icon.package
+      themeCfg.package
+    ];
   };
 }
