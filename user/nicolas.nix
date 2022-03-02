@@ -5,11 +5,6 @@ let
 in
 lib.mkMerge [
   {
-    my.location = {
-      latitude = 45.508;
-      longitude = -73.597;
-    };
-
     my.home = { config, ... }: {
       my.identity = {
         name = "Nicolas Berbiche";

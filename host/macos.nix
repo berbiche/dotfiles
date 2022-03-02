@@ -7,6 +7,11 @@
   # $ darwin-rebuild changelog
   system.stateVersion = 4;
 
+  my.location = {
+    latitude = 45.508;
+    longitude = -73.597;
+  };
+
   nix.settings.max-jobs = 6;
 
   environment.systemPackages = [ pkgs.vagrant pkgs.gnupg ];

@@ -13,6 +13,11 @@
 
   environment.systemPackages = with pkgs; [];
 
+  my.location = {
+    latitude = 45.508;
+    longitude = -73.597;
+  };
+
   wireguard."tq.rs".enable = false;
   wireguard."tq.rs".ipv4Address = "10.10.10.121/24";
   wireguard."tq.rs".publicKey = "E6x3s+2OS7hkxZBakUJosZ/zCgNrjjb7LqmeZrhDJz0=";
