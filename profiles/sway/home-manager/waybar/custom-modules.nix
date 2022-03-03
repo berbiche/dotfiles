@@ -132,8 +132,12 @@ in
       light = ""; # fontawesome.com/v5/cheatsheet sun f185
       dark = ""; # fontawesome.com/v5/cheatsheet moon f186
     };
-    exec-on-event = true;
     exec = pkgs.writeShellScript "waybar-custom-dark-mode" ''
+      if [ "$(${pkgs.darkman}/bin/darkman get)" = light ]; then
+        echo ${escape lightMode}
+      else
+        echo ${escape darkMode}
+      fi
       ${dbus-monitor} --session "type='signal',sender='nl.whynothugo.darkman',interface='nl.whynothugo.darkman',path='/nl/whynothugo/darkman',member='ModeChanged'" --monitor |
           ${stdbuf} -o0 ${awk} '
             /member=ModeChanged/ {
