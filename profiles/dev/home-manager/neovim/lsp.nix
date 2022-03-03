@@ -15,30 +15,29 @@
     # Language/grammar parser with multiple practical functionalities
     {
       plugin = nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars);
+      type = "lua";
       config = ''
-        lua <<EOF
-          require('nvim-treesitter.configs').setup {
-            -- ensure_installed = { 'c', 'cpp', },
+        require('nvim-treesitter.configs').setup {
+          -- ensure_installed = { 'c', 'cpp', },
 
-            -- highlight = { enable = true, },
-            incremental_selection = { enable = true, },
-            textobjects = {
-              enable = true,
-              lsp_interop = { enable = true, },
-            },
-            indent = { enable = true, },
-            matchup = { enable = true, },
-            -- With nvim-autopairs
-            autopairs = { enable = true, },
+          -- highlight = { enable = true, },
+          incremental_selection = { enable = true, },
+          textobjects = {
+            enable = true,
+            lsp_interop = { enable = true, },
+          },
+          indent = { enable = true, },
+          matchup = { enable = true, },
+          -- With nvim-autopairs
+          autopairs = { enable = true, },
 
-            -- With nvim-ts-rainbow
-            rainbow = {
-              enable = true,
-              extended_mode = false,
-              max_file_lines = 20000,
-            }
+          -- With nvim-ts-rainbow
+          rainbow = {
+            enable = true,
+            extended_mode = false,
+            max_file_lines = 20000,
           }
-        EOF
+        }
       '';
     }
     {
@@ -177,52 +176,52 @@
     cmp-path
     {
       plugin = nvim-cmp;
+      type = "lua";
       config = ''
-        lua <<EOF
-          local cmp = require("cmp")
-          local lspkind = require("lspkind")
-          local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+        local cmp = require("cmp")
+        local lspkind = require("lspkind")
+        local cmp_autopairs = require('nvim-autopairs.completion.cmp')
 
-          cmp.setup {
-            confirmation = { default_behavior = cmp.ConfirmBehavior.Replace },
-            formatting = {
-              format = function(entry, vim_item)
-                vim_item.kind = lspkind.presets.default[vim_item.kind]
-                vim_item.menu = ({
-                  buffer = "[Buffer]",
-                  nvim_lsp = "[LSP]",
-                  luasnip = "[LuaSnip]",
-                  nvim_lua = "[Lua]",
-                  latex_symbols = "[LaTeX]",
-                })[entry.source.name]
-                return vim_item
-              end,
-            },
-            mapping = {
-              ["<Tab>"] = cmp.mapping.confirm({ select = true }),
-              ["<C-p>"] = cmp.mapping.select_prev_item(),
-              ["<C-n>"] = cmp.mapping.select_next_item(),
-              ["<C-Space>"] = cmp.mapping.complete(),
-              ["<C-c>"] = cmp.mapping.close(),
-            },
-            sources = {
-              { name = "buffer" },
-              { name = "nvim_lsp" },
-              { name = "path" },
-            },
-          }
-          require("cmp_nvim_lsp").setup()
+        cmp.setup {
+          confirmation = { default_behavior = cmp.ConfirmBehavior.Replace },
+          formatting = {
+            format = function(entry, vim_item)
+              vim_item.kind = lspkind.presets.default[vim_item.kind]
+              vim_item.menu = ({
+                buffer = "[Buffer]",
+                nvim_lsp = "[LSP]",
+                luasnip = "[LuaSnip]",
+                nvim_lua = "[Lua]",
+                latex_symbols = "[LaTeX]",
+              })[entry.source.name]
+              return vim_item
+            end,
+          },
+          mapping = {
+            ["<Tab>"] = cmp.mapping.confirm({ select = true }),
+            ["<C-p>"] = cmp.mapping.select_prev_item(),
+            ["<C-n>"] = cmp.mapping.select_next_item(),
+            ["<C-Space>"] = cmp.mapping.complete(),
+            ["<C-c>"] = cmp.mapping.close(),
+          },
+          sources = {
+            { name = "buffer" },
+            { name = "nvim_lsp" },
+            { name = "path" },
+          },
+        }
+        require("cmp_nvim_lsp").setup()
 
-          -- Automatically insert parenthesis after confirming
-          cmp.event:on( 'confirm_done', cmp_autopairs.on_confirm_done({  map_char = { tex = ''' } }))
-        EOF
+        -- Automatically insert parenthesis after confirming
+        cmp.event:on( 'confirm_done', cmp_autopairs.on_confirm_done({  map_char = { tex = ''' } }))
       '';
     }
 
     {
       plugin = trouble-nvim;
+      type = "lua";
       config = ''
-        lua require'trouble'.setup{}
+        require('trouble').setup { }
       '';
     }
 
@@ -230,7 +229,9 @@
     # Language specific packages
     {
       plugin = zig-vim;
-      config = "let g:zig_fmt_autosave = 0";
+      config = ''
+        let g:zig_fmt_autosave = 0
+      '';
     }
   ];
 }

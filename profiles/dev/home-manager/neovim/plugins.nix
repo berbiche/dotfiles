@@ -6,6 +6,7 @@ in
 {
   programs.neovim.plugins = with pkgs.vimPlugins; [ ]
   ++ [
+    vim-repeat
     {
       # Notifications display
       plugin = nvim-notify;
@@ -42,6 +43,8 @@ in
     vim-indent-object
     vim-signify
     vim-sensible
+    # Indent using tabs or spaces based on the content of the file
+    vim-sleuth
     {
       plugin = vim-sandwich; # replaces vim-surround
       config = ''
@@ -68,20 +71,20 @@ in
     # UI configuration
     {
       plugin = dressing-nvim;
+      type = "lua";
       config = ''
-        lua require('dressing').setup {}
+        require('dressing').setup {}
       '';
     }
     # Automatically close pairs of symbols like {}, [], (), "", etc.
     {
       plugin = nvim-autopairs;
+      type = "lua";
       config = ''
-        lua <<EOF
-          require('nvim-autopairs').setup {
-            check_ts = true,
-            disable_filetype = { "TelescopePrompt", "NvimTree", "startify", "terminal", "coc-explorer" }
-          }
-        EOF
+        require('nvim-autopairs').setup {
+          check_ts = true,
+          disable_filetype = { "TelescopePrompt", "NvimTree", "startify", "terminal", "coc-explorer" }
+        }
       '';
     }
     # Automatically source the .envrc (integration with direnv)
@@ -89,7 +92,10 @@ in
     {
       # Peek lines when typing :30 for instance
       plugin = numb-nvim;
-      config = "lua require('numb').setup()";
+      type = "lua";
+      config = ''
+        require('numb').setup()
+      '';
     }
     {
       # Better wildmenu
@@ -124,21 +130,16 @@ in
     {
       # Shows a key sequence to jump to a word/letter letter after typing 's<letter><letter>'
       plugin = lightspeed-nvim;
-      config = ''
-        " let g:sneak#prompt = 'sneak> '
-        " let g:sneak#label = 1
-        " let g:sneak#map_netrw = 0
-      '';
+      type = "lua";
     }
     nui-nvim
     {
       plugin = searchbox-nvim;
+      type = "lua";
       config = ''
-        lua <<EOF
-          local map = vim.api.nvim_set_keymap
-          map("n", "<leader>sh", "<cmd>lua require('searchbox').replace()<CR>", {noremap=true})
-          map("v", "<leader>sh", "<cmd>lua require('searchbox').replace()<CR>", {noremap=true})
-        EOF
+        local map = vim.api.nvim_set_keymap
+        map("n", "<leader>sh", "<cmd>lua require('searchbox').replace()<CR>", {noremap=true})
+        map("v", "<leader>sh", "<cmd>lua require('searchbox').replace()<CR>", {noremap=true})
       '';
     }
     {
@@ -166,52 +167,53 @@ in
     {
       # Like emacs' magit
       plugin = neogit;
+      type = "lua";
       config = ''
-        lua <<EOF
-          require('neogit').setup {
-            disable_commit_confirmation = true,
-            integrations = {
-              diffview = true,
-            },
-          }
-        EOF
+        require('neogit').setup {
+          disable_commit_confirmation = true,
+          integrations = {
+            diffview = true,
+          },
+        }
 
-        nnoremap <silent> <leader>gg :lua require('neogit').open()<CR>
+        local map = vim.api.nvim_set_keymap
+        map("n", "<leader>gg", "<cmd>lua require('neogit').open()<CR>", {noremap=true, silent=true})
       '';
     }
     {
       plugin = gitsigns-nvim;
-      config = ''lua require('gitsigns').setup()'';
+      type = "lua";
+      config = ''
+        require('gitsigns').setup()
+      '';
     }
 
     {
       # Show key completion
       plugin = which-key-nvim;
+      type = "lua";
       config = ''
-        lua <<EOF
-          require('which-key').setup { }
-        EOF
+        require('which-key').setup { }
       '';
     }
     {
       # Comment lines with commentary.vim
       plugin = kommentary;
+      type = "lua";
       config = ''
-        lua <<EOF
-          local k = require('kommentary.config')
+        local k = require('kommentary.config')
 
-          k.use_extended_mappings()
-          k.configure_language("default", {
-            prefer_single_line_comments = true,
-          })
+        k.use_extended_mappings()
+        k.configure_language("default", {
+          prefer_single_line_comments = true,
+        })
 
-          local map = vim.api.nvim_set_keymap
-          map("i", "<M-;>", "<Plug>kommentary_line_default", {noremap = true})
-          map("n", "<M-;>", "<Plug>kommentary_line_default", {})
-          map("v", "<M-;>", "<Plug>kommentary_visual_default", {})
-          map("n", "<leader>;", "<Plug>kommentary_line_default", {})
-          map("v", "<leader>;", "<Plug>kommentary_visual_default", {})
-        EOF
+        local map = vim.api.nvim_set_keymap
+        map("i", "<M-;>", "<Plug>kommentary_line_default", {noremap = true})
+        map("n", "<M-;>", "<Plug>kommentary_line_default", {})
+        map("v", "<M-;>", "<Plug>kommentary_visual_default", {})
+        map("n", "<leader>;", "<Plug>kommentary_line_default", {})
+        map("v", "<leader>;", "<Plug>kommentary_visual_default", {})
       '';
     }
     {
@@ -260,6 +262,7 @@ in
         lua <<EOF
           local ts = require('telescope')
           local actions = require('telescope.actions')
+          local fb_actions = require('telescope').extensions.file_browser.actions
           ts.setup {
             defaults = {
               layout_strategy = 'horizontal',
@@ -284,6 +287,18 @@ in
                 display_type = 'full',
                 base_dirs = {
                   {'~/dev', max_depth = 3},
+                },
+              },
+              file_browser = {
+                mappings = {
+                  ["i"] = {
+                    -- Match completions behavior of accepting with tab
+                    ["<Tab>"] = actions.select_default,
+                    ["<C-e>"] = fb_actions.create,
+                  },
+                  ["n"] = {
+                    ["<C-e>"] = fb_actions.create,
+                  },
                 },
               },
             },
@@ -382,12 +397,11 @@ in
     {
       ## For telescope
       plugin = nvim-web-devicons;
+      type = "lua";
       config = ''
-        lua <<EOF
-          require('nvim-web-devicons').setup {
-            default = true,
-          }
-        EOF
+        require('nvim-web-devicons').setup {
+          default = true,
+        }
       '';
     }
 
@@ -395,18 +409,24 @@ in
     lualine-lsp-progress
     {
       plugin = lualine-nvim;
+      type = "lua";
       config = ''
-      lua <<EOF
         require("lualine").setup {
           options = {
             disabled_filetypes = { "TelescopePrompt", "NvimTree", "startify", "terminal", "coc-explorer" },
             theme = 'seoul256',
-            sections = {
-              lualine_c = { 'lsp_progress', },
-            },
+          },
+          sections = {
+            lualine_b = { 'branch', 'diagnostics', 'filename', },
+            lualine_c = { 'lsp_progress', },
+            lualine_x = { 'encoding', 'fileformat', 'filetype', },
+            lualine_y = { },
+          },
+          inactive_sections = {
+            lualine_b = { 'diff', },
+            lualine_y = { 'progress', },
           },
         }
-      EOF
       '';
     }
     {
@@ -468,38 +488,36 @@ in
     # Highlight css colors such as #ccc
     {
       plugin = nvim-colorizer-lua;
+      type = "lua";
       config = ''
-        lua <<EOF
-          require('colorizer').setup {
-            ['*'] = {
-              names = false,
-              mode = 'background',
-            },
-            css = { css = true, css_fn = true, },
-            html = { names = true, },
-            '!c',
-            '!cpp',
-            '!erlang',
-            '!go',
-          }
-        EOF
+        require('colorizer').setup {
+          ['*'] = {
+            names = false,
+            mode = 'background',
+          },
+          css = { css = true, css_fn = true, },
+          html = { names = true, },
+          '!c',
+          '!cpp',
+          '!erlang',
+          '!go',
+        }
       '';
     }
 
     {
       plugin = fterm-nvim;
+      type = "lua";
       config = ''
-        lua <<EOF
-          require('FTerm').setup {
-            border = 'rounded',
-          }
+        require('FTerm').setup {
+          border = 'rounded',
+        }
 
-          local map = vim.api.nvim_set_keymap
-          local opts = { noremap = true, silent = true }
+        local map = vim.api.nvim_set_keymap
+        local opts = { noremap = true, silent = true }
 
-          map('n', '<space>`', '<cmd>lua require("FTerm").toggle()<CR>', opts)
-          -- map('t', '<space>`', '<cmd>lua require("FTerm").toggle()<CR>', opts)
-        EOF
+        map('n', '<space>`', '<cmd>lua require("FTerm").toggle()<CR>', opts)
+        -- map('t', '<space>`', '<cmd>lua require("FTerm").toggle()<CR>', opts)
       '';
     }
   ]
