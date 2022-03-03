@@ -142,6 +142,9 @@ in
     # pkgs.pantheon.elementary-icon-theme
     pkgs.pantheon.elementary-music
 
+    # Music player
+    pkgs.tauon
+
     # Temporary
     pkgs.zoom-us
     pkgs.discord

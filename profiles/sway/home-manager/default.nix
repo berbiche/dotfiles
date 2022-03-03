@@ -88,5 +88,5 @@
   services.dunst.enable = false;
   services.sway-notification-center.enable = true;
 
-  home.packages = [ pkgs.flameshot ];
+  home.packages = [ pkgs.flameshot pkgs.wlogoutbar ];
 }

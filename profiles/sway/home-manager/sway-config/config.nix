@@ -39,7 +39,7 @@ let
     browser-private = "${firefox} --private-window";
     browser-work-profile = "${firefox} -P job";
     lock = "${pkgs.systemd}/bin/loginctl lock-session";
-    logout-menu = "${wlogout}";
+    logout-menu = "${wlogoutbar}";
     audiocontrol = "${pavucontrol}";
     #menu = "${nwggrid} -n 10 -fp -b 121212E0";
     #menu = "${pkgs.bash}/bin/bash -i -c '${xfce4-appfinder} --disable-server'";
@@ -87,6 +87,7 @@ let
     swaymsg = "${pkgs.sway}/bin/swaymsg";
     wl-paste = "${pkgs.wl-clipboard}/bin/wl-paste";
     # vvvv Requires my wlogout overlay
+    wlogoutbar = "${pkgs.wlogoutbar}/bin/wlogoutbar -x -p center -a middle -f -lcc ${lib.escapeShellArg lock}";
     wlogout = "${config.programs.wlogout.package}/bin/wlogout -p layer-shell";
     wofi = "${pkgs.wofi}/bin/wofi";
     xfce4-appfinder = "${pkgs.xfce.xfce4-appfinder}/bin/xfce4-appfinder";
