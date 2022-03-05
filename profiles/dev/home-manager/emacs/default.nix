@@ -44,7 +44,9 @@ lib.mkMerge [
       source = pkgs.applyPatches {
         name = "doom-emacs-source";
         src = inputs.doom-emacs-source;
-        patches = [ ./doom.d/disable_install_hooks.patch ];
+        # No longer necessary since https://github.com/hlissner/doom-emacs/commit/1c1ad3a8c8b669b6fa20b174b2a4c23afa85ec24
+        # Just pass "--no-hooks" when installing Doom Emacs
+        # patches = [ ./doom.d/disable_install_hooks.patch ];
       };
       force = true;
     };
