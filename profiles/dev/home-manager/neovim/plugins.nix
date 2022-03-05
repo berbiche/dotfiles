@@ -470,8 +470,8 @@ in
             local view = require('nvim-tree.view')
             local st = require('bufferline.state')
             tree.toggle()
-            if view.win_open() then
-              st.set_offset(31, 'FileTree')
+            if view.is_visible() then
+              st.set_offset(30, 'FileTree')
             else
               st.set_offset(0)
             end
