@@ -87,7 +87,7 @@ let
     swaymsg = "${pkgs.sway}/bin/swaymsg";
     wl-paste = "${pkgs.wl-clipboard}/bin/wl-paste";
     # vvvv Requires my wlogout overlay
-    wlogoutbar = "${pkgs.wlogoutbar}/bin/wlogoutbar -x -p center -a middle -f -lcc ${lib.escapeShellArg lock}";
+    wlogoutbar = "${pkgs.wlogoutbar}/bin/wlogoutbar -p center -a middle -f -lcc ${lib.escapeShellArg lock}";
     wlogout = "${config.programs.wlogout.package}/bin/wlogout -p layer-shell";
     wofi = "${pkgs.wofi}/bin/wofi";
     xfce4-appfinder = "${pkgs.xfce.xfce4-appfinder}/bin/xfce4-appfinder";

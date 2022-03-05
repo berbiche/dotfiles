@@ -15,8 +15,8 @@ final: prev: {
     src = fetchFromGitHub {
       repo = pname;
       owner = "berbiche";
-      rev = "de58c5b54400645c44ed229a75f5f0e7b708ed80";
-      hash = "sha256-a74slXWC0hPHl/Pbj3cbPmvQaT/plN5D4g/kLO+xyY8=";
+      rev = "561eab773a37e2791c59794da6b653a8c0577da7";
+      hash = "sha256-VYzyybzqMW+J+EUGPZz3+V9s6LWXrg4Z4x6PTkWsuXc=";
     };
 
     vendorSha256 = "sha256-eez6ZaYz7gNXBHaf2eUijQMuM9SFP/ZOmd1z1a5B/OI=";
