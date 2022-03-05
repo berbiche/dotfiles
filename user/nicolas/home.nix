@@ -23,6 +23,9 @@ in
   # my.theme.package = pkgs.materia-theme;
   # my.theme.light = "Materia-light-compact";
   # my.theme.dark = "Materia-dark-compact";
+  # my.theme.package = pkgs.adw-gtk3-theme;
+  # my.theme.light = "adw-gtk";
+  # my.theme.dark = "adw-gtk3-dark";
   my.theme.package = pkgs.orchis-theme;
   my.theme.light = "Orchis";
   my.theme.dark = "Orchis-dark";
@@ -31,10 +34,10 @@ in
   my.theme.cursor.size = 24;
   my.theme.cursor.package = pkgs.gnome.gnome-themes-extra;
 
-  # my.theme.icon.name = "Papirus";
-  # my.theme.icon.package = pkgs.papirus-icon-theme;
-  my.theme.icon.name = "Adwaita";
-  my.theme.icon.package = pkgs.gnome.adwaita-icon-theme;
+  my.theme.icon.name = "Papirus";
+  my.theme.icon.package = pkgs.papirus-icon-theme;
+  # my.theme.icon.name = "Adwaita";
+  # my.theme.icon.package = pkgs.gnome.adwaita-icon-theme;
 
   my.terminal.fontSize = 12.0;
   my.terminal.fontName = lib.mkMerge [
