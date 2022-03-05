@@ -49,6 +49,7 @@ let
     menu-rofi = "${pkgs.bash}/bin/bash -lc ${pkgs.writeShellScript "rofi" ''
       ${rofi} -show drun -modi drun,run,calc,emoji -display-drun 'Launch' -theme slate
     ''}";
+    menu-ulauncher = "${pkgs.bash}/bin/bash -lc ${pkgs.ulauncher}/bin/ulauncher-toggle";
 
     on-startup-shutdown = pkgs.runCommandLocal "sway-on-startup-shutdown" {
       src = pkgs.fetchFromGitHub {
@@ -140,7 +141,7 @@ let
     modifier = "Mod4";
     floating.modifier = "Mod4";
     # menu = binaries.menu-wofi;
-    menu = binaries.menu-rofi;
+    menu = binaries.menu-ulauncher;
 
     fonts = {
       names = [ "FontAwesome" "FontAwesome5Free" "Fira Sans" "DejaVu Sans Mono" ];
@@ -276,12 +277,17 @@ let
         { app_id = "lutris"; }
         { title = "^Zoom Cloud.*"; }
       ])
+      {
+        criteria.title = "^Zoom Cloud.*";
+        command = "inhibit_idle visible";
+      }
       (map (x: mkFloatingNoBorder { criteria = x; }) [
         { app_id = "^launcher$"; }
         { app_id = "xfce4-appfinder"; }
         { instance = "xfce4-appfinder"; }
         { app_id = "zenity"; }
         { app_id = "pdfarranger"; }
+        { app_id = "ulauncher"; }
       ])
       (mkFloatingNoBorder {
         criteria = { app_id = "blueman-manager"; };

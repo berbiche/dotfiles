@@ -41,6 +41,8 @@
     # and desktop files
     # ./wofi.nix
     ./rofi.nix
+    # Application runner
+    ./ulauncher.nix
 
     # Sway's lockscreen configuration
     ./swaylock.nix
