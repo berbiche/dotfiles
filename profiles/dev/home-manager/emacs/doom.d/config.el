@@ -1,5 +1,6 @@
 ;;; config.el -*- lexical-binding: t; no-byte-compile: t; -*-
 
+;;; Code:
 ;; themes are THE MOST important setting
 (require 'base16-theme)
 
@@ -31,6 +32,8 @@
 
 ;; Always softwrap
 (global-visual-line-mode t)
+(setq-default fill-column 80)
+(global-display-fill-column-indicator-mode)
 
 ;; Override line highlighting foreground
 (add-hook 'server-after-make-frame-hook
@@ -49,7 +52,7 @@
 (setq projectile-project-search-path '("~/dev/"))
 
 ;; Set notmuch backend to mbsync
-; (setq +notmuch-sync-backend 'mbsync)
+;; (setq +notmuch-sync-backend 'mbsync)
 
 ;; Make treemacs rename use a minibuffer
 (setq treemacs-read-string-input 'from-minibuffer)
@@ -79,7 +82,7 @@
                 compilation-mode-hook
                 minibuffer-mode-hook))
   (add-hook hook (lambda ()
-    (set (make-local-variable 'show-trailing-whitespace) nil))))
+                   (set (make-local-variable 'show-trailing-whitespace) nil))))
 
 ;; Lets drag stuff aroung using hjkl
 (map! :ne "C-S-k" #'drag-stuff-up)
@@ -92,25 +95,6 @@
 
 (map! :ne "SPC j g" #'dumb-jump-go)
 (map! :ne "SPC j b" #'dumb-jump-back)
-
-;; Display a frame à la vscode at the top for M-x other things
-(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center))
-      ivy-posframe-height-alist '((t . 10))
-      ivy-posframe-parameters '((internal-border-width . 5)))
-(setq ivy-posframe-border '((t (:background "#61BFFF"))))
-;; (setq ivy-posframe-width (max 100 (- (frame-width) 10)))
-(ivy-posframe-mode +1)
-
-;; This is also called for ivy-posframe's size change ...
-(add-to-list 'window-size-change-functions
-             (lambda (frame)
-               "Set ivy-posframe-width to a max width of 140 columns on frame resize."
-               (let* ((ivy-frame (buffer-local-value 'posframe--frame (get-buffer ivy-posframe-buffer)))
-                      (width (frame-width))
-                      ;; Don't leave space on the sides when there is less than 70 columns
-                      (min-width (max (min 70 width) (- width 10))))
-                 (when (not (equal ivy-frame frame))
-                   (setq ivy-posframe-width (min 140 min-width))))))
 
 ;; Don't push a new buffer when navigating with RETURN in dired
 ;; Doesn't work
@@ -139,4 +123,7 @@
 (use-package! vala-mode
   :defer t
   :mode "\\.vala\\'"
-  :hook (vala-mode . (lambda () (lsp))))
+  :hook ((vala-mode . (lambda () (lsp)))
+         (vala-mode . display-line-numbers-mode)))
+
+;;; config.el ends here
