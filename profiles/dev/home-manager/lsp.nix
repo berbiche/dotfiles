@@ -1,5 +1,8 @@
 { config, lib, pkgs, ... }:
 
+let
+  inherit (pkgs.stdenv.hostPlatform) isLinux isDarwin;
+in
 {
   # Of course, all of these packages can be overriden by direnv (envrc)
   home.packages = with pkgs; [
@@ -37,10 +40,12 @@
     cargo cargo-audit cargo-edit clippy
     rustfmt
     # Vala
-    vala-language-server
     # YAML
     yaml-language-server
     # JSON, HTML, CSS    (I only care about JSON)
     nodePackages.vscode-langservers-extracted
+  ]
+  ++ lib.optionals isLinux [
+    vala-language-server
   ];
 }

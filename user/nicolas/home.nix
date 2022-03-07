@@ -3,6 +3,9 @@
 let
   inherit (lib) mkIf mkDefault;
   inherit (pkgs.stdenv.hostPlatform) isLinux isDarwin;
+
+  dummyPackage = pkgs.runCommandLocal "dummy" { } "mkdir $out";
+  packageIfLinux = x: if isLinux then x else dummyPackage;
 in
 {
   my.identity = {
@@ -15,29 +18,16 @@ in
   # my.defaults.terminal = "${config.programs.kitty.package}/bin/kitty";
   my.defaults.file-explorer = mkIf isLinux "${pkgs.cinnamon.nemo}/bin/nemo";
 
-  # pkgs.numix-gtk-theme
-  # pkgs.yaru-theme
-  # my.theme.package = pkgs.arc-theme;
-  # my.theme.light = "Arc";
-  # my.theme.dark = "Arc-Dark";
-  # my.theme.package = pkgs.materia-theme;
-  # my.theme.light = "Materia-light-compact";
-  # my.theme.dark = "Materia-dark-compact";
-  # my.theme.package = pkgs.adw-gtk3-theme;
-  # my.theme.light = "adw-gtk";
-  # my.theme.dark = "adw-gtk3-dark";
-  my.theme.package = pkgs.orchis-theme;
   my.theme.light = "Orchis";
   my.theme.dark = "Orchis-dark";
+  my.theme.package = packageIfLinux pkgs.orchis-theme;
 
   my.theme.cursor.name = "Adwaita";
   my.theme.cursor.size = 24;
-  my.theme.cursor.package = pkgs.gnome.gnome-themes-extra;
+  my.theme.cursor.package = packageIfLinux pkgs.gnome.gnome-themes-extra;
 
   my.theme.icon.name = "Papirus";
-  my.theme.icon.package = pkgs.papirus-icon-theme;
-  # my.theme.icon.name = "Adwaita";
-  # my.theme.icon.package = pkgs.gnome.adwaita-icon-theme;
+  my.theme.icon.package = packageIfLinux pkgs.papirus-icon-theme;
 
   my.terminal.fontSize = 12.0;
   my.terminal.fontName = lib.mkMerge [
@@ -92,7 +82,7 @@ in
       "gtk-cursor-theme-size" = config.my.theme.cursor.size;
     };
   };
-  xsession.pointerCursor = {
+  xsession.pointerCursor = mkIf isLinux {
     package = config.my.theme.cursor.package;
     name = "${config.my.theme.cursor.name}";
     size = config.my.theme.cursor.size;
@@ -159,41 +149,49 @@ in
   ];
 
   # Copy the scripts folder
-  home.file."scripts".source = let
-    path = lib.makeBinPath (with pkgs; [
-      gawk gnused jq wget bc
-      pulseaudio # for pactl
-      pamixer # volume control
-      avizo # show a popup notification for the volume level
-      sway # for swaymsg
-      flameshot
-      wl-clipboard # wl-copy/wl-paste
-      fzf # menu
-      wofi # menu
-      xdg-user-dirs # for the screenshot tool
-      networkmanager # for nmcli
-      notify-send_sh # from my overlays
-      playerctl # to control mpris players
-      util-linux # flock
-    ]);
-  in mkIf isLinux "${
-    # For the patchShebang phase
-    pkgs.runCommandLocal "sway-scripts" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
-      mkdir -p "$out"/bin
-      cp --no-preserve=mode -T -r "${../scripts}" "$out"/_bin
-      chmod +x "$out"/_bin/*
-      for i in "$out"/_bin/*; do
-        makeWrapper "$i" "$out"/bin/"$(basename $i)" --prefix PATH : ${path}
-      done
-    ''
-  }/bin";
-
-  lib.my = mkIf isLinux {
-    # Instead of using the path in the nix store, return the relative path of the script in my configuration
-    # This makes it possible to update scripts without reloading my Sway configuration
-    getScript = name:
-      assert lib.assertMsg (builtins.pathExists (../scripts + "/${name}"))
-        "The specified script '${name}' does not exist in the 'scripts/' folder";
-      "${config.home.homeDirectory}/${config.home.file."scripts".target}/${name}";
+  home.file."scripts" = mkIf isLinux {
+    source = let
+      path = lib.makeBinPath (with pkgs; [
+        gawk gnused jq wget bc
+        pulseaudio # for pactl
+        pamixer # volume control
+        avizo # show a popup notification for the volume level
+        sway # for swaymsg
+        flameshot
+        wl-clipboard # wl-copy/wl-paste
+        fzf # menu
+        wofi # menu
+        xdg-user-dirs # for the screenshot tool
+        networkmanager # for nmcli
+        notify-send_sh # from my overlays
+        playerctl # to control mpris players
+        util-linux # flock
+      ]);
+    in "${
+      # For the patchShebang phase
+      pkgs.runCommandLocal "sway-scripts" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
+        mkdir -p "$out"/bin
+        cp --no-preserve=mode -T -r "${../scripts}" "$out"/_bin
+        chmod +x "$out"/_bin/*
+        for i in "$out"/_bin/*; do
+          makeWrapper "$i" "$out"/bin/"$(basename $i)" --prefix PATH : ${path}
+        done
+      ''
+    }/bin";
   };
+
+  lib.my = lib.mkMerge [
+    (mkIf isLinux {
+      # Instead of using the path in the nix store, return the relative path of the script in my configuration
+      # This makes it possible to update scripts without reloading my Sway configuration
+      getScript = name:
+        assert lib.assertMsg (builtins.pathExists (../scripts + "/${name}"))
+          "The specified script '${name}' does not exist in the 'scripts/' folder";
+        "${config.home.homeDirectory}/${config.home.file."scripts".target}/${name}";
+    })
+
+    (mkIf isDarwin {
+      getScript = throw "getScript: this function does not work on Darwin";
+    })
+  ];
 }
