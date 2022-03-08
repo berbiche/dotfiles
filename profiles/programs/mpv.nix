@@ -13,10 +13,10 @@ in
 
     config = {
       # Use hardware acceleration
-      hwdec = "vaapi";
+      hwdec = lib.mkIf isLinux "vaapi";
       vo = "gpu";
       hwdec-codecs = "all";
-      gpu-context = "wayland";
+      gpu-context = lib.mkIf isLinux "wayland";
       keep-open = true;
 
       script-opts="ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp";
