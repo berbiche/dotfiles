@@ -33,16 +33,28 @@ in {
         version = "0.31.0";
         sha256 = "sha256-PsddtpwaK070LFtkOIP4ddE/SUmHgfLZZozjyYQHsz0=";
       };
-      wakatime = (buildVs {
-        name = "vscode-wakatime";
-        publisher = "WakaTime";
-        version = "17.1.0";
-        sha256 = "sha256-/DfyYCZnyScvLmWLgatX1tL/3ndh3pz7FeDY/KxC+Jw=";
-      }).overrideAttrs (old: {
-        postInstall = old.postInstall or "" + ''
-            mkdir -p "$out/${old.installPrefix}/wakatime-cli"
-            ln -sT "${prev.wakatime}/bin/wakatime" "$out/${old.installPrefix}/wakatime-cli/wakatime-cli"
-          '';
+      pymakr = buildVs {
+        name = "Pymakr";
+        publisher = "pycom";
+        version = "1.1.17";
+        sha256 = "sha256-Ni60SaRssRpY4mDfU/pyATj2t/ZMHq7x8tuxAUFD6Xo=";
+      } // {
+        # Package builds a binary in $out at runtime...
+        meta.broken = true;
+      };
+      wakatime = let
+        # package = (buildVs {
+        #   name = "vscode-wakatime";
+        #   publisher = "WakaTime";
+        #   version = "17.1.0";
+        #   sha256 = "sha256-/DfyYCZnyScvLmWLgatX1tL/3ndh3pz7FeDY/KxC+Jw=";
+        # });
+        package = prev.vscode-extensions.WakaTime.vscode-wakatime;
+      in package.overrideAttrs (drv: {
+        postInstall = drv.postInstall or "" + ''
+          mkdir -p "$out/${drv.installPrefix}/wakatime-cli"
+          ln -sT "${prev.wakatime}/bin/wakatime" "$out/${drv.installPrefix}/wakatime-cli/wakatime-cli"
+        '';
       });
     };
   };
