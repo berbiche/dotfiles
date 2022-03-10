@@ -314,10 +314,13 @@ let
       (map (x: mkFloatingBorder { criteria = x; }) [
         { app_id = "org.kde.haruna"; }
       ])
-      {
-        criteria = { floating = ""; app_id = "firefox"; };
+      (map (x: {
+        criteria = x // { floating = ""; };
         command = "border none";
-      }
+      }) [
+        { app_id = "firefox"; }
+        { app_id = "chromium-browser"; }
+      ])
     ];
 
     bars = lib.mkForce [];
