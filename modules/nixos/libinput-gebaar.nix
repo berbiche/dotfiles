@@ -81,7 +81,7 @@ in
       wantedBy = [ "graphical.target" ];
 
       serviceConfig = rec {
-        Type = "forking";
+        Type = "simple";
         ExecStart = "${cfg.package}/bin/gebaard";
         ExecStartPre = pkgs.writeShellScript "gebaard-start-pre" ''
           ${pkgs.coreutils}/bin/ln -sv "${configFile}" "''${XDG_CONFIG_HOME}/gebaar/gebaard.toml"
