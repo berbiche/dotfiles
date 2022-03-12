@@ -177,5 +177,6 @@
 
   my.home = { config, lib, pkgs, ... }: {
     profiles.steam.enableProtonGE = true;
+    services.sway-notification-center.settings.positionX = "left";
   };
 }

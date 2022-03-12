@@ -3,8 +3,12 @@
 {
   services.sway-notification-center = {
     settings = {
-      positionX = "center";
+      positionX = lib.mkDefault "center";
       positionY = "top";
+      control-center-margin-top = 5;
+      control-center-margin-bottom = 5;
+      control-center-margin-right = 5;
+      control-center-margin-left = 5;
       timeout = 10;
       timeout-low = 10;
       timeout-critical = 10;
