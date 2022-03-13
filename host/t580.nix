@@ -138,8 +138,24 @@
   services.thermald.enable = true;
 
   networking.firewall.allowPing = true;
-  #networking.firewall.allowedTCPPorts = [ 8000 ];
-  networking.firewall.allowedTCPPorts = [ 9000 9001 9002 ];
+  networking.firewall.allowedTCPPorts = [
+    # Can't remember
+    1716
+    # Chromium chromecast (port 8010)
+    # https://github.com/NixOS/nixpkgs/issues/49630
+    8010
+    # Can't remember
+    9000 9001 9002
+    # Can't remember
+    21027
+    # Spotify
+    57621 57622
+  ];
+  networking.firewall.allowedUDPPorts = [
+    # Spotify
+    57621 57622
+  ];
+
 
   hardware.opengl = {
     enable = true;
