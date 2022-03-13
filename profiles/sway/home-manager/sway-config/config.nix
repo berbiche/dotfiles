@@ -207,6 +207,7 @@ let
         mode = "3840x2160@60Hz";
         scale_filter = "smart";
         scale = "2";
+        bg = "${imagePath} fill";
       };
     };
 
