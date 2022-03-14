@@ -183,7 +183,7 @@ lib.mkMerge [
         line-numbers = true;
         side-by-side = false;
         whitespace-error-style = "22 reverse";
-        syntax-theme = "ansi-dark";
+        syntax-theme = "ansi";
       };
     };
   }

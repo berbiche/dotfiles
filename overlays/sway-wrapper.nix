@@ -3,6 +3,14 @@
   to the systemd log using systemd-cat
 */
 final: prev: {
+  sway-unwrapped = prev.sway-unwrapped.overrideAttrs (drv: {
+    src = prev.fetchFromGitHub {
+      owner = "swaywm";
+      repo = "sway";
+      rev = "68a3c06bb6043919b14f810a63a8a7c0a8deb202";
+      hash = "sha256-GJBMUMtvBqBOnWuI3xmX61nag1qRJPkA4F5aYo5Hf2A=";
+    };
+  });
   sway = prev.lib.flip prev.callPackage { } (
     { lib
     , sway-unwrapped, systemd
