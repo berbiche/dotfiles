@@ -3,6 +3,14 @@
 let
   inherit (pkgs.stdenv.targetPlatform) isDarwin isLinux;
 
+  sessionVariables = {
+    # Fix Firefox. See <https://mastransky.wordpress.com/2020/03/16/wayland-x11-how-to-run-firefox-in-mixed-environment/>
+    MOZ_DBUS_REMOTE = "1";
+    MOZ_ENABLE_WAYLAND = "1";
+    MOZ_USE_XINPUT2 = "1";
+    MOZ_LOG = "PlatformDecoderModule:5";
+  };
+
   wrappedFirefox = pkgs.firefox-beta-bin.override {
     desktopName = "Firefox";
     icon = "firefox";
@@ -69,6 +77,11 @@ let
       "media.ffvpx.enabled" = false;
       "media.hardware-video-decoding.enabled" = true;
 
+      # FIXME(2022-03-15): firefox RDD
+      # The RDD process is not compatible with the NixOS
+      # paths for the VA-API drivers at the moment
+      "media.rdd-process.enabled" = false;
+
       # Allow websites to output to a specific audio device
       # Leaks available audio devices (fingerprinting)
       "media.setsinkid.enabled" = true;
@@ -110,12 +123,8 @@ let
       "nglayout.initialpaint.delay" = 400;
 
       # Acceleration settings
-      # Temporarily disable (2021-10-09)
       "gfx.webrender.all" = true;
       # "layers.acceleration.force-enabled" = true;
-
-      # Fix clipboard hanging with drag-n-drop
-      "widget.wayland.async-clipboard.enabled" = true;
 
       # Extension related settings
       "extensions.ui.dictionary.hidden" = false;
@@ -214,11 +223,13 @@ let
   };
 in
 lib.mkIf isLinux {
-  xdg.desktopEntries = lib.mkIf isLinux {
+  xdg.desktopEntries = let
+    variables = lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "${n}=${v}") sessionVariables);
+  in {
     # Wrapped firefox desktop application
     firefox = {
       name = "Firefox";
-      exec = "/usr/bin/env MOZ_DBUS_REMOTE=1 MOZ_ENABLE_WAYLAND=1 MOZ_USE_XINPUT2=1 firefox %u";
+      exec = "/usr/bin/env ${variables} firefox %u";
       categories = [ "Application" "Network" "WebBrowser" ];
       icon = "firefox";
       genericName = "Web Browser";
@@ -226,7 +237,7 @@ lib.mkIf isLinux {
     };
     thunderbird = {
       name = "Thunderbird";
-      exec = "/usr/bin/env MOZ_DBUS_REMOTE=1 MOZ_ENABLE_WAYLAND=1 MOZ_USE_XINPUT2=1 thunderbird %U";
+      exec = "/usr/bin/env ${variables} thunderbird %U";
       categories = [ "Network" "WebBrowser" ];
       icon = "thunderbird";
       genericName = "Web Browser";
@@ -234,12 +245,7 @@ lib.mkIf isLinux {
     };
   };
 
-  # Fix Firefox. See <https://mastransky.wordpress.com/2020/03/16/wayland-x11-how-to-run-firefox-in-mixed-environment/>
-  home.sessionVariables = {
-    MOZ_DBUS_REMOTE = "1";
-    MOZ_ENABLE_WAYLAND = "1";
-    MOZ_USE_XINPUT2 = "1";
-  };
+  home.sessionVariables = sessionVariables;
 
   programs.firefox = {
     enable = true;
