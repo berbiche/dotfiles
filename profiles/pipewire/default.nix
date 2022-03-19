@@ -14,97 +14,14 @@ let
   };
 in
 {
+  imports = [
+    ./loopback.nix
+    ./lowlatency.nix
+  ];
+
   options.profiles.pipewire.enable = mkEnableOption "pipewire replacement of Pulseaudio";
-  options.profiles.pipewire.enableLowLatency = mkEnableOption "low latency configuration for Pipewire";
-  options.profiles.pipewire.loopbackTargets = mkOption {
-    type = types.listOf types.str;
-    default = [ ];
-    description = "Loopback targets for the main primary output";
-  };
 
   config = mkMerge [
-    (mkIf (cfg.enable && cfg.loopbackTargets != []) {
-      # Pipewire 0.3.44 has a bug where muting a loopback device
-      # does not mute the audio going to the sub-devices ("slaves").
-      # I am forced to use the module-combine-sink because it DOES NOT have this bug.
-      # `pw-loopback` does not have this bug either...
-      services.pipewire.config.pipewire-pulse."context.exec" =
-        (defaultPipewireJson."context.exec" or [ ])
-        ++ [
-          {
-            path = "/bin/sh";
-            args = pkgs.writeShellScript "combine-sink" ''
-              ${pkgs.pulseaudio}/bin/pactl load-module module-combine-sink sink_name=combine sink_properties=device.description='Combined Output' format=s16le rate=48000 channels=2 channel_map=front-left,front-right slaves=${escapeShellArg (concatStringsSep "," cfg.loopbackTargets)}
-            '';
-          }
-        ];
-    })
-    (mkIf (cfg.enable && cfg.enableLowLatency) {
-      services.pipewire.config.pipewire = {
-        "properties" = {
-          "default.clock.rate" = 48000;
-          "default.clock.quantum" = 1024;
-          "default.clock.min-quantum" = 32;
-          # Can't be set too low with my devices unfortunately
-          "default.clock.max-quantum" = 8192;
-        };
-        "context.modules" = [
-          {
-            name = "libpipewire-module-rtkit";
-            args = {
-              "nice.level" = -15;
-              "rt.prio" = 88;
-              "rt.time.soft" = 200000;
-              "rt.time.hard" = 200000;
-            };
-            flags = [ "ifexists" "nofail" ];
-          }
-        ]
-        # Skip the rtkit module since I replace its configuration
-        ++ builtins.filter (x: x.name != "libpipewire-module-rtkit") (defaultPipewireJson."context.modules" or []);
-      };
-      services.pipewire.config.pipewire-pulse = {
-        "context.properites"."log.level" = logLevel.DEBUG;
-        "stream.properties" = {
-          # "node.latency" = "32/48000";
-          "resample.quality" = 10;
-        };
-        "context.modules" = [
-          {
-            name = "libpipewire-module-rtkit";
-            args = {
-              "nice.level" = -15;
-              "rt.prio" = 88;
-              "rt.time.soft" = 200000;
-              "rt.time.hard" = 200000;
-            };
-            flags = [ "ifexists" "nofail" ];
-          }
-        ]
-        # Skip the rtkit module and the protocol-pulse module since I replace their configuration
-        ++ builtins.filter
-          (x: x.name != "libpipewire-module-rtkit" && x.name != "libpipewire-module-protocol-pulse")
-          (defaultPipewirePulseJson."context.modules" or [])
-        ++ [
-          {
-            name = "libpipewire-module-protocol-pulse";
-            args = {
-              "pulse.min.req" = "32/48000";
-              "pulse.default.req" = "32/48000";
-              "pulse.max.req" = "4096/48000";
-              "pulse.default.frag" = "96000/48000";
-              "pulse.max.frag" = "96000/48000";
-              "pulse.min.quantum" = "32/48000";
-              "pulse.max.quantum" = "8192/48000";
-              "server.address" = [ "unix:native" ];
-              "vm.overrides" = {
-                "pulse.max.quantum" = "8192/48000";
-              };
-            };
-          }
-        ];
-      };
-    })
     (mkIf cfg.enable {
       sound.enable = false;
       hardware.pulseaudio.enable = false;
@@ -116,6 +33,23 @@ in
         alsa.support32Bit = true;
         pulse.enable = true;
         jack.enable = true;
+      };
+
+      # Fix a bug with Discord
+      # See https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/2197
+      # and https://www.reddit.com/r/archlinux/comments/t45chj/discord_pipewire_no_notification_sounds/
+      services.pipewire.config.pipewire-pulse = {
+        "pulse.rules" = defaultPipewirePulseJson."pulse.rules" or [ ] ++ [
+          {
+            matches = [
+              { "application.process.binary" = "~.+Discord.+"; }
+              # { "application.process.binary" = ".Discord-wrapped"; }
+            ];
+            actions.update-props = {
+              "pulse.min.quantum" = "1024/48000";
+            };
+          }
+        ];
       };
 
       services.pipewire.config.pipewire = {
