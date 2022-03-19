@@ -8,7 +8,7 @@ let
     MOZ_DBUS_REMOTE = "1";
     MOZ_ENABLE_WAYLAND = "1";
     MOZ_USE_XINPUT2 = "1";
-    MOZ_LOG = "PlatformDecoderModule:5";
+    # MOZ_LOG = "PlatformDecoderModule:5";
   };
 
   wrappedFirefox = pkgs.firefox-beta-bin.override {

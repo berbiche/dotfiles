@@ -55,15 +55,15 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "alebastr";
         repo = "sway-systemd";
-        rev = "0e87499359f2d5258f369531f88cc225ebd7cf48";
-        hash = "sha256-HCNYWrEIqgnVkIEjcWkTmO34v0QwqujIlpkfeYgqBjQ=";
+        rev = "f5feb1ebed993120d1c2525cb7f6905f5012ac12";
+        hash = "sha256-S10x6A1RaD1msIw9pWXpBHFKKyWfsaEGbAZo2SU3CtI=";
       };
       nativeBuildInputs = [ pkgs.makeWrapper ];
+      buildInputs = [ pkgs.python3 ];
       BINS = lib.makeBinPath [ pkgs.systemd pkgs.dbus pkgs.sway ];
     } ''
       mkdir -p $out/bin
-      install -Dm755 $src/src/session.sh $out/bin/session.sh
-      # echo 'systemctl --user stop wayland-session.target' >> $out/bin/session.sh
+      install -Dm755 $src/src/{session.sh,assign-cgroups.py} $out/bin
       wrapProgram $out/bin/session.sh --set PATH "$BINS"
     '';
 
@@ -227,19 +227,6 @@ let
       { command = binaries.element-desktop; }
       { command = binaries.spotify; }
       { command = binaries.signal-desktop; }
-      {
-        always = true;
-        command = let
-          gsettings = "${pkgs.glib.bin}/bin/gsettings";
-          gnome-schema = "org.gnome.desktop.interface";
-        in toString (pkgs.writeShellScript "sway-gsettings" ''
-          ## Commented out because this doesn't follow the day/night theme logic
-          # ${gsettings} set "${gnome-schema}" gtk-theme ${config.gtk.theme.name}
-          ${gsettings} set "${gnome-schema}" icon-theme ${config.gtk.iconTheme.name}
-          ${gsettings} set "${gnome-schema}" cursor-theme ${config.xsession.pointerCursor.name}
-          ${gsettings} set "${gnome-schema}" cursor-size ${toString config.xsession.pointerCursor.size}
-        '');
-      }
       # { command = binaries.bitwarden; }
     ];
 

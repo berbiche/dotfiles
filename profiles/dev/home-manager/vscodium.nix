@@ -59,6 +59,7 @@ let
     ms-vsliveshare.vsliveshare
     ms-python.python
     llvm-org.lldb-vscode
+    llvm-vs-code-extensions.vscode-clangd
   ]
   ++ lib.optional (osConfig.profiles.dev.wakatime.enable or false) berbiche.wakatime;
 
@@ -114,6 +115,9 @@ in
 
       # Language settings
       "[nix]"."editor.tabSize" = 2;
+      "[c]" = {
+        "editor.defaultFormatter" = "llvm-vs-code-extensions.vscode-clangd";
+      };
     };
 
     keybindings = [
