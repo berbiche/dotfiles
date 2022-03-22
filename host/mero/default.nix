@@ -183,10 +183,14 @@
     21027
     # Spotify
     57621 57622
+    # torrents
+    58145
   ];
   networking.firewall.allowedUDPPorts = [
     # Spotify
     57621 57622
+    # torrents
+    58145
   ];
 
   services.openssh.enable = true;
