@@ -35,11 +35,12 @@
 (setq-default fill-column 80)
 (global-display-fill-column-indicator-mode)
 
-;; Override line highlighting foreground
-(add-hook 'server-after-make-frame-hook
-          (lambda ()
-            (set-face-foreground 'highlight 'unspecified)))
-(set-face-foreground 'highlight 'unspecified)
+(defun disable-highlight-annoyances ()
+    "Disables the annoying underline and foreground color change when a line is highlighted"
+    (interactive)
+    (set-face-attribute 'highlight nil :underline nil :foreground 'unspecified))
+(add-hook 'server-after-make-frame-hook 'disable-highlight-annoyances)
+(disable-highlight-annoyances)
 
 ;; Disable clipboard manager hanging for a few seconds on Wayland
 (setq x-select-enable-clipboard-manager nil)
