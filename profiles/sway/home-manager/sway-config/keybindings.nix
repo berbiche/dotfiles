@@ -61,6 +61,8 @@ makeNoRepeat (defaultKeybindings // {
 
   # Toggle laptop output
   "--locked ${modifier}+Shift+F12" = "output ${OUTPUT-LAPTOP} toggle";
+  # Toggle DPMS on primary output
+  "--locked ${modifier}+F12" = "output DP-1 dpms toggle";
 
   # Disable defaults (either with a noop or unbind)
   "${modifier}+Shift+e" = null;
