@@ -5,11 +5,13 @@
     ./homebrew.nix
   ];
 
+  environment.shells = [ pkgs.fish pkgs.zsh ];
+
   # Fix xdg.{dataHome,cacheHome} being empty in home-manager
   users.users.${config.my.username} = {
     home = "/Users/${config.my.username}";
     isHidden = false;
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
   };
 
   system.defaults.finder = {
