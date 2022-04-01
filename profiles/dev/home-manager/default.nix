@@ -39,6 +39,7 @@ in
     rsync # copy files localy and remotely
     nmap # scanner for CTF and my local network
     netcat-gnu # better than telnet
+    socat # unix socket connections, etc.
     tcpdump # see packet flows on interfaces to debug stuff
     dnsutils # dns lookups
     mtr # interactive traceroute that updates continuously

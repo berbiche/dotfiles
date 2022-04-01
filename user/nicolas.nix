@@ -10,10 +10,11 @@ lib.mkMerge [
 
   (lib.optionalAttrs isLinux {
     programs.zsh.enable = true; # required if `users.shell == zsh`
+    programs.fish.enable = true;
     users.users.${username} = {
       createHome = true;
       isNormalUser = true;
-      shell = pkgs.zsh;
+      shell = pkgs.fish;
       uid = 1000;
       group = username;
       home = "/home/${username}";

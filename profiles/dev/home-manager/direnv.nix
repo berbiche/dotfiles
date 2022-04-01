@@ -7,7 +7,6 @@
   programs.direnv = {
     enable = true;
     enableZshIntegration = true;
-    # enableFishIntegration = true;
     # I don't want direnv to be loaded in shitty `nix-shell`s
     enableBashIntegration = false;
     nix-direnv.enable = true;
