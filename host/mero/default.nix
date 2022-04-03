@@ -7,8 +7,10 @@
     obs
     steam
     wireguard
+    gnome
   ] ++ [
     ./openrgb.nix
+    ./xserver.nix
   ];
 
   environment.systemPackages = with pkgs; [];
@@ -34,6 +36,8 @@
 
   profiles.steam.wine.enable = true;
 
+  profiles.sway.nvidia.enable = true;
+
   sops.defaultSopsFile = rootPath + "/secrets/merovingian.yaml";
 
   boot.kernelParams = [ "amd_iommu=pt" "iommu=soft" ]
@@ -48,14 +52,14 @@
   #boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Disable HDMI/DisplayPort audio with amdgpu
-  environment.etc."modprobe.d/custom-amdgpu.conf".text = ''
-    options amdgpu audio=0
-    # 10-bit colors lack hw accel on Chromium, and glitches with Mesa/Vulkan
-    # options amdgpu deep_color=1
+  # environment.etc."modprobe.d/custom-amdgpu.conf".text = ''
+  #   options amdgpu audio=0
+  #   # 10-bit colors lack hw accel on Chromium, and glitches with Mesa/Vulkan
+  #   # options amdgpu deep_color=1
 
-    # DSC still not working with my samsung monitor
-    #options amdgpu dc=0
-  '';
+  #   # DSC still not working with my samsung monitor
+  #   #options amdgpu dc=0
+  # '';
 
   # https://www/spinics.net/lists/usb/msg02644.html
   # Hopefully this will fix usb issues with my nested usb docks (4 level of nesting)
@@ -158,7 +162,8 @@
   location.provider = "manual";
 
 
-  services.xserver.videoDrivers = [ "amdgpu" ];
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia.modesetting.enable = true;
   hardware.cpu.amd.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
   hardware.opengl.enable = true;
@@ -167,9 +172,9 @@
   services.resolved.enable = lib.mkForce false;
 
   hardware.opengl.extraPackages = with pkgs; [
-    rocm-opencl-icd
-    rocm-runtime
-    amdvlk
+    # rocm-opencl-icd
+    # rocm-runtime
+    # amdvlk
   ];
 
   networking.firewall.allowPing = true;
@@ -210,7 +215,7 @@
   hardware.xpadneo.enable = true;
 
   my.home = { config, lib, pkgs, ... }: {
-    home.packages = [ pkgs.glpaper pkgs.wf-recorder ];
+    home.packages = [ pkgs.glpaper pkgs.wf-recorder pkgs.xlockmore ];
 
     profiles.steam.enableProtonGE = true;
   };

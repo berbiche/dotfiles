@@ -9,6 +9,8 @@
     ./screenshare.nix
 
     # ./gnome-session.nix
+
+    ./options.nix
   ];
 
   my.home = { imports = [ ./home-manager ]; };
