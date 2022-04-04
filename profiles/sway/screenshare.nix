@@ -1,10 +1,14 @@
 { config, lib, pkgs, ... }:
 
+let
+  gnomeDisabled = !config.services.xserver.desktopManager.gnome.enable;
+in
 {
   xdg.portal = {
     enable = true;
-    extraPortals = with pkgs; [ xdg-desktop-portal-wlr xdg-desktop-portal-gtk ];
-    gtkUsePortal = true;
+    extraPortals = with pkgs; [ xdg-desktop-portal-wlr ]
+      ++ lib.optional gnomeDisabled [ xdg-desktop-portal-gtk ];
+    gtkUsePortal = lib.mkIf gnomeDisabled true;
   };
   services.pipewire.enable = true;
 
