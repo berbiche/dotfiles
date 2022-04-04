@@ -10,10 +10,10 @@ in
 
   config = mkMerge [
     (mkIf cfg.nvidia.enable {
-      programs.sway.extraOptions = [ "--unsupported-gpu" ];
+      programs.sway.extraOptions = [ " --unsupported-gpu " ];
 
       programs.sway.extraSessionCommands = mkBefore ''
-        export WLR_NO_HARDWARE_CURSOR=1
+        export WLR_NO_HARDWARE_CURSORS=1
       '';
     })
   ];

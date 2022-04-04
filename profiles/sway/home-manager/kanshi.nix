@@ -15,7 +15,7 @@ let
     laptop = { criteria = "eDP-1"; };
     g9 = {
       criteria = "Samsung Electric Company LC49G95T H4ZN801309";
-      mode = "5120x1440@60Hz";
+      mode = "5120x1440@119.999Hz";
     };
     g9-dsc = g9 // {
       mode = "5120x1440@239.761Hz";
@@ -27,8 +27,10 @@ let
   genDisableLaptop = lib.flip lib.mergeAttrsConcatenateValues { outputs = [ disable-laptop ]; };
 
   configs = {
-    g9-dsc.outputs = [ displays.g9-dsc ];
-    home-dell-lone.outputs = [ displays.dell-3 ];
+    # nix attribute sets are ordered lexicographically
+    # "000-g9-dsc".outputs = [ displays.g9-dsc ];
+    "001-g9".outputs = [ displays.g9 ];
+    "002-home-dell-lone".outputs = [ displays.dell-3 ];
   };
 in
 {
