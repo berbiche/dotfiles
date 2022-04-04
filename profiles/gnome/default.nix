@@ -1,13 +1,13 @@
 { config, pkgs, ... }:
 
 {
-  services.xserver.desktopManager.gnome3.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
 
   environment.systemPackages = with pkgs; [
-    gnome3.dconf
-    gnome3.gnome-desktop
-    gnome3.gnome-session
-    gnome3.gnome-tweaks
+    dconf
+    # gnome.gnome-desktop
+    gnome.gnome-session
+    gnome.gnome-tweaks
     # To install Gnome extensions using the browser extension
     chrome-gnome-shell
     gnomeExtensions.appindicator
@@ -30,31 +30,31 @@
     # Screenshot tool
     flameshot
     evince
-    gnome3.eog
+    gnome.eog
   ];
 
-  environment.gnome3.excludePackages = with pkgs; [
+  environment.gnome.excludePackages = with pkgs; [
     gnome-usage
-    gnome3.accerciser
+    gnome.accerciser
     evolution
-    gnome3.cheese
+    gnome.cheese
     #gnome3.gedit
-    gnome3.gnome-calculator
+    gnome.gnome-calculator
     #gnome3.gnome-calendar
-    gnome3.gnome-clocks
-    gnome3.gnome-contacts
-    gnome3.gnome-disk-utility
-    gnome3.gnome-getting-started-docs
-    gnome3.gnome-logs
-    gnome3.gnome-music
-    gnome3.gnome-online-accounts
-    gnome3.gnome-power-manager
-    gnome3.gnome-software
-    gnome3.gnome-system-monitor
-    gnome3.gnome-todo
-    gnome3.gnome-user-docs
-    gnome3.vinagre
-    gnome3.yelp
-    gnome3.yelp-tools
+    gnome.gnome-clocks
+    gnome.gnome-contacts
+    gnome.gnome-disk-utility
+    gnome-tour
+    gnome.gnome-logs
+    gnome.gnome-music
+    gnome-online-accounts
+    gnome.gnome-power-manager
+    gnome.gnome-software
+    gnome.gnome-system-monitor
+    gnome.gnome-todo
+    gnome-user-docs
+    gnome.vinagre
+    gnome.yelp
+    yelp-tools
   ];
 }
