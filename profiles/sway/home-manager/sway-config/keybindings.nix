@@ -67,9 +67,6 @@ makeNoRepeat (defaultKeybindings // {
   # Disable defaults (either with a noop or unbind)
   "${modifier}+Shift+e" = null;
 
-  # Pasting (might not work)
-  "--release Shift+Insert" = exec "${binaries.wl-paste} --primary";
-
   # Volume stuff
   "--locked XF86AudioRaiseVolume"  = makeRepeatable (exec "${getScript "volume.sh"} 'increase'");
   "--locked XF86AudioLowerVolume"  = makeRepeatable (exec "${getScript "volume.sh"} 'decrease'");

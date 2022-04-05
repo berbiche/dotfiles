@@ -63,9 +63,10 @@ let
       kinect = mkProfile [ ./kinect ];
       obs = mkProfile [ ./obs ];
       steam = mkProfile [ ./steam ];
-      sway = mkProfile [ ./sway ];
+      sway = mkProfile [ ./i3-sway ./sway ];
       wireguard = mkProfile [ ./wireguard ];
       xfce = mkProfile [ ./xfce ];
+      i3 = mkProfile [ ./i3-sway ./i3 ];
       # Pseudo profiles
       default-linux = mkProfile (with self; [ core-linux dev graphical-linux programs sway ctf secrets ]);
     }

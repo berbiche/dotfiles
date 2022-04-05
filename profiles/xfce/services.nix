@@ -23,11 +23,6 @@
       Install.WantedBy = mkForce [ "x11-session.target" ];
     };
 
-    services.flameshot.enable = false;
-    systemd.user.services.flameshot = mkIf config.services.flameshot.enable {
-      Install.WantedBy = mkForce [ "x11-session.target" ];
-    };
-
     systemd.user.services.xfce4-notifyd = {
       Unit = {
         Description = "XFCE notification service";

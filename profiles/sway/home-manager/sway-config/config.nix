@@ -94,20 +94,7 @@ let
     xfce4-appfinder = "${pkgs.xfce.xfce4-appfinder}/bin/xfce4-appfinder";
   };
 
-  # Number at the start is used for ordering
-  # https://github.com/Alexays/Waybar/blob/f233d27b782c04ef128e3d71ec32a0b2ce02df39/src/modules/sway/workspaces.cpp#L351-L357
-  workspaces = {
-    WS1 = "1:";      # browsing
-    WS2 = "2:";      # school
-    WS3 = "3:";      # dev
-    WS4 = "4:";      # sysadmin
-    WS5 = "5:";      # gaming
-    WS6 = "6:";      # movie
-    WS7 = "7:";      # social
-    WS8 = "8";        # scratchpad
-    WS9 = "9";        # scratchpad
-    WS10 = "10";      # scratchpad
-  };
+  inherit (config.profiles.i3-sway) workspaces;
 
   extraConfig = with workspaces; let
     makeCommand = (i: x: "exec_always ${binaries.swaymsg} rename workspace number ${toString i} to '${x}'");
@@ -138,48 +125,13 @@ let
 
   swayConfig = with workspaces; {
     inherit (binaries) terminal;
-    modifier = "Mod4";
-    floating.modifier = "Mod4";
+
     # menu = binaries.menu-wofi;
     menu = binaries.menu-ulauncher;
 
     fonts = {
       names = [ "FontAwesome" "FontAwesome5Free" "Fira Sans" "DejaVu Sans Mono" ];
       size = 11.0;
-    };
-
-    colors = let
-      darkblue = "#08052b";
-      lightblue = "#5294e2";
-      urgrentred = "#e53935";
-      white = "#ffffff";
-      black = "#000000";
-      darkgrey = "#373c4a";
-      grey = "#b0b5bd";
-      mediumgrey = "#8b8b8b";
-      yellowbrown = "#e1b700";
-    in rec {
-      focused = {
-        border = lightblue;
-        background = darkblue;
-        text = white;
-        indicator = lightblue;
-        childBorder = mediumgrey;
-      };
-      focusedInactive = focused // {
-        border = darkblue;
-        text = grey;
-        childBorder = black;
-      };
-      unfocused = focusedInactive // {
-        border = darkgrey;
-        childBorder = darkgrey;
-      };
-      urgent = focused // {
-        border = urgrentred;
-        background = urgrentred;
-        childBorder = yellowbrown;
-      };
     };
 
     focus.newWindow = "smart";

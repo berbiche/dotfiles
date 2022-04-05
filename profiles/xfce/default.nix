@@ -9,7 +9,6 @@
     ./autorandr.nix
     ./picom.nix
     ./services.nix
-    ./i3.nix
   ];
 
   services.xserver.desktopManager.xfce = {
