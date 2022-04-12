@@ -3,8 +3,9 @@ final: prev: {
     src = prev.fetchFromGitHub {
       owner = "misterdanb";
       repo = "avizo";
-      rev = "d5c416aa7ac46660cd943f01ecfab6e29cb5e8c3";
-      hash = "sha256-BRtdCOBFsKkJif/AlnF7N9ZDcmA+878M9lDQld+SAgo=";
+      # berbiche:basic-x11-support
+      rev = "61d220b6ad48f77cffe7bca0dde8605596583516";
+      hash = "sha256-+el6wqBIKKeIYI1OuVyod4vt676Hh6eC5tGAuY+6FrY=";
     };
     patches = [ ];
   });
