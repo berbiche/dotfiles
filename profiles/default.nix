@@ -56,10 +56,8 @@ let
     }
     // optionalAttrs isLinux {
       core-linux = mkProfile [ ./core-linux ./pipewire ];
-      email = mkProfile [ ./email ];
       gnome = mkProfile [ ./gnome ];
       graphical-linux = mkProfile [ ./graphical-linux ];
-      kde = mkProfile [ ./kde ];
       kinect = mkProfile [ ./kinect ];
       obs = mkProfile [ ./obs ];
       steam = mkProfile [ ./steam ];
@@ -71,7 +69,6 @@ let
     }
     // optionalAttrs isDarwin {
       core-darwin = mkProfile [ ./core-darwin ];
-      yabai = mkProfile [ ./yabai ];
     };
 
   profiles' = fix profiles;
