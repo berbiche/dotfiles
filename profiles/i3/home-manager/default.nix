@@ -6,6 +6,9 @@
     ./keybindings.nix
     ./modes.nix
     ./binaries.nix
+    ./services.nix
+    ./picom.nix
+    ./polybar.nix
   ];
 
   options.profiles.i3.binaries = lib.mkOption {
@@ -13,7 +16,22 @@
   };
 
   config = {
-    home.packages = [ pkgs.playerctl ];
+    home.packages = [
+      pkgs.xclip
+      pkgs.lightlocker
+    ];
+
+    xsession.enable = true;
+
+    systemd.user.targets.x11-session = {
+      Unit = {
+        Description = "X11 compositor session";
+        Documentation = [ "man:systemd.special(7)" ];
+        BindsTo = [ "graphical-session.target" ];
+        Wants = [ "graphical-session-pre.target" ];
+        After = [ "graphical-session-pre.target" ];
+      };
+    };
 
     xsession.windowManager.i3 = {
       enable = true;

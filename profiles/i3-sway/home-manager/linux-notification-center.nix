@@ -1,15 +1,12 @@
-{ config, inputs, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
-  mod = config.wayland.windowManager.sway.config.modifier;
-
   toggle-notification-center = pkgs.writeScript "toggle-deadd" ''
     ${pkgs.systemd}/bin/systemctl --user kill -s USR1 deadd-notification-center
   '';
 in
 {
   programs.deadd-notification-center = {
-    enable = true;
     systemd.enable = true;
     # package = pkgs.my-nur.deadd-notification-center;
     settings = {
@@ -69,26 +66,16 @@ in
     '';
   };
 
-  systemd.user.services.deadd-notification-center = {
+  systemd.user.services.deadd-notification-center = lib.mkIf config.programs.deadd-notification-center.enable {
     # Force running as an XWayland client since I don't need to position
     # the popups manually and that it works fine
+    # ConditionEnvironment = [ "!XDG_CURRENT_DESKTOP=sway" ];
     Service.UnsetEnvironment = [ "WAYLAND_DISPLAY" ];
-    Install.WantedBy = lib.mkForce [ "sway-session.target" ];
+    # Install.WantedBy = lib.mkForce [ "sway-session.target" ];
   };
 
 
-  wayland.windowManager.sway.config = {
-    # window.commands = [{
-    #   criteria = { app_id = "deadd-notification-center"; };
-    #   command = lib.concatStringsSep "; " [
-    #     "no_focus"
-    #     "floating enable"
-    #     "border none"
-    #     "exec ${move-to-corner}"
-    #   ];
-    # }];
-    keybindings = {
-      "--no-warn --no-repeat ${mod}+a" = "exec ${toggle-notification-center}";
-    };
+  xsession.windowManager.i3.config.keybindings = {
+    "${config.profiles.i3-sway.modifier}+a" = "exec ${toggle-notification-center}";
   };
 }

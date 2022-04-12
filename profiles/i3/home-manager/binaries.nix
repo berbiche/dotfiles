@@ -16,12 +16,13 @@ in
     launcher = menu-ulauncher;
     menu = menu-ulauncher;
     logout = "${pkgs.xfce.xfce4-session}/bin/xfce4-session-logout";
-    panel = "${pkgs.xfce.xfce4-panel}/bin/xfce4-panel";
     locker = "${pkgs.lightlocker}/bin/light-locker-command -l";
     screenshot = "${getScript "screenshot.sh"}";
     volume = "${getScript "volume.sh"}";
 
     menu-ulauncher = "${pkgs.bash}/bin/bash -lc ${pkgs.ulauncher}/bin/ulauncher-toggle";
+
+    light-locker = "${pkgs.lightlocker}/bin/light-locker --idle-hint --lock-on-suspend --lock-after-screensaver=5 --late-locking";
 
     # Things used by the default commands above (or directly)
     alacritty = "${pkgs.alacritty}/bin/alacritty";

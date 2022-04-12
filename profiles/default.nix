@@ -65,7 +65,6 @@ let
       steam = mkProfile [ ./steam ];
       sway = mkProfile [ ./i3-sway ./sway ];
       wireguard = mkProfile [ ./wireguard ];
-      xfce = mkProfile [ ./xfce ];
       i3 = mkProfile [ ./i3-sway ./i3 ];
       # Pseudo profiles
       default-linux = mkProfile (with self; [ core-linux dev graphical-linux programs sway ctf secrets ]);

@@ -16,21 +16,30 @@ in
   xsession.windowManager.i3.config.keybindings = {
     "${mod}+Shift+q" = "exec ${binaries.logout}";
     "${mod}+Shift+d" = "kill";
+
     "${mod}+d" = exec "${binaries.launcher}";
+
+    "${mod}+Return" = "exec ${binaries.terminal}";
+    "${mod}+Shift+Return" = "exec ${binaries.floating-term}";
 
     "${mod}+BackSpace"      = "exec ${binaries.locker}";
     "${mod}+Ctrl+BackSpace" = "exec ${binaries.logout}";
 
-    "${mod}+Shift+Return" = exec "${binaries.floating-term}";
     "${mod}+p" = exec "${binaries.menu}";
 
     "${mod}+semicolon" = exec "${binaries.emacsclient}";
+
+    # Browser
+    "${mod}+n"       = exec binaries.browser;
+    "${mod}+Shift+n" = exec binaries.browser-private;
+    "${mod}+Ctrl+n"  = exec binaries.browser-work-profile;
 
     "${mod}+z"       = "focus child";
     "${mod}+Shift+Z" = "focus parent";
     "${mod}+Shift+minus" = "move to scratchpad";
     "${mod}+minus"       = "scratchpad show";
-    "${mod}+Shift+Space" = "floating toggle, border normal";
+    "${mod}+space"       = "focus mode_toggle";
+    "${mod}+Shift+space" = "floating toggle, border normal";
 
     "${mod}+f"       = "fullscreen toggle";
     "${mod}+Shift+f" = "fullscreen toggle global";
@@ -57,31 +66,28 @@ in
     "${mod}+w" = "layout tabbed";
     "${mod}+Shift+s" = "sticky toggle";
 
-    "XF86AudioPause" = (exec "${binaries.playerctl} ${withPlayerctld} pause");
-    "XF86AudioPlay"  = (exec "${binaries.playerctl} ${withPlayerctld} play");
-    "XF86AudioPrev"  = (exec "${binaries.playerctl} previous");
-    "Pause"          = (exec "${binaries.playerctl} ${withPlayerctld} play-pause");
+    "XF86AudioPause" = exec "${binaries.playerctl} ${withPlayerctld} pause";
+    "XF86AudioPlay"  = exec "${binaries.playerctl} ${withPlayerctld} play";
+    "XF86AudioPrev"  = exec "${binaries.playerctl} previous";
+    "Pause"          = exec "${binaries.playerctl} ${withPlayerctld} play-pause";
 
     # Volume stuff
-    "XF86AudioRaiseVolume" = (exec "${binaries.volume} 'increase'");
-    "XF86AudioLowerVolume" = (exec "${binaries.volume} 'decrease'");
-    "XF86AudioMute"        = (exec "${binaries.volume} 'toggle-mute'");
-    "XF86AudioMicMute"     = (exec "${binaries.volume} 'mic-mute'");
-    "${mod}+Backslash"     = (exec "${binaries.volume} 'mic-mute'");
-    "Scroll_Lock"          = (exec "${binaries.volume} 'mic-mute'");
+    "XF86AudioRaiseVolume" = exec "${binaries.volume} 'increase'";
+    "XF86AudioLowerVolume" = exec "${binaries.volume} 'decrease'";
+    "XF86AudioMute"        = exec "${binaries.volume} 'toggle-mute'";
+    "XF86AudioMicMute"     = exec "${binaries.volume} 'mic-mute'";
+    "${mod}+Backslash"     = exec "${binaries.volume} 'mic-mute'";
+    "Scroll_Lock"          = exec "${binaries.volume} 'mic-mute'";
 
-    "--release Print"       = (exec "${binaries.screenshot} 'selection'");
-    "--release Alt+Print"   = (exec "${binaries.screenshot} 'window'");
-    "--release Shift+Print" = (exec "${binaries.screenshot} 'screen'");
-    "--release Ctrl+Print"  = (exec "${binaries.screenshot} 'everything'");
+    "--release Print"       = exec "${binaries.screenshot} 'selection'";
+    "--release Alt+Print"   = exec "${binaries.screenshot} 'window'";
+    "--release Shift+Print" = exec "${binaries.screenshot} 'screen'";
+    "--release Ctrl+Print"  = exec "${binaries.screenshot} 'everything'";
 
-    # Paste a specific clipboard item
-    "Shift+Insert" = "exec ${binaries.xfce4-popup-clipman}";
-
-    # Browser
-    "${mod}+n"       = (exec binaries.browser);
-    "${mod}+Shift+n" = (exec binaries.browser-private);
-    "${mod}+Ctrl+n"  = (exec binaries.browser-work-profile);
+    # Switch focus on workspaces
+    "${mod}+u"       = "workspace back_and_forth";
+    "${mod}+Shift+u" = "move container to workspace back_and_forth";
+    "${mod}+Ctrl+u"  = "move container to workspace back_and_forth; workspace back_and_forth";
 
     "${mod}+1" = "workspace ${ws.WS1}";
     "${mod}+2" = "workspace ${ws.WS2}";

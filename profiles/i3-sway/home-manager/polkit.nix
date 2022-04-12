@@ -7,7 +7,7 @@
     Unit = {
       Description = "Polkit GNOME agent";
       PartOf = [ "graphical-session.target" ];
-      After = [ "graphical-session.target" ];
+      After = [ "graphical-session-pre.target" ];
     };
     Service = {
       # Type = "dbus";
@@ -16,6 +16,6 @@
       ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
       Restart = "abort";
     };
-    Install.WantedBy = [ "sway-session.target" ];
+    Install.WantedBy = [ "graphical-session.target" ];
   };
 }

@@ -2,7 +2,7 @@
 
 {
   programs.mako = {
-    enable = true;
+    enable = false;
     # Display in center
     anchor = "top-right";
     # Show on my primary output
@@ -29,7 +29,7 @@
     textColor = "#808080";
   };
 
-  systemd.user.services.mako = {
+  systemd.user.services.mako = lib.mkIf config.programs.mako.enable {
     Unit = {
       Description = "A lightweight Wayland notification daemon";
       Documentation = "man:mako(1)";

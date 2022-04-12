@@ -62,7 +62,7 @@ in
         RestartSec = 1;
       };
 
-      Install.WantedBy = [ "sway-session.target" ];
+      Install.WantedBy = [ "graphical-session.target" ];
     };
   };
 }

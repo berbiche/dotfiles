@@ -16,6 +16,6 @@
       Restart = "on-failure";
     };
 
-    Install.WantedBy = [ "sway-session.target" ];
+    Install.WantedBy = [ "graphical-session.target" ];
   };
 }

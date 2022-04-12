@@ -20,11 +20,7 @@
       fade = 1;
       gamma-day = "0.8:0.7:0.8";
       gamma-night = 0.7;
-      adjustment-method = "wayland";
+      # adjustment-method = "wayland";
     };
-  };
-
-  systemd.user.services.gammastep = {
-    Install.WantedBy = lib.mkForce [ "sway-session.target" ];
   };
 }

@@ -9,9 +9,6 @@ let
   partial-transparency = transparency 90;
 in
 {
-  systemd.user.services.dunst.Service.UnsetEnvironment = [ "DISPLAY" ];
-
-  # services.dunst.enable = true;
   services.dunst.iconTheme = {
     name = config.my.theme.icon.name;
     package = config.my.theme.icon.package;

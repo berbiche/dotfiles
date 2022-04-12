@@ -1,40 +1,6 @@
 { config, lib, pkgs, ... }:
 
 let
-  darkblue = "#08052b";
-  lightblue = "#5294e2";
-  urgrentred = "#e53935";
-  white = "#ffffff";
-  black = "#000000";
-  darkgrey = "#373c4a";
-  grey = "#b0b5bd";
-  mediumgrey = "#8b8b8b";
-  yellowbrown = "#e1b700";
-
-  colors = rec {
-    focused = {
-      border = lightblue;
-      background = darkblue;
-      text = white;
-      indicator = lightblue;
-      childBorder = mediumgrey;
-    };
-    focusedInactive = focused // {
-      border = darkblue;
-      text = grey;
-      childBorder = black;
-    };
-    unfocused = focusedInactive // {
-      border = darkgrey;
-      childBorder = darkgrey;
-    };
-    urgent = focused // {
-      border = urgrentred;
-      background = urgrentred;
-      childBorder = yellowbrown;
-    };
-  };
-
   # Number at the start is used for ordering
   # https://github.com/Alexays/Waybar/blob/f233d27b782c04ef128e3d71ec32a0b2ce02df39/src/modules/sway/workspaces.cpp#L351-L357
   workspaces = {
@@ -51,11 +17,34 @@ let
   };
 in
 {
-  options.profiles.i3-sway.colors = lib.mkOption {
-    type = let
-      x = lib.types.attrsOf (lib.types.oneOf [ lib.types.str x ]);
-    in x // { description = "Attribute set of attribute sets containing color configuration"; };
-  };
+  imports = [
+    # i3/sway colors
+    ./colors.nix
+
+    # Automatically changes the theme for my desktop based on the time
+    ./darkman.nix
+
+    # Expose Gnome/GTK settings automatically to GTK/x11 applications.
+    # Required for proper scaling support of the cursor in XWayland apps
+    # when the display is scaled.
+    ./gsettingsd.nix
+
+    # Generic notification daemon configuration
+    ./notifications.nix
+    # Specific notification daemon configuration
+    ./dunst.nix
+    ./linux-notification-center.nix
+    ./swaync
+
+    # Shows a prompt to run some root stuff like certain systemctl calls
+    ./polkit.nix
+
+    # Show a prompt to mount usb disks
+    ./udiskie.nix
+
+    # Application runner
+    ./ulauncher.nix
+  ];
 
   options.profiles.i3-sway.workspaces = lib.mkOption {
     type = lib.types.attrsOf lib.types.str;
@@ -67,12 +56,7 @@ in
   };
 
   config = {
-    profiles.i3-sway.colors = lib.mkDefault colors;
-
     profiles.i3-sway.workspaces = lib.mkDefault workspaces;
-
-    xsession.windowManager.i3.config.colors = config.profiles.i3-sway.colors;
-    wayland.windowManager.sway.config.colors = config.profiles.i3-sway.colors;
 
     xsession.windowManager.i3.config.modifier = config.profiles.i3-sway.modifier;
     xsession.windowManager.i3.config.floating.modifier = config.profiles.i3-sway.modifier;

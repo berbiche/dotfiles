@@ -11,15 +11,16 @@ in
 
     settings.lat = lib.mkIf (latitude != null) latitude;
     settings.lng = lib.mkIf (longitude != null) longitude;
+    settings.usegeoclue = latitude == null || longitude == null;
 
     darkModeScripts.gtk-theme = ''
-      ${dconf} write /org/gnome/desktop/interface/gtk-theme "'${config.my.theme.dark}'"
+      # ${dconf} write /org/gnome/desktop/interface/gtk-theme "'${config.my.theme.dark}'"
+      ${dconf} write /org/gnome/desktop/interface/color-scheme "'prefer-dark'"
     '';
 
     lightModeScripts.gtk-theme = ''
-      ${dconf} write /org/gnome/desktop/interface/gtk-theme "'${config.my.theme.light}'"
+      # ${dconf} write /org/gnome/desktop/interface/gtk-theme "'${config.my.theme.light}'"
+      ${dconf} write /org/gnome/desktop/interface/color-scheme "'prefer-light'"
     '';
   };
-
-  systemd.user.services.darkman.Install.WantedBy = [ "sway-session.target" ];
 }

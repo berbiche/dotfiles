@@ -1,5 +1,5 @@
 { ... }:
 
 {
-  my.home.imports = [ ./home-manager.nix ];
+  my.home.imports = [ ./home-manager ];
 }
