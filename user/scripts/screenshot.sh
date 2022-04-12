@@ -82,7 +82,11 @@ notify() {
 }
 
 copy_clipboard() {
-  wl-copy < "$output_file"
+  if [ ! -z "$WAYLAND_DISPLAY" ]; then
+    wl-copy < "$output_file"
+  else
+    xclip -selection clipboard -t image/png -i "$output_file"
+  fi
 }
 
 print_selection() {
@@ -95,19 +99,21 @@ print_selection() {
 
 print_window() {
   create_dir
-  local window=`$select_window`
-  grim -g "$window" "$output_file"
+  if [ ! -z "$WAYLAND_DISPLAY" ]; then
+    local window=`$select_window`
+    grim -g "$window" "$output_file"
+  fi
 }
 
 print_active_screen() {
   create_dir
-  local output=$(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name')
   # How does Qt and flameshot handle Wayland screen numbers?
   # Looking at the source code: https://github.com/flameshot-org/flameshot/blob/5ab76e233bfe6835649cc27fa9c68bc185a6b0b8/src/core/controller.cpp#L345-L363
   # it doesn't seem to support selecting a screen by it's name at this time
   _flameshot screen
 
   # old code:
+  # local output=$(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name')
   # grim -o $output "$output_file"
 }
 
