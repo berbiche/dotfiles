@@ -6,7 +6,7 @@ let
   sessionVariables = {
     # Fix Firefox. See <https://mastransky.wordpress.com/2020/03/16/wayland-x11-how-to-run-firefox-in-mixed-environment/>
     MOZ_DBUS_REMOTE = "1";
-    MOZ_ENABLE_WAYLAND = "1";
+    # Better scrolling behaviour?
     MOZ_USE_XINPUT2 = "1";
     # MOZ_LOG = "PlatformDecoderModule:5";
   };

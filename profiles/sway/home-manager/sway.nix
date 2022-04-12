@@ -50,6 +50,9 @@ in
       # Fix for some Java AWT applications (e.g. Android Studio)
       export _JAVA_AWT_WM_NONREPARENTING=1
 
+      # Run Firefox with the Wayland backend
+      export MOZ_ENABLE_WAYLAND = "1";
+
       # TODO: remove once gnome-keyring exports SSH_AUTH_SOCK correctly
       : ''${XDG_RUNTIME_DIR=/run/user/$(id -u)}
       if [ -S  "''${XDG_RUNTIME_DIR}/keyring/ssh" ]; then
