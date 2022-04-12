@@ -11,13 +11,13 @@ final: prev: {
 
   buildGoModule {
     pname = "darkman";
-    version = "v1.0.0";
+    version = "v1.1.0";
 
     src = fetchFromGitLab {
       owner = "WhyNotHugo";
       repo = "darkman";
-      rev = "v1.0.0";
-      hash = "sha256-eJUFVj0IliIcukcWRU4uFJqE5yu5I7TVIDRnNuMHH6U=";
+      rev = "v1.1.0";
+      hash = "sha256-zVXfn3kxumFIF6vjY9EFuBkBnshJDnxrBewHsY7xPvs=";
     };
 
     vendorSha256 = "sha256-CGgWEaHztWeCQPIrobwLHuDkFauJM19hBU7JsA3HMic=";
@@ -55,6 +55,7 @@ final: prev: {
       description = "Framework for dark-mode and light-mode transitions on Linux desktop";
       homepage = "https://gitlab.com/WhyNotHugo/darkman";
       license = licenses.isc;
+      platforms = platforms.linux;
       maintainers = [ maintainers.berbiche ];
     };
   });

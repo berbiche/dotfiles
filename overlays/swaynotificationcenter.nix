@@ -4,9 +4,10 @@ final: prev: {
     src = prev.fetchFromGitHub {
       owner = "ErikReider";
       repo = "SwayNotificationCenter";
-      rev = "223e78a0a7e92944f2cc0e8efad6bd240cf453e4";
-      hash = "sha256-kALxeDkalN7q3SsA/YTkOJ82zGX6qVZVYao0Etaec+4=";
+      rev = "188bef8bf90364ee0d76eb07b8e3736ef1382ce5";
+      hash = "sha256-0RmYsxpe4rt/BMAqxhaDBh2l5BflFK7p3Hqxu7icPD4=";
     };
+    buildInputs = drv.buildInputs or [ ] ++ [ prev.scdoc ];
     patches = drv.patches or [] ++ [
       # (fetchpatch {
       #   name = "ellipsize-content.patch";
