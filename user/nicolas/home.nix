@@ -63,6 +63,11 @@ in
 
   fonts.fontconfig.enable = lib.mkForce true;
 
+  home.keyboard = {
+    layout = "us";
+    options = [ "compose:ralt" ];
+  };
+
   gtk = {
     enable = mkDefault isLinux;
     iconTheme = {
