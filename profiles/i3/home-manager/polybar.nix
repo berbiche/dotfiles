@@ -41,6 +41,11 @@ in
         enable-ipc = "true";
         height = height;
 
+        # Yes, this is a static hardcoded monitor output, but I only use
+        # X11 on a specific pc with a static configuration.
+        monitor = "DP-4";
+        monitor-fallback = "";
+
         # Don't make i3 aware of the bar (requires fake transparent spacer bar)
         # This is required or else the x offset is ignored and the left side of the
         # bar is stuck to the side of the monitor, ruining the floating effect

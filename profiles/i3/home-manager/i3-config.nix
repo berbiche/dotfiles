@@ -2,6 +2,7 @@
 
 let
   inherit (config.profiles.i3) binaries;
+  ws = config.profiles.i3-sway.workspaces;
 
   # Window rules helpers
   mkInhibitFullscreen = criteria: {
@@ -42,9 +43,8 @@ in {
       commands = lib.flatten [
         (map mkInhibitFullscreen [
           { class = "Firefox"; }
-          { app_id = "firefox"; }
           { instance = "Steam"; }
-          { app_id = "lutris"; }
+          { instance = "lutris"; }
           { title = "^Zoom Cloud.*"; }
         ])
         {
@@ -63,9 +63,6 @@ in {
           command = "floating enable";
           criteria.instance = "pavucontrol";
         }
-        (mkMarkSocial {
-
-        })
         (map (x: { command = "move to workspace '${ws.WS7}'"; criteria = x; }) [
           { con_mark = "_social.*"; }
           { con_mark = "_music-player.*"; }

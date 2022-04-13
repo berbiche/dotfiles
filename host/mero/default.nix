@@ -7,7 +7,7 @@
     obs
     steam
     wireguard
-    gnome
+    i3
   ] ++ [
     ./openrgb.nix
     ./xserver.nix
@@ -49,7 +49,6 @@
   boot.extraModulePackages = [ ];
 
   boot.kernelPackages = pkgs.linuxPackages_zen;
-  #boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Disable HDMI/DisplayPort audio with amdgpu
   # environment.etc."modprobe.d/custom-amdgpu.conf".text = ''
@@ -106,23 +105,23 @@
     allowDiscards = true;
   };
 
-  boot.initrd.luks.devices."blackarch" = {
-    device = "/dev/disk/by-partlabel/blackarch_enc";
-    # TLDR: performance improvement on my SSD
-    bypassWorkqueues = true;
-    allowDiscards = true;
-  };
-  system.activationScripts."blackarch-permissions".text = ''
-    echo "chowning /dev/mapper/blackarch to qemu-libvirtd:libvirtd"
-    if [ -b /dev/mapper/blackarch ]; then
-      chown -v qemu-libvirtd:libvirtd /dev/mapper/blackarch
-      if [ $? -ne 0 ]; then
-        echo "Failed to chown /dev/mapper/blackarch"
-      fi
-    else
-      echo "could not chown /dev/mapper/blackarch"
-    fi
-  '';
+  # boot.initrd.luks.devices."blackarch" = {
+  #   device = "/dev/disk/by-partlabel/blackarch_enc";
+  #   # TLDR: performance improvement on my SSD
+  #   bypassWorkqueues = true;
+  #   allowDiscards = true;
+  # };
+  # system.activationScripts."blackarch-permissions".text = ''
+  #   echo "chowning /dev/mapper/blackarch to qemu-libvirtd:libvirtd"
+  #   if [ -b /dev/mapper/blackarch ]; then
+  #     chown -v qemu-libvirtd:libvirtd /dev/mapper/blackarch
+  #     if [ $? -ne 0 ]; then
+  #       echo "Failed to chown /dev/mapper/blackarch"
+  #     fi
+  #   else
+  #     echo "could not chown /dev/mapper/blackarch"
+  #   fi
+  # '';
 
   # FS settings
   fileSystems."/" = {
@@ -218,5 +217,7 @@
     home.packages = [ pkgs.glpaper pkgs.wf-recorder pkgs.xlockmore ];
 
     profiles.steam.enableProtonGE = true;
+
+    profiles.i3-sway.notifications = "linux-notification-center";
   };
 }
