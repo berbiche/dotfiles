@@ -83,13 +83,6 @@ in
     '';
 
     extraConfig = ''
-      " Colors/Theme
-      set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
-            \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
-            \,sm:block-blinkwait175-blinkoff150-blinkon175
-      au ColorScheme * hi Normal  ctermbg=none guibg=none
-      au ColorScheme * hi NonText ctermbg=none guibg=none
-
       " Color/theme : sonokai
       colorscheme sonokai
 

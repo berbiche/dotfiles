@@ -26,7 +26,8 @@ in
 {
   xdg.configFile = grammars // {
     # Stolen from L3afMe's dotnix
-    "nvim/after/queries/nix/injections.scm".text = ''
+    "nvim/after/queries/nix/injections.scm" = lib.mkIf false {
+      text = ''
       (binding
         attrpath: ((attrpath (identifier)) @_path
           (#match? @_path "^([a-z][A-Za-z]*Phase|(pre|post)[A-Z][A-Za-z]*|(.*\\.)?script)$"))
@@ -193,6 +194,7 @@ in
       ; Lua strings
       ([(indented_string_expression) (string_expression)] @lua @_code
         (#lua-match? @_code "\s*\\-\\- Syntax: lua"))
-    '';
+      '';
+    };
   };
 }

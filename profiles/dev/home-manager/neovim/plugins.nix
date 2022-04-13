@@ -10,15 +10,16 @@ in
     {
       # Notifications display
       plugin = nvim-notify;
+      type = "lua";
       config = ''
-        lua <<EOF
-          local notify = require("notify")
-          -- vim.notify = notify
-          notify.setup({
-            stages = 'fade',
-            render = 'minimal',
-          })
-        EOF
+        local notify = require("notify")
+        notify.setup({
+          stages = 'fade',
+          render = 'minimal',
+          background_color = '#000000',
+        })
+
+        vim.notify = notify
       '';
     }
     # {
@@ -57,15 +58,17 @@ in
     # Highlight TODO:, FIXME, HACK etc.
     {
       plugin = todo-comments-nvim;
+      type = "lua";
       config = ''
-        lua require('todo-comments').setup {}
+        require('todo-comments').setup {}
       '';
     }
     # Highlight ranges in the commandline such as :10,20
     {
       plugin = range-highlight-nvim;
+      type = "lua";
       config = ''
-        lua require('range-highlight').setup {}
+        require('range-highlight').setup {}
       '';
     }
     # UI configuration
@@ -144,9 +147,12 @@ in
     }
     {
       plugin = BufOnly-vim;
+      type = "lua";
       config = ''
-        nnoremap <leader>bo :BufOnly<CR>
-        nnoremap <leader>bo :BufOnly!<CR>
+        local map = vim.api.nvim_set_keymap
+        local opt = { noremap = true }
+        map("n", "<leader>bo", "<cmd>BufOnly<CR>", opt)
+        map("v", "<leader>bo", "<cmd>BufOnly!<CR>", opt)
       '';
     }
     {
@@ -219,8 +225,10 @@ in
     {
       # Close buffers/windows/etc.
       plugin = vim-sayonara;
+      type = "lua";
       config = ''
-        nnoremap <silent><leader>Q <cmd>Sayonara<CR>
+        local map = vim.api.nvim_set_keymap
+        map("n", "<leader>Q", "<cmd>Sayonara<CR>", {noremap = true, silent = true,})
       '';
     }
     {
@@ -448,9 +456,9 @@ in
         let g:nvim_tree_git_hl = 1
         let g:nvim_tree_highlight_opened_files = 1
 
+
         lua <<EOF
           require('nvim-tree').setup {
-            auto_close = true,
             update_focused_file = {
               enable = true,
               ignore_list = {'startify', 'dashboard'},
@@ -481,6 +489,21 @@ in
           local opts = { noremap = true, silent = true }
 
           map('n', '<leader>op', '<cmd>call v:lua.tree_toggle()<CR>', opts)
+
+          -- Since the auto_close option has been removed, this is the only option
+          ${lib.optionalString (
+            lib.versionAtLeast (builtins.parseDrvName config.programs.neovim.package.name).version
+              "0.7.0"
+          ) ''
+            vim.api.nvim_create_autocmd("BufEnter", {
+              nested = true,
+              callback = function()
+                if #vim.api.nvim_list_wins() == 1 and vim.api.nvim_buf_get_name(0):match("NvimTree_") ~= nil then
+                  vim.cmd("quit")
+                end
+              end,
+            })
+          ''}
         EOF
       '';
     }
@@ -532,13 +555,15 @@ in
 
   programs.neovim.extraConfig = lib.mkAfter ''
     " neovim-remote setup
-    let $GIT_EDITOR = 'nvr -cc split --remote-wait'
-    au FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
-    command! DisconnectClients
-      \  if exists('b:nvr')
-      \|   for client in b:nvr
-      \|     silent! call rpcnotify(client, 'Exit', 1)
-      \|   endfor
-      \| endif
+    if !exists('g:vscode')
+      let $GIT_EDITOR = 'nvr -cc split --remote-wait'
+      au FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
+      command! DisconnectClients
+        \  if exists('b:nvr')
+        \|   for client in b:nvr
+        \|     silent! call rpcnotify(client, 'Exit', 1)
+        \|   endfor
+        \| endif
+    endif
 '';
 }
