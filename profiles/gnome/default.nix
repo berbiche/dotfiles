@@ -9,8 +9,10 @@
     gnome.gnome-session
     gnome.gnome-tweaks
     # To install Gnome extensions using the browser extension
-    chrome-gnome-shell
+    # chrome-gnome-shell
     gnomeExtensions.appindicator
+    # Better Gnome Shell
+    gnomeExtensions.pop-shell
     ## Broken
     #gnomeExtensions.clipboard-indicator
     gnomeExtensions.dash-to-panel
