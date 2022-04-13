@@ -6,7 +6,7 @@
     ./dconf.nix
     ./noisetorch.nix
     ./fonts.nix
-    ./opensnitch.nix
+    # ./opensnitch.nix
     # ./xserver.nix
   ];
 
@@ -30,11 +30,11 @@
     # background = pkgs.nixos-artwork.wallpapers.dracula.gnomeFilePath;
     background = pkgs.nixos-artwork.wallpapers.nineish-dark-gray.gnomeFilePath;
     greeters.enso = {
-      enable = false;
+      enable = true;
       blur = true;
     };
     greeters.mini = {
-      enable = true;
+      enable = false;
       user = config.my.username;
       extraConfig = ''
         [greeter]
