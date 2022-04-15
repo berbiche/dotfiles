@@ -122,7 +122,7 @@ in
         # label-urgent = "%name%";
 
         # only show workspaces on the current monitor
-        pin-workspaces = "true";
+        pin-workspaces = false;
       };
 
       "module/cpu" = {
@@ -174,7 +174,7 @@ in
       "module/pulseaudio" = {
         type = "internal/alsa";
         master-mixer = "Master";
-        headphone-id = 9;
+        # headphone-id = 9;
         format-volume-padding = 2;
         format-muted-padding = 2;
         label-muted = "婢 Mute";
@@ -185,14 +185,14 @@ in
         format-volume-margin = 2;
         format-volume = "<ramp-volume> <label-volume>";
         label-volume = "%percentage%%";
-        use-ui-max = "false";
+        use-ui-max = false;
         interval = 5;
       };
 
       "module/powermenu" = {
         type = "custom/menu";
 
-        expand-right = "true";
+        expand-right = true;
 
         format-spacing = 1;
         format-margin = 0;
