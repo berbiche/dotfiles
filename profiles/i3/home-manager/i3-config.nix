@@ -89,4 +89,8 @@ in {
         { command = binaries.light-locker; }
       ];
   };
+
+  xsession.windowManager.i3.extraConfig = ''
+    no_focus [instance="avizo-service"]
+  '';
 }
