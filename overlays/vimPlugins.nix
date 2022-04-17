@@ -21,13 +21,6 @@ in {
       sha256 = "sha256-vxcqh2ExTUsye19c2jXoPMrbuYojzyz9Dq7UIrxhAdM=";
     });
 
-    dressing-nvim = toPlugin "dressing.nvim" (prev.fetchFromGitHub {
-      owner = "stevearc";
-      repo = "dressing.nvim";
-      rev = "b36b69c6a5d6b30b16782be22674d6d037dc87e3";
-      sha256 = "sha256-UZxi7EeTJ8fVuJsHYbVCuNG1G22VdbZgz7s4Rk8/y8Y=";
-    });
-
     desktop-notify-nvim = toPlugin "desktop-notify-nvim" (prev.fetchFromGitHub {
       owner = "HiPhish";
       repo = "desktop-notify-nvim";
