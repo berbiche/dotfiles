@@ -21,6 +21,8 @@ in
 
   home.packages = with pkgs; [
     jq # tool to extract data out from a json input (files, stdin, ...)
+    fq # like jq but for any binary format
+    fx # equivalent of piping json to `less` with the ability to minimize nodes
 
     # Programming
     gnumake # for the `make` program
