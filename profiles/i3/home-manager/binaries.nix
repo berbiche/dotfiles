@@ -31,7 +31,7 @@ in
     emacsclient = "${config.programs.emacs.finalPackage}/bin/emacsclient -c";
     firefox = "${pkgs.firefox}/bin/firefox";
     pavucontrol = "${pkgs.pavucontrol}/bin/pavucontrol";
-    playerctl = "${pkgs.playerctl}/bin/playerctl";
+    playerctl = "${pkgs.playerctl}/bin/playerctl --player=spotify,mpv,firefox";
     element-desktop = "${pkgs.element-desktop}/bin/element-desktop";
     spotify = "${pkgs.spotify}/bin/spotify";
     xfce4-appfinder = "${pkgs.xfce.xfce4-appfinder}/bin/xfce4-appfinder";
