@@ -1,0 +1,37 @@
+commit 3deda9e6673e886c5e5f641744c3c45e506c9e34
+Author: Nicolas Berbiche <nicolas@normie.dev>
+Date:   Tue Apr 19 16:32:02 2022 -0400
+
+    xserver: add an option to disable automatic user xsession execution
+
+diff --git a/nixos/modules/services/x11/display-managers/default.nix b/nixos/modules/services/x11/display-managers/default.nix
+index a5db3dd5dd4..0279c4d3512 100644
+--- a/nixos/modules/services/x11/display-managers/default.nix
++++ b/nixos/modules/services/x11/display-managers/default.nix
+@@ -89,10 +89,12 @@ let
+       # Start systemd user services for graphical sessions
+       /run/current-system/systemd/bin/systemctl --user start graphical-session.target
+ 
+-      # Allow the user to setup a custom session type.
+-      if test -x ~/.xsession; then
+-          eval exec ~/.xsession "$@"
+-      fi
++      ${optionalString (cfg.displayManager.job.executeUserXsession) ''
++        # Allow the user to setup a custom session type.
++        if test -x ~/.xsession; then
++            eval exec ~/.xsession "$@"
++        fi
++      ''}
+ 
+       if test "$1"; then
+           # Run the supplied session command. Remove any double quotes with eval.
+@@ -301,6 +303,9 @@ in
+       };
+ 
+       job = {
++        executeUserXsession = mkEnableOption "executing the user's <filename>$HOME/.xsession</filename> if it exists" // {
++          default = true;
++        };
+ 
+         preStart = mkOption {
+           type = types.lines;

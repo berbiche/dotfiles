@@ -3,7 +3,6 @@
     "Nicolas Berbiche's poorly organized dotfiles and computer configuration";
 
   inputs = {
-    # This input I update less frequently
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     # nixpkgs.url = "github:berbiche/nixpkgs/fix-emacs-passthru";
     # nixpkgs.url = "git+file:///home/nicolas/dev/nixpkgs";
@@ -11,7 +10,6 @@
     nix-darwin.url = "github:berbiche/nix-darwin/stuff-i-want-merged";
     master.url = "github:nixos/nixpkgs/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-    # home-manager.url= "github:nix-community/home-manager";
     home-manager.url= "github:berbiche/home-manager/my-custom-master-branch";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/nur";
@@ -33,13 +31,20 @@
   };
 
   outputs = inputs @ { self, nixpkgs, ... }: let
-    lib = self.lib nixpkgs;
+    inherit (nixpkgs) lib;
 
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
 
     forAllPlatforms = f: lib.genAttrs platforms (platform: f platform);
 
-    nixpkgsFor = forAllPlatforms (platform: import nixpkgs {
+    nixpkgsFor = forAllPlatforms (platform: let
+      # I need to submit a PR with this patch
+      patchedNixpkgs = (import nixpkgs { system = platform; }).applyPatches {
+        name = "patched-nixpkgs";
+        src = nixpkgs;
+        patches = [ ./overlays/add-option-to-disable-automatic-user-xsession-file-execution.patch ];
+      };
+    in import patchedNixpkgs {
       system = platform;
       overlays = builtins.attrValues self.overlays;
       config.allowUnfree = true;
@@ -59,17 +64,28 @@
     # mkConfig :: (args :: {}) -> [ modules ]
     mkConfig = import ./top-level/mkConfig.nix;
 
-    mkLinuxConfig = args@{ platform, hostname, ... }:
-      lib.nixosSystem {
+    # We don't use nixpkgs' `lib.nixosSystem` because patches applied
+    # to NixOS modules are not visible from this function exposed in their flake.
+    # The solution is to import eval-config.nix directly.
+    mkLinuxConfig = args@{ platform, hostname, ... }: let
+      pkgs = nixpkgsFor.${platform};
+      lib = pkgs.lib;
+    in import "${pkgs.path}/nixos/lib/eval-config.nix" {
+        inherit pkgs;
+        system = platform;
         modules = mkConfig ((removeAttrs args [ "platform" ]) // {
           isLinux = true;
           extraModules = [ ./top-level/nixos.nix ];
-        });
-        system = platform;
-        pkgs = nixpkgsFor.${platform};
+        }) ++ [{
+          # This module is part of the upstream `lib.nixosSystem`
+          # and needs to be replicated here manually.
+          system.nixos.versionSuffix =
+            ".${lib.substring 0 8 (nixpkgs.lastModifiedDate or nixpkgs.lastModified or "19700101")}.${nixpkgs.shortRev or "dirty"}";
+          system.nixos.revision = lib.mkIf (nixpkgs ? rev) nixpkgs.rev;
+        }];
         specialArgs = specialArgs {
           inherit inputs;
-          lib = self.lib nixpkgsFor.${platform};
+          lib = self.lib pkgs;
           isLinux = true;
         };
       };

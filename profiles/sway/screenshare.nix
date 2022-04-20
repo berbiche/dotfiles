@@ -1,7 +1,8 @@
 { config, lib, pkgs, ... }:
 
 let
-  gnomeDisabled = !config.services.xserver.desktopManager.gnome.enable;
+  gnomeDisabled = !config.services.xserver.desktopManager.gnome.enable
+    && config.services.xserver.desktopManager.gnome.flashback.customSessions == [];
 in
 {
   xdg.portal = {

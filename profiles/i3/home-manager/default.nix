@@ -17,8 +17,9 @@
 
   config = {
     home.packages = [
-      pkgs.xclip
-      pkgs.lightlocker
+      pkgs.xclip         # copy/paste
+      pkgs.lightlocker   # lockscreen that integrates with lightdm
+      pkgs.nitrogen      # wallpaper
     ];
 
     xsession.enable = true;

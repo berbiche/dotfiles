@@ -30,7 +30,8 @@ in {
       # Hack to always leave enough space for polybar at the top
       top = let
         polybarCfg = config.services.polybar.config."bar/main" or { };
-      in (polybarCfg.height or 0) + 2 * (polybarCfg.offset-y or 0);
+        topGaps = (polybarCfg.height or 0) + 2 * (polybarCfg.offset-y or 0);
+      in topGaps;
       inner = 5;
       smartGaps = false; # Always display gaps
       smartBorders = "on"; # Hide borders even with gaps
@@ -47,21 +48,15 @@ in {
           { instance = "lutris"; }
           { title = "^Zoom Cloud.*"; }
         ])
-        {
-          command = "floating enable";
-          criteria.instance = "xfce4-appfinder";
-        }
-        {
-          command = "floating enable";
-          criteria.instance = "floating-term";
-        }
+        (map (x: { command = "floating enable, border none"; criteria = x; }) [
+          { instance = "xfce4-appfinder"; }
+          { instance = "floating-term"; }
+          { instance = "pavucontrol"; }
+          { instance = "gnome-panel"; title = "Calendar"; }
+        ])
         {
           command = "floating enable, border none";
           criteria.instance = "avizo-service";
-        }
-        {
-          command = "floating enable";
-          criteria.instance = "pavucontrol";
         }
         (map (x: { command = "move to workspace '${ws.WS7}'"; criteria = x; }) [
           { con_mark = "_social.*"; }
@@ -78,15 +73,17 @@ in {
 
     startup =
       map (v: v // {
-        command = if v ? command then "${v.command}" else null;
+        command = "--no-startup-id ${v.command}";
         notification = v.notification or false;
       }) [
         { command = binaries.disableCompositing; always = true; }
-        { command = binaries.fixXkeyboard; }
         { command = binaries.startX11SessionTarget; }
         { command = binaries.spotify; }
         { command = binaries.element-desktop; }
         { command = binaries.light-locker; }
+        { command = binaries.wallpaper; }
+        { command = binaries.override-gaps-settings; always = true; }
+        { command = binaries.unclutter; }
       ];
   };
 

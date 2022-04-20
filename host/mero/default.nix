@@ -38,6 +38,8 @@
 
   profiles.sway.nvidia.enable = true;
 
+  profiles.i3.flashback.enable = true;
+
   sops.defaultSopsFile = rootPath + "/secrets/merovingian.yaml";
 
   boot.kernelParams = [ "amd_iommu=pt" "iommu=soft" ]

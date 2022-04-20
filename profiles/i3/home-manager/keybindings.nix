@@ -7,23 +7,24 @@ let
   ws = config.profiles.i3-sway.workspaces;
 
   # Wrapper around `exec` to always use a login shell (and inherit environment variables)
-  exec = n: "exec ${lib.escapeShellArg pkgs.bash}/bin/bash -lc "
+  exec = n: exec-no-startup "${lib.escapeShellArg pkgs.bash}/bin/bash -lc "
     + lib.escapeShellArg (toString n);
+  exec-no-startup = n: "exec --no-startup-id " + n;
 
   withPlayerctld = lib.optionalString config.services.playerctld.enable "-p playerctld";
 in
 {
   xsession.windowManager.i3.config.keybindings = {
-    "${mod}+Shift+q" = "exec ${binaries.logout}";
+    "${mod}+Shift+q" = exec-no-startup "${binaries.logout}";
     "${mod}+Shift+d" = "kill";
 
     "${mod}+d" = exec "${binaries.launcher}";
 
-    "${mod}+Return" = "exec ${binaries.terminal}";
-    "${mod}+Shift+Return" = "exec ${binaries.floating-term}";
+    "${mod}+Return" = exec-no-startup "${binaries.terminal}";
+    "${mod}+Shift+Return" = exec-no-startup "${binaries.floating-term}";
 
-    "${mod}+BackSpace"      = "exec ${binaries.locker}";
-    "${mod}+Ctrl+BackSpace" = "exec ${binaries.logout}";
+    "${mod}+BackSpace"      = exec-no-startup "${binaries.locker}";
+    "${mod}+Ctrl+BackSpace" = exec-no-startup "${binaries.logout}";
 
     "${mod}+p" = exec "${binaries.menu}";
 
@@ -72,11 +73,10 @@ in
     "Pause"          = exec "${binaries.playerctl} ${withPlayerctld} play-pause";
 
     # Volume stuff
-    "XF86AudioRaiseVolume" = exec "${binaries.volume} 'increase'";
-    "XF86AudioLowerVolume" = exec "${binaries.volume} 'decrease'";
-    "XF86AudioMute"        = exec "${binaries.volume} 'toggle-mute'";
-    "XF86AudioMicMute"     = exec "${binaries.volume} 'mic-mute'";
-    "${mod}+Backslash"     = exec "${binaries.volume} 'mic-mute'";
+    # "XF86AudioRaiseVolume" = exec "${binaries.volume} 'increase'";
+    # "XF86AudioLowerVolume" = exec "${binaries.volume} 'decrease'";
+    # "XF86AudioMute"        = exec "${binaries.volume} 'toggle-mute'";
+    # "XF86AudioMicMute"     = exec "${binaries.volume} 'mic-mute'";
     "Scroll_Lock"          = exec "${binaries.volume} 'mic-mute'";
 
     "--release Print"       = exec "${binaries.screenshot} 'selection'";
