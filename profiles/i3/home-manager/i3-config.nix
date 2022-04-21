@@ -37,6 +37,12 @@ in {
       smartBorders = "on"; # Hide borders even with gaps
     };
 
+    assigns = {
+      ${ws.WS7} = [
+        { con_mark = "_social.*"; }
+        { con_mark = "_music-player.*"; }
+      ];
+    };
     window = {
       titlebar = true;
       border = 1;
@@ -50,18 +56,19 @@ in {
         ])
         (map (x: { command = "floating enable, border none"; criteria = x; }) [
           { instance = "xfce4-appfinder"; }
-          { instance = "floating-term"; }
           { instance = "pavucontrol"; }
           { instance = "gnome-panel"; title = "Calendar"; }
+          { instance = "gnome-control-center"; }
+          { instance = "avizo-service"; }
         ])
-        {
-          command = "floating enable, border none";
-          criteria.instance = "avizo-service";
-        }
-        (map (x: { command = "move to workspace '${ws.WS7}'"; criteria = x; }) [
-          { con_mark = "_social.*"; }
-          { con_mark = "_music-player.*"; }
+        (map (x: { command = "floating enable"; criteria = x; }) [
+          { instance = "floating-term"; }
         ])
+        (mkMarkSocial "element" { class = "Element"; })
+        (mkMarkSocial "signal" { class = "Signal"; })
+        (mkMarkSocial "bitwarden" { class = "Bitwarden"; })
+        (mkMarkSocial "rocket" { class = "Rocket.Chat"; })
+        (mkMarkSocial "caprine" { class = "Caprine"; })
       ];
     };
     floating = {
@@ -73,7 +80,7 @@ in {
 
     startup =
       map (v: v // {
-        command = "--no-startup-id ${v.command}";
+        command = "${v.command}";
         notification = v.notification or false;
       }) [
         { command = binaries.disableCompositing; always = true; }
