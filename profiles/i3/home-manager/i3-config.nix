@@ -13,7 +13,28 @@ let
     inherit criteria;
     command = "mark \"_social_${name}\"";
   };
+
+  # Hack to always leave enough space for polybar at the top
+  polybarCfg = config.services.polybar.config."bar/main" or { };
+  topGaps = (polybarCfg.height or 0) + 2 * (polybarCfg.offset-y or 0);
+  xrdbHackCmd = ''
+    ${lib.getBin pkgs.xorg.xrdb}/bin/xrdb -merge ${pkgs.writeText "i3-flashback-xresources" ''
+      i3-wm.gaps.top: 0
+    ''}
+  '';
 in {
+  # The hack above is not necessary when running from a Gnome Flashback session
+  xsession.initExtra = lib.mkAfter ''
+    if [[ "''${XDG_CURRENT_DESKTOP-}" =~ "GNOME-Flashback" ]]; then
+      ${xrdbHackCmd}
+    fi
+  '';
+  home.activation.flashback-xrdb = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    if [[ "''${XDG_CURRENT_DESKTOP-}" =~ "GNOME-Flashback" ]]; then
+      $DRY_RUN_CMD ${xrdbHackCmd}
+    fi
+  '';
+
   xsession.windowManager.i3.config = {
     inherit (binaries) terminal;
 
@@ -27,11 +48,6 @@ in {
     bars = [ ];
 
     gaps = {
-      # Hack to always leave enough space for polybar at the top
-      top = let
-        polybarCfg = config.services.polybar.config."bar/main" or { };
-        topGaps = (polybarCfg.height or 0) + 2 * (polybarCfg.offset-y or 0);
-      in topGaps;
       inner = 5;
       smartGaps = false; # Always display gaps
       smartBorders = "on"; # Hide borders even with gaps
@@ -89,12 +105,13 @@ in {
         { command = binaries.element-desktop; }
         { command = binaries.light-locker; }
         { command = binaries.wallpaper; }
-        { command = binaries.override-gaps-settings; always = true; }
         { command = binaries.unclutter; }
       ];
   };
 
   xsession.windowManager.i3.extraConfig = ''
     no_focus [instance="avizo-service"]
+
+    set_from_resources $i3-wm.gaps.top i3-wm.gaps.top ${toString topGaps}
   '';
 }

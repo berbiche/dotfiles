@@ -73,11 +73,5 @@ in
         ${pkgs.feh}/bin/feh --bg-scale ~/.background-image
       fi
     '';
-    # The top gaps is only used for the polybar hack
-    override-gaps-settings = pkgs.writeShellScript "i3-override-gaps" ''
-      if [[ "$XDG_CURRENT_DESKTOP" =~ "GNOME-Flashback" ]]; then
-        ${pkgs.i3}/bin/i3-msg gaps top all set 0
-      fi
-    '';
   };
 }
