@@ -44,7 +44,12 @@ in
     emacsclient = "${config.programs.emacs.finalPackage}/bin/emacsclient -c";
     firefox = "${pkgs.firefox}/bin/firefox";
     pavucontrol = "${pkgs.pavucontrol}/bin/pavucontrol";
-    playerctl = "${pkgs.playerctl}/bin/playerctl --player=spotify,mpv,firefox";
+    # i3 and Sway don't parse quotes correctly so the commas in the command below
+    # are parsed as i3/sway command separators.
+    # The solution is to use a wrapper script
+    playerctl = pkgs.writeShellScript "i3-playerctl" ''
+      ${pkgs.playerctl}/bin/playerctl --player=spotify,mpv,firefox "$@"
+    '';
     element-desktop = "${pkgs.element-desktop}/bin/element-desktop";
     spotify = "${pkgs.spotify}/bin/spotify";
     unclutter = "${pkgs.unclutter-xfixes}/bin/unclutter --exclude-root";
@@ -53,7 +58,7 @@ in
     xfce4-popup-clipman = "${pkgs.xfce.xfce4-clipman-plugin}/bin/xfce4-popup-clipman";
 
     disableCompositing = pkgs.writeShellScript "disable-xfce-compositing" ''
-      xfconf-query -c xfwm4 -p /general/use_compositing -s false
+      xfconf-query -c xfwm4 -p /general/use_compositing -s false || true
     '';
     startX11SessionTarget = pkgs.writeShellScript "start-x11-session-target" ''
       ${pkgs.dbus}/bin/dbus-update-activation-environment DISPLAY XDG_SESSION_TYPE XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP
