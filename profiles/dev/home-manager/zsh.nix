@@ -162,7 +162,7 @@ in
 
       nrsf() {
         ${lib.optionalString isLinux ''
-          local cmd=(sudo nixos-rebuild switch --flake ~/dotfiles -v -L)
+          local cmd=(nixos-rebuild switch --use-remote-sudo --flake ~/dotfiles -v -L)
         ''}
         ${lib.optionalString isDarwin ''
           local cmd=(darwin-rebuild switch --flake ~/dotfiles -v -L)

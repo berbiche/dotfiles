@@ -14,7 +14,7 @@ in
 
     functions = {
       "nrsf" = lib.mkIf isLinux ''
-        set -a args sudo nixos-rebuild switch --flake ~/dotfiles -v -L $argv
+        set -a args nixos-rebuild switch --use-remote-sudo --flake ~/dotfiles -v -L $argv
         echo $args
         $args
       '';
