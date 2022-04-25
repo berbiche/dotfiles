@@ -60,8 +60,8 @@ in
     "${mod}+Shift+i" = "focus output left";
     "${mod}+Shift+o" = "focus output right";
 
-    "${mod}+v" = "split h";
-    "${mod}+b" = "split v";
+    "${mod}+v" = "split v";
+    "${mod}+b" = "split h";
     "${mod}+e" = "split toggle";
     "${mod}+s" = "layout stacking";
     "${mod}+w" = "layout tabbed";
