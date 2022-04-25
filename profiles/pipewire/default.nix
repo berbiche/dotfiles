@@ -40,15 +40,15 @@ in
       # and https://www.reddit.com/r/archlinux/comments/t45chj/discord_pipewire_no_notification_sounds/
       services.pipewire.config.pipewire-pulse = {
         "pulse.rules" = defaultPipewirePulseJson."pulse.rules" or [ ] ++ [
-          {
-            matches = [
-              { "application.process.binary" = "~.+Discord.+"; }
-              # { "application.process.binary" = ".Discord-wrapped"; }
-            ];
-            actions.update-props = {
-              "pulse.min.quantum" = "1024/48000";
-            };
-          }
+          # {
+          #   matches = [
+          #     { "application.process.binary" = "~.+Discord.+"; }
+          #     # { "application.process.binary" = ".Discord-wrapped"; }
+          #   ];
+          #   actions.update-props = {
+          #     "pulse.min.quantum" = "1024/48000";
+          #   };
+          # }
         ];
       };
 
