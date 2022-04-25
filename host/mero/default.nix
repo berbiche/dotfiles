@@ -29,11 +29,17 @@
 
   profiles.pipewire.enable = true;
   profiles.pipewire.enableLowLatency = false;
-  profiles.pipewire.loopbackTargets = [
-    # "alsa_output.pci-0000_0e_00.4.analog-stereo"
-    "alsa_output.usb-Burr-Brown_from_TI_USB_Audio_CODEC-00.analog-stereo-output"
-    "alsa_output.usb-SteelSeries_SteelSeries_Arctis_7-00.stereo-game"
-  ];
+  profiles.pipewire.loopbackTargets = {
+    stereo = [
+      # "alsa_output.pci-0000_0e_00.4.analog-stereo"
+      "alsa_output.usb-Burr-Brown_from_TI_USB_Audio_CODEC-00.analog-stereo-output"
+      "alsa_output.usb-SteelSeries_SteelSeries_Arctis_7-00.stereo-game"
+    ];
+    chat = [
+      "alsa_output.usb-Burr-Brown_from_TI_USB_Audio_CODEC-00.analog-stereo-output"
+      "alsa_output.usb-SteelSeries_SteelSeries_Arctis_7-00.mono-chat"
+    ];
+  };
 
   profiles.steam.wine.enable = true;
 
@@ -91,11 +97,10 @@
     };
     systemd-boot = {
       enable = true;
-      # My disk is encrypted so enabling the editor isn't that big of a security risk
-      # If someone has physical access to my computer they have already won.
+      # My disk is encrypted so enabling the editor isn't that big of a security risk,
+      # also if someone has physical access to my computer they have already won.
       editor = true;
       consoleMode = "auto";
-      # consoleMode = "keep";
     };
   };
 
