@@ -28,9 +28,10 @@
   profiles.smb.secretFile = rootPath + "/secrets/smb-public-share.txt";
 
   profiles.pipewire.enable = true;
-  profiles.pipewire.enableLowLatency = true;
+  profiles.pipewire.enableLowLatency = false;
   profiles.pipewire.loopbackTargets = [
-    "alsa_output.pci-0000_0e_00.4.analog-stereo"
+    # "alsa_output.pci-0000_0e_00.4.analog-stereo"
+    "alsa_output.usb-Burr-Brown_from_TI_USB_Audio_CODEC-00.analog-stereo-output"
     "alsa_output.usb-SteelSeries_SteelSeries_Arctis_7-00.stereo-game"
   ];
 
