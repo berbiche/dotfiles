@@ -23,6 +23,8 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
+      my.home.imports = [ ./home-manager.nix ];
+
       sound.enable = false;
       hardware.pulseaudio.enable = false;
 
