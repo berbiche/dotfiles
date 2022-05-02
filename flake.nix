@@ -4,14 +4,17 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
-    # nixpkgs.url = "github:berbiche/nixpkgs/fix-emacs-passthru";
     # nixpkgs.url = "git+file:///home/nicolas/dev/nixpkgs";
-    #nix-darwin.url = "github:LnL7/nix-darwin";
-    nix-darwin.url = "github:berbiche/nix-darwin/stuff-i-want-merged";
     master.url = "github:nixos/nixpkgs/master";
-    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url= "github:berbiche/home-manager/my-custom-master-branch";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    nix-darwin = {
+      # url = "github:LnL7/nix-darwin";
+      url = "github:berbiche/nix-darwin/stuff-i-want-merged";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    home-manager = {
+      url= "github:berbiche/home-manager/my-custom-master-branch";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nur.url = "github:nix-community/nur";
     my-nur = { url = "github:berbiche/nur-packages"; flake = false; };
 
@@ -21,8 +24,10 @@
     doom-emacs-source = { url = "github:hlissner/doom-emacs/master"; flake = false; };
     emacs-overlay.url = "github:nix-community/emacs-overlay";
 
-    neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
-    neovim-nightly.inputs.nixpkgs.follows = "nixpkgs";
+    neovim-nightly = {
+      url = "github:nix-community/neovim-nightly-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     nixpkgs-wayland = {
       url = "github:nix-community/nixpkgs-wayland";
@@ -39,10 +44,18 @@
 
     nixpkgsFor = forAllPlatforms (platform: let
       # I need to submit a PR with this patch
-      patchedNixpkgs = (import nixpkgs { system = platform; }).applyPatches {
+      pkgs' = import nixpkgs { system = platform; };
+      patchedNixpkgs = pkgs'.applyPatches {
         name = "patched-nixpkgs";
         src = nixpkgs;
-        patches = [ (builtins.path { path = ./overlays/add-option-to-disable-automatic-user-xsession-file-execution.patch; }) ];
+        patches = [
+          (builtins.path { path = ./overlays/add-option-to-disable-automatic-user-xsession-file-execution.patch; })
+          (pkgs'.fetchpatch {
+            name = "vulkan-loader-fix-include-path.patch";
+            url = "https://github.com/NixOS/nixpkgs/commit/c55ce6c9bb872edfcae372f85f05bb3018ee4fce.patch";
+            sha256 = "sha256-Vpw0UIlqiZut0Uyf2BoC7svJuTpW4KNHHdnqdYkY7hU=";
+          })
+        ];
       };
     in import patchedNixpkgs {
       system = platform;
