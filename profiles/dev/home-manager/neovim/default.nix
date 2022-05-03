@@ -9,10 +9,18 @@ let
     # The `-s` or `--remote` flag has to be specified last
     # The `mktemp -u` flag will not create the file (otherwise neovim will refuse to replace it)
     nvim = toString (pkgs.writeShellScript "neovim-alias" ''
+      # Pick up the nvim command from the current environment
+      # This allows updating the neovim configuration without reloading
+      # all shells to use the new alias
+      nvim=$(command -v nvim)
       if [[ -z "$NVIM_LISTEN_ADDRESS" ]]; then
-        exec ${config.programs.neovim.finalPackage}/bin/nvim "$@"
+        if [[ -z "$nvim" ]]; then
+          exec -a nvim ${config.programs.neovim.finalPackage}/bin/nvim "$@"
+        else
+          exec -a nvim "$nvim" "$@"
+        fi
       else
-        exec ${pkgs.neovim-remote}/bin/nvr -s "$@"
+        exec -a nvim ${pkgs.neovim-remote}/bin/nvr -s "$@"
       fi
     '');
     n = nvim;
