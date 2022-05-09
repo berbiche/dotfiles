@@ -42,7 +42,7 @@
       patchedNixpkgs = (import nixpkgs { system = platform; }).applyPatches {
         name = "patched-nixpkgs";
         src = nixpkgs;
-        patches = [ ./overlays/add-option-to-disable-automatic-user-xsession-file-execution.patch ];
+        patches = [ (builtins.path { path = ./overlays/add-option-to-disable-automatic-user-xsession-file-execution.patch; }) ];
       };
     in import patchedNixpkgs {
       system = platform;
@@ -222,6 +222,10 @@
         # The package always fails to build on Darwin,
         # so just disable it and use the cask instead
         kitty = prev.runCommandLocal "dummy" { } "mkdir -p $out";
+        # FIXME: https://github.com/NixOS/nixpkgs/issues/168984
+        golangci-lint = prev.golangci-lint.override {
+          buildGoModule = prev.buildGoModule;
+        };
       };
       x86_64-for-aarch64 = final: prev: let
         inherit (prev) lib;
