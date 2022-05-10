@@ -15,10 +15,10 @@ in
     audiocontrol = pavucontrol;
     launcher = menu-ulauncher;
     menu = menu-ulauncher;
-    logout = "${pkgs.xfce.xfce4-session}/bin/xfce4-session-logout";
-    locker = pkgs.writeShellScript "i3-locker" ''
+    logout = "${pkgs.gnome.gnome-session}/bin/gnome-session-quit";
+    locker = pkgs.writeShellScript "locker" ''
       case "$XDG_CURRENT_DESKTOP" in
-        none+i3)
+        none+*)
           ${pkgs.lightlocker}/bin/light-locker-command -l
           ;;
         GNOME-Flashback*)
@@ -31,8 +31,8 @@ in
 
     menu-ulauncher = "${pkgs.bash}/bin/bash -lc ${pkgs.ulauncher}/bin/ulauncher-toggle";
 
-    light-locker = pkgs.writeShellScript "i3-lockscreen" ''
-      if [ "$XDG_CURRENT_DESKTOP" = "none+i3" ]; then
+    light-locker = pkgs.writeShellScript "lockscreen" ''
+      if [ "$XDG_CURRENT_DESKTOP" = "none+*" ]; then
         ${pkgs.lightlocker}/bin/light-locker --idle-hint --lock-on-suspend --lock-after-screensaver=5 --late-locking
       fi
     '';
@@ -47,7 +47,7 @@ in
     # i3 and Sway don't parse quotes correctly so the commas in the command below
     # are parsed as i3/sway command separators.
     # The solution is to use a wrapper script
-    playerctl = pkgs.writeShellScript "i3-playerctl" ''
+    playerctl = pkgs.writeShellScript "playerctl" ''
       ${pkgs.playerctl}/bin/playerctl --player=spotify,mpv,firefox "$@"
     '';
     element-desktop = "${pkgs.element-desktop}/bin/element-desktop";

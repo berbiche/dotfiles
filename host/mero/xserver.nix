@@ -14,6 +14,7 @@
 
     Section "Monitor"
       Identifier  "Monitor-Philips"
+      VendorName  "Unknown"
       ModelName   "Philips PHL346B1C"
       HorizSync   160.0 - 160.0
       VertRefresh 48.0 - 100.0

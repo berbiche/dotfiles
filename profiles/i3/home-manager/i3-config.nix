@@ -83,7 +83,6 @@ in {
         (mkMarkSocial "element" { class = "Element"; })
         (mkMarkSocial "signal" { class = "Signal"; })
         (mkMarkSocial "bitwarden" { class = "Bitwarden"; })
-        (mkMarkSocial "rocket" { class = "Rocket.Chat"; })
         (mkMarkSocial "caprine" { class = "Caprine"; })
       ];
     };

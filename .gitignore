@@ -4,3 +4,4 @@
 hostname
 result
 /.direnv/
+__pycache__
