@@ -55,17 +55,37 @@ let
       secrets = mkProfile [ ./secrets ];
     }
     // optionalAttrs isLinux {
-      core-linux = mkProfile [ ./core-linux ./pipewire ];
+      core-linux = mkProfile [
+        ./core-linux
+        ./pipewire
+      ];
       gnome = mkProfile [ ./gnome ];
       graphical-linux = mkProfile [ ./graphical-linux ];
       kinect = mkProfile [ ./kinect ];
       obs = mkProfile [ ./obs ];
       steam = mkProfile [ ./steam ];
-      sway = mkProfile [ ./i3-sway ./sway ];
+      sway = mkProfile [
+        ./i3-sway
+        ./sway
+      ];
       wireguard = mkProfile [ ./wireguard ];
-      i3 = mkProfile [ ./i3-sway ./i3 ];
+      i3 = mkProfile [
+        ./i3-sway
+        ./i3
+      ];
+      qtile = mkProfile [
+        ./qtile
+      ];
       # Pseudo profiles
-      default-linux = mkProfile (with self; [ core-linux dev graphical-linux programs sway ctf secrets ]);
+      default-linux = mkProfile (with self; [
+        core-linux
+        dev
+        graphical-linux
+        programs
+        sway
+        ctf
+        secrets
+      ]);
     }
     // optionalAttrs isDarwin {
       core-darwin = mkProfile [ ./core-darwin ];
