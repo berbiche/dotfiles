@@ -51,9 +51,9 @@
         patches = [
           (builtins.path { path = ./overlays/add-option-to-disable-automatic-user-xsession-file-execution.patch; })
           (pkgs'.fetchpatch {
-            name = "vulkan-loader-fix-include-path.patch";
-            url = "https://github.com/NixOS/nixpkgs/commit/c55ce6c9bb872edfcae372f85f05bb3018ee4fce.patch";
-            sha256 = "sha256-Vpw0UIlqiZut0Uyf2BoC7svJuTpW4KNHHdnqdYkY7hU=";
+            name = "dotnet3.1-unbreak-icu.patch";
+            url = "https://github.com/NixOS/nixpkgs/commit/611be96fd91496423cc48718e6d2e795ed2aa073.patch";
+            sha256 = "sha256-LzpPQxLtlwm37rSQMOfhNELwWzKx0KoJv65ws/358TU=";
           })
         ];
       };
@@ -80,7 +80,7 @@
     # We don't use nixpkgs' `lib.nixosSystem` because patches applied
     # to NixOS modules are not visible from this function exposed in their flake.
     # The solution is to import eval-config.nix directly.
-    mkLinuxConfig = args@{ platform, hostname, ... }: let
+    mkLinuxConfig = args@{ platform, hostname, stateVersion ? "22.05", ... }: let
       pkgs = nixpkgsFor.${platform};
       lib = pkgs.lib;
     in import "${pkgs.path}/nixos/lib/eval-config.nix" {
@@ -90,6 +90,7 @@
           isLinux = true;
           extraModules = [ ./top-level/nixos.nix ];
         }) ++ [{
+          system.stateVersion = stateVersion;
           # This module is part of the upstream `lib.nixosSystem`
           # and needs to be replicated here manually.
           system.nixos.versionSuffix =

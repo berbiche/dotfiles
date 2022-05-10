@@ -75,7 +75,7 @@ in
       "gtk-cursor-theme-size" = config.my.theme.cursor.size;
     };
   };
-  xsession.pointerCursor = {
+  home.pointerCursor = {
     package = config.my.theme.cursor.package;
     name = "${config.my.theme.cursor.name}";
     size = config.my.theme.cursor.size;

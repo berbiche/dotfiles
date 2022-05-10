@@ -87,7 +87,7 @@ in
       "gtk-cursor-theme-size" = config.my.theme.cursor.size;
     };
   };
-  xsession.pointerCursor = mkIf isLinux {
+  home.pointerCursor = mkIf isLinux {
     package = config.my.theme.cursor.package;
     name = "${config.my.theme.cursor.name}";
     size = config.my.theme.cursor.size;
