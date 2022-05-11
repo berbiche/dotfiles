@@ -60,7 +60,7 @@ let
       };
       nativeBuildInputs = [ pkgs.makeWrapper ];
       buildInputs = [ pkgs.python3 ];
-      BINS = lib.makeBinPath [ pkgs.systemd pkgs.dbus pkgs.sway ];
+      BINS = lib.makeBinPath [ pkgs.systemd pkgs.dbus pkgs.sway pkgs.gnugrep ];
     } ''
       mkdir -p $out/bin
       install -Dm755 $src/src/{session.sh,assign-cgroups.py} $out/bin
