@@ -17,6 +17,9 @@
 
   networking.firewall.enable = true;
 
+  systemd.network.wait-online.timeout = 10;
+  systemd.network.wait-online.anyInterface = true;
+
   # Set automatic hibernation image size to prevent "not enough memory"
   # errors when trying to hibernate, even though the swapfile is as big as
   # the amount of ram I have...

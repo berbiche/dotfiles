@@ -21,6 +21,8 @@ in
   config = mkIf cfg.enable {
     networking.networkmanager.unmanaged = [ network ];
 
+    systemd.network.wait-online.ignoredInterfaces = [ network ];
+
     systemd.network.netdevs.${network} = {
       enable = true;
       netdevConfig = {

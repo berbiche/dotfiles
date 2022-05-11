@@ -112,24 +112,6 @@
     options = [ "subvol=nixos/private" "compress=zstd" "noatime" "nodiratime" "discard" ];
   };
 
-  boot.initrd.luks.devices."blackarch" = {
-    device = "/dev/disk/by-partlabel/blackarch_enc";
-    # TLDR: performance improvement on my SSD
-    bypassWorkqueues = true;
-    allowDiscards = true;
-  };
-  system.activationScripts."blackarch-permissions".text = ''
-    echo "chowning /dev/mapper/blackarch to qemu-libvirtd:libvirtd"
-    if [ -b /dev/mapper/blackarch ]; then
-      chown -v qemu-libvirtd:libvirtd /dev/mapper/blackarch
-      if [ $? -ne 0 ]; then
-        echo "Failed to chown /dev/mapper/blackarch"
-      fi
-    else
-      echo "could not chown /dev/mapper/blackarch"
-    fi
-  '';
-
   nix.settings.max-jobs = 6;
   powerManagement.enable = true;
   powerManagement.powertop.enable = true;
@@ -193,6 +175,7 @@
 
   my.home = { config, lib, pkgs, ... }: {
     profiles.steam.enableProtonGE = true;
-    services.sway-notification-center.settings.positionX = "left";
+    # I wish gammastep was smart enough to figure out the backend automatically...
+    services.gammastep.settings.general.adjustment-method = "wayland";
   };
 }
