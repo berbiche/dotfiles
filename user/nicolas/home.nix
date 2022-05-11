@@ -127,6 +127,26 @@ in
   services.network-manager-applet.enable = mkDefault isLinux;
 
   services.plex-mpv-shim.enable = mkDefault isLinux;
+  services.plex-mpv-shim.settings = {
+    enable_gui = false;
+    client_uuid = "2b3dd3d6-c436-4f2b-8d5e-1ea1daec86b7";
+    fullscreen = false;
+    kb_debug = "~";
+    kb_menu = "c";
+    kb_menu_down = "down";
+    kb_menu_esc = "esc";
+    kb_menu_left = "left";
+    kb_menu_ok = "enter";
+    kb_menu_right = "right";
+    kb_menu_up = "up";
+    kb_next = ">";
+    kb_pause = "space";
+    kb_prev = "<";
+    kb_stop = "q";
+    kb_unwatched = "u";
+    kb_watched = "w";
+    transcode_kbps = "6000";
+  };
 
   # Playerctl smart daemon to stop the "last player"
   # supposedly smarter than the default play-pause behavior
