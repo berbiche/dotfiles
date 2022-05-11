@@ -1,5 +1,5 @@
 { config, ... }:
 
 {
-  services.easyeffects.enable = true;
+  services.easyeffects.enable = false;
 }
