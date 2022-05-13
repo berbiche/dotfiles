@@ -13,8 +13,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  # Introduce a sleep in every ydotool command for better compatibility with Sway
-  ydotool = "${pkgs.ydotool}/bin/ydotool sleep 100 ,";
+  ydotool = "${pkgs.ydotool}/bin/ydotool";
 in
 {
   options.profiles.sway.libinput.enable = lib.mkEnableOption "libinput gesture configuration";
@@ -22,10 +21,17 @@ in
   config = lib.mkIf config.profiles.sway.libinput.enable {
     my.home.home.packages = [ pkgs.ydotool ];
 
-    services.gebaar-libinput = {
+    services.gebaar-libinput = let
+      # From Linux's kernel input-event-codes.h
+      KEY_LEFTMETA = "125";
+      KEY_O = "24";
+      KEY_I = "23";
+      KEY_P = "25";
+    in {
       enable = true;
 
-      # ydotool.enable = true;
+      # Necessary with ydotool now
+      ydotoold.enable = true;
 
       # This configuration is tightly related to my Sway `keybindings.nix`
       # This configuration also uses "natural scrolling" where in
@@ -34,12 +40,13 @@ in
       settings = {
         swipe.commands.four = {
           # Go to next workspace when swiping left with 4 fingers
-          left = "${ydotool} key Super_L+o";
+          # Super_L + o == KEY_LEFTMETA
+          left = "${ydotool} key ${KEY_LEFTMETA}:1 ${KEY_O}:1 ${KEY_O}:0 ${KEY_LEFTMETA}:0";
           # Go to previous workspace when swiping right with 4 fingers
-          right = "${ydotool} key Super_L+i";
+          right = "${ydotool} key ${KEY_LEFTMETA}:1 ${KEY_I}:1 ${KEY_I}:0 ${KEY_LEFTMETA}:0";
         };
         swipe.commands.three = {
-          up = "${ydotool} key Super_L+p";
+          # up = "${ydotool} key ${KEY_LEFTMETA}:1 ${KEY_P}:1 ${KEY_P}:0 ${KEY_LEFTMETA}:0";
           right = "${pkgs.sway}/bin/swaymsg focus left";
           left = "${pkgs.sway}/bin/swaymsg focus right";
         };

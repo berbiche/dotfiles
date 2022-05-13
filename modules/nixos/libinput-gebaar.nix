@@ -22,8 +22,8 @@ in
       '';
     };
 
-    ydotool = {
-      enable = mkEnableOption "ydotool virtual input system service";
+    ydotoold = {
+      enable = mkEnableOption "ydotoold virtual input system service";
       package = mkOption {
         type = types.package;
         default = pkgs.ydotool;
@@ -77,7 +77,7 @@ in
 
       partOf = [ "graphical.target" ];
       requires = [ "graphical.target" ];
-      after = [ "graphical.target" ] ++ lib.optionals cfg.ydotool.enable [ "ydotoold.service" ];
+      after = [ "graphical.target" ] ++ lib.optionals cfg.ydotoold.enable [ "ydotoold.service" ];
       wantedBy = [ "graphical.target" ];
 
       serviceConfig = rec {
@@ -104,47 +104,33 @@ in
       };
     };
 
-    # systemd.services.ydotoold = mkIf cfg.ydotool.enable {
-    #   description = "Ydotoold virtual input device";
+    systemd.services.ydotoold = mkIf cfg.ydotoold.enable {
+      description = "Ydotoold virtual input device";
 
-    #   partOf = [ "graphical.target" ];
-    #   requires = [ "graphical.target" ];
-    #   after = [ "graphical.target" ];
-    #   wantedBy = [ "graphical.target" ];
+      partOf = [ "graphical.target" ];
+      requires = [ "graphical.target" ];
+      after = [ "graphical.target" ];
+      wantedBy = [ "graphical.target" ];
 
-    #   serviceConfig = {
-    #     ExecStartPre = pkgs.writeShellScript "delete-ydotool-socket" ''
-    #       ${pkgs.coreutils}/bin/rm /tmp/.ydotool_socket || true
-    #     '';
-    #     ExecStart = "${cfg.ydotool.package}/bin/ydotoold";
-    #     ExecStopPost = pkgs.writeShellScript "delete-ydotool-socket" ''
-    #       ${pkgs.coreutils}/bin/rm /tmp/.ydotool_socket || true
-    #     '';
-    #     ExecReload = "systemctl kill --signal=HUP $MAINPID";
-    #     KillMode = "process";
-    #     TimeoutSec = 100;
-    #     Restart = "on-failure";
-    #     User = config.users.users.gebaar-libinput.name;
-    #     Group = config.users.users.gebaar-libinput.group;
+      serviceConfig = {
+        ExecStartPre = pkgs.writeShellScript "delete-ydotool-socket" ''
+          ${pkgs.coreutils}/bin/rm /tmp/.ydotool_socket || true
+        '';
+        ExecStart = "${cfg.ydotoold.package}/bin/ydotoold";
+        ExecStopPost = pkgs.writeShellScript "delete-ydotool-socket" ''
+          ${pkgs.coreutils}/bin/rm /tmp/.ydotool_socket || true
+        '';
+        ExecReload = "systemctl kill --signal=HUP $MAINPID";
+        KillMode = "process";
+        TimeoutSec = 100;
+        Restart = "on-failure";
+        User = config.users.users.gebaar-libinput.name;
+        Group = config.users.users.gebaar-libinput.group;
 
-    #     # ProtectHome = "read-only";
-    #     # PrivateTmp = true;
-    #   };
-    # };
-
-    # systemd.sockets.ydotoold = mkIf cfg.ydotool.enable {
-    #   description = "Socket for Ydotoold";
-
-    #   partOf = [ "graphical.target" ];
-    #   requires = [ "graphical.target" ];
-    #   after = [ "graphical.target" ];
-    #   wantedBy = [ "graphical.target" ];
-
-    #   # The socket is configurable in ydotoold, but not in the ydotool client
-    #   # so it currently serves no purpose: https://github.com/ReimuNotMoe/ydotool/issues/86
-    #   listenStreams = [ "/tmp/.ydotool_socket" ];
-    # };
-
+        ProtectHome = "read-only";
+        PrivateTmp = false;
+      };
+    };
   };
 
   meta.maintainers = with lib.maintainers; [ berbiche ];
