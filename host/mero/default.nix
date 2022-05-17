@@ -59,32 +59,17 @@
 
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
-  # Disable HDMI/DisplayPort audio with amdgpu
-  # environment.etc."modprobe.d/custom-amdgpu.conf".text = ''
-  #   options amdgpu audio=0
-  #   # 10-bit colors lack hw accel on Chromium, and glitches with Mesa/Vulkan
-  #   # options amdgpu deep_color=1
-
-  #   # DSC still not working with my samsung monitor
-  #   #options amdgpu dc=0
-  # '';
+  hardware.nvidia.open = true;
 
   # https://www/spinics.net/lists/usb/msg02644.html
-  # Hopefully this will fix usb issues with my nested usb docks (4 level of nesting)
-  # Sometimes I can't use my keyboard when booting because usb read errors
+  # Hopefully this will fix usb issues with my nested usb docks
   environment.etc."modprobe.d/custom-usb.conf".text = ''
     options usbcore old_scheme_first=y
     options usbcore use_both_schemes=y
   '';
 
-  # Hide devices from Nemo/Nautilus
-  services.udev.extraRules = ''
-     SUBSYSTEM=="block", ENV{ID_FS_UUID}=="7F25-9A66", ENV={UDISKS_IGNORE}="1"
-  '';
-
   hardware.video.hidpi.enable = false;
 
-  # Boot loader settings
   # Resume device is the partition with the swapfile in this case
   boot.resumeDevice = "/dev/mapper/cryptroot";
   # Show Nixos logo while loading
@@ -112,24 +97,6 @@
     bypassWorkqueues = true;
     allowDiscards = true;
   };
-
-  # boot.initrd.luks.devices."blackarch" = {
-  #   device = "/dev/disk/by-partlabel/blackarch_enc";
-  #   # TLDR: performance improvement on my SSD
-  #   bypassWorkqueues = true;
-  #   allowDiscards = true;
-  # };
-  # system.activationScripts."blackarch-permissions".text = ''
-  #   echo "chowning /dev/mapper/blackarch to qemu-libvirtd:libvirtd"
-  #   if [ -b /dev/mapper/blackarch ]; then
-  #     chown -v qemu-libvirtd:libvirtd /dev/mapper/blackarch
-  #     if [ $? -ne 0 ]; then
-  #       echo "Failed to chown /dev/mapper/blackarch"
-  #     fi
-  #   else
-  #     echo "could not chown /dev/mapper/blackarch"
-  #   fi
-  # '';
 
   # FS settings
   fileSystems."/" = {
@@ -171,18 +138,13 @@
 
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia.modesetting.enable = true;
+  hardware.nvidia.package = lib.mkIf config.hardware.nvidia.open config.boot.kernelPackages.nvidiaPackages.beta;
   hardware.cpu.amd.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
   hardware.opengl.enable = true;
   hardware.opengl.driSupport = true;
 
   services.resolved.enable = lib.mkForce false;
-
-  hardware.opengl.extraPackages = with pkgs; [
-    # rocm-opencl-icd
-    # rocm-runtime
-    # amdvlk
-  ];
 
   networking.firewall.allowPing = true;
   # Open ports in the firewall.
@@ -226,6 +188,9 @@
 
     profiles.steam.enableProtonGE = true;
 
-    profiles.i3-sway.notifications = "linux-notification-center";
+    profiles.i3-sway.notifications = "swaync";
+    services.sway-notification-center.settings = {
+      fit-to-screen = false;
+    };
   };
 }
