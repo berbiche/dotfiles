@@ -26,12 +26,19 @@ let
 
   OUTPUT-LAPTOP = "eDP-1";
 
-  # Sway's poor default to repeat the action continuously is dumb
+  # Sway's bad default to repeat the action continuously is dumb
   makeNoRepeat = lib.mapAttrs' (n: v:
-    let default = "--no-warn ${n}"; in
+    let
+      default = "--no-warn ${n}";
+      # check for wrapper mk* thingy (mkDefault, mkIf, etc.)
+      # and use the inner content
+      value = if v ? _type then v.content else v;
+      innerValue = if value ? repeat then value.repeat else value;
+    in
     lib.nameValuePair
-      (if v ? repeat then default else "--no-repeat ${default}")
-      (v.repeat or v)
+      (if value ? repeat then default else "--no-repeat ${default}")
+      (if v ? _type then v // ({ content = innerValue; })
+       else innerValue)
   );
   # Marks a keybinding as being repeatable (holding the key will trigger the action continuously)
   makeRepeatable = n: { repeat = n; };
@@ -139,6 +146,7 @@ makeNoRepeat (defaultKeybindings // {
   "${modifier}+f"       = "fullscreen, inhibit_idle fullscreen";
   "${modifier}+Shift+f" = "fullscreen global, inhibit_idle fullscreen";
 
+  "${modifier}+a"       = lib.mkDefault null;
   "${modifier}+z"       = "focus child";
   "${modifier}+Shift+z" = "focus parent";
   "${modifier}+Shift+s" = "sticky toggle";
