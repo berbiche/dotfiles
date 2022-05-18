@@ -4,8 +4,8 @@ final: prev: {
     src = prev.fetchFromGitHub {
       owner = "ErikReider";
       repo = "SwayNotificationCenter";
-      rev = "188bef8bf90364ee0d76eb07b8e3736ef1382ce5";
-      hash = "sha256-0RmYsxpe4rt/BMAqxhaDBh2l5BflFK7p3Hqxu7icPD4=";
+      rev = "a9c7af237102303908a4392da0dc8e86db60d9d4";
+      hash = "sha256-LKt/iB/mNAe0CBuw/0L8iBvnWkUnLzBhGQXA1WgM9SQ=";
     };
     buildInputs = drv.buildInputs or [ ] ++ [ prev.scdoc ];
     patches = drv.patches or [] ++ [

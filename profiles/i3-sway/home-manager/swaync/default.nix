@@ -5,6 +5,7 @@
     settings = {
       positionX = lib.mkDefault "center";
       positionY = "top";
+      control-center-height = 600;
       control-center-margin-top = 5;
       control-center-margin-bottom = 5;
       control-center-margin-right = 5;
