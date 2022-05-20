@@ -5,7 +5,7 @@ let
   shitty-keyboards =
     builtins.listToAttrs (map (name: {
       inherit name;
-      value = { 
+      value = {
         xkb_options = "ctrl:swapcaps,compose:ralt";
         xkb_layout = "us";
         repeat_rate = defaultRepeatRate;
@@ -28,7 +28,7 @@ shitty-keyboards // {
     tap = "enabled";
     natural_scroll = "enabled";
     middle_emulation = "enabled";
-    pointer_accel = "-0.1";
+    pointer_accel = "0.25";
     scroll_factor = "0.5";
     scroll_method = "two_finger";
     # Number of fingers for each "button": 1: left; 2: right; 3: middle
