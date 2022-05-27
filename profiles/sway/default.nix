@@ -18,6 +18,7 @@
   services.xserver.displayManager.defaultSession = "sway";
 
   profiles.sway.libinput.enable = true;
+  profiles.sway.enableGtklock = true;
 
   # I don't use Home Manager's Sway package since it does not expose
   # the session to my login manager

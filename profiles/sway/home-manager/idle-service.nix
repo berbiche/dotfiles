@@ -1,7 +1,8 @@
 { config, lib, pkgs, ... }:
 
 let
-  swaylock  = "${pkgs.swaylock}/bin/swaylock";
+  # lock  = "${pkgs.swaylock}/bin/swaylock --daemonize";
+  lock  = "${pkgs.gtklock}/bin/gtklock --daemonize -s ${config.xdg.configHome}/gtklock/style.css";
   swaymsg   = "${pkgs.sway}/bin/swaymsg";
   playerctl = "${pkgs.playerctl}/bin/playerctl";
   systemctl = "${pkgs.systemd}/bin/systemctl";
@@ -18,7 +19,7 @@ in
       {
         timeout = "5 minutes";
         command = [
-          "${swaylock} -f"
+          "${lock}"
           # "${swaymsg} 'input type:pointer events disabled'"
           "${swaymsg} 'seat default idle_wake keyboard touchpad switch'"
         ];
@@ -41,12 +42,12 @@ in
     beforeSleep = [
       "${playerctl} ${withPlayerctld} pause"
       "${dunstctl} set-paused true"
-      "${swaylock} -f"
+      "${lock}"
     ];
 
     lock = [
       "${dunstctl} set-paused true"
-      "${swaylock} -f"
+      "${lock}"
     ];
 
     unlock = [

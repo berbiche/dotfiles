@@ -35,6 +35,7 @@
 
     # Sway's lockscreen configuration
     ./swaylock.nix
+    ./gtklock.nix
 
     # Logout menu that is displayed with a special keybind
     ./wlogout.nix
