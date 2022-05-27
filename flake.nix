@@ -49,7 +49,7 @@
         name = "patched-nixpkgs";
         src = nixpkgs;
         patches = [
-          (builtins.path { path = ./overlays/add-option-to-disable-automatic-user-xsession-file-execution.patch; })
+          (builtins.path { path = ./overlays/xserver-patches.patch; })
           (pkgs'.fetchpatch {
             name = "dotnet3.1-unbreak-icu.patch";
             url = "https://github.com/NixOS/nixpkgs/commit/611be96fd91496423cc48718e6d2e795ed2aa073.patch";

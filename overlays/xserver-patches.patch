@@ -1,0 +1,76 @@
+commit dad6f3236e388c820b051a7b8998956fb3483d7b
+Author: Nicolas Berbiche <nicolas@normie.dev>
+Date:   Thu May 26 20:20:54 2022 -0400
+
+    xserver: add an option to disable automatic user xsession execution
+
+diff --git a/nixos/modules/services/x11/display-managers/default.nix b/nixos/modules/services/x11/display-managers/default.nix
+index a5db3dd5dd4..6743e6cfa2a 100644
+--- a/nixos/modules/services/x11/display-managers/default.nix
++++ b/nixos/modules/services/x11/display-managers/default.nix
+@@ -89,11 +89,13 @@ let
+       # Start systemd user services for graphical sessions
+       /run/current-system/systemd/bin/systemctl --user start graphical-session.target
+ 
+-      # Allow the user to setup a custom session type.
+-      if test -x ~/.xsession; then
+-          eval exec ~/.xsession "$@"
+-      fi
++      ${optionalString (cfg.displayManager.job.executeUserXsession) ''
++        # Allow the user to setup a custom session type.
++        if test -x ~/.xsession; then
++            eval exec ~/.xsession "$@"
++        fi
+ 
++      ''}
+       if test "$1"; then
+           # Run the supplied session command. Remove any double quotes with eval.
+           eval exec "$@"
+@@ -301,6 +303,9 @@ in
+       };
+ 
+       job = {
++        executeUserXsession = mkEnableOption "executing the user's <filename>$HOME/.xsession</filename> if it exists" // {
++          default = true;
++        };
+ 
+         preStart = mkOption {
+           type = types.lines;
+
+commit e54328ff4b94cdbbd49d208eb909b800a7de64f0
+Author: Nicolas Berbiche <nicolas@normie.dev>
+Date:   Thu May 26 20:22:18 2022 -0400
+
+    xserver: add option to disable starting graphical-session.target
+    automatically
+
+diff --git a/nixos/modules/services/x11/display-managers/default.nix b/nixos/modules/services/x11/display-managers/default.nix
+index 6743e6cfa2a..753e3fb2ff4 100644
+--- a/nixos/modules/services/x11/display-managers/default.nix
++++ b/nixos/modules/services/x11/display-managers/default.nix
+@@ -86,9 +86,11 @@ let
+ 
+       ${cfg.displayManager.sessionCommands}
+ 
+-      # Start systemd user services for graphical sessions
+-      /run/current-system/systemd/bin/systemctl --user start graphical-session.target
++      ${optionalString (cfg.displayManager.job.startGraphicalSession) ''
++        # Start systemd user services for graphical sessions
++        /run/current-system/systemd/bin/systemctl --user start graphical-session.target
+ 
++      ''}
+       ${optionalString (cfg.displayManager.job.executeUserXsession) ''
+         # Allow the user to setup a custom session type.
+         if test -x ~/.xsession; then
+@@ -307,6 +309,10 @@ in
+           default = true;
+         };
+ 
++        startGraphicalSession = mkEnableOption "starting the graphical-session.target automatically" // {
++          default = true;
++        };
++
+         preStart = mkOption {
+           type = types.lines;
+           default = "";
+

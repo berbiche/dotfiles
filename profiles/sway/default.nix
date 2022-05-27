@@ -19,9 +19,14 @@
 
   profiles.sway.libinput.enable = true;
 
-  # I don't use the Sway Home Manager module since it does not expose
+  # I don't use Home Manager's Sway package since it does not expose
   # the session to my login manager
   my.home.wayland.windowManager.sway.package = lib.mkForce null;
+
+  # NixOS' wrapper script cannot be configured per-session
+  # This shouldn't mess with anything else...
+  services.xserver.displayManager.job.executeUserXsession = false;
+  services.xserver.displayManager.job.startGraphicalSession = false;
 
   programs.sway = {
     enable = true;
