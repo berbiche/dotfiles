@@ -139,7 +139,7 @@ let
 
     focus.newWindow = "smart";
     gaps = {
-      inner = 5;
+      inner = 10;
       smartGaps = false; # Always display gaps
       smartBorders = "on"; # Hide borders even with gaps
       # Following option needs to be set in extraConfig
