@@ -245,10 +245,11 @@ let
         command = "mark --add _music-player.spotify";
       }
       (mkMarkSocial "element" { class = "Element"; })
+      (mkMarkSocial "element" { app_id = "Element"; })
       (mkMarkSocial "signal" { class = "Signal"; })
+      (mkMarkSocial "signal" { app_id = "Signal"; })
+      (mkMarkSocial "signal" { title = "^Signal$"; })
       (mkMarkSocial "bitwarden" { class = "Bitwarden"; })
-      (mkMarkSocial "rocket" { class = "Rocket.Chat"; })
-      (mkMarkSocial "caprine" { class = "Caprine"; })
       # assign [con_mark] does not work! So we do it here with a for_window
       (map (x: { command = "move to workspace '${WS7}'"; criteria = x; }) [
         { con_mark = "_social.*"; }
