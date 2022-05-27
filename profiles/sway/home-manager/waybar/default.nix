@@ -14,7 +14,7 @@ let
     inherit layer spacing;
     inherit height width;
     position = "top";
-    margin-top = margin;
+    margin-top = 0;
     margin-right = margin;
     margin-left = margin;
     # margin-bottom = margin;
