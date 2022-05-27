@@ -61,10 +61,9 @@ lib.mkMerge [
 
     # Only start after graphical session because of missing DISPLAY/WAYLAND_DISPLAY
     # environment variable
-    systemd.user.services.emacs = {
-      Unit.PartOf = [ "graphical-session.target" ];
-      Unit.After = [ "graphical-session-pre.target" ];
-      Install.WantedBy = lib.mkForce [ "graphical-session.target" ];
-    };
+    # systemd.user.services.emacs = {
+    #   Unit.PartOf = [ "graphical-session.target" ];
+    #   Install.WantedBy = lib.mkForce [ "graphical-session.target" ];
+    # };
   })
 ]
