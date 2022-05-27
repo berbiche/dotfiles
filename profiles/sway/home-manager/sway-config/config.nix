@@ -31,7 +31,10 @@ let
   # Sway variables
   imagePath = toString config.programs.swaylock.imagePath;
 
-  binaries = rec {
+  binaries = let
+    # ozone-platform-hint is not yet supported by the electron versions used by element/signal
+    electron-ozone = "--ozone-platform-hint=auto --ozone-platform=wayland";
+  in rec {
     terminal = "${config.my.defaults.terminal} --working-directory ${config.home.homeDirectory}";
     floating-term = "${terminal} --class='floating-term'";
     explorer = "${config.my.defaults.file-explorer}";
@@ -77,8 +80,8 @@ let
     nwggrid-server = "${pkgs.nwg-launchers}/bin/nwggrid-server";
     pavucontrol = "${pkgs.pavucontrol}/bin/pavucontrol";
     playerctl = "${pkgs.playerctl}/bin/playerctl --player=spotify,mpv";
-    element-desktop = "${pkgs.element-desktop}/bin/element-desktop";
-    signal-desktop = "${pkgs.signal-desktop}/bin/signal-desktop";
+    element-desktop = "${pkgs.element-desktop}/bin/element-desktop ${electron-ozone}";
+    signal-desktop = "${pkgs.signal-desktop}/bin/signal-desktop ${electron-ozone}";
     nwggrid = "${pkgs.nwg-launchers}/bin/nwggrid";
     nwgbar = "${pkgs.nwg-launchers}/bin/nwgbar";
     rofi = "${config.programs.rofi.finalPackage}/bin/rofi";
