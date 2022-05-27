@@ -15,6 +15,9 @@
 
   my.home = { config, lib, pkgs, ... }: {
     home.packages = with pkgs; [
+      # Remove journalctl noise related to assistive technologies (AT-SPI)
+      at-spi2-core
+
       # Audio software
       pavucontrol
       # control MPRIS players
