@@ -8,6 +8,14 @@
   ];
 
   networking.networkmanager.enable = true;
+  networking.wireless.iwd.enable = false;
+  # networking.networkmanager.wifi.backend = "iwd";
+
+  networking.wireless.iwd.settings = {
+    Network.EnableIPv6 = true;
+    Network.RoutePriorityOffset = 300;
+    Settings.AutoConnect = true;
+  };
 
   # Virtualization
   # virtualisation.docker.enable = true;
@@ -19,6 +27,11 @@
 
   systemd.network.wait-online.timeout = 10;
   systemd.network.wait-online.anyInterface = true;
+  systemd.network.wait-online.extraArgs = [
+    "--interface=wlan0"
+    "--interface=ethernet0"
+    "--operational-state=routable"
+  ];
 
   # Set automatic hibernation image size to prevent "not enough memory"
   # errors when trying to hibernate, even though the swapfile is as big as

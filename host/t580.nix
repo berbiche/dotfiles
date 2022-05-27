@@ -138,6 +138,19 @@
     57621 57622
   ];
 
+  systemd.network.links."10-wifi" = {
+    matchConfig.MACAddress = "3c:6a:a7:d4:e0:90";
+    linkConfig = {
+      Name = "wlan0";
+    };
+  };
+  systemd.network.links."10-ethernet" = {
+    matchConfig.MACAddress = "48:2a:e3:10:9d:0d";
+    linkConfig = {
+      Name = "ethernet0";
+    };
+  };
+
 
   hardware.opengl = {
     enable = true;

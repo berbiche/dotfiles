@@ -187,10 +187,8 @@ in
         fzf # menu
         wofi # menu
         xdg-user-dirs # for the screenshot tool
-        networkmanager # for nmcli
         notify-send_sh # from my overlays
         playerctl # to control mpris players
-        util-linux # flock
       ]);
     in "${
       # For the patchShebang phase
