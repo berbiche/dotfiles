@@ -39,8 +39,8 @@ let
     floating-term = "${terminal} --class='floating-term'";
     explorer = "${config.my.defaults.file-explorer}";
     browser = "env MOZ_DBUS_REMOTE=1 MOZ_ENABLE_WAYLAND=1 ${firefox}";
-    browser-private = "${firefox} --private-window";
-    browser-work-profile = "${firefox} -P job";
+    browser-private = "${browser} --private-window";
+    browser-work-profile = "${browser} -P job";
     lock = "${pkgs.systemd}/bin/loginctl lock-session self";
     logout-menu = "${wlogoutbar}";
     audiocontrol = "${pavucontrol}";
