@@ -95,6 +95,7 @@ let
     wlogout = "${config.programs.wlogout.package}/bin/wlogout -p layer-shell";
     wofi = "${pkgs.wofi}/bin/wofi";
     xfce4-appfinder = "${pkgs.xfce.xfce4-appfinder}/bin/xfce4-appfinder";
+    xdg-desktop-portal-wlr = "${pkgs.xdg-desktop-portal-wlr}/libexec/xdg-desktop-portal-wlr --replace --loglevel=WARN";
   };
 
   inherit (config.profiles.i3-sway) workspaces;
@@ -182,6 +183,7 @@ let
       { command = binaries.element-desktop; }
       { command = binaries.spotify; }
       { command = binaries.signal-desktop; }
+      { command = binaries.xdg-desktop-portal-wlr; }
       # { command = binaries.bitwarden; }
     ];
 
