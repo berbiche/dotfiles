@@ -59,7 +59,7 @@
 
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
-  hardware.nvidia.open = true;
+  # hardware.nvidia.open = true;
 
   # https://www/spinics.net/lists/usb/msg02644.html
   # Hopefully this will fix usb issues with my nested usb docks
@@ -138,7 +138,7 @@
 
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia.modesetting.enable = true;
-  hardware.nvidia.package = lib.mkIf config.hardware.nvidia.open config.boot.kernelPackages.nvidiaPackages.beta;
+  hardware.nvidia.package = lib.mkIf (config.hardware.nvidia.open or false) config.boot.kernelPackages.nvidiaPackages.beta;
   hardware.cpu.amd.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
   hardware.opengl.enable = true;

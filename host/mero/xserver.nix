@@ -32,6 +32,8 @@
       DefaultDepth   24
       Option         "Stereo" "0"
       Option         "metamodes" "5120x1440_120 +0+0 {ForceCompositionPipeline=On, ForceFullCompositionPipeline=On}"
+      Option         "AllowIndirectGLXProtocol" "off"
+      Option         "TripleBuffer" "on"
       Option         "SLI" "Off"
       Option         "MultiGPU" "Off"
       Option         "BaseMosaic" "off"
@@ -48,6 +50,8 @@
       DefaultDepth    24
       Option         "Stereo" "0"
       Option         "metamodes" "3440x1440_100 +0+0 {ForceCompositionPipeline=On, ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On}"
+      Option         "AllowIndirectGLXProtocol" "off"
+      Option         "TripleBuffer" "on"
       Option         "SLI" "Off"
       Option         "MultiGPU" "Off"
       Option         "BaseMosaic" "off"

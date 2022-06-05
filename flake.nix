@@ -51,9 +51,9 @@
         patches = [
           (builtins.path { path = ./overlays/xserver-patches.patch; })
           (pkgs'.fetchpatch {
-            name = "dotnet3.1-unbreak-icu.patch";
-            url = "https://github.com/NixOS/nixpkgs/commit/611be96fd91496423cc48718e6d2e795ed2aa073.patch";
-            sha256 = "sha256-LzpPQxLtlwm37rSQMOfhNELwWzKx0KoJv65ws/358TU=";
+            name = "noisetorch-0.12.0.patch";
+            url = "https://github.com/NixOS/nixpkgs/commit/74ed89f2439f1ccc12da0517fe7a573a4143c9ed.patch";
+            sha256 = "sha256-1LFOjdWvBx2OQRfxI7kvaHx7G54QT2d+HdU9vOrQkVc=";
           })
         ];
       };
