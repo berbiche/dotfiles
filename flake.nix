@@ -50,11 +50,11 @@
         src = nixpkgs;
         patches = [
           (builtins.path { path = ./overlays/xserver-patches.patch; })
-          (pkgs'.fetchpatch {
-            name = "noisetorch-0.12.0.patch";
-            url = "https://github.com/NixOS/nixpkgs/commit/74ed89f2439f1ccc12da0517fe7a573a4143c9ed.patch";
-            sha256 = "sha256-1LFOjdWvBx2OQRfxI7kvaHx7G54QT2d+HdU9vOrQkVc=";
-          })
+          # (pkgs'.fetchpatch {
+          #   name = "noisetorch-0.12.0.patch";
+          #   url = "https://github.com/NixOS/nixpkgs/commit/74ed89f2439f1ccc12da0517fe7a573a4143c9ed.patch";
+          #   sha256 = "sha256-1LFOjdWvBx2OQRfxI7kvaHx7G54QT2d+HdU9vOrQkVc=";
+          # })
         ];
       };
     in import patchedNixpkgs {

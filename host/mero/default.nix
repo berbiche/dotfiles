@@ -183,6 +183,9 @@
   # Enable xbox controller
   hardware.xpadneo.enable = true;
 
+  # I know use an old phone as my webcam
+  programs.droidcam.enable = true;
+
   my.home = { config, lib, pkgs, ... }: {
     home.packages = [ pkgs.glpaper pkgs.wf-recorder pkgs.xlockmore ];
 
