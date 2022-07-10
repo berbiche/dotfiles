@@ -53,6 +53,9 @@ in
       # Run Firefox with the Wayland backend
       export MOZ_ENABLE_WAYLAND = "1";
 
+      # Use GTK portal for the file picker and other things
+      export GTK_USE_PORTAL=1
+
       # TODO: remove once gnome-keyring exports SSH_AUTH_SOCK correctly
       : ''${XDG_RUNTIME_DIR=/run/user/$(id -u)}
       if [ -S  "''${XDG_RUNTIME_DIR}/keyring/ssh" ]; then

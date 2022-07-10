@@ -73,7 +73,6 @@
   xdg = {
     icons.enable = true;
     portal.enable = true;
-    portal.gtkUsePortal = true;
   };
 
   services.printing.enable = true;

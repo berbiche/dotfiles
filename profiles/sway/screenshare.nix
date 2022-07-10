@@ -9,7 +9,6 @@ in
     enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-wlr ]
       ++ lib.optionals gnomeDisabled [ pkgs.xdg-desktop-portal-gtk ];
-    gtkUsePortal = lib.mkIf gnomeDisabled true;
   };
   services.pipewire.enable = true;
 

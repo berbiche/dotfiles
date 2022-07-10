@@ -112,6 +112,8 @@ let
       "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features" = false;
       # Force-enable xdg-desktop-portal for filepickers and other things
       "widget.use-xdg-desktop-portal" = true;
+      "widget.use-xdg-desktop-portal.file-picker" = 1;
+      "widget.use-xdg-desktop-portal.mime-handler" = 1;
 
       # Prevent the browser from requesting true fullscreen
       # This allows me to personally fullscreen or not something (e.g. Youtube)
@@ -213,7 +215,7 @@ let
       # Extra security settings
       # 0=don't allow sub-resources to open HTTP authentication credentials dialogs
       # 1=don't allow cross-origin sub-resources '' '' ''
-      # 2=allow '' '' (default)
+      # 2=allow cross-origin sub-resources (default)
       "network.auth.subresource-http-auth-allow" = 1;
       "security.ssl.require_safe_negotiation" = true;
       "security.tls.version.enabled-deprecated" = false;
