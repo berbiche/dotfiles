@@ -26,7 +26,7 @@ in
 {
   xdg.configFile = grammars // {
     "nvim/after/queries/nix/injections.scm" = {
-      text = (lib.optionalString false ''
+      text = (lib.optionalString true ''
         ;; This uses oxalica's injections with the new syntax from tree sitter
         (binding
           attrpath: ((attrpath (identifier)) @_path
@@ -191,7 +191,7 @@ in
         ([(indented_string_expression) (string_expression)] @lua @_code
           (#lua-match? @_code "\s*\\-\\- Syntax: lua"))
       '') +
-      (lib.optionalString true ''
+      (lib.optionalString false ''
         ((app [
             ((identifier) @_func)
             (select (identifier) (attrpath (attr_identifier) @_func . ))

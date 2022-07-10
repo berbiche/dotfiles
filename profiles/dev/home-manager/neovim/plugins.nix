@@ -16,7 +16,7 @@ in
         notify.setup({
           stages = 'fade',
           render = 'minimal',
-          background_color = '#000000',
+          background_colour = '#000000',
         })
 
         vim.notify = notify
@@ -451,60 +451,59 @@ in
     {
       # Filetree
       plugin = nvim-tree-lua;
+      type = "lua";
       config = ''
-        let g:nvim_tree_add_trailing = 1
-        let g:nvim_tree_git_hl = 1
-        let g:nvim_tree_highlight_opened_files = 1
+        require('nvim-tree').setup {
+          update_focused_file = {
+            enable = true,
+            ignore_list = {'startify', 'dashboard'},
+          },
+          git = {
+            enable = true,
+            ignore = true,
+          },
+          lsp_diagnostics = enable,
+          filters = {
+            custom = { '.git', 'result', },
+          },
+          renderer = {
+            add_trailing = true,
+            highlight_git = true,
+            highlight_opened_files = "icon",
+          },
+        }
 
-
-        lua <<EOF
-          require('nvim-tree').setup {
-            update_focused_file = {
-              enable = true,
-              ignore_list = {'startify', 'dashboard'},
-            },
-            git = {
-              enable = true,
-              ignore = true,
-            },
-            lsp_diagnostics = enable,
-            filters = {
-              custom = { '.git', 'result', },
-            },
-          }
-
-          function _G.tree_toggle()
-            local tree = require('nvim-tree')
-            local view = require('nvim-tree.view')
-            local st = require('bufferline.state')
-            tree.toggle()
-            if view.is_visible() then
-              st.set_offset(30, 'FileTree')
-            else
-              st.set_offset(0)
-            end
+        function _G.tree_toggle()
+          local tree = require('nvim-tree')
+          local view = require('nvim-tree.view')
+          local st = require('bufferline.state')
+          tree.toggle()
+          if view.is_visible() then
+            st.set_offset(30, 'FileTree')
+          else
+            st.set_offset(0)
           end
+        end
 
-          local map = vim.api.nvim_set_keymap
-          local opts = { noremap = true, silent = true }
+        local map = vim.api.nvim_set_keymap
+        local opts = { noremap = true, silent = true }
 
-          map('n', '<leader>op', '<cmd>call v:lua.tree_toggle()<CR>', opts)
+        map('n', '<leader>op', '<cmd>call v:lua.tree_toggle()<CR>', opts)
 
-          -- Since the auto_close option has been removed, this is the only option
-          ${lib.optionalString (
-            lib.versionAtLeast (builtins.parseDrvName config.programs.neovim.package.name).version
-              "0.7.0"
-          ) ''
-            vim.api.nvim_create_autocmd("BufEnter", {
-              nested = true,
-              callback = function()
-                if #vim.api.nvim_list_wins() == 1 and vim.api.nvim_buf_get_name(0):match("NvimTree_") ~= nil then
-                  vim.cmd("quit")
-                end
-              end,
-            })
-          ''}
-        EOF
+        -- Since the auto_close option has been removed, this is the only option
+        ${lib.optionalString (
+          lib.versionAtLeast (builtins.parseDrvName config.programs.neovim.package.name).version
+            "0.7.0"
+        ) ''
+          vim.api.nvim_create_autocmd("BufEnter", {
+            nested = true,
+            callback = function()
+              if #vim.api.nvim_list_wins() == 1 and vim.api.nvim_buf_get_name(0):match("NvimTree_") ~= nil then
+                vim.cmd("quit")
+              end
+            end,
+          })
+        ''}
       '';
     }
 
