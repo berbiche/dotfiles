@@ -20,7 +20,7 @@
     longitude = -73.597;
   };
 
-  wireguard."tq.rs".enable = false;
+  wireguard."tq.rs".enable = true;
   wireguard."tq.rs".ipv4Address = "10.10.10.121/24";
   wireguard."tq.rs".publicKey = "E6x3s+2OS7hkxZBakUJosZ/zCgNrjjb7LqmeZrhDJz0=";
 
@@ -144,7 +144,7 @@
   hardware.opengl.enable = true;
   hardware.opengl.driSupport = true;
 
-  services.resolved.enable = lib.mkForce false;
+  # services.resolved.enable = lib.mkForce false;
 
   networking.firewall.allowPing = true;
   # Open ports in the firewall.

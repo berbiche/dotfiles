@@ -45,7 +45,7 @@ in
     systemd.network.networks.${network} = {
       enable = true;
       name = network;
-      dns = [ "10.97.42.6" "10.36.25.1" ];
+      dns = [ "10.97.1.1" "10.36.25.1" ];
       matchConfig.Name = network;
       linkConfig.ActivationPolicy = "manual";
       networkConfig = {
