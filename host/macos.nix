@@ -26,7 +26,14 @@
 
   homebrew.enable = true;
   homebrew.brewPrefix = "/usr/local/Homebrew/bin";
-  homebrew.brews = [ ];
+  homebrew.brews = [
+    # Yeah, I know...
+    "autoconf" "automake" "libtool"
+    "libidn" "pkg-config"
+    "msgpack" "tinycdb"
+    "libmaxminddb" "openssl@1.1" "libxslt" "fop"
+    "kerl"
+  ];
   homebrew.casks = [
     "vagrant"
     "yubico-yubikey-personalization-gui"
