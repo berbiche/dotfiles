@@ -10,7 +10,8 @@
   ];
   homebrew.casks = [
     "alt-tab"               # Windows-like alt-tab
-    "caffeine"              # Disable automatic sleep when toggled
+    # Amphetamine is only available on the App Store
+    #"amphetamine"           # Disable automatic sleep when toggled
     "hiddenbar"             # Hide extra things in the top bar
     "karabiner-elements"    # Remap keys
     "keycastr"              # Display typed keys
