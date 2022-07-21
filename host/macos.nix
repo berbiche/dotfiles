@@ -32,4 +32,8 @@
     "yubico-yubikey-personalization-gui"
     "virtualbox"
   ];
+
+  system.defaults.dock = {
+    orientation = "bottom";
+  };
 }

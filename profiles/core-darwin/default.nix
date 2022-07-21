@@ -21,7 +21,7 @@
     CreateDesktop = false;
   };
 
-  system.defaults.dock = {
+  system.defaults.dock = lib.mkDefault {
     expose-group-by-app = true;
     minimize-to-application = true;
     mru-spaces = false;
