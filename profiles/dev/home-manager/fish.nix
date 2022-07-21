@@ -13,8 +13,10 @@ in
     };
 
     functions = {
-      "nrsf" = lib.mkIf isLinux ''
-        set -a args nixos-rebuild switch --use-remote-sudo --flake ~/dotfiles -v -L $argv
+      "nrsf" = ''
+        set cmd (if test (uname) = Linux; echo nixos-rebuild; else; echo darwin-rebuild; end)
+        set sudo (if test (uname) = Linux; echo -- '--use-remote-sudo'; end)
+        set -a args $cmd switch $sudo --flake ~/dotfiles -v -L $argv
         echo $args
         $args
       '';

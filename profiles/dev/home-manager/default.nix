@@ -34,7 +34,7 @@ in
     wget # I prefer using curl but still useful for one-off things
     curl # make advanced http requests, fetch files, etc.
     ouch # a generic compressor/decompressor tool
-    httpie # like curl/wget with a simpler cli interface
+    # httpie # like curl/wget with a simpler cli interface
     aria # curl/wget on steroid to download files using different protocols
     lsof # shows information about opened files by processes, useful for debugging
     gitFull # contains extra stuff that I don't remember
