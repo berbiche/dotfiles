@@ -1,22 +1,25 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  inherit (lib) types;
   nixCfg = config.nix.settings;
 in
 {
   imports = [ inputs.home-manager.darwinModules.home-manager ];
 
+  # This option will never be read on Darwin since sops-nix does not
+  # support MacOS and is not loaded
   options.sops = lib.mkSinkUndeclaredOptions { };
 
   # Temporary fix
   options.nix.settings = lib.mkOption {
-    type = types.attrsOf (types.oneOf [ types.str (types.listOf types.str) types.float types.int ]);
+    type = with lib.types; attrsOf (oneOf [ str (listOf str) float int ]);
   };
 
   config = lib.mkMerge [
     {
       my.defaults.file-explorer = "";
+
+      system.stateVersion = 4;
 
       nix.nixPath = [
         "darwin=${inputs.nix-darwin}"
@@ -28,12 +31,6 @@ in
         "/System/Library/PrivateFrameworks"
         # Probably necessary
         "/usr/lib"
-        # Likely necessary
-        # "/private/tmp"
-        # Likely necessary
-        # "/private/var/tmp"
-        # This seems very impure
-        # "/usr/bin/env"
       ];
 
       nix.trustedUsers = [ "@admin" config.my.username ];

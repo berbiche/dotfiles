@@ -29,7 +29,7 @@ in
     # Broken (2021-09-06)
     # powershell # for some rare one-off scripts and tests
     tig # navigate a git repository's log and commits in a TUI, provides sorting, filtering, etc.
-    (lib.lowPrio clang) # for the binary tools it offers?
+    # (lib.lowPrio clang) # for the binary tools it offers?
 
     wget # I prefer using curl but still useful for one-off things
     curl # make advanced http requests, fetch files, etc.
@@ -43,7 +43,8 @@ in
     netcat-gnu # better than telnet
     socat # unix socket connections, etc.
     tcpdump # see packet flows on interfaces to debug stuff
-    dnsutils # dns lookups
+    ## dnsutils does not build on aarch64 with the version of Nixpkgs I use because jemalloc does not build
+    # dnsutils # dns lookups
     mtr # interactive traceroute that updates continuously
     bandwhich # see which programs are using network
     exa # a better ls with colors, tree support (it has to evaluate the entire file tree unfortunately)
@@ -101,5 +102,7 @@ in
     pv # view status of pipes (bandwidth, etc.)
 
     marker # markdown editor
+  ] ++ lib.optionals (!isAarch64) [
+    dnsutils
   ];
 }

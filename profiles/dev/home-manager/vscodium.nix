@@ -42,7 +42,6 @@ let
     arrterian.nix-env-selector
     ms-kubernetes-tools.vscode-kubernetes-tools
     ms-vscode-remote.remote-ssh
-    xaver.clang-format
     redhat.java
     # dbaeumer.vscode-eslint
     davidanson.vscode-markdownlint
@@ -60,6 +59,9 @@ let
     ms-python.python
     llvm-org.lldb-vscode
     llvm-vs-code-extensions.vscode-clangd
+  ]
+  ++ lib.optionals (pkgs.stdenv.hostPlatform.system != "aarch64-darwin") [
+    xaver.clang-format
   ]
   ++ lib.optional (osConfig.profiles.dev.wakatime.enable or false) berbiche.wakatime;
 

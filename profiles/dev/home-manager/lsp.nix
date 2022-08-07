@@ -6,9 +6,6 @@ in
 {
   # Of course, all of these packages can be overriden by direnv (envrc)
   home.packages = with pkgs; [
-    # For clangd
-    (lib.lowPrio clang-tools)
-
     # Erlang/Elixir
     erlang-ls
     # beamPackages.elixir beamPackages.elixir_ls
@@ -47,5 +44,9 @@ in
   ]
   ++ lib.optionals isLinux [
     vala-language-server
+  ]
+  ++ lib.optionals (pkgs.stdenv.hostPlatform.system != "aarch64-darwin") [
+    # For clangd
+    (lib.lowPrio clang-tools)
   ];
 }

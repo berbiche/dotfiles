@@ -253,19 +253,6 @@
         #vscode-utils = pkgs-amd64-darwin.vscode-utils;
         #vscode-with-extensions = pkgs-amd64-darwin.vscode-with-extensions;
         #vscodium = pkgs-amd64-darwin.vscodium;
-        nix-index-unwrapped = prev.nix-index-unwrapped.overrideAttrs (drv: rec {
-          src = prev.fetchFromGitHub {
-            owner = "berbiche";
-            repo = "nix-index";
-            rev = "de7f7dce37a47bcc528e527580b12f6c1a87da25";
-            sha256 = "sha256-kExZMd1uhnOFiSqgdPpxp1txo+8MkgnMaGPIiTCCIQk=";
-          };
-          cargoDeps = drv.cargoDeps.overrideAttrs (lib.const {
-            #name = "${drv.name}-vendor.tar.gz";
-            inherit src;
-            outputHash = "sha256:0nqfcklkljgqpw4mzs2ak3p5dccgw8mxfchjkkj1zrrf4xg2mgld";
-          });
-        });
       };
     };
 

@@ -3,10 +3,6 @@
 {
   imports = with profiles; [ base dev programs core-darwin ];
 
-  # Used for backwards compatibility, please read the changelog before changing.
-  # $ darwin-rebuild changelog
-  system.stateVersion = 4;
-
   my.location = {
     latitude = 45.508;
     longitude = -73.597;
@@ -29,16 +25,16 @@
   homebrew.brewPrefix = "/opt/homebrew/bin";
   homebrew.brews = [ ];
   homebrew.casks = [
-    "docker"
     "kitty"
     "gcenx/wine/unofficial-wineskin"
     "spotify"
+    "rancher"
     # "vagrant"
     # "virtualbox"
     #"yubico-yubikey-personalization-gui"
   ];
 
-  my.home = { config, pkgs, ... }: {
-    home.sessionPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ];
+  my.home = { config, pkgs, osConfig, ... }: {
+    home.sessionPath = [ osConfig.homebrew.brewPrefix "/opt/homebrew/sbin" ];
   };
 }
