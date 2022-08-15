@@ -11,21 +11,23 @@ with prev.lib; {
     , gtk-layer-shell
     , wrapGAppsHook
     , pam
+    , scdoc
     }:
     stdenv.mkDerivation rec {
       pname = "gtklock";
-      version = "unstable-2022-05-22";
+      version = "unstable-2022-08-12";
 
       src = fetchFromGitHub {
         owner = "jovanlanik";
         repo = pname;
-        rev = "e8892ccd242cfa06c4791936e7cf7bbcae783b96";
-        hash = "sha256-SjCwNXMmCJxLt8wLctf8SbNoWVfAwFy/dGcI3fAPzUo=";
+        rev = "e67be9ff0c1c33ec04e8e8d96ebc965972a9bb38";
+        hash = "sha256-cwV6yCSKwIM5V8VvoMsj5W50cvfBAAvSrgLhSkfAYR4=";
       };
 
       nativeBuildInputs = [
         pkg-config
         wrapGAppsHook
+        scdoc
       ];
 
       buildInputs = [

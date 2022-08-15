@@ -105,6 +105,7 @@ lib.mkMerge [
         plum = "${pl} upstream master:master";
         pp = "push --prune";
         ppff = "push --prune --force-with-lease";
+        r  = "rebase";
         ra = "rebase --abort";
         rc = "rebase --continue";
         ri = "rebase -i";

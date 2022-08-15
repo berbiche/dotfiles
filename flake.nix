@@ -43,12 +43,12 @@
     forAllPlatforms = f: lib.genAttrs platforms (platform: f platform);
 
     nixpkgsFor = forAllPlatforms (platform: let
-      # I need to submit a PR with this patch
       pkgs' = import nixpkgs { system = platform; };
       patchedNixpkgs = pkgs'.applyPatches {
         name = "patched-nixpkgs";
         src = nixpkgs;
         patches = [
+          # I need to submit a PR with this patch
           (builtins.path { path = ./overlays/xserver-patches.patch; })
           # (pkgs'.fetchpatch {
           #   name = "noisetorch-0.12.0.patch";
@@ -74,7 +74,7 @@
       in
       lib.fix args;
 
-    # mkConfig :: (args :: {}) -> [ modules ]
+    # mkConfig: takes an attrset as argument and returns a list of nix modules
     mkConfig = import ./top-level/mkConfig.nix;
 
     # We don't use nixpkgs' `lib.nixosSystem` because patches applied
