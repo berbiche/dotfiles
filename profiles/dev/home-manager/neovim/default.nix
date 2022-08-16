@@ -62,33 +62,38 @@ in
     # Language servers are configured in profies/dev/home-manager/lsp.nix
     extraPackages = with pkgs; [ ];
 
-    initExtra = ''
-      " Default settings
-      set nocompatible
-      set nobackup
-      " Yup, I live on the edge
-      set noswapfile
-      " Update terminal's titlebar
-      set title
-      " Use utf-8 by default
-      set enc=utf-8
-      set fenc=utf-8
-      set termencoding=utf-8
-      set encoding=utf-8
+    # Configuration that is set at the beginning of my configuration!
+    plugins = lib.mkBefore [{
+      plugin = pkgs.runCommandLocal "dummy" { } "mkdir $out";
+      type = "viml";
+      config = ''
+        " Default settings
+        set nocompatible
+        set nobackup
+        " Yup, I live on the edge
+        set noswapfile
+        " Update terminal's titlebar
+        set title
+        " Use utf-8 by default
+        set enc=utf-8
+        set fenc=utf-8
+        set termencoding=utf-8
+        set encoding=utf-8
 
-      " For CursorHold autocommand, required by which-key
-      set updatetime=100
+        " For CursorHold autocommand, required by which-key
+        set updatetime=100
 
-      let g:mapleader = "\<Space>"
-      let g:maplocalleader = ','
+        let g:mapleader = "\<Space>"
+        let g:maplocalleader = ','
 
-      " Use visual bell
-      set termguicolors
-      set visualbell
+        " Use visual bell
+        set termguicolors
+        set visualbell
 
-      " Basics
-      syntax on
-    '';
+        " Basics
+        syntax on
+      '';
+    }];
 
     extraConfig = ''
       " Color/theme : sonokai
