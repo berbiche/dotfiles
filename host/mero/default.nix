@@ -167,6 +167,19 @@
     58145
   ];
 
+  systemd.network.links."10-wifi" = {
+    matchConfig.MACAddress = "50:e0:85:bf:39:93";
+    linkConfig = {
+      Name = "wlan0";
+    };
+  };
+  systemd.network.links."10-ethernet" = {
+    matchConfig.MACAddress = "b4:2e:99:3f:19:64";
+    linkConfig = {
+      Name = "ethernet0";
+    };
+  };
+
   services.openssh.enable = true;
   services.openssh.openFirewall = true;
   services.openssh.permitRootLogin = "no";
