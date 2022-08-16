@@ -27,9 +27,9 @@
       "class_g ?= 'Notify-osd'"
       "_GTK_FRAME_EXTENTS@:c"
     ];
-    extraOptions = ''
-      use-ewmh-active-win = true
-    '';
+    settings = {
+      use-ewmh-active-win = true;
+    };
   };
 
   systemd.user.services.picom.Install.WantedBy = lib.mkForce [ "x11-session.target" ];
