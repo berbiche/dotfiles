@@ -55,7 +55,7 @@ in
     tree # file list tree
     bc # terminal calculator though I prefer using a python repl or `python -c 'print(39**25)'`
     bat # a better alternative to cat with syntax highlighting
-    procs # an alternative to ps to view all currently running processes (static view)
+    (lib.mkIf (!isDarwin || isAarch64) procs) # an alternative to ps to view all currently running processes (static view)
     sd # replace lines in files or lines in stdin without the "annoying" syntax of sed or awk
     du-dust # du with a tree-like listing and usage graph
     ncdu # interactive du
