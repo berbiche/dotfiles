@@ -137,16 +137,16 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1660606163,
-        "narHash": "sha256-kVi4/BcM9ZThdMYrL/Vd9c24wRjxcp0Wqdk9YEzUnZ4=",
-        "owner": "berbiche",
+        "lastModified": 1660574517,
+        "narHash": "sha256-Lp5D2pAPrM3iAc1eeR0iGwz5rM+SYOWzVxI3p17nlrU=",
+        "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "0bd34fe76d92a9ff17a030353ff2fafff9400aa3",
+        "rev": "688e5c85b7537f308b82167c8eb4ecfb70a49861",
         "type": "github"
       },
       "original": {
-        "owner": "berbiche",
-        "ref": "my-custom-master-branch",
+        "owner": "nix-community",
+        "ref": "master",
         "repo": "home-manager",
         "type": "github"
       }

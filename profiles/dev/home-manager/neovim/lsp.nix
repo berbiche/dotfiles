@@ -5,6 +5,7 @@
   programs.neovim.plugins = with pkgs.vimPlugins; [
     {
       plugin = vim-nix;
+      type = "viml";
       config = ''
         au BufRead,BufNewFile *.nix setf nix
       '';
@@ -43,6 +44,7 @@
     {
       # Show code action lightbulb
       plugin = nvim-lightbulb;
+      type = "viml";
       config = ''
         autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
       '';
@@ -52,6 +54,7 @@
     }
     {
       plugin = nvim-lspconfig;
+      type = "viml";
       config = ''
         " Display diagnostics only when hovering
         autocmd CursorHold * lua vim.diagnostic.open_float(nil, {focus = false, scope='cursor'})

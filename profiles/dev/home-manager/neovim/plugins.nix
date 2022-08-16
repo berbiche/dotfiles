@@ -103,6 +103,7 @@ in
     {
       # Better wildmenu
       plugin = wilder-nvim;
+      type = "viml";
       config = ''
         if !exists('g:vscode')
           call wilder#setup({'modes': [':', '/', '?']})
@@ -122,6 +123,7 @@ in
     {
       # Displays vertical line for the indentation level
       plugin = indent-blankline-nvim;
+      type = "viml";
       config = ''
         let g:indent_blankline_use_treesitter = v:true
         let g:indent_blankline_show_current_context = v:false
@@ -157,6 +159,7 @@ in
     }
     {
       plugin = registers-nvim;
+      type = "viml";
       config = ''
         let g:registers_delay = 500 " milliseconds
         let g:registers_show_empty_registers = 0
@@ -255,6 +258,7 @@ in
     plenary-nvim
     {
       plugin = sqlite-lua;
+      type = "viml";
       config = ''
         let g:sqlite_clib_path = '${lib.getLib pkgs.sqlite}/lib/libsqlite3${pkgs.hostPlatform.extensions.sharedLibrary}'
       '';
@@ -266,6 +270,7 @@ in
     telescope-file-browser-nvim
     {
       plugin = telescope-nvim;
+      type = "viml";
       config = ''
         lua <<EOF
           local ts = require('telescope')
