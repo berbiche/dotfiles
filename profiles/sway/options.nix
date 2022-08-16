@@ -11,7 +11,7 @@ in
 
   config = mkMerge [
     (mkIf cfg.nvidia.enable {
-      programs.sway.extraOptions = [ " --unsupported-gpu " " -D noscanout " ];
+      programs.sway.extraOptions = [ "--unsupported-gpu" "-Dnoscanout" ];
 
       programs.sway.extraSessionCommands = mkBefore ''
         export WLR_NO_HARDWARE_CURSORS=1
