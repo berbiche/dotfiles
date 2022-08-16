@@ -23,10 +23,9 @@
 }
 
 .notification {
-  border-radius: 10px;
+  border-radius: 12px;
   margin: 6px 12px;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3),
-    0 1px 3px 1px rgba(0, 0, 0, 0.7),
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.7),
     0 2px 6px 2px rgba(0, 0, 0, 0.3);
   padding: 0;
 }
@@ -35,43 +34,47 @@
 .low {
   background: yellow;
   padding: 6px;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 .normal {
   background: green;
   padding: 6px;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 .critical {
   background: red;
   padding: 6px;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 */
 
 .notification-content {
   background: transparent;
   padding: 6px;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 .close-button {
   background: @noti-close-bg;
   color: white;
   text-shadow: none;
-  padding: 0 4px;
+  padding: 0;
   border-radius: 100%;
   margin-top: 10px;
   margin-right: 16px;
   box-shadow: none;
+  border: none;
+  min-width: 24px;
+  min-height: 24px;
 }
 
 .close-button:hover {
   box-shadow: none;
   background: @noti-close-bg-hover;
   transition: all 0.15s ease-in-out;
+  border: none;
 }
 
 .notification-default-action,
@@ -91,7 +94,7 @@
 }
 
 .notification-default-action {
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 /* When alternative actions are visible */
@@ -116,62 +119,44 @@
   border-right: 1px solid @noti-border-color;
 }
 
-.image {}
+.image {
+}
 
 .body-image {
   margin-top: 6px;
   background-color: white;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 .summary {
+  font-size: 16px;
+  font-weight: bold;
+  background: transparent;
   color: white;
   text-shadow: none;
 }
 
 .time {
+  font-size: 16px;
+  font-weight: bold;
+  background: transparent;
   color: white;
   text-shadow: none;
   margin-right: 18px;
 }
 
 .body {
+  font-size: 15px;
+  font-weight: normal;
   background: transparent;
   color: white;
   text-shadow: none;
 }
 
+/* The "Notifications" and "Do Not Disturb" text widget */
 .top-action-title {
   color: white;
   text-shadow: none;
-}
-
-.control-center-clear-all {
-  color: white;
-  text-shadow: none;
-  background: @noti-bg;
-  border: 1px solid @noti-border-color;
-  box-shadow: none;
-  border-radius: 10px;
-}
-
-.control-center-clear-all:hover {
-  background: @noti-bg-hover;
-}
-
-.control-center-dnd {
-  border-radius: 10px;
-  background: @noti-bg;
-  border: 1px solid @noti-border-color;
-  box-shadow: none;
-}
-
-.control-center-dnd:checked {
-  background: @bg-selected;
-}
-
-.control-center-dnd slider {
-  background: @noti-bg-hover;
 }
 
 .control-center {
@@ -186,17 +171,69 @@
   background: transparent;
 }
 
+/* Window behind control center and on all other monitors */
+.blank-window {
+  background: alpha(black, 0.25);
+}
+
+/*** Widgets ***/
+
+/* Title widget */
+.widget-title {
+  margin: 8px;
+  font-size: 1.5rem;
+}
+.widget-title > button {
+  font-size: initial;
+  color: white;
+  text-shadow: none;
+  background: @noti-bg;
+  border: 1px solid @noti-border-color;
+  box-shadow: none;
+  border-radius: 12px;
+}
+.widget-title > button:hover {
+  background: @noti-bg-hover;
+}
+
+/* DND widget */
+.widget-dnd {
+  margin: 8px;
+  font-size: 1.1rem;
+}
+.widget-dnd > switch {
+  font-size: initial;
+  border-radius: 12px;
+  background: @noti-bg;
+  border: 1px solid @noti-border-color;
+  box-shadow: none;
+}
+.widget-dnd > switch:checked {
+  background: @bg-selected;
+}
+.widget-dnd > switch slider {
+  background: @noti-bg-hover;
+  border-radius: 12px;
+}
+
+/* Label widget */
+.widget-label {
+  margin: 8px;
+}
+.widget-label > label {
+  font-size: 1.1rem;
+}
 
 /*
  * My modifications
  */
 
 .control-center {
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 scrolledwindow {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .notifications {
@@ -251,4 +288,3 @@ undershoot {
   border: none;
   box-shadow: none;
 }
-
