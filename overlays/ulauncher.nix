@@ -1,11 +1,11 @@
 final: prev: {
   ulauncher = prev.ulauncher.overrideAttrs (drv: rec {
-    name = "${drv.pname}-${drv.version}";
-    version = "5.14.2";
+    version = "5.14.7";
     src = prev.fetchurl {
       url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
-      sha256 = "sha256-5Id70t5pyZmW5OOsXICDs+49GxgrDkpdUqOvE03Y1HU=";
+      sha256 = "sha256-gR4DZLrQCmZXuFrU80wQ/VOvyPcvztslgCFUFJ7XhpU=";
     };
+    nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ prev.gobject-introspection ];
     patches = [
       ./ulauncher/0001-Adjust-get_data_path-for-NixOS.patch
       ./ulauncher/fix-extensions.patch
