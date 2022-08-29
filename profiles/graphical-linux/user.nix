@@ -31,7 +31,7 @@
       # Video player
       haruna
       # Calculator
-      nasc
+      # nasc
       # for 'gio'
       glib.bin
       #gnome3.nautilus # Gnome file manager
