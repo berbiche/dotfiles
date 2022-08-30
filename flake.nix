@@ -234,9 +234,6 @@
         };
       };
       darwin = final: prev: prev.lib.optionalAttrs (prev.stdenv.hostPlatform.isDarwin) {
-        # The package always fails to build on Darwin,
-        # so just disable it and use the cask instead
-        kitty = prev.runCommandLocal "dummy" { } "mkdir -p $out";
         # FIXME: https://github.com/NixOS/nixpkgs/issues/168984
         golangci-lint = prev.golangci-lint.override {
           buildGoModule = prev.buildGoModule;
@@ -249,6 +246,9 @@
           localSystem = "x86_64-darwin";
         };
       in optionalAttrs (prev.stdenv.hostPlatform.isDarwin && prev.stdenv.hostPlatform.isAarch64) {
+        # The package always fails to build on Darwin,
+        # so just disable it and use the cask instead
+        kitty = prev.runCommandLocal "dummy" { } "mkdir -p $out";
         #vscode = pkgs-amd64-darwin.vscode;
         #vscode-extensions = pkgs-amd64-darwin.vscode-extensions;
         #vscode-utils = pkgs-amd64-darwin.vscode-utils;
