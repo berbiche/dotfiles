@@ -15,12 +15,12 @@ in
 
   profiles.dev.wakatime.enable = lib.mkDefault true;
 
-  fonts.fonts = with pkgs; [
-    anonymousPro
-    source-code-pro
-    nerdfonts
-    emacs-all-the-icons-fonts
-  ];
+  # fonts.fonts = with pkgs; [
+  #   anonymousPro
+  #   source-code-pro
+  #   nerdfonts
+  #   emacs-all-the-icons-fonts
+  # ];
 
   services.emacs.enable = lib.mkIf isDarwin true;
 

@@ -73,7 +73,7 @@
        :checkers
        syntax
        (spell
-        +hunspell
+        +flyspell
         +everywhere)
        ;;grammar
 

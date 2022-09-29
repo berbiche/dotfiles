@@ -59,7 +59,7 @@
     TrackpadRightClick = true;
   };
 
-  fonts.enableFontDir = lib.mkDefault true;
+  fonts.fontDir.enable = lib.mkDefault true;
 
 
   # Symlink Home Manager apps to ~/Applications/Home\ Manager\ Apps
@@ -72,5 +72,7 @@
         pathsToLink = "/Applications";
       };
     in "${apps}/Applications";
+
+    home.sessionPath = [ "$HOME/.local/bin" ];
   };
 }
