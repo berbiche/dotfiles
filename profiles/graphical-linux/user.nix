@@ -34,14 +34,14 @@
       # nasc
       # for 'gio'
       glib.bin
-      #gnome3.nautilus # Gnome file manager
+      #gnome.nautilus # Gnome file manager
       cinnamon.nemo # Cinnamon's fork of Gnome's file manager
-      gnome3.networkmanager-openconnect # OpenConnect plugin for NetworkManager
+      gnome.networkmanager-openconnect # OpenConnect plugin for NetworkManager
       rhythmbox # Gnome music player
-      gnome3.eog # Gnome image viewer
-      gnome3.seahorse # Gnome Keyring secret management
+      gnome.eog # Gnome image viewer
+      gnome.seahorse # Gnome Keyring secret management
       # Virtualization software
-      gnome3.gnome-boxes
+      gnome.gnome-boxes
       virt-manager
       vagrant
       # Torrent client

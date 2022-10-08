@@ -23,6 +23,7 @@
 
     doom-emacs-source = { url = "github:hlissner/doom-emacs/master"; flake = false; };
     emacs-overlay.url = "github:nix-community/emacs-overlay";
+    emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
 
     neovim-nightly = {
       url = "github:nix-community/neovim-nightly-overlay";

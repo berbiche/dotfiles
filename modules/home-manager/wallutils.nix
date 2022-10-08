@@ -43,7 +43,7 @@ in
       example = literalExpression ''
         {
           enable = true;
-          theme = "''${pkgs.gnome3.gnome-backgrounds}/share/backgrounds/gnome/adwaita-timed.xml";
+          theme = "''${pkgs.gnome.gnome-backgrounds}/share/backgrounds/gnome/adwaita-timed.xml";
           mode = "stretch";
         }
       '';

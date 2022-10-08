@@ -171,7 +171,7 @@ Most programs configuration live under `user/programs`.
 2. Copy the password and add it to the keyring
 
     ``` console
-    $ nix shell nixpkgs#gnome3.libsecret
+    $ nix shell nixpkgs#gnome.libsecret
     $ secret-tool store --label='Gmail account for neomutt' account gmail
     Password: <paste>
     $ mbsync -V gmail

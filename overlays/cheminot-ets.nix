@@ -5,7 +5,7 @@ final: prev: {
   cheminot-ets = prev.makeDesktopItem {
     name = "ChemiNot";
     exec = prev.writeShellScript "cheminot" ''
-      ${prev.icedtea_web}/bin/javaws <(curl 'https://cheminotjws.etsmtl.ca/ChemiNot.jnlp')
+      ${prev.adoptopenjdk-icedtea-web}/bin/javaws <(curl 'https://cheminotjws.etsmtl.ca/ChemiNot.jnlp')
     '';
     comment = "ChemiNot is an integrated consultation and registration system for ÉTS students";
     desktopName = "ChemiNot";

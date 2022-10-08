@@ -40,7 +40,7 @@ in
     format = "";
     tooltip = false;
     on-click = pkgs.writeShellScript "shutdown.sh" ''
-      ${pkgs.gnome3.zenity}/bin/zenity --question --text "Are you sure you want to shutdown?" \
+      ${pkgs.gnome.zenity}/bin/zenity --question --text "Are you sure you want to shutdown?" \
         --title 'Shutdown?' \
         --window-icon warning \
         --timeout 10 \

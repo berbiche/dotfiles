@@ -40,9 +40,9 @@
     gnome.accerciser
     evolution
     gnome.cheese
-    #gnome3.gedit
+    #gnome.gedit
     gnome.gnome-calculator
-    #gnome3.gnome-calendar
+    #gnome.gnome-calendar
     gnome.gnome-clocks
     gnome.gnome-contacts
     gnome.gnome-disk-utility

@@ -173,7 +173,6 @@
 
   # X11 fixes for the tearing and low performance
   # Doesn't seem to be working ¯\_(ツ)_/¯
-  services.xserver.useGlamor = true;
   services.xserver.videoDrivers = lib.mkForce [ "modesettings" ];
   services.xserver.deviceSection = ''
     Option "DRI" "3"
