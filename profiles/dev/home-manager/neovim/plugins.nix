@@ -159,12 +159,21 @@ in
     }
     {
       plugin = registers-nvim;
-      type = "viml";
+      type = "lua";
       config = ''
-        let g:registers_delay = 500 " milliseconds
-        let g:registers_show_empty_registers = 0
-        let g:registers_hide_only_whitespace = 1
-        let g:registers_window_border = 'rounded'
+        local registers = require("registers")
+        registers.setup({
+          show_empty = false,
+          hide_only_whitespace = true,
+
+          bind_keys = {
+            registers = registers.apply_register({ delay = 0.5 }),
+          },
+
+          window = {
+            border = "rounded",
+          },
+        })
       '';
     }
 
@@ -518,16 +527,20 @@ in
       type = "lua";
       config = ''
         require('colorizer').setup {
-          ['*'] = {
+          filetypes = {
+            html = { names = true, },
+            '!c',
+            '!cpp',
+            '!erlang',
+            '!go',
+          },
+          user_default_options = {
             names = false,
             mode = 'background',
+            css = true,
+            css_fn = true,
+            tailwind = false,
           },
-          css = { css = true, css_fn = true, },
-          html = { names = true, },
-          '!c',
-          '!cpp',
-          '!erlang',
-          '!go',
         }
       '';
     }
