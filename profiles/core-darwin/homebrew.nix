@@ -2,7 +2,8 @@
 
 {
   homebrew.enable = lib.mkDefault true;
-  homebrew.cleanup = lib.mkDefault "uninstall";
+  homebrew.onActivation.cleanup = lib.mkDefault "uninstall";
+  homebrew.onActivation.upgrade = true;
   homebrew.brews = [
     "lsusb"
     "pinentry"
