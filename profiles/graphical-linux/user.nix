@@ -48,7 +48,7 @@
       qbittorrent
       transmission-remote-gtk
       # Minecraft client
-      polymc
+      prismlauncher
       # Merge pdfs and other stuff
       pdfarranger
       # Companion for the fxcast firefox extension
