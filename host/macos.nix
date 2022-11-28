@@ -35,6 +35,7 @@
     "kerl"
   ];
   homebrew.casks = [
+    "rancher"
     "vagrant"
     "yubico-yubikey-personalization-gui"
     "virtualbox"
