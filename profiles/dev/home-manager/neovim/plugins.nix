@@ -245,18 +245,33 @@ in
     }
     {
       plugin = nvim-hlslens;
+      type = "lua";
       config = ''
-        noremap <silent> n <cmd>execute('normal! ' . v:count1 . 'n')<CR>
-                    \<cmd>lua require('hlslens').start()<CR>
-        noremap <silent> N <cmd>execute('normal! ' . v:count1 . 'N')<CR>
-                    \<cmd>lua require('hlslens').start()<CR>
-        noremap * *<cmd>lua require('hlslens').start()<CR>
-        noremap # #<cmd>lua require('hlslens').start()<CR>
-        noremap g* g*<cmd>lua require('hlslens').start()<CR>
-        noremap g# g#<cmd>lua require('hlslens').start()<CR>
+        require('hlslens').setup()
+        
+        local bind = vim.api.nvim_set_keymap
+        local opts = {noremap = true, silent = true}
 
-        " use : instead of <cmd>
-        nnoremap <silent> <leader>l :noh<CR>
+        bind('n', 'n',
+             [[<cmd>execute('normal! ' . v:count1 . 'n')<CR><cmd>lua require('hlslens').start()<CR>]],
+             opts)
+        bind('n', 'N',
+             [[<cmd>execute('normal! ' . v:count1 . 'N')<CR><cmd>lua require('hlslens').start()<CR>]],
+             opts)
+        bind('n', '*',
+             [[*<cmd>lua require('hlslens').start()<CR>]],
+             opts)
+        bind('n', '#',
+             [[#<cmd>lua require('hlslens').start()<CR>]],
+             opts)
+        bind('n', 'g*',
+             [[g*<cmd>lua require('hlslens').start()<CR>]],
+             opts)
+        bind('n', 'g#',
+             [[g#<cmd>lua require('hlslens').start()<CR>]],
+             opts)
+
+        bind('n', '<leader>l', ':noh<CR>', opts)
       '';
     }
 

@@ -42,6 +42,12 @@ shitty-keyboards // {
     repeat_rate = defaultRepeatRate;
     repeat_delay = defaultRepeatDelay;
   };
+  "10730:866:Kinesis_Corporation_Adv360_Pro_Keyboard" = {
+    xkb_options = "compose:paus";
+    xkb_layout = "us";
+    repeat_rate = defaultRepeatRate;
+    repeat_delay = defaultRepeatDelay;
+  };
   # My old Noppoo KB84M
   "1155:20736:CATEX_TECH._KB84M-S" = {
     xkb_options = "compose:ralt";

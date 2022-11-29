@@ -81,7 +81,7 @@
     # We don't use nixpkgs' `lib.nixosSystem` because patches applied
     # to NixOS modules are not visible from this function exposed in their flake.
     # The solution is to import eval-config.nix directly.
-    mkLinuxConfig = args@{ platform, hostname, stateVersion ? "22.05", ... }: let
+    mkLinuxConfig = args@{ platform, hostname, stateVersion ? "22.11", ... }: let
       pkgs = nixpkgsFor.${platform};
       lib = pkgs.lib;
     in import "${pkgs.path}/nixos/lib/eval-config.nix" {
@@ -138,7 +138,7 @@
         inherit pkgs; # to pull in my overlays
         system = args.platform;
         homeDirectory = args.homeDirectory or "/home/${args.username}";
-        stateVersion = "22.05";
+        stateVersion = "22.11";
         extraSpecialArgs = rec {
           inherit inputs isLinux;
           lib = self.lib pkgs;

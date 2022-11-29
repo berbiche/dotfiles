@@ -191,6 +191,14 @@ let
       inherit config binaries options workspaces;
     };
 
+    keycodebindings = let
+      exec = n: "exec ${lib.escapeShellArg pkgs.bash}/bin/bash -lc ${lib.escapeShellArg (toString n)}";
+      withPlayerctld = lib.optionalString config.services.playerctld.enable "-p playerctld";
+    in {
+      # KEY_PLAYPAUSE
+      "--locked --no-repeat 172" = exec "${binaries.playerctl} ${withPlayerctld} play-pause";
+    };
+
     modes = lib.myLib.callWithDefaults ./modes.nix {
       inherit config binaries;
     };

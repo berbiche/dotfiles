@@ -103,10 +103,10 @@ makeNoRepeat (defaultKeybindings // {
   "${modifier}+Ctrl+n"  = (exec binaries.browser-work-profile);
 
   # MPRIS
-  "--locked XF86AudioPause" = (exec "${binaries.playerctl} ${withPlayerctld} pause");
-  "--locked XF86AudioPlay"  = (exec "${binaries.playerctl} ${withPlayerctld} play");
+  # "--locked XF86AudioPause" = (exec "${binaries.playerctl} ${withPlayerctld} pause");
+  # "--locked XF86AudioPlay"  = (exec "${binaries.playerctl} ${withPlayerctld} play");
   # Toggle play/pause for the focused? MPRIS instance with PauseBreak
-  "--locked Pause"          = (exec "${binaries.playerctl} ${withPlayerctld} play-pause");
+  # "--locked Pause"          = (exec "${binaries.playerctl} ${withPlayerctld} play-pause");
 
   # Preserve the moving window behavior of being repeatable
   # I'd like to make this only repeatable for floating windows

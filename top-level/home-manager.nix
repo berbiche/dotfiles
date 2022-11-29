@@ -18,7 +18,7 @@
   home-manager.sharedModules = [
     {
       # Specify Home Manager version compability
-      home.stateVersion = "22.05";
+      home.stateVersion = "23.05";
       # Use the new systemd service activation/deactivation tool
       # See https://github.com/nix-community/home-manager/pull/1656
       # systemd.user.startServices = "sd-switch";
