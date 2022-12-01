@@ -5,6 +5,7 @@ let
 
   DOOMLOCALDIR = "${config.xdg.dataHome}/doom";
   DOOMDIR = "${config.xdg.configHome}/doom";
+  DOOMPROFILELOADFILE = "${config.xdg.dataHome}/doom/cache/profile-load.el";
 
   emacsWithPackages = package:
     (pkgs.emacsPackagesFor package).emacsWithPackages (epkgs: [
@@ -27,10 +28,10 @@ lib.mkMerge [
     };
 
     home.sessionVariables = {
-      inherit DOOMLOCALDIR DOOMDIR;
+      inherit DOOMLOCALDIR DOOMDIR DOOMPROFILELOADFILE;
     };
     systemd.user.sessionVariables = lib.mkIf isLinux {
-      inherit DOOMLOCALDIR DOOMDIR;
+      inherit DOOMLOCALDIR DOOMDIR DOOMPROFILELOADFILE;
     };
 
     home.sessionPath = [ "${config.xdg.configHome}/emacs/bin" ];
