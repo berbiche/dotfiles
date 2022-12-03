@@ -41,6 +41,9 @@ lib.mkMerge [
       force = true;
     };
 
+    # Create this folder for the $DOOMPROFILELOADFILE file
+    xdg.dataFile."doom/cache/.keep".text = "";
+
     xdg.configFile."emacs" = {
       source = pkgs.applyPatches {
         name = "doom-emacs-source";
