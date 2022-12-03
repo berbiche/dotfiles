@@ -1,6 +1,6 @@
 let
-  version = "1.7.2+wayland1";
-  hash = "sha256-INFYHOVjBNj8ks4UjKnxLW8mL7h1c8ySFPS/rUxOWwo=";
+  version = "61f96e4cca8ee72abbdadd81af0e828adf24c6d2";
+  hash = "sha256-N4Zi/Ul1hYuq5+zUxrfe0yDRjNETQPnTW5GY6lJ3W4Y=";
 in
 final: prev: {
   rofi-wayland = (prev.rofi.override {
@@ -19,6 +19,6 @@ final: prev: {
     });
   }).overrideAttrs (_: {
     pname = "rofi-wayland";
-    inherit version;
+    version = "unstable-2022-11-26";
   });
 }
