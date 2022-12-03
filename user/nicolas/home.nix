@@ -168,9 +168,6 @@ in
     pkgs.discord
     pkgs.discord-canary
     pkgs.teams
-
-    # From my overlays
-    pkgs.cheminot-ets
   ];
 
   # Copy the scripts folder
