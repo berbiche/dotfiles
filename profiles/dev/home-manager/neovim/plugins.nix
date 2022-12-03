@@ -561,7 +561,7 @@ in
     }
 
     {
-      plugin = fterm-nvim;
+      plugin = FTerm-nvim;
       type = "lua";
       config = ''
         require('FTerm').setup {
