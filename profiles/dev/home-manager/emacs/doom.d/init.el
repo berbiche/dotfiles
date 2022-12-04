@@ -21,12 +21,10 @@
        doom
        doom-dashboard
        doom-quit
-       fill-column
        ;;(emoji +unicode)
        hl-todo
        ;;hydra
        indent-guides
-       ligature
        ;;minimap
        modeline
        nav-flash
@@ -36,7 +34,7 @@
        ;;tabs
        treemacs
        ;;unicode
-       vc-gutter
+       (vc-gutter +pretty)
        vi-tilde-fringe
        ;;window-select
        workspaces
@@ -116,11 +114,12 @@
        data
        ;;(dart +flutter)
        ;;dhall
-       ;;elixir
+       ;;(elixir +lsp +tree-sitter)
        ;;elm
        emacs-lisp
        (erlang +lsp)
        ;;ess
+       ;;factor
        ;;faust
        ;;fsharp
        ;;fstar
@@ -137,7 +136,6 @@
        ;;kotlin
        ;;latex
        ;;lean
-       ;;factor
        ;;ledger
        ;;lua
        markdown
