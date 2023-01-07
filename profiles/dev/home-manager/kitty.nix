@@ -30,8 +30,8 @@
     background_opacity = "0.8";
     dynamic_background_opacity = true;
     window_padding_width = "2";
-    window_padding_height = "2";
+    # window_padding_height = "2";
 
-    macos_option_as_alt = true;
+    macos_option_as_alt = "left";
   };
 }
