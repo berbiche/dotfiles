@@ -25,8 +25,8 @@
     expose-group-by-app = true;
     minimize-to-application = true;
     mru-spaces = false;
-    orientation = "right";
-    show-recents = false;
+    orientation = "bottom";
+    show-recents = true;
     tilesize = 48;
   };
 
