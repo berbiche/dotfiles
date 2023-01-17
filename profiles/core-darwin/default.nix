@@ -48,7 +48,7 @@
     NSAutomaticSpellingCorrectionEnabled = false;
     InitialKeyRepeat = 25;
     KeyRepeat = 2;
-    "com.apple.keyboard.fnState" = true;
+    "com.apple.keyboard.fnState" = false;
     "com.apple.mouse.tapBehavior" = 1;
   };
 
