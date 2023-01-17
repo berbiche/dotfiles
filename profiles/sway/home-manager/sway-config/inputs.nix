@@ -22,19 +22,6 @@ let
     ]);
 in
 shitty-keyboards // {
-  # Thinkpad T580 touch pad
-  "1739:0:Synaptics_TM3276-031" = {
-    dwt = "enabled";
-    tap = "enabled";
-    natural_scroll = "enabled";
-    middle_emulation = "enabled";
-    pointer_accel = "0.25";
-    scroll_factor = "0.5";
-    scroll_method = "two_finger";
-    # Number of fingers for each "button": 1: left; 2: right; 3: middle
-    tap_button_map = "lrm";
-  };
-
   # iKBC new Poker II
   "1241:521:USB-HID_Keyboard" = {
     xkb_options = "compose:ralt";
