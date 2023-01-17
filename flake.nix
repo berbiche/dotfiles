@@ -45,7 +45,7 @@
 
     nixpkgsFor = forAllPlatforms (platform: let
       pkgs' = import nixpkgs { system = platform; };
-      patchedNixpkgs = pkgs'.applyPatches {
+      patchedNixpkgs' = pkgs'.applyPatches {
         name = "patched-nixpkgs";
         src = nixpkgs;
         patches = [
@@ -59,6 +59,10 @@
           # })
         ];
       };
+      patchedNixpkgs =
+        if platform == "x86_64-linux"
+        then patchedNixpkgs'
+        else nixpkgs;
     in import patchedNixpkgs {
       system = platform;
       overlays = builtins.attrValues self.overlays;
