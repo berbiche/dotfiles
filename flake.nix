@@ -51,7 +51,6 @@
         patches = [
           # I need to submit a PR with this patch
           (builtins.path { path = ./overlays/xserver-patches.patch; })
-          # (pkgs'.writeText "dummy" "")
           # (pkgs'.fetchpatch {
           #   name = "noisetorch-0.12.0.patch";
           #   url = "https://github.com/NixOS/nixpkgs/commit/74ed89f2439f1ccc12da0517fe7a573a4143c9ed.patch";

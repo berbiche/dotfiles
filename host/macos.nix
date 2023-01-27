@@ -35,10 +35,11 @@
     "kerl"
   ];
   homebrew.casks = [
+    "obs"
     "rancher"
     "vagrant"
-    "yubico-yubikey-personalization-gui"
     "virtualbox"
+    "yubico-yubikey-personalization-gui"
   ];
 
   system.defaults.dock = {
