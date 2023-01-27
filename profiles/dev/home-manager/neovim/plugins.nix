@@ -473,8 +473,8 @@ in
         let bufferline = get(g:, 'bufferline', {})
         let bufferline.closable = v:false
 
-        " autocmd User CocExplorerOpenPre lua require'bufferline.state'.set_offset(30, 'FileTree')
-        " autocmd User CocExplorerQuitPre lua require'bufferline.state'.set_offset(0)
+        " autocmd User CocExplorerOpenPre lua require'bufferline.api'.set_offset(30, 'FileTree')
+        " autocmd User CocExplorerQuitPre lua require'bufferline.api'.set_offset(0)
       '';
     }
     {
