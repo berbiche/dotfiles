@@ -32,5 +32,9 @@ lib.mkMerge [
     home.file.".gnupg/gpg-agent.conf".text =  lib.mkAfter ''
       pinentry-program /usr/local/bin/pinentry-mac
     '';
+
+    programs.gpg.scdaemonSettings = {
+      disable-ccid = true;
+    };
   })
 ]

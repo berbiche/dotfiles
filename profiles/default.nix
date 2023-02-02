@@ -88,7 +88,7 @@ let
       ]);
     }
     // optionalAttrs isDarwin {
-      core-darwin = mkProfile [ ./core-darwin ];
+      core-darwin = mkProfile [ ./core-darwin ./secrets ];
     };
 
   profiles' = fix profiles;
