@@ -21,7 +21,7 @@
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    doom-emacs-source = { url = "github:hlissner/doom-emacs/master"; flake = false; };
+    doom-emacs-source = { url = "github:doomemacs/doomemacs/master"; flake = false; };
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
 
