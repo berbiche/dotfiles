@@ -12,4 +12,5 @@
 (package! wakatime-mode)
 (package! jsonnet-mode)
 (package! vala-mode)
+(package! exec-path-from-shell)
 ;;; packages.el ends here

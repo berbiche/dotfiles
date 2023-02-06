@@ -22,10 +22,7 @@
 ;; Display 5 lines below/above when scrolling
 (setq scroll-margin 5)
 
-;; (setq doom-font (font-spec :family "Iosevka" :size 16)
-;;       doom-big-font (font-spec :family "Iosevka" :size 30)
-;;       doom-variable-pitch-font (font-spec :family "Noto Sans" :size 14))
-;; <=> >> >>= >>> <<< <- -> ->> <-> &&
+;; <=> >> << >>= =<< >>> <<< -> <- ->> <<- <-> && ||
 (setq doom-font (font-spec :family "Source Code Pro" :size 16)
       doom-big-font (font-spec :family "Source Code Pro" :size 30)
       doom-variable-pitch-font (font-spec :family "Source Code Pro" :size 14))
@@ -44,7 +41,6 @@
 
 ;; Disable clipboard manager hanging for a few seconds on Wayland
 (setq x-select-enable-clipboard-manager nil)
-
 ;; Don't yank/etc. buffer to the x11-clipboard
 (setq select-enable-clipboard nil)
 (setq select-enable-primary nil)
@@ -57,6 +53,16 @@
 
 ;; Make treemacs rename use a minibuffer
 (setq treemacs-read-string-input 'from-minibuffer)
+
+
+;; Graciously donated by my friend: https://github.com/starcraft66/os-config/commit/9109152ea81c9398cc0a0d90a3728b44301ef56f
+(after! exec-path-from-shell
+  (when (memq window-system '(mac ns x))
+    (dolist (var '("SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE" "NIX_SSL_CERT_FILE" "NIX_PATH"))
+      (add-to-list 'exec-path-from-shell-variables var))
+    (set exec-path-from-shell-arguments 'nil)
+    (exec-path-from-sshell-initialize)))
+
 
 (setq lsp-clients-clangd-args '("-j=3"
                                 "--background-index"
@@ -75,7 +81,7 @@
   "Toggle `show-trailing-whitespace'"
   (interactive)
   (setq show-trailing-whitespace (not show-trailing-whitespace)))
-;; but disable trailing whitespace for the modes
+;; but disable trailing whitespace for these modes
 (dolist (hook '(vterm-mode-hook
                 term-mode-hook
                 special-mode-hook
