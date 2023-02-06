@@ -8,7 +8,9 @@ let
   DOOMPROFILELOADFILE = "${config.xdg.dataHome}/doom/cache/profile-load.el";
 
   emacsWithPackages = package:
-    (pkgs.emacsPackagesFor package).emacsWithPackages (epkgs: [
+    (pkgs.emacsPackagesFor (
+      package.overrideAttrs (drv: { noTreeSitter = false; nativeComp = true; })
+    )).emacsWithPackages (epkgs: [
       epkgs.vterm
     ]);
 in
@@ -23,7 +25,7 @@ lib.mkMerge [
       enable = true;
       package = lib.mkMerge [
         (lib.mkIf isLinux (emacsWithPackages pkgs.emacsPgtk))
-        (lib.mkIf isDarwin (emacsWithPackages pkgs.emacsUnstable))
+        (lib.mkIf isDarwin (emacsWithPackages pkgs.emacsGit))
       ];
     };
 
