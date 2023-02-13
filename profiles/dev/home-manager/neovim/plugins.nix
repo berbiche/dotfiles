@@ -505,12 +505,12 @@ in
         function _G.tree_toggle()
           local tree = require('nvim-tree')
           local view = require('nvim-tree.view')
-          local st = require('bufferline.state')
+          local api = require('bufferline.api')
           tree.toggle()
           if view.is_visible() then
-            st.set_offset(30, 'FileTree')
+            api.set_offset(30, 'FileTree')
           else
-            st.set_offset(0)
+            api.set_offset(0)
           end
         end
 
