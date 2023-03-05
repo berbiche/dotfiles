@@ -47,7 +47,7 @@ in
     socat # unix socket connections, etc.
     tcpdump # see packet flows on interfaces to debug stuff
     ## dnsutils does not build on aarch64 with the version of Nixpkgs I use because jemalloc does not build
-    # dnsutils # dns lookups
+    dnsutils # dns lookups
     mtr # interactive traceroute that updates continuously
     bandwhich # see which programs are using network
     exa # a better ls with colors, tree support (it has to evaluate the entire file tree unfortunately)
@@ -61,7 +61,6 @@ in
     (lib.mkIf (!isDarwin || isAarch64) procs) # an alternative to ps to view all currently running processes (static view)
     sd # replace lines in files or lines in stdin without the "annoying" syntax of sed or awk
     du-dust # du with a tree-like listing and usage graph
-    ncdu # interactive du
     tokei # shows the number of lines of code in a folder for each language
     manix # lookup a nix function documentation or a NixOS/Home Manager option documentation
     bottom # `btm` is an htop/gotop/... alternative
@@ -97,7 +96,8 @@ in
     # pipr # interactive tool to write pipelines
     # bubblewrap # required by pipr
 
-    iotop # see which processes/kernel tasks are using IO
+    # Broken: 2023-03-05
+    ncdu # interactive du
 
     #jetbrains.idea-community # IDE that I don't use anymore, even for Java development
     insomnia # GUI tool to test http APIs, alternative to postman and hoppscotch (formerly postwoman)
@@ -106,6 +106,6 @@ in
 
     marker # markdown editor
   ] ++ lib.optionals (!isAarch64) [
-    dnsutils
+    iotop # see which processes/kernel tasks are using IO
   ];
 }

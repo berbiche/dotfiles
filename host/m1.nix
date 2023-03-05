@@ -43,6 +43,7 @@
     "gcenx/wine/unofficial-wineskin"
     "spotify"
     "rancher"
+    "switchresx"
     # "vagrant"
     # "virtualbox"
     #"yubico-yubikey-personalization-gui"

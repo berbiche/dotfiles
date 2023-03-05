@@ -8,6 +8,8 @@ let
   iniFormat = pkgs.formats.ini { };
 in
 {
+  disabledModules = [ "services/avizo.nix" ];
+
   options.services.avizo = {
     enable = mkEnableOption "volume/brightness notification daemon. Note that avizo needs to be invoked by it's client <command>avizo-client</command> to display any notifications";
 
