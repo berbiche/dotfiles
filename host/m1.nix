@@ -28,8 +28,8 @@
     protocol = "ssh-ng";
     sshUser = "nicolas";
     hostName = "nixos-builder.node.tq.rs";
-    sshKey = "/Users/${config.my.username}/.ssh/builder";
-    # publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSU1RUHlybWxObExmcnVSMnJONXB2MEJSeGtqVGJna2wyb1E5dm5YSjNYOEMgcm9vdEBuaXhvcy1idWlsZGVyCg==";
+    sshKey = "/etc/nix/nixos-builder.key";
+    publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSU1RUHlybWxObExmcnVSMnJONXB2MEJSeGtqVGJna2wyb1E5dm5YSjNYOEMgcm9vdEBuaXhvcy1idWlsZGVyCg==";
   }];
   # nix.settings.builders-use-substitutes = true;
 
