@@ -35,6 +35,7 @@
     "kerl"
   ];
   homebrew.casks = [
+    "asix-ax88179"
     "obs"
     "rancher"
     "vagrant"
