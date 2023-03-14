@@ -19,8 +19,10 @@ in
     NIX_PAGER = "less --RAW-CONTROL-CHARS --quit-if-one-screen";
   };
 
+  # Alias jq to the go version of the tool
+  home.shellAliases."jq" = "gojq";
   home.packages = with pkgs; [
-    jq # tool to extract data out from a json input (files, stdin, ...)
+    gojq # tool to extract data out from a json input (files, stdin, ...)
     fq # like jq but for any binary format
     yq-go # like jq for yaml
     fx # equivalent of piping json to `less` with the ability to minimize nodes

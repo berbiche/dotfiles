@@ -13,7 +13,7 @@
       # Mnemonic: pr mine
       prm = "pr list --author=berbiche";
       # Create a repo for my user
-      rc = ''!gh repo create "''${PWD##*/}" "$@"'';
+      rc = ''!gh repo create "''${$(pwd)##*/}" "$@"'';
       rcl = "repo clone";
     };
   };
