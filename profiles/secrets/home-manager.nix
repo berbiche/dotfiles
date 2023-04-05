@@ -1,7 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }@args:
 
 let
-  inherit (pkgs.stdenv.hostPlatform) isLinux isDarwin;
+  inherit (pkgs.stdenv.hostPlatform) isLinux isDarwin isAarch64;
+  osConfig = args.osConfig or { };
 in
 lib.mkMerge [
   {
@@ -30,7 +31,12 @@ lib.mkMerge [
   (lib.mkIf isDarwin {
     # pinentry-mac is not packaged on nixpkgs
     home.file.".gnupg/gpg-agent.conf".text =  lib.mkAfter ''
-      pinentry-program /usr/local/bin/pinentry-mac
+      pinentry-program ${
+        if isAarch64 then
+          "${osConfig.homebrew.brewPrefix or "/opt/homebrew/bin"}/pinentry-mac"
+        else
+          "/usr/local/bin/pinentry-mac"
+      }
     '';
 
     programs.gpg.scdaemonSettings = {

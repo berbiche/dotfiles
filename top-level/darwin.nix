@@ -28,6 +28,7 @@ in
         "/usr/lib"
       ];
 
+      nix.settings.allowed-users = [ "@admin" config.my.username ];
       nix.settings.trusted-users = [ "@admin" config.my.username ];
       nix.useDaemon = true;
       services.nix-daemon.enable = true;

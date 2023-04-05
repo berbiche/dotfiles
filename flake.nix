@@ -192,6 +192,13 @@
         hostConfiguration = ./host/macos.nix;
         userConfiguration = ./user/nicolas.nix;
       };
+      "AG-PC0211-M" = mkDarwinConfig {
+        hostname = "AG-PC0211-M";
+        username = "n.berbiche";
+        platform = "aarch64-darwin";
+        hostConfiguration = ./host/m1v2.nix;
+        userConfiguration = ./user/nicolas.nix;
+      };
       m1 = mkDarwinConfig {
         hostname = "m1";
         username = "nberbiche";
