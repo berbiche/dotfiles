@@ -469,12 +469,16 @@ in
     {
       # Tab-bar
       plugin = barbar-nvim;
+      type = "lua";
       config = ''
-        let bufferline = get(g:, 'bufferline', {})
-        let bufferline.closable = v:false
-
-        " autocmd User CocExplorerOpenPre lua require'bufferline.api'.set_offset(30, 'FileTree')
-        " autocmd User CocExplorerQuitPre lua require'bufferline.api'.set_offset(0)
+        require('barbar').setup {
+          icons = {
+            button = false,
+            modified = {
+              button = false,
+            }
+          }
+        }
       '';
     }
     {
@@ -503,10 +507,10 @@ in
         }
 
         function _G.tree_toggle()
-          local tree = require('nvim-tree')
+          local tree = require('nvim-tree.api')
           local view = require('nvim-tree.view')
           local api = require('bufferline.api')
-          tree.toggle()
+          tree.tree.toggle()
           if view.is_visible() then
             api.set_offset(30, 'FileTree')
           else
