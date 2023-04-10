@@ -39,7 +39,16 @@ lib.mkMerge [
     home.sessionPath = [ "${config.xdg.configHome}/emacs/bin" ];
 
     xdg.configFile."doom" = {
-      source = ./doom.d;
+      source = pkgs.applyPatches {
+        name = "doom-emacs-dotfiles";
+        src = ./doom.d;
+        patches = [
+          (pkgs.substituteAll {
+            src = ./doom.d/envrc-package.patch;
+            envrc_direnv_package = "${config.programs.direnv.package or pkgs.direnv}/bin/direnv";
+          })
+        ];
+      };
       force = true;
     };
 

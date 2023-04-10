@@ -54,6 +54,9 @@
 ;; Make treemacs rename use a minibuffer
 (setq treemacs-read-string-input 'from-minibuffer)
 
+;; Set envrc global package through config variable
+(setq envrc-direnv-executable "direnv")
+
 
 ;; Graciously donated by my friend: https://github.com/starcraft66/os-config/commit/9109152ea81c9398cc0a0d90a3728b44301ef56f
 (after! exec-path-from-shell
