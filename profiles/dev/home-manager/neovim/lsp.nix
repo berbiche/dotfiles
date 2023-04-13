@@ -5,9 +5,12 @@
   programs.neovim.plugins = with pkgs.vimPlugins; [
     {
       plugin = vim-nix;
-      type = "viml";
+      type = "lua";
       config = ''
-        au BufRead,BufNewFile *.nix setf nix
+        vim.api.nvim_create_autocmd({'BufRead', 'BufNewFile'}, {
+          pattern = '*.nix',
+          command = 'setf nix',
+        })
       '';
     }
     lspkind-nvim
@@ -44,9 +47,14 @@
     {
       # Show code action lightbulb
       plugin = nvim-lightbulb;
-      type = "viml";
+      type = "lua";
       config = ''
-        autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
+        vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
+          pattern = '*',
+          callback = function ()
+            require('nvim-lightbulb').update_lightbulb()
+          end
+        })
       '';
     }
     {
@@ -54,122 +62,116 @@
     }
     {
       plugin = nvim-lspconfig;
-      type = "viml";
+      type = "lua";
       config = ''
-        " Display diagnostics only when hovering
-        autocmd CursorHold * lua vim.diagnostic.open_float(nil, {focus = false, scope='cursor'})
+        local lsp = require('lspconfig')
+        local lspkind = require('lspkind')
 
-        lua <<EOF
-          local lsp = require('lspconfig')
-          local lspkind = require('lspkind')
+        lspkind.init()
 
-          lspkind.init()
+        vim.diagnostic.config({ virtual_text = false })
 
-          vim.diagnostic.config({ virtual_text = false })
+        -- Display diagnostics only when hovering
+        vim.api.nvim_create_autocmd('CursorHold', {
+          pattern = '*',
+          callback = function ()
+            vim.diagnostic.open_float(nil, {focus = false, scope='cursor'})
+          end
+        })
 
-          local function on_attach(_, buf)
-            local map = {
-              K = "lua vim.lsp.buf.hover()",
-              -- ["<space>d"] = "Trouble lsp_document_diagnostics",
-              -- ["<space>e"] = "Trouble lsp_workspace_diagnostics",
-              ["<space>bf"] = "lua vim.lsp.buf.formatting()",
-              -- ["<space>r"] = "Trouble lsp_references",
-              ["[d"] = "lua vim.diagnostic.goto_prev()",
-              ["]d"] = "lua vim.diagnostic.goto_next()",
-              ga = "lua vim.lsp.buf.code_action()",
-              gd = "lua vim.lsp.buf.definition()",
-              ge = "lua vim.diagnostic.open_float()",
-              gr = "lua vim.lsp.buf.rename()",
-              gt = "lua vim.lsp.buf.type_definition()",
-            }
+        local function on_attach(_, bufnr)
+          local cmd = function (thing)
+            return '<cmd>' .. thing .. '<CR>'
+          end
+          local map = {
+            K = vim.lsp.buf.hover,
+            -- ["<space>d"] = cmd("Trouble lsp_document_diagnostics"),
+            -- ["<space>e"] = cmd("Trouble lsp_workspace_diagnostics"),
+            ["<space>bf"] = vim.lsp.buf.formatting,
+            -- ["<space>r"] = cmd("Trouble lsp_references"),
+            ["[d"] = vim.diagnostic.goto_prev,
+            ["]d"] = vim.diagnostic.goto_next,
+            ga = vim.lsp.buf.code_action,
+            gd = vim.lsp.buf.definition,
+            ge = vim.diagnostic.open_float,
+            gr = vim.lsp.buf.rename,
+            gt = vim.lsp.buf.type_definition,
+          }
 
-
-            for k, v in pairs(map) do
-              vim.api.nvim_buf_set_keymap(
-                buf,
-                "n",
-                k,
-                "<cmd>" .. v .. "<cr>",
-                { noremap = true }
-              )
-            end
-
-
-            vim.api.nvim_buf_set_keymap(
-              buf,
-              "v",
-              "ga",
-              "<cmd>lua vim.lsp.buf.range_code_action()<cr>",
-              { noremap = true }
-            )
+          for key, value in pairs(map) do
+            vim.keymap.set("n", key, value, { buffer = bufnr })
           end
 
-          local function on_attach_trouble(client, bufnr)
-            on_attach(client, bufnr)
-            require("lsp_signature").on_attach({
-              bind = true,
-              handler_opts = { border = "single", },
-            }, bufnr)
-          end
+          vim.keymap.set("v", "ga", vim.lsp.buf.range_code_action, { buffer = bufnr })
+        end
 
-          -- C/CPP
-          lsp.clangd.setup {
-            default_config = {
-              cmd = {
-                'clangd', '--background-index', '--pch-storage=memory', '--clang-tidy', '--suggest-missing-includes',
-              },
-              filetypes = { 'c', 'cpp', },
-              root_dir = lsp.util.root_pattern('compile_commands.json', 'compile_flags.txt', '.git'),
+        local function on_attach_trouble(client, bufnr)
+          on_attach(client, bufnr)
+          require("lsp_signature").on_attach({
+            bind = true,
+            handler_opts = { border = "single", },
+          }, bufnr)
+        end
+
+        -- C/CPP
+        lsp.clangd.setup {
+          default_config = {
+            cmd = {
+              'clangd', '--background-index', '--pch-storage=memory', '--clang-tidy', '--suggest-missing-includes',
             },
-            on_attach = on_attach_trouble,
-          }
-          -- Erlang
-          lsp.erlangls.setup { on_attach = on_attach_trouble, }
-          -- Python
-          lsp.pyright.setup { on_attach = on_attach_trouble, }
-          -- Rust
-          lsp.rust_analyzer.setup { on_attach = on_attach_trouble, }
-          -- Go
-          lsp.gopls.setup { on_attach = on_attach_trouble, }
-          -- Terraform
-          lsp.terraformls.setup { on_attach = on_attach_trouble, }
-          -- Zig
-          lsp.zls.setup {
-            on_attach = function(a, bufnr)
-              -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-              on_attach_trouble(a, bufnr)
-            end,
-          }
-          -- YAML
-          lsp.yamlls.setup {
-            on_attach = on_attach_trouble,
-            -- settings = { yaml = { schemas = { ["https://..."] } } },
-          }
-          -- JSON
-          lsp.jsonls.setup {
-            on_attach = on_attach_trouble,
-            settings = {
-              json = {
-                schemas = require('schemastore').json.schemas(),
-              }
+            filetypes = { 'c', 
+            -- 'cpp',
+            },
+            root_dir = lsp.util.root_pattern('compile_commands.json', 'compile_flags.txt', '.git'),
+          },
+          on_attach = on_attach_trouble,
+        }
+        -- Erlang
+        lsp.erlangls.setup { on_attach = on_attach_trouble, }
+        -- Python
+        lsp.pyright.setup { on_attach = on_attach_trouble, }
+        -- Rust
+        lsp.rust_analyzer.setup { on_attach = on_attach_trouble, }
+        -- Go
+        lsp.gopls.setup { on_attach = on_attach_trouble, }
+        -- Terraform
+        lsp.terraformls.setup { on_attach = on_attach_trouble, }
+        -- Zig
+        lsp.zls.setup {
+          on_attach = function(a, bufnr)
+            -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+            on_attach_trouble(a, bufnr)
+          end,
+        }
+        -- YAML
+        lsp.yamlls.setup {
+          on_attach = on_attach_trouble,
+          -- settings = { yaml = { schemas = { ["https://..."] } } },
+        }
+        -- JSON
+        lsp.jsonls.setup {
+          on_attach = on_attach_trouble,
+          settings = {
+            json = {
+              schemas = require('schemastore').json.schemas(),
             }
           }
-          --[[ Vim
-          lsp.vimls.setup {
-            on_attach = on_attach,
-          }
-          --]]
-          -- Nix
-          lsp.rnix.setup {
-            on_attach = on_attach,
-          }
-          -- Bash
-          lsp.bashls.setup {
-            on_attach = on_attach,
-          }
-          -- Diagnostic-ls
-          lsp.diagnosticls.setup { }
-        EOF
+        }
+        --[[ Vim
+        lsp.vimls.setup {
+          on_attach = on_attach,
+        }
+        --]]
+        -- Nix
+        lsp.rnix.setup {
+          on_attach = on_attach,
+        }
+        -- Bash
+        lsp.bashls.setup {
+          on_attach = on_attach,
+        }
+        -- Diagnostic-ls
+        lsp.diagnosticls.setup { }
       '';
     }
 
@@ -216,7 +218,7 @@
         require("cmp_nvim_lsp").setup()
 
         -- Automatically insert parenthesis after confirming
-        cmp.event:on( 'confirm_done', cmp_autopairs.on_confirm_done({  map_char = { tex = ''' } }))
+        cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done({ map_char = { tex = "" } }))
       '';
     }
 
@@ -232,8 +234,9 @@
     # Language specific packages
     {
       plugin = zig-vim;
+      type = "lua";
       config = ''
-        let g:zig_fmt_autosave = 0
+        vim.g.zig_fmt_autosave = 0
       '';
     }
   ];

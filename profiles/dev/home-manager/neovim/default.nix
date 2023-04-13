@@ -87,18 +87,18 @@ in
         let g:maplocalleader = ','
 
         " Use visual bell
-        set termguicolors
         set visualbell
 
         " Basics
         syntax on
+
+        if has("termguicolors")
+          set termguicolors
+        endif
       '';
     }];
 
     extraConfig = ''
-      " Color/theme : sonokai
-      colorscheme sonokai
-
       set hidden      " Allows hidden buffer
       set hlsearch    " Highlight search result
       set smartcase
@@ -148,7 +148,7 @@ in
 
 
       " Highlight yanked text
-      au TextYankPost * silent! lua vim.highlight.on_yank()
+      autocmd TextYankPost * silent! lua vim.highlight.on_yank()
 
 
       " Disables automatic commenting on newline if previous line is a comment
@@ -182,6 +182,10 @@ in
           ''}
       endif
 
+      " Keep selection after indenting in Visual mode
+      vnoremap < <gv
+      vnoremap > >gv
+
       " Insert line above
       nnoremap [o O<Esc>j
       " Insert line below
@@ -209,7 +213,14 @@ in
       vnoremap <A-j> :m '>+1<CR>gv=gv
       vnoremap <A-k> :m '<-2<CR>gv=gv
 
-      au FileType gitcommit setlocal tw=68 colorcolumn=69 spell
+      autocmd FileType gitcommit setlocal tw=68 colorcolumn=69 spell
+
+
+      " Check if file has changed on buffer focus
+      autocmd FocusGained silent! :checktime
+
+      " Close certain buffer types with only 'q'
+      autocmd FileType help,checkhealth noremap <buffer><silent>q :close<CR>
     '';
   };
 }

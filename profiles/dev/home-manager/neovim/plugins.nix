@@ -22,22 +22,19 @@ in
         vim.notify = notify
       '';
     }
-    # {
-    #   plugin = desktop-notify-nvim;
-    #   config = ''
-    #     lua <<EOF
-    #       vim.notify = require("desktop_notify").notify_send;
-    #     EOF
-    #   '';
-    # }
-    # https://github.com/neovim/neovim/issues/12587
-    FixCursorHold-nvim
     {
       plugin = sonokai; # theme
+      type = "lua";
       config = ''
-        let g:sonokai_style = 'maia'
-        let g:sonokai_enable_italic = 1
-        let g:sonokai_transparent_background = 1
+        vim.g.sonokai_style = 'maia'
+        vim.g.sonokai_enable_italic = 1
+        vim.g.sonokai_transparent_background = 0
+
+        -- Attemps to create a directory in /nix/store/...-sonokai/after
+        -- Obviously this doesn't work!
+        vim.g.sonokai_better_performance = 0
+
+        vim.cmd.colorscheme('sonokai')
       '';
     }
     gruvbox-nvim # theme
@@ -48,9 +45,12 @@ in
     vim-sleuth
     {
       plugin = vim-sandwich; # replaces vim-surround
+      type = "lua";
       config = ''
-        " Use surround.vim keymaps since the default keymap breaks vim-sneak
-        runtime macros/sandwich/keymap/surround.vim
+        -- Use surround.vim keymaps since the default keymap breaks vim-sneak
+        vim.cmd([[
+          runtime macros/sandwich/keymap/surround.vim
+        ]])
       '';
     }
     # editorconfig support for indent style, etc.
@@ -103,8 +103,51 @@ in
     {
       # Better wildmenu
       plugin = wilder-nvim;
-      type = "viml";
+      type = "lua";
       config = ''
+        if vim.g.vscode == nil then
+          local wilder = require('wilder')
+
+          wilder.setup({
+            modes = {':', '/', '?'},
+            next_key = '<C-n>',
+            previous_key = '<C-p>',
+          })
+
+          wilder.set_option('pipeline', {
+            wilder.branch(
+              wilder.python_file_finder_pipeline(),
+              wilder.cmdline_pipeline({
+                language = 'python',
+                fuzzy = 1,
+              }),
+              wilder.python_search_pipeline({
+                pattern = wilder.python_fuzzy_delimiter_pattern(),
+                sorter = wilder.python_difflib_sorter(),
+              })
+            )
+          })
+          wilder.set_option('renderer', wilder.renderer_mux({
+            [':'] = wilder.popupmenu_renderer(
+              wilder.popupmenu_border_theme({
+                border = 'rounded',
+                highlights = {
+                  border = 'Normal',
+                },
+                highlighter = wilder.basic_highlighter(),
+                min_width = '100%',
+                reverse = 1,
+                left = {' ', wilder.popupmenu_devicons()},
+                right = {' ', wilder.popupmenu_scrollbar()},
+              })
+            ),
+            ['/'] = wilder.wildmenu_renderer({
+              highlighter = wilder.basic_highlighter(),
+            })
+          }))
+        end
+
+        --[[ Temporary stuff
         if !exists('g:vscode')
           call wilder#setup({'modes': [':', '/', '?']})
           call wilder#set_option('pipeline', [
@@ -118,18 +161,20 @@ in
             \ 'left': [wilder#popupmenu_devicons()],
             \ }))
         endif
+        --]]
       '';
     }
     {
       # Displays vertical line for the indentation level
       plugin = indent-blankline-nvim;
-      type = "viml";
+      type = "lua";
       config = ''
-        let g:indent_blankline_use_treesitter = v:true
-        let g:indent_blankline_show_current_context = v:false
-
-        let g:indent_blankline_filetype_exclude = ['help', 'startify']
-        let g:indent_blankline_buftype_exclude = ['terminal', 'startify']
+        require("indent_blankline").setup {
+          use_treesitter = true,
+          show_current_context = false,
+          filetype_exclude = {'help', 'startify'},
+          buftype_exclude = {'terminal', 'startify'},
+        }
       '';
     }
     {
@@ -137,24 +182,17 @@ in
       plugin = lightspeed-nvim;
       type = "lua";
     }
-    nui-nvim
+    {
+      plugin = nui-nvim;
+      type = "lua";
+    }
     {
       plugin = searchbox-nvim;
       type = "lua";
       config = ''
-        local map = vim.api.nvim_set_keymap
-        map("n", "<leader>sh", "<cmd>lua require('searchbox').replace()<CR>", {noremap=true})
-        map("v", "<leader>sh", "<cmd>lua require('searchbox').replace()<CR>", {noremap=true})
-      '';
-    }
-    {
-      plugin = BufOnly-vim;
-      type = "lua";
-      config = ''
-        local map = vim.api.nvim_set_keymap
-        local opt = { noremap = true }
-        map("n", "<leader>bo", "<cmd>BufOnly<CR>", opt)
-        map("v", "<leader>bo", "<cmd>BufOnly!<CR>", opt)
+        local bind = vim.keymap.set
+        bind({"n", "v"}, "<leader>sh", require('searchbox').replace)
+        bind("x", "<leader>sh", function() require('searchbox').replace({visual_mode = true}) end)
       '';
     }
     {
@@ -167,7 +205,7 @@ in
           hide_only_whitespace = true,
 
           bind_keys = {
-            registers = registers.apply_register({ delay = 0.5 }),
+            registers = registers.apply_register({ delay = 1 }),
           },
 
           window = {
@@ -178,7 +216,7 @@ in
     }
 
     # Better netrw
-    vim-vinegar
+    # vim-vinegar
 
     # Git
     diffview-nvim
@@ -187,22 +225,22 @@ in
       plugin = neogit;
       type = "lua";
       config = ''
-        require('neogit').setup {
+        local neogit = require('neogit')
+        neogit.setup {
           disable_commit_confirmation = true,
           integrations = {
             diffview = true,
           },
         }
 
-        local map = vim.api.nvim_set_keymap
-        map("n", "<leader>gg", "<cmd>lua require('neogit').open()<CR>", {noremap=true, silent=true})
+        vim.keymap.set("n", "<leader>gg", neogit.open, {silent = true})
       '';
     }
     {
       plugin = gitsigns-nvim;
       type = "lua";
       config = ''
-        require('gitsigns').setup()
+        require('gitsigns').setup { }
       '';
     }
 
@@ -226,12 +264,11 @@ in
           prefer_single_line_comments = true,
         })
 
-        local map = vim.api.nvim_set_keymap
-        map("i", "<M-;>", "<Plug>kommentary_line_default", {noremap = true})
-        map("n", "<M-;>", "<Plug>kommentary_line_default", {})
-        map("v", "<M-;>", "<Plug>kommentary_visual_default", {})
-        map("n", "<leader>;", "<Plug>kommentary_line_default", {})
-        map("v", "<leader>;", "<Plug>kommentary_visual_default", {})
+        local bind = vim.keymap.set
+        bind({'i', 'n'}, "<M-;>", "<Plug>kommentary_line_default")
+        bind("v", "<M-;>", "<Plug>kommentary_visual_default")
+        bind("n", "<leader>;", "<Plug>kommentary_line_default")
+        bind("v", "<leader>;", "<Plug>kommentary_visual_default")
       '';
     }
     {
@@ -239,8 +276,8 @@ in
       plugin = vim-sayonara;
       type = "lua";
       config = ''
-        local map = vim.api.nvim_set_keymap
-        map("n", "<leader>Q", "<cmd>Sayonara<CR>", {noremap = true, silent = true,})
+        local bind = vim.keymap.set
+        bind("n", "<leader>Q", "<cmd>Sayonara<CR>", {silent = true})
       '';
     }
     {
@@ -248,9 +285,9 @@ in
       type = "lua";
       config = ''
         require('hlslens').setup()
-        
-        local bind = vim.api.nvim_set_keymap
-        local opts = {noremap = true, silent = true}
+
+        local bind = vim.keymap.set
+        local opts = {silent = true}
 
         bind('n', 'n',
              [[<cmd>execute('normal! ' . v:count1 . 'n')<CR><cmd>lua require('hlslens').start()<CR>]],
@@ -282,9 +319,9 @@ in
     plenary-nvim
     {
       plugin = sqlite-lua;
-      type = "viml";
+      type = "lua";
       config = ''
-        let g:sqlite_clib_path = '${lib.getLib pkgs.sqlite}/lib/libsqlite3${pkgs.hostPlatform.extensions.sharedLibrary}'
+        vim.g.sqlite_clib_path = [[${lib.getLib pkgs.sqlite}/lib/libsqlite3${pkgs.hostPlatform.extensions.sharedLibrary}]]
       '';
     }
     telescope-project-nvim
@@ -292,105 +329,119 @@ in
     # telescope-fzy-native-nvim
     telescope-fzf-native-nvim
     telescope-file-browser-nvim
+    telescope-zoxide
     {
       plugin = telescope-nvim;
-      type = "viml";
+      type = "lua";
       config = ''
-        lua <<EOF
-          local ts = require('telescope')
-          local actions = require('telescope.actions')
-          local fb_actions = require('telescope').extensions.file_browser.actions
-          ts.setup {
-            defaults = {
-              layout_strategy = 'horizontal',
+        local ts = require('telescope')
+        local actions = require('telescope.actions')
+        local fb_actions = ts.extensions.file_browser.actions
+        local builtins = require('telescope.builtin')
+        -- local themes = require('telescope.themes')
+
+        ts.setup {
+          defaults = {
+            layout_strategy = 'horizontal',
+            mappings = {
+              i = {
+                ["<esc>"] = actions.close,
+                ["C-g"] = actions.close,
+              },
+              n = {
+                ["<esc>"] = actions.close,
+                ["C-g"] = actions.close,
+              },
+            },
+          },
+          extensions = {
+            fzf = {
+              fuzzy = true,
+              override_generic_sorter = false,
+              override_file_sorter = true,
+              case_mode = "smart_case",
+            },
+            project = {
+              display_type = 'full',
+              base_dirs = {
+                {'~/dev', max_depth = 3},
+              },
+            },
+            file_browser = {
+              hijack_netrw = true,
               mappings = {
-                i = {
-                  ["C-c"] = actions.close,
+                ["i"] = {
+                  -- Match completions behavior of accepting with tab
+                  ["<Tab>"] = actions.select_default,
+                  ["<C-e>"] = fb_actions.create_from_prompt,
                 },
-                n = {
-                  ["<esc>"] = actions.close,
-                  ["C-c"] = actions.close,
-                },
-              },
-            },
-            extensions = {
-              fzf = {
-                fuzzy = true,
-                override_generic_sorter = false,
-                override_file_sorter = true,
-                case_mode = "smart_case",
-              },
-              project = {
-                display_type = 'full',
-                base_dirs = {
-                  {'~/dev', max_depth = 3},
-                },
-              },
-              file_browser = {
-                mappings = {
-                  ["i"] = {
-                    -- Match completions behavior of accepting with tab
-                    ["<Tab>"] = actions.select_default,
-                    ["<C-e>"] = fb_actions.create,
-                  },
-                  ["n"] = {
-                    ["<C-e>"] = fb_actions.create,
-                  },
+                ["n"] = {
+                  ["<C-e>"] = fb_actions.create_from_prompt,
                 },
               },
             },
-            pickers = {
-              buffers = {
-                sort_lastused = true,
-                sort_mru = true,
-                theme = "dropdown",
-                previewer = false,
-              },
-              find_files = {
-                theme = "dropdown",
-              },
+          },
+          pickers = {
+            buffers = {
+              sort_lastused = true,
+              sort_mru = true,
+              theme = "dropdown",
+              previewer = false,
             },
-          }
+            find_files = {
+              theme = "dropdown",
+            },
+            spell_suggest = {
+              theme = "cursor"
+            },
+          },
+        }
 
-          -- ts.load_extension('fzy_native')
-          ts.load_extension('fzf')
-          ts.load_extension('frecency')
-          ts.load_extension('project')
-          ts.load_extension('file_browser')
-          ts.load_extension('notify')
+        -- ts.load_extension('fzy_native')
+        ts.load_extension('fzf')
+        ts.load_extension('frecency')
+        ts.load_extension('project')
+        ts.load_extension('file_browser')
+        ts.load_extension('notify')
+        ts.load_extension('zoxide')
 
-          local map = vim.api.nvim_set_keymap
-          local opts = { noremap = true, silent = true }
+        local bind = vim.keymap.set
+        local opts = { silent = true }
 
-          map("n", "<space><space>", "<cmd>lua require('telescope.builtin').git_files()<CR>", opts)
-          -- map("n", "<leader><.>", "<cmd>lua require('telescope.builtin').find_files({ cwd = vim.fn.expand('%:p:h')})<CR>", opts)
+        bind("n", "<space><space>", builtins.git_files, opts)
+        -- bind("n", "<leader><.>", function() builtins.find_files({ cwd = vim.fn.expand('%:p:h')}) end, opts)
+        bind("n", "<leader>.", function() ts.extensions.file_browser.file_browser({ cwd = vim.fn.expand('%:p:h') }) end, opts)
 
-          -- Create new file with <C-e> in file_browser
-          map("n", "<leader>.", "<cmd>lua require('telescope').extensions.file_browser.file_browser({ cwd = vim.fn.expand('%:p:h') })<CR>", opts)
+        for _, v in pairs({",", "b,", "bi"}) do
+          bind("n", "<leader>"..v, builtins.buffers, opts)
+        end
 
-          for _, v in pairs({",", "b,", "bi"}) do
-            map("n", "<leader>"..v, "<cmd>lua require('telescope.builtin').buffers()<CR>", opts)
-          end
+        -- List spelling suggestions
+        bind("n", "<leader>si", builtins.spell_suggest, opts)
+        -- List recent files
+        bind("n", "<leader>fr", builtins.oldfiles, opts)
+        -- List most open files
+        bind("n", "<leader>fF", ts.extensions.frecency.frecency, opts)
+        bind("n", "<leader>pp", ts.extensions.project.project, opts)
 
-          -- List
-          map("n", "<leader>si", "<cmd>lua require('telescope.builtin').spell_suggest()<CR>", opts)
-          -- List recent files
-          map("n", "<leader>fr", "<cmd>lua require('telescope.builtin').oldfiles()<CR>", opts)
-          -- List most open files
-          map("n", "<leader>fF", "<cmd>lua require('telescope').extensions.frecency.frecency()<CR>", opts)
-          map("n", "<leader>pp", "<cmd>lua require('telescope').extensions.project.project()<CR>", opts)
+        -- Finding things
+        bind("n", "<leader>ss", builtins.current_buffer_fuzzy_find, opts)
+        bind("n", "<leader>sp", builtins.live_grep, opts)
 
-          -- Finding things
-          map("n", "<leader>ss", "<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>", opts)
-          map("n", "<leader>sp", "<cmd>lua require('telescope.builtin').live_grep()<CR>", opts)
-        EOF
+        -- List registers
+        bind("n", "<leader>ir", builtins.registers, opts)
 
-        autocmd! User TelescopePreviewerLoaded setlocal wrap
+        --
+        vim.api.nvim_create_autocmd('User', {
+          pattern = 'TelescopePreviewerLoaded',
+          command = 'setlocal wrap',
+        })
       '';
     }
 
     {
       plugin = vim-startify;
+      type = "viml";
       config = ''
         let g:startify_use_env = 0
         let g:startify_files_number = 10
@@ -451,7 +502,7 @@ in
         require("lualine").setup {
           options = {
             disabled_filetypes = { "TelescopePrompt", "NvimTree", "startify", "terminal", "coc-explorer" },
-            theme = 'seoul256',
+            theme = 'sonokai',
           },
           sections = {
             lualine_b = { 'branch', 'diagnostics', 'filename', },
@@ -476,9 +527,25 @@ in
             button = false,
             modified = {
               button = false,
-            }
-          }
+            },
+            filetype = {
+              enabled = true,
+            },
+          },
+          sidebar_filetypes = {
+            NvimTree = true,
+          },
         }
+
+        local bind = vim.keymap.set
+        local opts = {silent = true}
+
+        for i=1,9 do
+          bind('n', '<A-' .. i .. '>', '<cmd>BufferGoto ' .. i .. '<CR>', opts)
+        end
+        bind('n', '<A-0>', '<cmd>BufferLast<CR>', opts)
+
+        bind('n', '<leader>bO', '<cmd>BufferCloseAllButCurrent<CR>', opts)
       '';
     }
     {
@@ -497,31 +564,25 @@ in
           },
           lsp_diagnostics = enable,
           filters = {
-            custom = { '.git', 'result', },
+            custom = { '^.git$', '^result', },
           },
           renderer = {
             add_trailing = true,
             highlight_git = true,
             highlight_opened_files = "icon",
           },
+
+          actions = {
+            change_dir = {
+              enable = false,
+            },
+          },
         }
 
-        function _G.tree_toggle()
-          local tree = require('nvim-tree.api')
-          local view = require('nvim-tree.view')
-          local api = require('bufferline.api')
-          tree.tree.toggle()
-          if view.is_visible() then
-            api.set_offset(30, 'FileTree')
-          else
-            api.set_offset(0)
-          end
-        end
-
-        local map = vim.api.nvim_set_keymap
+        local map = vim.keymap.set
         local opts = { noremap = true, silent = true }
 
-        map('n', '<leader>op', '<cmd>call v:lua.tree_toggle()<CR>', opts)
+        map('n', '<leader>op', require('nvim-tree.api').tree.toggle, opts)
 
         -- Since the auto_close option has been removed, this is the only option
         ${lib.optionalString (
@@ -572,20 +633,21 @@ in
           border = 'rounded',
         }
 
-        local map = vim.api.nvim_set_keymap
-        local opts = { noremap = true, silent = true }
+        local map = vim.keymap.set
+        local opts = { silent = true }
 
-        map('n', '<space>`', '<cmd>lua require("FTerm").toggle()<CR>', opts)
+        map('n', '<space>`', require("FTerm").toggle, opts)
         -- map('t', '<space>`', '<cmd>lua require("FTerm").toggle()<CR>', opts)
       '';
     }
   ]
   ++ lib.optional (osConfig.profiles.dev.wakatime.enable or false) {
     plugin = vim-wakatime;
+    type = "lua";
     optional = true;
     config = ''
-      " WakaTime CLI path
-      let g:wakatime_OverrideCommandPrefix = ${lib.escapeShellArg pkgs.wakatime}.'/bin/wakatime'
+      -- WakaTime CLI path
+      vim.g.wakatime_OverrideCommandPrefix = [[${pkgs.wakatime}/bin/wakatime]]
     '';
   };
 
