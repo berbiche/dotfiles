@@ -25,7 +25,7 @@ lib.mkMerge [
       enable = true;
       package = lib.mkMerge [
         (lib.mkIf isLinux (emacsWithPackages pkgs.emacsPgtk))
-        (lib.mkIf isDarwin (emacsWithPackages pkgs.emacsGit))
+        (lib.mkIf isDarwin (emacsWithPackages pkgs.emacsUnstable))
       ];
     };
 
