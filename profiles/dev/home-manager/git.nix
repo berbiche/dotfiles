@@ -98,6 +98,11 @@ lib.mkMerge [
         f = "fetch --prune";
         fo = "${f} origin";
         fu = "${f} upstream";
+        # Not sure how to correctly check if GIT_DIR and/or GIT_WORK_TREE are set...
+        # so just assume that .git is always relative to this alias
+        # This alias runs git commit with the content of the last COMMIT_EDITMSG
+        # when for instance I enter the wrong password for my pgp key
+        fuck = "commit -F .git/COMMIT_EDITMSG";
         p = "pull --prune";
         pl = "${p} --rebase";
         pu = "${p} upstream";
