@@ -102,7 +102,7 @@ lib.mkMerge [
         # so just assume that .git is always relative to this alias
         # This alias runs git commit with the content of the last COMMIT_EDITMSG
         # when for instance I enter the wrong password for my pgp key
-        fuck = "commit -F .git/COMMIT_EDITMSG";
+        fuck = "commit --cleanup=strip -F .git/COMMIT_EDITMSG";
         p = "pull --prune";
         pl = "${p} --rebase";
         pu = "${p} upstream";
