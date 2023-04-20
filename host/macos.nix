@@ -12,8 +12,6 @@
 
   environment.systemPackages = [ pkgs.vagrant pkgs.gnupg ];
 
-  programs.fish.enable = true;
-  programs.zsh.enable = true;
   #services.emacs.enable = true;
 
   profiles.dev.wakatime.enable = false;

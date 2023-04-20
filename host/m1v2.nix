@@ -12,10 +12,6 @@
 
   environment.systemPackages = [ pkgs.vagrant pkgs.gnupg ];
 
-  programs.fish.enable = true;
-  programs.zsh.enable = true;
-  #services.emacs.enable = true;
-
   system.defaults.loginwindow.LoginwindowText = "Property of Nicolas Berbiche";
 
   homebrew.enable = true;
