@@ -8,7 +8,7 @@
     longitude = -73.597;
   };
 
-  nix.settings.max-jobs = 8;
+  nix.settings.max-jobs = 16;
 
   environment.systemPackages = [ pkgs.vagrant pkgs.gnupg ];
 
@@ -38,9 +38,6 @@
     "spotify"
     "rancher"
     "switchresx"
-    # "vagrant"
-    # "virtualbox"
-    #"yubico-yubikey-personalization-gui"
   ];
 
   my.home = { config, pkgs, osConfig, ... }: {
