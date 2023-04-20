@@ -1,14 +1,14 @@
 keys:
 - &mine 328820E009708FDD29C08DBA1D0261F6BCA46C6E
-- &mero 0DAC6AEF24C04C867FA1B0516D96FCE616772081
-- &t580 52ef90d0ba179584d6e7e301286c057facc4004e
+#- &mero 0DAC6AEF24C04C867FA1B0516D96FCE616772081
+- &mero
+- &m1v2 age1mnr4n27de0gq22dse6cp8ku7u3uecqg7sl0c793yh6s23ek3rv4su402ju
 creation_rules:
 - path_regex: 'secrets/smb-public-share.txt$'
   key_groups:
   - pgp:
     - *mine
     - *mero
-    - *t580
 - path_regex: 'secrets/merovingian.ya?ml$'
   key_groups:
   - pgp:
@@ -19,4 +19,5 @@ creation_rules:
   - pgp:
     - *mine
     - *mero
-    - *t580
+    age:
+    - *m1v2

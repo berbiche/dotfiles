@@ -6,6 +6,13 @@ let
 in
 lib.mkMerge [
   {
+    # Create folder, I don't care if the folder is 755, as long as the content
+    # of the secrets themselves is 400
+    xdg.configFile."sops/age/.keep".text = "Managed by Home Manager.";
+    sops.age.keyFile = "${config.xdg.configHome}/sops/age/keys.txt";
+    sops.age.generateKey = false;
+
+
     # home.file.".gnupg/gpg-agent.conf".text = lib.mkAfter ''
     #   pinentry-program ${pkgs.pinentry.gnome3}/bin/pinentry
     #   # pinentry-program ${pkgs.pinentry.qt}/bin/pinentry

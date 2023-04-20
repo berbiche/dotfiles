@@ -13,8 +13,6 @@ in
 
   my.home.imports = [ ./home-manager ];
 
-  profiles.dev.wakatime.enable = lib.mkDefault true;
-
   # fonts.fonts = with pkgs; [
   #   anonymousPro
   #   source-code-pro

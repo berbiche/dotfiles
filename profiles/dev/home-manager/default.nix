@@ -19,6 +19,8 @@ in
     NIX_PAGER = "less --RAW-CONTROL-CHARS --quit-if-one-screen";
   };
 
+  profiles.dev.wakatime.enable = lib.mkDefault true;
+
   # Alias jq to the go version of the tool
   home.shellAliases."jq" = "gojq";
   home.packages = with pkgs; [

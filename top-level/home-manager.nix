@@ -16,6 +16,7 @@
     isDarwin = !isLinux;
   };
   home-manager.sharedModules = [
+    inputs.sops-nix.homeManagerModules.sops
     {
       # Specify Home Manager version compability
       home.stateVersion = "23.05";

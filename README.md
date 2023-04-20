@@ -179,10 +179,22 @@ Most programs configuration live under `user/programs`.
 
 ### Sops
 
-Setup:
+**Setup**
 
 1. `sudo nix run nixpkgs#ssh-to-pgp -- -i /etc/ssh/ssh_host_rsa_key -o secrets/hosts/"$(hostname -s)".asc`
 2. Copy the fingerprint to `.sops.yaml`
+
+Make sure to export `SOPS_AGE_KEY_FILE`!
+
+    `SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt`
+
+**Updating keys**
+
+1. `sops updatekeys <FILE>`
+
+**Modifying secret**
+
+1. `sops --in-place <FILE>`
 
 ### pam_u2f
 

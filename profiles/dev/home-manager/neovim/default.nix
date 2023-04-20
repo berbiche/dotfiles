@@ -3,8 +3,6 @@ moduleArgs@{ config, lib, pkgs, inputs, ... }:
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
 
-  osConfig = moduleArgs.osConfig or { };
-
   shellAliases = rec {
     # The `-s` or `--remote` flag has to be specified last
     # The `mktemp -u` flag will not create the file (otherwise neovim will refuse to replace it)
@@ -175,13 +173,6 @@ in
         endif
       endfunction
 
-      if !exists('g:vscode')
-        " autocmd TermOpen * silent call RemoveTrailingHighlight()
-        ${lib.optionalString (osConfig.profiles.dev.wakatime.enable or false) ''
-            packadd vim-wakatime
-          ''}
-      endif
-
       " Keep selection after indenting in Visual mode
       vnoremap < <gv
       vnoremap > >gv
@@ -220,7 +211,7 @@ in
       autocmd FocusGained silent! :checktime
 
       " Close certain buffer types with only 'q'
-      autocmd FileType help,checkhealth noremap <buffer><silent>q :close<CR>
+      autocmd FileType help,checkhealth,qf noremap <buffer><silent>q :close<CR>
     '';
   };
 }

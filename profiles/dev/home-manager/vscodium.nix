@@ -3,8 +3,6 @@ moduleArgs@{ config, lib, pkgs, ... }:
 let
   inherit (pkgs.stdenv.hostPlatform) isAarch64 isDarwin isLinux;
 
-  osConfig = moduleArgs.osConfig or { };
-
   # Replaces VSCodium's open-vsx with Microsoft's extension gallery
   # This is temporary
   extensionsGallery = builtins.toJSON {
@@ -63,7 +61,7 @@ let
   ++ lib.optionals (pkgs.stdenv.hostPlatform.system != "aarch64-darwin") [
     xaver.clang-format
   ]
-  ++ lib.optional (osConfig.profiles.dev.wakatime.enable or false) berbiche.wakatime;
+  ++ lib.optional (config.profiles.dev.wakatime.enable) berbiche.wakatime;
 
   package = vscodium;
   # package = pkgs.vscode;

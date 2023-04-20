@@ -1,8 +1,5 @@
 moduleArgs@{ config, lib, pkgs, ... }:
 
-let
-  osConfig = moduleArgs.osConfig or { };
-in
 {
   programs.neovim.plugins = with pkgs.vimPlugins; [ ]
   ++ [
@@ -146,22 +143,6 @@ in
             })
           }))
         end
-
-        --[[ Temporary stuff
-        if !exists('g:vscode')
-          call wilder#setup({'modes': [':', '/', '?']})
-          call wilder#set_option('pipeline', [
-            \ wilder#branch(
-            \   wilder#cmdline_pipeline({'fuzzy': 1, 'language': 'python'}),
-            \   wilder#python_search_pipeline(),
-            \ ),
-            \ ])
-          call wilder#set_option('renderer', wilder#popupmenu_renderer({
-            \ 'highlighter': [wilder#basic_highlighter()],
-            \ 'left': [wilder#popupmenu_devicons()],
-            \ }))
-        endif
-        --]]
       '';
     }
     {
@@ -641,13 +622,17 @@ in
       '';
     }
   ]
-  ++ lib.optional (osConfig.profiles.dev.wakatime.enable or false) {
+  ++ lib.optional (config.profiles.dev.wakatime.enable) {
     plugin = vim-wakatime;
     type = "lua";
     optional = true;
     config = ''
       -- WakaTime CLI path
       vim.g.wakatime_OverrideCommandPrefix = [[${pkgs.wakatime}/bin/wakatime]]
+
+      if vim.g.vscode == nil then
+        vim.cmd([[packadd vim-wakatime]])
+      end
     '';
   };
 

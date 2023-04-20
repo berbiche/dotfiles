@@ -16,8 +16,6 @@
   programs.zsh.enable = true;
   #services.emacs.enable = true;
 
-  profiles.dev.wakatime.enable = false;
-
   system.defaults.loginwindow.LoginwindowText = "Property of Nicolas Berbiche";
 
   homebrew.enable = true;
