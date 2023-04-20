@@ -14,8 +14,8 @@ in
     gpgSigningKey = "1D0261F6BCA46C6E";
   };
 
-  my.defaults.terminal = "${config.programs.alacritty.package}/bin/alacritty";
-  # my.defaults.terminal = "${config.programs.kitty.package}/bin/kitty";
+  # my.defaults.terminal = "${config.programs.alacritty.package}/bin/alacritty";
+  my.defaults.terminal = "${config.programs.kitty.package}/bin/kitty";
   my.defaults.file-explorer = mkIf isLinux "${pkgs.cinnamon.nemo}/bin/nemo";
 
   my.theme.light = "Orchis";
@@ -164,10 +164,7 @@ in
     pkgs.tauon
 
     # Temporary
-    pkgs.zoom-us
     pkgs.discord
-    pkgs.discord-canary
-    pkgs.teams
   ];
 
   # Copy the scripts folder

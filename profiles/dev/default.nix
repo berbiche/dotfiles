@@ -20,7 +20,7 @@ in
   #   emacs-all-the-icons-fonts
   # ];
 
-  services.emacs.enable = lib.mkIf isDarwin true;
+  services.emacs.enable = lib.mkIf isDarwin (lib.mkDefault true);
 
   environment.pathsToLink = [ "/share/zsh" "/share/fish" ];
   programs.fish.enable = true;

@@ -31,10 +31,8 @@ in
 
     # Programming
     gnumake # for the `make` program
-    # Broken (2021-09-06)
-    # powershell # for some rare one-off scripts and tests
+    powershell # for some rare one-off scripts and tests
     tig # navigate a git repository's log and commits in a TUI, provides sorting, filtering, etc.
-    # (lib.lowPrio clang) # for the binary tools it offers?
 
     wget # I prefer using curl but still useful for one-off things
     curl # make advanced http requests, fetch files, etc.
@@ -48,7 +46,6 @@ in
     netcat-gnu # better than telnet
     socat # unix socket connections, etc.
     tcpdump # see packet flows on interfaces to debug stuff
-    ## dnsutils does not build on aarch64 with the version of Nixpkgs I use because jemalloc does not build
     dnsutils # dns lookups
     mtr # interactive traceroute that updates continuously
     bandwhich # see which programs are using network
@@ -60,7 +57,7 @@ in
     tree # file list tree
     bc # terminal calculator though I prefer using a python repl or `python -c 'print(39**25)'`
     bat # a better alternative to cat with syntax highlighting
-    (lib.mkIf (!isDarwin || isAarch64) procs) # an alternative to ps to view all currently running processes (static view)
+    procs # an alternative to ps to view all currently running processes (static view)
     sd # replace lines in files or lines in stdin without the "annoying" syntax of sed or awk
     du-dust # du with a tree-like listing and usage graph
     tokei # shows the number of lines of code in a folder for each language
@@ -70,8 +67,6 @@ in
     htop # shows running processes with sorting or filtering
     ctop # shows running containers (supports docker, mock, runc)
     docker-compose # a nice wrapper for docker to manage multiple docker containers (for one-off projects)
-    # onefetch's libresolv dependency does not build on aarch64
-    (lib.mkIf (!(isAarch64 && isDarwin)) onefetch) # neofetch for a git repository : lines of code, repo, etc.
 
     ispell # spellchecking
 
@@ -101,7 +96,6 @@ in
     # Broken: 2023-03-05
     ncdu # interactive du
 
-    #jetbrains.idea-community # IDE that I don't use anymore, even for Java development
     insomnia # GUI tool to test http APIs, alternative to postman and hoppscotch (formerly postwoman)
 
     pv # view status of pipes (bandwidth, etc.)
@@ -109,5 +103,8 @@ in
     marker # markdown editor
   ] ++ lib.optionals (!isAarch64) [
     iotop # see which processes/kernel tasks are using IO
+
+    # onefetch's libresolv dependency does not build on aarch64
+    onefetch # neofetch for a git repository : lines of code, repo, etc.
   ];
 }
