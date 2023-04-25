@@ -22,6 +22,8 @@ lib.mkMerge [
     programs.git.extraConfig.credential.helper = "gnome-keyring";
   })
   {
+    home.packages = [ pkgs.git-absorb ];
+
     programs.git = {
       enable = true;
       package = pkgs.gitFull;
