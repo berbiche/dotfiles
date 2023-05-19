@@ -31,13 +31,19 @@
   homebrew.onActivation.upgrade = true;
   homebrew.onActivation.cleanup = "uninstall";
   homebrew.brewPrefix = "/opt/homebrew/bin";
+  homebrew.taps = [
+    "homebrew/cask-versions"
+  ];
   homebrew.brews = [ ];
   homebrew.casks = [
     "kitty"
-    "gcenx/wine/unofficial-wineskin"
+    # "gcenx/wine/unofficial-wineskin"
     "spotify"
     "rancher"
     "switchresx"
+
+    # Available on cask-versions tap
+    "virtualbox-beta"
   ];
 
   my.home = { config, pkgs, osConfig, ... }: {
