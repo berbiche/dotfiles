@@ -75,8 +75,8 @@ let
     });
 in
 {
-  programs.vscode = lib.mkIf (!(isDarwin && isAarch64)) {
-    enable = true;
+  programs.vscode = {
+    enable = lib.mkDefault true;
 
     package = finalPackage;
 
