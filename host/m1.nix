@@ -8,6 +8,8 @@
     longitude = -73.597;
   };
 
+  profiles.dev.vmware.enable = true;
+
   nix.settings.max-jobs = 16;
 
   environment.systemPackages = [ pkgs.vagrant pkgs.gnupg ];

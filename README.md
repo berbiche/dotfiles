@@ -27,12 +27,19 @@ My configuration is organized as follows:
 
   This is where some of the options that I use in my configuration are defined.
 
+  Each OS also declares "stub"/"sink" options for things that are not available on
+  respective OS as their assignment leads to an error.
+
+  For instance, NixOS does not have a launchd option so it is stubbed with `mkSinkUndeclaredOptions`.
+
 - `./user`: declares an active user, note that my system configuration does not
   support using multiple users yet.
+  All profiles are configurated for the "current" user.
 
-- `./host`: this is where I define each host
+- `./host`: this is where I define each host.
+  The list of "profiles" used by each host is defined in the root `flake.nix` file.
 
-- `./modules`: this is where I define my custom modules.
+- `./modules`: this is where I define my custom modules for NixOS, nix-darwin and Home Manager.
 
   These modules are loaded automatically depending on the platform
   by `./top-level/module.nix`
@@ -42,8 +49,8 @@ My configuration is organized as follows:
   Most configurations work with NixOS and nix-darwin but some are exclusive to each
   platform.
 
-  I am currently in the process of rewriting some of these configurations to be compatible
-  with a standalone Home Manager installation.
+  ~~I am currently in the process of rewriting my profiles to be compatible
+  with a standalone Home Manager installation~~.
 
 - `./cachix`: this folder is owned by cachix and serves to configure substituers.
 
@@ -52,7 +59,7 @@ My configuration is organized as follows:
 
 - `./secrets`: secrets managed with sops and [`sops-nix`](https://github.com/Mic92/sops-nix).
 
-## Initial setup
+## Initial setup (for NixOS)
 
 1. Clone this repository.
 
@@ -93,7 +100,7 @@ use the nix-shell.
         building the system configuration...
         ```
 
-        This command is also aliased to the command `nrsf` in my ZSH shell.
+        This command is also aliased to the command `nrsf` in my shells.
 
     - On Darwin
 
@@ -113,13 +120,13 @@ use the nix-shell.
 1. Update the dependencies
 
     ``` console
-    $ nix flake update
+    $ nix flake update --commit-lock-file
     ```
 
     or
 
     ``` console
-    $ nix flake lock --update-input <input-name>
+    $ nix flake lock --commit-lock-file --update-input <input-name>
     ```
 
 2. Rebuild per instructions in the [Building](#building) section
@@ -141,7 +148,7 @@ because nix-darwin does not expose the installer script in the flake.
 1. Build the configuration
 
     ``` console
-    $ nix build '.#darwinConfigurations.${machine-name}' -v -L
+    $ nix --experimental-features "nix-command flakes" build '.#darwinConfigurations.${machine-name}' -v -L
     ...
     ```
 

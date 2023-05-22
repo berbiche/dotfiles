@@ -5,6 +5,7 @@
     ./boot.nix
     ./services.nix
     ./yubikey.nix
+    ./stubs.nix
   ];
 
   networking.networkmanager.enable = true;
