@@ -68,7 +68,7 @@ My configuration is organized as follows:
 1. Enter the nix shell
 
     ``` console
-    $ nix-shell
+    $ nix --experimental-features "nix-command flakes" develop
     ```
 
 1. Build the system
