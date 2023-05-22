@@ -61,7 +61,6 @@ let
       ];
       gnome = mkProfile [ ./gnome ];
       graphical-linux = mkProfile [ ./graphical-linux ];
-      kinect = mkProfile [ ./kinect ];
       obs = mkProfile [ ./obs ];
       steam = mkProfile [ ./steam ];
       sway = mkProfile [
