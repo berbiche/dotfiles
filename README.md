@@ -75,7 +75,7 @@ My configuration is organized as follows:
 1. Enter the nix shell
 
     ``` console
-    $ nix --experimental-features "nix-command flakes" develop
+    $ nix --extra-experimental-features "nix-command flakes" develop
     ```
 
 1. Build the system
@@ -148,7 +148,7 @@ because nix-darwin does not expose the installer script in the flake.
 1. Build the configuration
 
     ``` console
-    $ nix --experimental-features "nix-command flakes" build '.#darwinConfigurations.${machine-name}' -v -L
+    $ nix --extra-experimental-features "nix-command flakes" build '.#darwinConfigurations.${machine-name}' -v -L
     ...
     ```
 

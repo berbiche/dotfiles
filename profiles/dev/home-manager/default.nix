@@ -31,7 +31,8 @@ in
 
     # Programming
     gnumake # for the `make` program
-    powershell # for some rare one-off scripts and tests
+    # Broken: 2023-05-22 because OpenSSL 1.1 is marked "unsecure"
+    #powershell # for some rare one-off scripts and tests
     tig # navigate a git repository's log and commits in a TUI, provides sorting, filtering, etc.
 
     wget # I prefer using curl but still useful for one-off things
