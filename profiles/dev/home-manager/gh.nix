@@ -15,6 +15,7 @@
       # Create a repo for my user
       rc = ''!gh repo create "''${$(pwd)##*/}" "$@"'';
       rcl = "repo clone";
+      open = "repo view -w";
     };
   };
 }
