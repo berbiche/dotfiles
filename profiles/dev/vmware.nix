@@ -27,10 +27,6 @@ in
         ProcessType = "Background";
         # 29 days in seconds: 29 days * 24 hours * 60 minutes * 60 seconds
         StartInterval = 2505600; 
-
-        Debug = true;
-        StandardOutPath = "/Library/Logs/${Label}.log";
-        StandardErrorPath = "/Library/Logs/${Label}-error.log";
       };
     };
   };
