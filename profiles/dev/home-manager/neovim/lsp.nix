@@ -79,7 +79,7 @@
           end
         })
 
-        local function on_attach(_, bufnr)
+        local function on_attach(client, bufnr)
           local cmd = function (thing)
             return '<cmd>' .. thing .. '<CR>'
           end
@@ -103,6 +103,13 @@
           end
 
           vim.keymap.set("v", "ga", vim.lsp.buf.range_code_action, { buffer = bufnr })
+
+          if client.server_capabilities["documentSymbolProvider"] then
+            local hasnavic, navic = pcall(require, "nvim-navic")
+            if hasnavic then
+              navic.attach(client, bufnr)
+            end
+          end
         end
 
         local function on_attach_trouble(client, bufnr)
@@ -203,7 +210,16 @@
             end,
           },
           mapping = {
-            ["<Tab>"] = cmp.mapping.confirm({ select = true }),
+            ["<Tab>"] = (function()
+              local hasplugin, intellitab = pcall(require, 'intellitab')
+              if hasplugin then
+                return function (fallback)
+                  intellitab.indent()
+                end
+              else
+                return cmp.mapping.confirm({ select = true })
+              end
+            end)(),
             ["<C-p>"] = cmp.mapping.select_prev_item(),
             ["<C-n>"] = cmp.mapping.select_next_item(),
             ["<C-Space>"] = cmp.mapping.complete(),

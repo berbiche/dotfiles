@@ -31,6 +31,7 @@ in
     ./plugins.nix
     ./tree-sitter.nix
     ./lsp.nix
+    ./ui.nix
   ];
 
   home.packages = [
