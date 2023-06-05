@@ -68,6 +68,7 @@ in
     htop # shows running processes with sorting or filtering
     ctop # shows running containers (supports docker, mock, runc)
     docker-compose # a nice wrapper for docker to manage multiple docker containers (for one-off projects)
+    kubie # a better kubens
 
     ispell # spellchecking
 
