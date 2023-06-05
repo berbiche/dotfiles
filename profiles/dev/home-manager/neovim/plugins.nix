@@ -160,22 +160,16 @@ moduleArgs@{ config, lib, pkgs, ... }:
       '';
     }
     {
-      # Comment lines with commentary.vim
-      plugin = kommentary;
+      plugin = comment-nvim;
       type = "lua";
       config = ''
-        local k = require('kommentary.config')
+        local c = require('Comment')
 
-        k.use_extended_mappings()
-        k.configure_language("default", {
-          prefer_single_line_comments = true,
-        })
-
-        local bind = vim.keymap.set
-        bind({'i', 'n'}, "<M-;>", "<Plug>kommentary_line_default")
-        bind("v", "<M-;>", "<Plug>kommentary_visual_default")
-        bind("n", "<leader>;", "<Plug>kommentary_line_default")
-        bind("v", "<leader>;", "<Plug>kommentary_visual_default")
+        c.setup {
+          extra = {
+            line = {'<leader>;', '<M-;>'},
+          },
+        }
       '';
     }
     {

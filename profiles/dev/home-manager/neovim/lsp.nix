@@ -16,6 +16,7 @@
     lspkind-nvim
     lsp_signature-nvim
     nvim-ts-rainbow
+    nvim-ts-context-commentstring
     # Language/grammar parser with multiple practical functionalities
     {
       plugin = nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars);
