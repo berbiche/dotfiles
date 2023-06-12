@@ -335,6 +335,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
         -- Finding things
         bind("n", "<leader>ss", builtins.current_buffer_fuzzy_find, opts)
         bind("n", "<leader>sp", builtins.live_grep, opts)
+        -- bind("n", "<leader>sd", function() builtins. end,)
 
         -- List registers
         bind("n", "<leader>ir", builtins.registers, opts)

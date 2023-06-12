@@ -213,6 +213,8 @@ in
 
       " Close certain buffer types with only 'q'
       autocmd FileType help,checkhealth,qf noremap <buffer><silent>q :close<CR>
+
+      au BufRead,BufNewFile */rebar.config setfiletype erlang
     '';
   };
 }
