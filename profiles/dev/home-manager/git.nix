@@ -39,7 +39,7 @@ lib.mkMerge [
           user.useConfigOnly = true;
           pull.ff = "only";
           push.default = "current";
-          mergetool.prompt = true;
+          mergetool.prompt = false;
           difftool.prompt = false;
           advice.addEmptyPathspec = false;
           diff.colorMoved = "default";
@@ -53,7 +53,10 @@ lib.mkMerge [
         }
         (lib.mkIf config.programs.neovim.enable {
           mergetool.nvimdiff = {
-            cmd = "${config.programs.neovim.finalPackage}/bin/nvim -d $LOCAL $REMOTE $MERGE -c 'wincmd w' -c 'wincmd J'";
+            cmd = "${config.programs.neovim.finalPackage}/bin/nvim -d \"$LOCAL\" \"$REMOTE\" \"$MERGE\" -c 'DiffviewOpen'";
+          };
+          difftool.nvimdiff = {
+            cmd = "${config.programs.neovim.finalPackage}/bin/nvim -d \"$LOCAL\" \"$REMOTE\" -c 'DiffviewOpen'";
           };
           merge.guitool = "nvimdiff";
           merge.tool = "nvimdiff";

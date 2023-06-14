@@ -126,7 +126,15 @@ moduleArgs@{ config, lib, pkgs, ... }:
     }
 
     # Git
-    diffview-nvim
+    {
+      plugin = diffview-nvim;
+      type = "lua";
+      config = ''
+        require('diffview').setup {
+
+        }
+      '';
+    }
     {
       # Like emacs' magit
       plugin = neogit;
