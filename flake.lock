@@ -465,11 +465,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1675355751,
-        "narHash": "sha256-cgjKaYfMqvAT+mypIRop/q62B9XPF+PGDocfksxS39w=",
+        "lastModified": 1686768132,
+        "narHash": "sha256-lB8UwwbsZ9EWx3pA1VAcSzXeRn2QdR60yw6fK+8gmXs=",
         "owner": "berbiche",
         "repo": "nix-darwin",
-        "rev": "7d122d3e819f742edef667b2a9ad2a5ac1d7f855",
+        "rev": "a1ee5182d1e414ff1567a70d8ab48c671397ad5c",
         "type": "github"
       },
       "original": {

@@ -41,6 +41,7 @@
     AppleShowAllExtensions = with config.system.defaults.finder;
       if isNull AppleShowAllExtensions then false else AppleShowAllExtensions;
     AppleShowScrollBars = "Always";
+    ApplePressAndHoldEnabled = false;
     NSAutomaticCapitalizationEnabled = false;
     NSAutomaticDashSubstitutionEnabled = false;
     NSAutomaticPeriodSubstitutionEnabled = false;
@@ -52,11 +53,21 @@
     "com.apple.mouse.tapBehavior" = 1;
   };
 
+  system.defaults.menuExtraClock = {
+    Show24Hour = true;
+    ShowDayOfWeek = true;
+    ShowDate = 2;
+  };
+
   system.defaults.screencapture.location = "${config.users.users.${config.my.username}.home}/Screenshots";
 
   system.defaults.trackpad = {
     Clicking = true;
     TrackpadRightClick = true;
+  };
+
+  system.defaults.CustomUserPreferences = {
+    "com.apple.safari"."ShowFullURLInSmartSearchField" = true;
   };
 
   fonts.fontDir.enable = lib.mkDefault true;
