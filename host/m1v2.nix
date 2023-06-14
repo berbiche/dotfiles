@@ -1,5 +1,8 @@
 { config, pkgs, lib, profiles, ... }:
 
+let
+  availableOnDarwin = lib.meta.availableOn pkgs.stdenv.hostPlatform;
+in
 {
   imports = with profiles; [ base dev programs core-darwin ];
 
@@ -30,6 +33,9 @@
     "kerl"
 
     "pcp"
+  ] ++ lib.optionals (! availableOnDarwin pkgs.helm) [
+    # Not packaged for Darwin in nixpkgs
+    "helm@3"
   ];
   homebrew.casks = [
     "asix-ax88179"
@@ -38,6 +44,9 @@
     "rancher"
     "spotify"
     "vagrant"
+
+    "obsidian"
+
     ### Brew's Virtualbox isn't compatible with aarch64
     #"virtualbox"
     ### Ditto for yubikey-...
@@ -50,5 +59,15 @@
 
   my.home = { config, pkgs, osConfig, ... }: {
     home.sessionPath = [ osConfig.homebrew.brewPrefix "/opt/homebrew/sbin" ];
+    home.packages = lib.mkMerge [
+      [
+        pkgs.krew
+        pkgs.kubectl
+        pkgs.vault-bin
+      ]
+      (lib.mkIf (availableOnDarwin pkgs.helm) [
+        pkgs.helm
+      ])
+    ];
   };
 }
