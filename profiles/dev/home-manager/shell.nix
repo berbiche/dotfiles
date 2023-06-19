@@ -20,6 +20,7 @@ in
     llt       = "${ll} --tree";
     tree      = "${ls} --tree";
     batnp     = "${pkgs.bat}/bin/bat --pager=''";
+    cat       = "cat -v";
     cdtemp    = ''cd "$(mktemp -d)"'';
     cp        = "cp -iv";
     ln        = "ln -v";
