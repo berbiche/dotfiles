@@ -86,6 +86,13 @@ lib.mkMerge [
         ".direnv/"
       ];
 
+      includes = [
+        {
+          path = "~/dev/adgear/gitconfig"; 
+          condition = "gitdir:~/dev/adgear/";
+        }
+      ];
+
       aliases = lib.mapAttrs (_n: toString) rec {
         a  = "add";
         an = "${a} --intent-to-add";
