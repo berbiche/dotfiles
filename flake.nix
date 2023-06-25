@@ -226,7 +226,7 @@
     in overlayFiles // {
       lib = _: prev: { lib = self.lib prev; };
       nixpkgs-wayland = inputs.nixpkgs-wayland.overlay;
-      emacs = inputs.emacs-overlay.overlay;
+      # emacs = inputs.emacs-overlay.overlay;
       # neovim-nightly = inputs.neovim-nightly.overlay;
       nur = inputs.nur.overlay;
       manual = final: prev: {

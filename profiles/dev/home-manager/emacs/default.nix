@@ -9,7 +9,8 @@ let
 
   emacsWithPackages = package:
     (pkgs.emacsPackagesFor (
-      package.overrideAttrs (drv: { noTreeSitter = false; nativeComp = true; })
+      # package.overrideAttrs (drv: { noTreeSitter = false; nativeComp = true; })
+      package.override (drv: { withTreeSitter = true; withNativeCompilation = true; })
     )).emacsWithPackages (epkgs: [
       epkgs.vterm
     ]);
@@ -24,8 +25,8 @@ lib.mkMerge [
     programs.emacs = {
       enable = true;
       package = lib.mkMerge [
-        (lib.mkIf isLinux (emacsWithPackages pkgs.emacsPgtk))
-        (lib.mkIf isDarwin (emacsWithPackages pkgs.emacsUnstable))
+        (lib.mkIf isLinux (emacsWithPackages pkgs.emacs29-pgtk))
+        (lib.mkIf isDarwin (emacsWithPackages pkgs.emacs29))
       ];
     };
 
