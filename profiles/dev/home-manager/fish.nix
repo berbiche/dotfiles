@@ -20,6 +20,14 @@ in
         echo $args
         $args
       '';
+
+      last_history_item = ''
+        echo $history[1]
+      '';
     };
+
+    interactiveShellInit = ''
+      abbr --add --position anywhere --function last_history_item -- !!
+    '';
   };
 }
