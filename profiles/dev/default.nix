@@ -13,12 +13,12 @@ in
 
   my.home.imports = [ ./home-manager ];
 
-  # fonts.fonts = with pkgs; [
-  #   anonymousPro
-  #   source-code-pro
-  #   nerdfonts
-  #   emacs-all-the-icons-fonts
-  # ];
+  fonts.fonts = with pkgs; [
+    anonymousPro
+    source-code-pro
+    nerdfonts
+    emacs-all-the-icons-fonts
+  ];
 
   services.emacs.enable = lib.mkIf isDarwin (lib.mkDefault true);
 
