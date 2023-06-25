@@ -34,4 +34,20 @@
 
     macos_option_as_alt = "left";
   };
+
+  programs.kitty.keybindings = {
+    # Font size stuff
+    "ctrl+shift+equal" = "change_font_size current +2.0";
+    "ctrl+shift+plus" = "change_font_size current +2.0";
+    "cmd+plus" = "change_font_size current +2.0";
+    "cmd+equal" = "change_font_size current +2.0";
+    # Decrease font size
+    "ctrl+shift+minus" = "change_font_size current -2.0";
+    "cmd+minus" = "change_font_size current -2.0";
+    # Reset font size
+    "ctrl+shift+backspace" = "change_font_size current 0";
+    "cmd+backspace" = "change_font_size current 0";
+
+    "opt+cmd+r" = "clear_terminal reset all";
+  };
 }
