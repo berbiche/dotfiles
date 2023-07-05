@@ -142,7 +142,9 @@ moduleArgs@{ config, lib, pkgs, ... }:
       config = ''
         local neogit = require('neogit')
         neogit.setup {
+          use_magit_keybindings = true,
           disable_commit_confirmation = true,
+          disable_insert_on_commit = false,
           integrations = {
             diffview = true,
           },
