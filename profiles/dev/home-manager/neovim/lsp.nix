@@ -19,12 +19,10 @@
     nvim-ts-context-commentstring
     # Language/grammar parser with multiple practical functionalities
     {
-      plugin = nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars);
+      plugin = nvim-treesitter.withAllGrammars;
       type = "lua";
       config = ''
         require('nvim-treesitter.configs').setup {
-          -- ensure_installed = { 'c', 'cpp', },
-
           -- highlight = { enable = true, },
           incremental_selection = { enable = true, },
           textobjects = {
