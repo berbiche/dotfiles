@@ -114,10 +114,10 @@
        data
        ;;(dart +flutter)
        ;;dhall
-       ;;(elixir +lsp +tree-sitter)
+       (elixir +lsp +tree-sitter)
        ;;elm
        emacs-lisp
-       (erlang +lsp)
+       (erlang +lsp +tree-sitter)
        ;;ess
        ;;factor
        ;;faust
