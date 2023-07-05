@@ -5,6 +5,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
     # Toolkits
     popup-nvim
     nui-nvim
+    # Replaces vim.ui components
     {
       plugin = dressing-nvim;
       type = "lua";
@@ -53,8 +54,10 @@ moduleArgs@{ config, lib, pkgs, ... }:
       plugin = poimandres-nvim;
       type = "lua";
       config = ''
-        require('poimandres').setup {}
-        vim.cmd.colorscheme('sonokai')
+        require('poimandres').setup {
+          disable_italics = true,
+        }
+        vim.cmd.colorscheme('poimandres')
       '';
     }
 
