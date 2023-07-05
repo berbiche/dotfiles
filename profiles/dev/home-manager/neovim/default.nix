@@ -22,14 +22,11 @@ let
       fi
     '');
     n = nvim;
-    vim = nvim;
-    vi = nvim;
   };
 in
 {
   imports = [
     ./plugins.nix
-    ./tree-sitter.nix
     ./lsp.nix
     ./ui.nix
   ];
@@ -37,9 +34,9 @@ in
   home.packages = [
     pkgs.fzf
     pkgs.neovim-remote
-  ]
-  # graphical neovim
-  ++ lib.optional isLinux pkgs.neovide;
+    # graphical neovim
+    pkgs.neovide
+  ];
 
   # programs.neovim.defaultEditor = true;
   home.sessionVariables = {
