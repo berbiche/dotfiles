@@ -202,7 +202,6 @@ moduleArgs@{ config, lib, pkgs, ... }:
           },
         }
 
-        local bind = vim.keymap.set
         local opts = {silent = true}
 
         for i=1,9 do
@@ -271,7 +270,6 @@ moduleArgs@{ config, lib, pkgs, ... }:
           },
         }
 
-        local bind = vim.keymap.set
         local opts = { noremap = true, silent = true }
 
         bind('n', '<leader>op', require('nvim-tree.api').tree.toggle, opts)
@@ -312,6 +310,13 @@ moduleArgs@{ config, lib, pkgs, ... }:
       '';
     }
 
+    {
+      plugin = twilight-nvim;
+      type = "lua";
+      config = ''
+      '';
+    }
+
 
     # Neovide specific settings
     {
@@ -319,7 +324,6 @@ moduleArgs@{ config, lib, pkgs, ... }:
       type = "lua";
       config = ''
         if vim.g.neovide then
-
           vim.o.guifont = "Source Code Pro:h14"
           vim.g.neovide_input_use_logo = false
           vim.g.neovide_input_macos_alt_is_meta = true
@@ -327,9 +331,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
 
           vim.g.neovide_scale_factor = 1.0
 
-
           -- Keybinds
-          local bind = vim.keymap.set
           local opts = { silent = true, }
 
           bind('n', '<C-ScrollWheelUp', function()

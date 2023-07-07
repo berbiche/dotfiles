@@ -181,6 +181,27 @@
       '';
     }
 
+    # Snippets
+    vim-snippets
+    {
+      plugin = nvim-snippy;
+      type = "lua";
+      config = ''
+        require('snippy').setup {
+          mappings = {
+            is = {
+              ['<Tab>'] = 'expand_or_advance',
+              ['<S-Tab>'] = 'previous',
+            },
+            -- nx = {
+            --   ['<leader>x'] = 'cut_text',
+            -- },
+          },
+        }
+      '';
+    }
+    cmp-snippy
+
     # Completion popups
     cmp-nvim-lsp
     cmp-buffer
@@ -224,10 +245,16 @@
             ["<C-Space>"] = cmp.mapping.complete(),
             ["<C-c>"] = cmp.mapping.close(),
           },
+          snippet = {
+            expand = function(args)
+              require("snippy").expand_snippet(args.body)
+            end,
+          },
           sources = {
             { name = "buffer" },
             { name = "nvim_lsp" },
             { name = "path" },
+            { name = "snippy "},
           },
         }
         require("cmp_nvim_lsp").setup()

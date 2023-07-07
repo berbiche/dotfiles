@@ -105,7 +105,6 @@ moduleArgs@{ config, lib, pkgs, ... }:
       plugin = searchbox-nvim;
       type = "lua";
       config = ''
-        local bind = vim.keymap.set
         bind({"n", "v"}, "<leader>sh", require('searchbox').replace)
         bind("x", "<leader>sh", function() require('searchbox').replace({visual_mode = true}) end)
       '';
@@ -187,7 +186,6 @@ moduleArgs@{ config, lib, pkgs, ... }:
       plugin = vim-sayonara;
       type = "lua";
       config = ''
-        local bind = vim.keymap.set
         bind("n", "<leader>Q", "<cmd>Sayonara<CR>", {silent = true})
       '';
     }
@@ -205,7 +203,6 @@ moduleArgs@{ config, lib, pkgs, ... }:
       config = ''
         require('hlslens').setup()
 
-        local bind = vim.keymap.set
         local opts = {silent = true}
 
         bind('n', 'n',
@@ -242,9 +239,20 @@ moduleArgs@{ config, lib, pkgs, ... }:
         vim.g.sqlite_clib_path = [[${lib.getLib pkgs.sqlite}/lib/libsqlite3${pkgs.hostPlatform.extensions.sharedLibrary}]]
       '';
     }
-    telescope-project-nvim
+
+    {
+      plugin = workspaces-nvim;
+      type = "lua";
+      config = ''
+        require('workspaces').setup {
+          cd_type = 'tab',
+        }
+      '';
+    }
+
+    # telescope-project-nvim
     telescope-frecency-nvim
-    # telescope-fzy-native-nvim
+    telescope-fzy-native-nvim
     telescope-fzf-native-nvim
     telescope-file-browser-nvim
     telescope-zoxide
@@ -278,6 +286,10 @@ moduleArgs@{ config, lib, pkgs, ... }:
               override_generic_sorter = false,
               override_file_sorter = true,
               case_mode = "smart_case",
+            },
+            fzy_native = {
+              override_generic_sorter = false,
+              override_file_sorter = true,
             },
             project = {
               display_type = 'full',
@@ -315,15 +327,15 @@ moduleArgs@{ config, lib, pkgs, ... }:
           },
         }
 
-        -- ts.load_extension('fzy_native')
-        ts.load_extension('fzf')
+        ts.load_extension('fzy_native')
+        -- ts.load_extension('fzf')
         ts.load_extension('frecency')
-        ts.load_extension('project')
+        -- ts.load_extension('project')
         ts.load_extension('file_browser')
         ts.load_extension('notify')
         ts.load_extension('zoxide')
+        ts.load_extension('workspaces')
 
-        local bind = vim.keymap.set
         local opts = { silent = true }
 
         bind("n", "<space><space>", builtins.git_files, opts)
@@ -340,7 +352,8 @@ moduleArgs@{ config, lib, pkgs, ... }:
         bind("n", "<leader>fr", builtins.oldfiles, opts)
         -- List most open files
         bind("n", "<leader>fF", ts.extensions.frecency.frecency, opts)
-        bind("n", "<leader>pp", ts.extensions.project.project, opts)
+        -- bind("n", "<leader>pp", ts.extensions.project.project, opts)
+        bind("n", "<leader>pp", ts.extensions.workspaces.workspaces, opts)
 
         -- Finding things
         bind("n", "<leader>ss", builtins.current_buffer_fuzzy_find, opts)
