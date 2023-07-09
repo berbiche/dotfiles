@@ -3,6 +3,8 @@ moduleArgs@{ config, lib, pkgs, inputs, ... }:
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
 
+  dummy = pkgs.runCommandLocal "dummy" { } "mkdir $out";
+
   shellAliases = rec {
     # The `-s` or `--remote` flag has to be specified last
     # The `mktemp -u` flag will not create the file (otherwise neovim will refuse to replace it)
@@ -59,10 +61,41 @@ in
     extraPackages = with pkgs; [ ];
 
     # Configuration that is set at the beginning of my configuration!
-    plugins = lib.mkBefore [{
-      plugin = pkgs.runCommandLocal "dummy" { } "mkdir $out";
-      type = "lua";
-      config = import ./init.lua.nix { };
-    }];
+    plugins = lib.mkMerge [
+      (lib.mkBefore [{
+        plugin = dummy;
+        type = "lua";
+        config = import ./init.lua.nix { };
+      }])
+      (lib.mkAfter [{
+        plugin = dummy;
+        type = "lua";
+        config = ''
+          -- neovim-remote setup
+          if vim.g.vscode == nil then
+            vim.env.GIT_EDITOR = 'nvr -cc split --remote-wait'
+
+            autocmd({'FileType'}, {
+              group = myCommandGroup,
+              pattern = {'gitcommit', 'gitrebase', 'gitconfig'},
+              callback = function()
+                vim.opt_local.bufhidden = 'delete'
+              end,
+            })
+
+            local function DisconnectClients()
+              if vim.b.nvr then
+                for _, client in ipairs(vim.b.nvr) do
+                  -- Call rpcnotify to exit the client
+                  vim.rpcnotify(client, 'Exit', 1)
+                end
+              end
+            end
+
+            vim.cmd('command! DisconnectClients lua DisconnectClients()')
+          end
+        '';
+      }])
+    ];
   };
 }

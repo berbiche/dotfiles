@@ -400,18 +400,4 @@ moduleArgs@{ config, lib, pkgs, ... }:
       end
     '';
   };
-
-  programs.neovim.extraConfig = lib.mkAfter ''
-    " neovim-remote setup
-    if !exists('g:vscode')
-      let $GIT_EDITOR = 'nvr -cc split --remote-wait'
-      au FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
-      command! DisconnectClients
-        \  if exists('b:nvr')
-        \|   for client in b:nvr
-        \|     silent! call rpcnotify(client, 'Exit', 1)
-        \|   endfor
-        \| endif
-    endif
-  '';
 }
