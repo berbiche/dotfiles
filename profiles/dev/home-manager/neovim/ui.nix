@@ -1,7 +1,38 @@
 moduleArgs@{ config, lib, pkgs, ... }:
 
 {
-  programs.neovim.plugins = with pkgs.vimPlugins; [
+  programs.neovim.plugins = with pkgs.vimPlugins; lib.mkMerge [
+    (lib.mkOrder 5 [
+      ### THEMES ###
+      gruvbox-nvim
+      {
+        plugin = sonokai; # theme
+        type = "lua";
+        config = ''
+
+          vim.g.sonokai_style = 'maia'
+          vim.g.sonokai_enable_italic = 1
+          vim.g.sonokai_transparent_background = 0
+
+          -- Attemps to create a directory in /nix/store/...-sonokai/after
+          -- Obviously this doesn't work!
+          vim.g.sonokai_better_performance = 0
+
+          -- vim.cmd.colorscheme('sonokai')
+        '';
+      }
+      {
+        plugin = poimandres-nvim;
+        type = "lua";
+        config = ''
+          require('poimandres').setup {
+            disable_italics = true,
+          }
+          vim.cmd.colorscheme('poimandres')
+        '';
+      }
+    ])
+    [
     # Toolkits
     popup-nvim
     nui-nvim
@@ -29,35 +60,6 @@ moduleArgs@{ config, lib, pkgs, ... }:
         })
 
         vim.notify = notify
-      '';
-    }
-
-
-    ### THEMES ###
-    gruvbox-nvim
-    {
-      plugin = sonokai; # theme
-      type = "lua";
-      config = ''
-        vim.g.sonokai_style = 'maia'
-        vim.g.sonokai_enable_italic = 1
-        vim.g.sonokai_transparent_background = 0
-
-        -- Attemps to create a directory in /nix/store/...-sonokai/after
-        -- Obviously this doesn't work!
-        vim.g.sonokai_better_performance = 0
-
-        -- vim.cmd.colorscheme('sonokai')
-      '';
-    }
-    {
-      plugin = poimandres-nvim;
-      type = "lua";
-      config = ''
-        require('poimandres').setup {
-          disable_italics = true,
-        }
-        vim.cmd.colorscheme('poimandres')
       '';
     }
 
@@ -102,47 +104,60 @@ moduleArgs@{ config, lib, pkgs, ... }:
       '';
     }
 
+    # Start screen
+    # {
+    #   plugin = alpha-nvim;
+    #   type = "lua";
+    #   config = ''
+    #     require('alpha').setup {
+    #
+    #     }
+    #   '';
+    # }
+
     {
       plugin = vim-startify;
-      type = "viml";
+      type = "lua";
       config = ''
-        let g:startify_use_env = 0
-        let g:startify_files_number = 10
-        let g:startify_session_autoload = 0
-        let g:startify_relative_path = 0
+        vim.g.startify_use_env = 0
+        vim.g.startify_files_number = 10
+        vim.g.startify_session_autoload = 0
+        vim.g.startify_relative_path = 0
 
-        let g:startify_custom_header = []
-        let g:startify_custom_footer = []
+        vim.g.startify_custom_header = {}
+        vim.g.startify_custom_footer = {}
 
-        let g:startify_lists = [
-          \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
-          \ { 'type': 'files',     'header': ['   MRU']            },
-          \ { 'type': 'sessions',  'header': ['   Sessions']       },
-          \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
-          \ { 'type': 'commands',  'header': ['   Commands']       },
-          \ ]
+        vim.g.startify_lists = {
+          { type = 'dir',       header = {'   MRU ' .. vim.fn.getcwd()} },
+          { type = 'files',     header = {'   MRU'} },
+          { type = 'sessions',  header = {'   Sessions'} },
+          { type = 'bookmarks', header = {'   Bookmarks'} },
+          { type = 'commands',  header = {'   Commands'} },
+        }
 
-        let g:startify_skiplist = [
-          \ 'COMMIT_EDITMSG',
-          \ '^/nix/store',
-          \ ]
-        let g:startify_bookmarks = [
-          \ { 'd': '~/dotfiles' },
-          \ { 'k': '~/dev/infra/keanu.ovh' },
-          \ ]
+        vim.g.startify_skiplist = { 'COMMIT_EDITMSG', '^/nix/store', }
+        vim.g.startify_bookmarks = {{ d = '~/dotfiles' }, { k = '~/dev/infra/keanu.ovh', }},
 
-        autocmd User Startified setlocal cursorline
+        autocmd({'User'}, {
+          group = myCommandGroup,
+          pattern = 'Startified',
+          command = 'setlocal cursorline',
+        })
 
-        " Save the current session
-        nnoremap <leader>qS :SSave
-        " Load a session
-        nnoremap <leader>qL :SLoad
+        -- Save the current session
+        bind('n', '<leader>qS', '<cmd>SSave', {desc = 'Save the current session'})
+        -- Load a session
+        bind('n', '<leader>qL', '<cmd>SLoad', {desc = 'Load a previous session'})
 
-        " Open Startify when it's the last remaining buffer
-        " autocmd BufEnter * if line2byte('.') == -1 && len(tabpagebuflist()) == 1 && empty(expand('%')) && empty(&l:buftype) && &l:modifiable | Startify | endif
-        if !exists('g:vscode')
-          autocmd BufDelete * if empty(filter(tabpagebuflist(), '!buflisted(v:val)')) && empty(expand('%')) && empty(&l:buftype) | Startify | endif
-        endif
+        -- Open Startify when it's the last remaining buffer
+        if vim.g.vscode == nil then
+          autocmd({'BufDelete'}, {
+            group = myCommandGroup,
+            command = [[
+              if empty(filter(tabpagebuflist(), '!buflisted(v:val)')) && empty(expand('%')) && empty(&l:buftype) | Startify | endif
+            ]]
+          })
+        end
       '';
     }
     {
@@ -343,5 +358,5 @@ moduleArgs@{ config, lib, pkgs, ... }:
         end
       '';
     }
-  ];
+  ]];
 }
