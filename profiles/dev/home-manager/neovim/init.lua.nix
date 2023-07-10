@@ -57,11 +57,12 @@ vim.opt.listchars = [[tab:>-,trail:*]]
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
+vim.opt.smarttab = true
 vim.opt.expandtab = true
 -- Reuse indentation from previous line
 vim.opt.autoindent = true
 
--- Show relative numbering for line number
+-- Show line numbers with relative numbering
 vim.opt.number = true
 vim.opt.relativenumber = true
 
@@ -95,6 +96,7 @@ t: Auto-wrap text: Vim will automatically wrap text when you exceed the textwidt
 vim.opt.formatoptions = { j = true, q = true, t = true, }
 
 -- Completion in menu
+vim.opt.wildmenu = true
 vim.opt.wildmode = 'longest:full,full'
 vim.opt.wildignorecase = true
 
@@ -102,6 +104,7 @@ vim.opt.wildignorecase = true
 vim.opt.showmode = false
 
 -- Live substitution
+vim.opt.incsearch = true
 vim.opt.inccommand = 'nosplit'
 
 -- Don't pass messages to |ins-completion-menu|
@@ -136,7 +139,7 @@ autocmd({'FocusGained'}, {
 -- Close certain buffer types with only 'q'
 autocmd({'FileType'}, {
   group = myCommandGroup,
-  pattern = {'help', 'checkhealth', 'qf'},
+  pattern = {'help', 'checkhealth', 'qf', 'man'},
   callback = function()
     bind({'n', 'v', 's', 'o'}, 'q', '<cmd>Sayonara<cr>', { buffer = true, silent = true }, 'Close buffer')
   end,
@@ -148,11 +151,6 @@ vim.filetype.add({
     ['rebar.config'] = 'erlang',
   },
 })
--- autocmd({'BufRead', 'BufNewFile'}, {
---   group = myCommandGroup,
---   pattern = '*/rebar.config',
---   command = 'setfiletype erlang',
--- })
 
 -- Magit-like keybinds to save a commit msg
 autocmd({'BufEnter'}, {
@@ -226,4 +224,38 @@ bind('n', '<leader>ot', function()
   vim.cmd.resize(-10)
   vim.cmd.terminal()
 end, {silent = true}, 'Open terminal')
+
+-- Switch to most recently used buffer
+local function switch_to_last_buffer()
+  local last_buffer = vim.fn.bufnr('#')
+  if last_buffer ~= -1 and vim.fn.buflisted(last_buffer) == 1 then
+    vim.cmd.buffer(last_buffer)
+  else
+    -- If no last accessed buffer or it is unloaded, find the most recently used open buffer
+    local buffer_list = vim.api.nvim_list_bufs()
+    local most_recent_buffer = nil
+    local most_recent_time = 0
+
+    if #buffer_list > 1 then
+      table.remove(buffer_list, vim.api.nvim_get_current_buf())
+    end
+
+    for _, buf in ipairs(buffer_list) do
+      if vim.fn.buflisted(buf) == 1 then
+        local lastused = vim.fn.getbufinfo(buf).lastused or 0
+        if lastused > most_recent_time then
+          most_recent_buffer = buf
+          most_recent_time = timestamp
+        end
+      end
+    end
+
+    if most_recent_buffer then
+      vim.cmd.buffer(most_recent_buffer)
+    end
+  end
+end
+for _, key in pairs({'`', 'b`'}) do
+  bind('n', '<leader>'..key, switch_to_last_buffer, 'Switch to last buffer')
+end
 ''

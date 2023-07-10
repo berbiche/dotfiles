@@ -15,7 +15,7 @@
     }
     lspkind-nvim
     lsp_signature-nvim
-    nvim-ts-rainbow
+    nvim-ts-rainbow2
     nvim-ts-context-commentstring
     # Language/grammar parser with multiple practical functionalities
     {
