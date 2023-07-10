@@ -9,7 +9,6 @@ moduleArgs@{ config, lib, pkgs, ... }:
         plugin = sonokai; # theme
         type = "lua";
         config = ''
-
           vim.g.sonokai_style = 'maia'
           vim.g.sonokai_enable_italic = 1
           vim.g.sonokai_transparent_background = 0
@@ -86,35 +85,10 @@ moduleArgs@{ config, lib, pkgs, ... }:
         require('range-highlight').setup {}
       '';
     }
-    # {
-    #   # Peek lines when typing :30 for instance
-    #   plugin = numb-nvim;
-    #   type = "lua";
-    #   config = ''
-    #     require('numb').setup()
-    #   '';
-    # }
 
-    {
-      # Show key completion
-      plugin = which-key-nvim;
-      type = "lua";
-      config = ''
-        require('which-key').setup { }
-      '';
-    }
+
 
     # Start screen
-    # {
-    #   plugin = alpha-nvim;
-    #   type = "lua";
-    #   config = ''
-    #     require('alpha').setup {
-    #
-    #     }
-    #   '';
-    # }
-
     {
       plugin = vim-startify;
       type = "lua";
@@ -136,7 +110,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
         }
 
         vim.g.startify_skiplist = { 'COMMIT_EDITMSG', '^/nix/store', }
-        vim.g.startify_bookmarks = {{ d = '~/dotfiles' }, { k = '~/dev/infra/keanu.ovh', }},
+        vim.g.startify_bookmarks = {{ d = '~/dotfiles' }, { k = '~/dev/infra/infrastructure', }},
 
         autocmd({'User'}, {
           group = myCommandGroup,
@@ -153,9 +127,30 @@ moduleArgs@{ config, lib, pkgs, ... }:
         if vim.g.vscode == nil then
           autocmd({'BufDelete'}, {
             group = myCommandGroup,
-            command = [[
-              if empty(filter(tabpagebuflist(), '!buflisted(v:val)')) && empty(expand('%')) && empty(&l:buftype) | Startify | endif
-            ]]
+            callback = function()
+              local buffer_list = vim.fn.tabpagebuflist(vim.api.nvim_get_current_tabpage())
+
+              if type(buffer_list) ~= 'table' then
+                return
+              end
+
+              -- Find whether all buffers are listed
+              local exists_unlisted_buffer = false
+              for _, bufnr in pairs(buffer_list) do
+                if vim.fn.buflisted(bufnr) ~= 1 then
+                  exists_unlisted_buffer = true
+                  break
+                end
+              end
+
+              local bufnr = vim.api.nvim_get_current_buf()
+              local is_nameless_buffer = vim.api.nvim_buf_get_name(bufnr) == '''
+              local is_buftype_empty = vim.api.nvim_buf_get_option(bufnr, 'buftype') == '''
+
+              if not exists_unlisted_buffer and is_nameless_buffer and is_buftype_empty then
+                vim.cmd.Startify()
+              end
+            end,
           })
         end
       '';
@@ -179,7 +174,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
       config = ''
         require("lualine").setup {
           options = {
-            disabled_filetypes = { "TelescopePrompt", "NvimTree", "startify", "terminal", "coc-explorer" },
+            disabled_filetypes = { 'TelescopePrompt', 'NvimTree', 'startify', 'terminal', 'coc-explorer' },
             -- theme = 'sonokai',
             theme = 'poimandres',
           },
@@ -239,7 +234,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
           create_autocmd = false,
           exclude_filetypes = { "TelescopePrompt", "NvimTree", "startify", "terminal", "coc-explorer" },
         })
-        vim.api.nvim_create_autocmd({
+        autocmd({
           "WinResized",
           "BufWinEnter",
           "CursorHold",
@@ -290,11 +285,11 @@ moduleArgs@{ config, lib, pkgs, ... }:
         bind('n', '<leader>op', require('nvim-tree.api').tree.toggle, opts, 'Open file tree')
 
         -- Since the auto_close option has been removed, this is the only option
-        vim.api.nvim_create_autocmd("BufEnter", {
+        autocmd('BufEnter', {
           nested = true,
           callback = function()
-            if #vim.api.nvim_list_wins() == 1 and vim.api.nvim_buf_get_name(0):match("NvimTree_") ~= nil then
-              vim.cmd("quit")
+            if #vim.api.nvim_list_wins() == 1 and vim.api.nvim_buf_get_name(0):match('NvimTree_') ~= nil then
+              vim.cmd.quit()
             end
           end,
         })
@@ -339,7 +334,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
       type = "lua";
       config = ''
         if vim.g.neovide then
-          vim.o.guifont = "Source Code Pro:h14"
+          vim.o.guifont = 'Source Code Pro:h14'
           vim.g.neovide_input_use_logo = false
           vim.g.neovide_input_macos_alt_is_meta = true
           vim.g.neovide_cursor_animation_length = 0
