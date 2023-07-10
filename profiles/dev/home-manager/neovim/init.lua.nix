@@ -154,6 +154,15 @@ vim.filetype.add({
 --   command = 'setfiletype erlang',
 -- })
 
+-- Magit-like keybinds to save a commit msg
+autocmd({'BufEnter'}, {
+  group = myCommandGroup,
+  pattern = {'COMMIT_EDITMSG'},
+  callback = function()
+    bind({'n', 'i'}, '<c-c><c-c>', '<esc><cmd>wq<cr>', {buffer = true}, 'Commit')
+    bind({'n', 'i'}, '<c-c><c-k>', '<esc><cmd>q!<cr>', {buffer = true}, 'Abort')
+  end,
+})
 
 ----- Keymaps
 

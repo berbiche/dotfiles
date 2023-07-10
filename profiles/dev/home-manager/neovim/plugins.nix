@@ -160,6 +160,8 @@ moduleArgs@{ config, lib, pkgs, ... }:
         local neogit = require('neogit')
         neogit.setup {
           use_magit_keybindings = true,
+          auto_show_console = false,
+          console_timeout = 5000,
           disable_commit_confirmation = true,
           disable_insert_on_commit = false,
           integrations = {
