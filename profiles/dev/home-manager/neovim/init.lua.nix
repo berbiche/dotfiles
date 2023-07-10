@@ -1,7 +1,17 @@
 {...}:
 ''
 
-local bind = vim.keymap.set
+local function bind(mode, l, r, opts, desc)
+  if type(opts) == 'string' then
+    opts = { desc = opts }
+  else
+    opts = opts or {}
+  end
+  if desc then
+    opts.desc = desc
+  end
+  vim.keymap.set(mode, l, r, opts)
+end
 local autocmd = vim.api.nvim_create_autocmd
 local myCommandGroup = vim.api.nvim_create_augroup('init.lua', {})
 
@@ -128,7 +138,7 @@ autocmd({'FileType'}, {
   group = myCommandGroup,
   pattern = {'help', 'checkhealth', 'qf'},
   callback = function()
-    bind({'n', 'v', 's', 'o'}, 'q', '<cmd>close<cr>', { buffer = true, silent = true, })
+    bind({'n', 'v', 's', 'o'}, 'q', '<cmd>Sayonara<cr>', { buffer = true, silent = true }, 'Close buffer')
   end,
 })
 
@@ -148,61 +158,63 @@ vim.filetype.add({
 ----- Keymaps
 
 -- Remove Ex mode keybind
-bind('n', 'Q', ''', {})
+bind('n', 'Q', ''')
 
 -- Keep selection after indenting in Visual mode
-bind('v', '<', '<gv', {})
-bind('v', '>', '>gv', {})
+bind('v', '<', '<gv')
+bind('v', '>', '>gv')
 
-bind('n', '[o', 'O<Esc>j', {desc = 'Insert line above'})
-bind('n', ']o', 'o<Esc>k', {desc = 'Insert line below'})
-bind('n', 'Y', 'y$', {desc = 'Copy till EOL'})
-bind('n', 'gp', [['`['.strpart(getregtype(), 0, 1).'`]']], {
-  expr = true,
-  desc = 'Selected pasted text',
-})
+bind('n', '[o', 'O<Esc>j', 'Insert line above')
+bind('n', ']o', 'o<Esc>k', 'Insert line below')
+bind('n', 'Y', 'y$', 'Copy till EOL')
+bind('n', 'gp', [['`['.strpart(getregtype(), 0, 1).'`]']],
+  { expr = true, },
+  'Select pasted text'
+)
 -- Buffer management
 autocmd({'VimEnter'}, {
   callback = function()
     bind({'n', 'v'}, '<leader>b', ''', {buffer = true})
   end,
 })
-bind('n', '<leader>bd', ':BufferClose<CR>', {silent = true, desc = 'Close buffer'})
-bind('n', '<leader>bn', ':bnext<CR>', {desc = 'Next buffer'})
-bind('n', '<leader>bp', ':bprevious<CR>', {desc = 'Previous buffer'})
-bind('n', '<leader>bN', ':enew<CR>', {desc = 'New buffer'})
+bind('n', '<leader>bd', ':BufferClose<CR>', {silent = true}, 'Close buffer')
+bind('n', '<leader>bn', ':bnext<CR>', 'Next buffer')
+bind('n', '<leader>bp', ':bprevious<CR>', 'Previous buffer')
+bind('n', '<leader>bN', ':enew<CR>', 'New buffer')
 -- Window management
-bind(''', '<leader>w', '<C-w>', {})
-bind('n', '<leader>qq', '<cmd>quitall<CR>', {desc = 'Quit neovim'})
+bind('n', '<leader>w', '<C-w>', '+window')
+bind('n', '<leader>qq', '<cmd>quitall<CR>', 'Quit neovim')
+bind('n', '<leader>qQ', '<cmd>quitall!<CR>', 'Forcefully quit neovim')
 
 -- Move line below/above
-bind('n', '<A-j>', ':m .+1<CR>==', {desc = 'Move line below'})
-bind('n', '<A-k>', ':m .-2<CR>', {desc = 'Move line above'})
-bind('i', '<A-j>', '<Esc>:m .+1<CR>==gi', {desc = 'Move line below'})
-bind('i', '<A-k>', '<Esc>:m .-2<CR>==gi', {desc = 'Move line above'})
-bind('v', '<A-j>', [[:m '>+1<CR>gv=gv]], {desc = 'Move line below'})
-bind('v', '<A-k>', [[:m '<-2<CR>gv=gv]], {desc = 'Move line above'})
+bind('n', '<A-j>', ':m .+1<CR>==', 'Move line below')
+bind('n', '<A-k>', ':m .-2<CR>', 'Move line above')
+bind('i', '<A-j>', '<Esc>:m .+1<CR>==gi', 'Move line below')
+bind('i', '<A-k>', '<Esc>:m .-2<CR>==gi', 'Move line above')
+bind('v', '<A-j>', [[:m '>+1<CR>gv=gv]], 'Move line below')
+bind('v', '<A-k>', [[:m '<-2<CR>gv=gv]], 'Move line above')
 
 -- Command mode mappings
-bind('c', '<C-a>', '<Home>', {desc = 'Go to beginning of line'})
-bind('c', '<C-e>', '<End>', {desc = 'Go to end of line'})
-bind('c', '<M-BS>', '<C-w>', {desc = 'Delete word'})
+bind('c', '<C-a>', '<Home>', 'Go to beginning of line')
+bind('c', '<C-e>', '<End>', 'Go to end of line')
+bind('c', '<M-BS>', '<C-w>', 'Delete word')
 -- I asked ChatGPT why I need to use -2 and it believes it's because <C-k>
 -- is silently/invisibly inserted
 -- Deletes from char until the end of the line
-bind('c', '<C-k>', [[<C-\>egetcmdline()[:getcmdpos() - 2]<cr>]], {desc = 'Delete till end of line'})
+bind('c', '<C-k>', [[<C-\>egetcmdline()[:getcmdpos() - 2]<cr>]], 'Delete till end of line')
 
 -- Highlight trailing whitespace
+-- g:terminal_color_1 is defined by poimandres-nvim
 vim.cmd([[
-  highlight TrailingWhitespace ctermbg=red guibg=red
+  execute 'highlight TrailingWhitespace guibg=' . g:terminal_color_1
   match TrailingWhitespace /\s\+$/
 ]])
 
 -- Fix terminal escape char
-bind('t', '<Esc>', [[<C-\><C-n>]], {})
+bind('t', '<Esc>', [[<C-\><C-n>]])
 bind('n', '<leader>ot', function()
   vim.cmd.botright('split')
   vim.cmd.resize(-10)
   vim.cmd.terminal()
-end, {silent = true, desc = 'Open terminal'})
+end, {silent = true}, 'Open terminal')
 ''

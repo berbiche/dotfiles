@@ -85,7 +85,7 @@ in
 
             local function DisconnectClients()
               if vim.b.nvr then
-                for _, client in ipairs(vim.b.nvr) do
+                for _, client in pairs(vim.b.nvr) do
                   -- Call rpcnotify to exit the client
                   vim.rpcnotify(client, 'Exit', 1)
                 end

@@ -224,7 +224,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
         end
         bind('n', '<A-0>', '<cmd>BufferLast<CR>', opts)
 
-        bind('n', '<leader>bO', '<cmd>BufferCloseAllButCurrent<CR>', opts)
+        bind('n', '<leader>bO', '<cmd>BufferCloseAllButCurrent<CR>', opts, 'Close other buffers')
       '';
     }
 
@@ -287,7 +287,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
 
         local opts = { noremap = true, silent = true }
 
-        bind('n', '<leader>op', require('nvim-tree.api').tree.toggle, opts)
+        bind('n', '<leader>op', require('nvim-tree.api').tree.toggle, opts, 'Open file tree')
 
         -- Since the auto_close option has been removed, this is the only option
         vim.api.nvim_create_autocmd("BufEnter", {
@@ -351,10 +351,10 @@ moduleArgs@{ config, lib, pkgs, ... }:
 
           bind('n', '<C-ScrollWheelUp', function()
             vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.25
-          end, opts)
+          end, opts, 'Increase font size')
           bind('n', '<C-ScrollWheelDown', function()
             vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.25
-          end, opts)
+          end, opts, 'Decrease font size')
         end
       '';
     }

@@ -2,12 +2,44 @@ moduleArgs@{ config, lib, pkgs, ... }:
 
 {
   programs.neovim.plugins = with pkgs.vimPlugins; [
+    {
+      # Show key completion
+      plugin = which-key-nvim;
+      type = "lua";
+      config = ''
+        local wk = require('which-key')
+        wk.setup {
+          marks = true,
+          registers = true,
+          spelling = { enabled = false, },
+          key_labels = {
+            ['<space>'] = 'SPC',
+          },
+          trigggers = {},
+          window = {
+            border = 'single'
+          },
+        }
+
+        wk.register({
+          ["<leader>'"] = { name = '+marks' },
+          ['<leader>b'] = { name = '+buffer' },
+          ['<leader>f'] = { name = '+file' },
+          ['<leader>g'] = { name = '+git' },
+          ['<leader>o'] = { name = '+open' },
+          ['<leader>p'] = { name = '+project' },
+          ['<leader>q'] = { name = '+session' },
+          ['<leader>w'] = { name = '+window' },
+        })
+      '';
+    }
     vim-repeat
     vim-indent-object
-    vim-signify
     vim-sensible
     # Indent using tabs or spaces based on the content of the file
     vim-sleuth
+    # Close buffers/windows/etc.
+    vim-sayonara
     {
       plugin = vim-sandwich; # replaces vim-surround
       type = "lua";
@@ -20,9 +52,9 @@ moduleArgs@{ config, lib, pkgs, ... }:
     }
     {
       plugin = intellitab-nvim;
-      type = "viml";
+      type = "lua";
       config = ''
-        inoremap <Tab> <CMD>lua require("intellitab").indent()<CR>
+        bind('i', '<Tab>', function() require('intellitab').indent() end, 'Indent')
       '';
     }
     # editorconfig support for indent style, etc.
@@ -42,7 +74,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
       config = ''
         require('nvim-autopairs').setup {
           check_ts = true,
-          disable_filetype = { "TelescopePrompt", "NvimTree", "startify", "terminal", "coc-explorer" }
+          disable_filetype = { 'TelescopePrompt', 'NvimTree', 'startify', 'terminal', 'coc-explorer' }
         }
       '';
     }
@@ -105,22 +137,8 @@ moduleArgs@{ config, lib, pkgs, ... }:
       plugin = searchbox-nvim;
       type = "lua";
       config = ''
-        bind({"n", "v"}, "<leader>sh", require('searchbox').replace)
-        bind("x", "<leader>sh", function() require('searchbox').replace({visual_mode = true}) end)
-      '';
-    }
-    {
-      plugin = registers-nvim;
-      type = "lua";
-      config = ''
-        local registers = require("registers")
-        registers.setup({
-          show_empty = false,
-          hide_only_whitespace = true,
-          window = {
-            border = "double",
-          },
-        })
+        bind({'n', 'v'}, '<leader>sh', require('searchbox').replace, 'Replace word')
+        bind('x', '<leader>sh', function() require('searchbox').replace({visual_mode = true}) end, 'Replace word')
       '';
     }
 
@@ -149,7 +167,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
           },
         }
 
-        vim.keymap.set("n", "<leader>gg", neogit.open, {silent = true})
+        bind('n', '<leader>gg', neogit.open, {silent = true}, 'Open neogit')
       '';
     }
     {
@@ -157,15 +175,6 @@ moduleArgs@{ config, lib, pkgs, ... }:
       type = "lua";
       config = ''
         require('gitsigns').setup { }
-      '';
-    }
-
-    {
-      # Show key completion
-      plugin = which-key-nvim;
-      type = "lua";
-      config = ''
-        require('which-key').setup { }
       '';
     }
     {
@@ -179,14 +188,6 @@ moduleArgs@{ config, lib, pkgs, ... }:
             line = {'<leader>;', '<M-;>'},
           },
         }
-      '';
-    }
-    {
-      # Close buffers/windows/etc.
-      plugin = vim-sayonara;
-      type = "lua";
-      config = ''
-        bind("n", "<leader>Q", "<cmd>Sayonara<CR>", {silent = true})
       '';
     }
 
@@ -338,35 +339,41 @@ moduleArgs@{ config, lib, pkgs, ... }:
 
         local opts = { silent = true }
 
-        bind("n", "<space><space>", builtins.git_files, opts)
-        -- bind("n", "<leader><.>", function() builtins.find_files({ cwd = vim.fn.expand('%:p:h')}) end, opts)
-        bind("n", "<leader>.", function() ts.extensions.file_browser.file_browser({ cwd = vim.fn.expand('%:p:h') }) end, opts)
+        bind('n', '<space><space>', builtins.git_files, opts, 'Find file in project')
+        bind('n', '<leader>.',
+          function() ts.extensions.file_browser.file_browser({ cwd = vim.fn.expand('%:p:h'), select_buffer = true, }) end,
+          opts,
+          'Find file in current directory')
 
-        for _, v in pairs({",", "b,", "bi"}) do
-          bind("n", "<leader>"..v, builtins.buffers, opts)
+        for _, v in pairs({',', 'b,', 'bi'}) do
+          bind('n', '<leader>'..v, builtins.buffers, opts, 'Find buffer')
         end
 
         -- List spelling suggestions
-        bind("n", "<leader>si", builtins.spell_suggest, opts)
+        bind('n', '<leader>si', builtins.spell_suggest, opts, 'Show spelling suggestions')
+        bind('n', 'z=', builtins.spell_suggest, opts, 'Show spelling suggestions')
         -- List recent files
-        bind("n", "<leader>fr", builtins.oldfiles, opts)
+        bind('n', '<leader>fr', builtins.oldfiles, opts, 'Find recent files')
         -- List most open files
-        bind("n", "<leader>fF", ts.extensions.frecency.frecency, opts)
-        -- bind("n", "<leader>pp", ts.extensions.project.project, opts)
-        bind("n", "<leader>pp", ts.extensions.workspaces.workspaces, opts)
+        bind('n', '<leader>fF', ts.extensions.frecency.frecency, opts, 'List most opened files')
+        -- bind('n', '<leader>pp', ts.extensions.project.project, opts)
+        bind('n', '<leader>pp', ts.extensions.workspaces.workspaces, opts, 'List projects')
 
         -- Finding things
-        bind("n", "<leader>ss", builtins.current_buffer_fuzzy_find, opts)
-        bind("n", "<leader>sp", builtins.live_grep, opts)
-        -- bind("n", "<leader>sd", function() builtins. end,)
+        bind('n', '<leader>ss', builtins.current_buffer_fuzzy_find, opts, 'Search in current buffer')
+        bind('n', '<leader>sp', builtins.live_grep, opts, 'Search word in current project')
+        -- bind('n', '<leader>sd', function() builtins. end,)
 
         -- List registers
-        bind("n", "<leader>ir", builtins.registers, opts)
+        bind('n', '<leader>ir', builtins.registers, opts, 'List registers')
 
         --
-        vim.api.nvim_create_autocmd('User', {
+        autocmd('User', {
+          group = myCommandGroup,
           pattern = 'TelescopePreviewerLoaded',
-          command = 'setlocal wrap',
+          callback = function()
+            vim.opt_local.wrap = true
+          end,
         })
       '';
     }
@@ -379,11 +386,8 @@ moduleArgs@{ config, lib, pkgs, ... }:
           border = 'rounded',
         }
 
-        local map = vim.keymap.set
         local opts = { silent = true }
-
-        map('n', '<space>`', require("FTerm").toggle, opts)
-        -- map('t', '<space>`', '<cmd>lua require("FTerm").toggle()<CR>', opts)
+        bind('n', '<space>of', require('FTerm').toggle, opts, 'Open floating terminal')
       '';
     }
   ]
