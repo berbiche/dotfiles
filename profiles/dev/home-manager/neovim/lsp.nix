@@ -3,20 +3,11 @@
 {
   # Languages and LSP
   programs.neovim.plugins = with pkgs.vimPlugins; [
-    {
-      plugin = vim-nix;
-      type = "lua";
-      config = ''
-        vim.api.nvim_create_autocmd({'BufRead', 'BufNewFile'}, {
-          pattern = '*.nix',
-          command = 'setf nix',
-        })
-      '';
-    }
     lspkind-nvim
     lsp_signature-nvim
     nvim-ts-rainbow2
     nvim-ts-context-commentstring
+    nvim-treesitter-endwise
     # Language/grammar parser with multiple practical functionalities
     {
       plugin = nvim-treesitter.withAllGrammars;
@@ -33,7 +24,8 @@
           matchup = { enable = true, },
           -- With nvim-autopairs
           autopairs = { enable = true, },
-
+          -- With nvim-treesitter-endwise
+          endwise = { enable = true, },
           -- With nvim-ts-rainbow
           rainbow = {
             enable = true,
@@ -57,14 +49,12 @@
       '';
     }
     {
-      plugin = SchemaStore-nvim;
-    }
-    {
       plugin = nvim-lspconfig;
       type = "lua";
       config = ''
         local lsp = require('lspconfig')
         local lspkind = require('lspkind')
+        local cmp_lsp = require('cmp_nvim_lsp')
 
         lspkind.init()
 
@@ -83,28 +73,30 @@
             return '<cmd>' .. thing .. '<CR>'
           end
           local map = {
-            K = vim.lsp.buf.hover,
-            -- ["<space>d"] = cmd("Trouble lsp_document_diagnostics"),
-            -- ["<space>e"] = cmd("Trouble lsp_workspace_diagnostics"),
-            ["<space>bf"] = vim.lsp.buf.formatting,
-            -- ["<space>r"] = cmd("Trouble lsp_references"),
-            ["[d"] = vim.diagnostic.goto_prev,
-            ["]d"] = vim.diagnostic.goto_next,
-            ga = vim.lsp.buf.code_action,
-            gd = vim.lsp.buf.definition,
-            ge = vim.diagnostic.open_float,
-            gr = vim.lsp.buf.rename,
-            gt = vim.lsp.buf.type_definition,
+            K = {vim.lsp.buf.hover, 'Lookup documentation'},
+            ['<space>bf'] = {vim.lsp.buf.formatting, 'Format'},
+            ['[d'] = {vim.diagnostic.goto_prev, 'Goto previous error'},
+            [']d'] = {vim.diagnostic.goto_next, 'Goto next error'},
+            ['<leader>la'] = {vim.lsp.buf.code_action, 'Code action'},
+            ['<leader>ld'] = {vim.lsp.buf.definition, 'Code definition'},
+            ['<leader>lD'] = {vim.lsp.buf.declaration, 'Code declaration'},
+            ['<leader>li'] = {vim.lsp.buf.implementation, 'Code implementation'},
+            ['<leader>le'] = {vim.diagnostic.open_float, 'Open diagnostic'},
+            ['<leader>lr'] = {vim.lsp.buf.rename, 'Rename'},
+            ['<leader>lt'] = {vim.lsp.buf.type_definition, 'Type definition'},
+            ['ga'] = {vim.lsp.buf.code_action, 'Code action'},
+            ['gd'] = {vim.lsp.buf.definition, 'Code definition'},
+            ['gD'] = {vim.lsp.buf.declaration, 'Code declaration'},
           }
 
           for key, value in pairs(map) do
-            vim.keymap.set("n", key, value, { buffer = bufnr })
+            bind('n', key, value[1], { buffer = bufnr }, value[2])
           end
 
-          vim.keymap.set("v", "ga", vim.lsp.buf.range_code_action, { buffer = bufnr })
+          bind('v', 'ga', vim.lsp.buf.range_code_action, { buffer = bufnr }, 'Code action')
 
-          if client.server_capabilities["documentSymbolProvider"] then
-            local hasnavic, navic = pcall(require, "nvim-navic")
+          if client.server_capabilities['documentSymbolProvider'] then
+            local hasnavic, navic = pcall(require, 'nvim-navic')
             if hasnavic then
               navic.attach(client, bufnr)
             end
@@ -113,11 +105,14 @@
 
         local function on_attach_trouble(client, bufnr)
           on_attach(client, bufnr)
-          require("lsp_signature").on_attach({
+          require('lsp_signature').on_attach({
             bind = true,
-            handler_opts = { border = "single", },
+            handler_opts = { border = 'single', },
           }, bufnr)
         end
+
+        -- cmp-lsp capabilities
+        local capabilities = cmp_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
         -- C/CPP
         lsp.clangd.setup {
@@ -125,38 +120,55 @@
             cmd = {
               'clangd', '--background-index', '--pch-storage=memory', '--clang-tidy', '--suggest-missing-includes',
             },
-            filetypes = { 'c', 
-            -- 'cpp',
-            },
+            filetypes = { 'c', },
             root_dir = lsp.util.root_pattern('compile_commands.json', 'compile_flags.txt', '.git'),
           },
           on_attach = on_attach_trouble,
+          capabilities = capabilities,
         }
         -- Erlang
-        lsp.erlangls.setup { on_attach = on_attach_trouble, }
+        lsp.erlangls.setup {
+          on_attach = on_attach_trouble,
+          capabilities = capabilities,
+        }
         -- Python
-        lsp.pyright.setup { on_attach = on_attach_trouble, }
+        lsp.pyright.setup {
+          on_attach = on_attach_trouble,
+          capabilities = capabilities,
+        }
         -- Rust
-        lsp.rust_analyzer.setup { on_attach = on_attach_trouble, }
+        lsp.rust_analyzer.setup {
+          on_attach = on_attach_trouble,
+          capabilities = capabilities,
+        }
         -- Go
-        lsp.gopls.setup { on_attach = on_attach_trouble, }
+        lsp.gopls.setup {
+          on_attach = on_attach_trouble,
+          capabilities = capabilities,
+        }
         -- Terraform
-        lsp.terraformls.setup { on_attach = on_attach_trouble, }
+        lsp.terraformls.setup {
+          on_attach = on_attach_trouble,
+          capabilities = capabilities,
+        }
         -- Zig
         lsp.zls.setup {
           on_attach = function(a, bufnr)
             -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
             on_attach_trouble(a, bufnr)
           end,
+          capabilities = capabilities,
         }
         -- YAML
         lsp.yamlls.setup {
           on_attach = on_attach_trouble,
+          capabilities = capabilities,
           -- settings = { yaml = { schemas = { ["https://..."] } } },
         }
         -- JSON
         lsp.jsonls.setup {
           on_attach = on_attach_trouble,
+          capabilities = capabilities,
           settings = {
             json = {
               schemas = require('schemastore').json.schemas(),
@@ -166,15 +178,18 @@
         --[[ Vim
         lsp.vimls.setup {
           on_attach = on_attach,
+          capabilities = capabilities,
         }
         --]]
         -- Nix
-        lsp.rnix.setup {
-          on_attach = on_attach,
+        lsp.nil_ls.setup {
+          on_attach = on_attach_trouble,
+          capabilities = capabilities,
         }
         -- Bash
         lsp.bashls.setup {
           on_attach = on_attach,
+          capabilities = capabilities,
         }
         -- Diagnostic-ls
         lsp.diagnosticls.setup { }
@@ -200,69 +215,6 @@
         }
       '';
     }
-    cmp-snippy
-
-    # Completion popups
-    cmp-nvim-lsp
-    cmp-buffer
-    cmp-path
-    {
-      plugin = nvim-cmp;
-      type = "lua";
-      config = ''
-        local cmp = require("cmp")
-        local lspkind = require("lspkind")
-        local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-
-        cmp.setup {
-          confirmation = { default_behavior = cmp.ConfirmBehavior.Replace },
-          formatting = {
-            format = function(entry, vim_item)
-              vim_item.kind = lspkind.presets.default[vim_item.kind]
-              vim_item.menu = ({
-                buffer = "[Buffer]",
-                nvim_lsp = "[LSP]",
-                luasnip = "[LuaSnip]",
-                nvim_lua = "[Lua]",
-                latex_symbols = "[LaTeX]",
-              })[entry.source.name]
-              return vim_item
-            end,
-          },
-          mapping = {
-            ["<Tab>"] = (function()
-              local hasplugin, intellitab = pcall(require, 'intellitab')
-              if hasplugin then
-                return function (fallback)
-                  intellitab.indent()
-                end
-              else
-                return cmp.mapping.confirm({ select = true })
-              end
-            end)(),
-            ["<C-p>"] = cmp.mapping.select_prev_item(),
-            ["<C-n>"] = cmp.mapping.select_next_item(),
-            ["<C-Space>"] = cmp.mapping.complete(),
-            ["<C-c>"] = cmp.mapping.close(),
-          },
-          snippet = {
-            expand = function(args)
-              require("snippy").expand_snippet(args.body)
-            end,
-          },
-          sources = {
-            { name = "buffer" },
-            { name = "nvim_lsp" },
-            { name = "path" },
-            { name = "snippy "},
-          },
-        }
-        require("cmp_nvim_lsp").setup()
-
-        -- Automatically insert parenthesis after confirming
-        cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done({ map_char = { tex = "" } }))
-      '';
-    }
 
     {
       plugin = trouble-nvim;
@@ -280,6 +232,20 @@
       config = ''
         vim.g.zig_fmt_autosave = 0
       '';
+    }
+    {
+      plugin = vim-nix;
+      type = "lua";
+      config = ''
+        vim.filetype.add({
+          extension = {
+            nix = 'nix',
+          },
+        })
+      '';
+    }
+    {
+      plugin = SchemaStore-nvim;
     }
   ];
 }

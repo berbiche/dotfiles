@@ -167,7 +167,13 @@ moduleArgs@{ config, lib, pkgs, ... }:
     }
 
     # Statusbar
-    lualine-lsp-progress
+    {
+      plugin = fidget-nvim;
+      type = "lua";
+      config = ''
+        require('fidget').setup {}
+      '';
+    }
     {
       plugin = lualine-nvim;
       type = "lua";
@@ -180,7 +186,6 @@ moduleArgs@{ config, lib, pkgs, ... }:
           },
           sections = {
             lualine_b = { 'branch', 'diagnostics', 'filename', },
-            lualine_c = { 'lsp_progress', },
             lualine_x = { 'encoding', 'fileformat', 'filetype', },
             lualine_y = { },
           },
@@ -324,6 +329,13 @@ moduleArgs@{ config, lib, pkgs, ... }:
       plugin = twilight-nvim;
       type = "lua";
       config = ''
+        local twilight = require('twilight')
+        twilight.setup {
+          dimming = {
+            inactive = true,
+          },
+        }
+        bind('n', '<leader>wz', twilight.toggle, 'Toggle focus-mode')
       '';
     }
 

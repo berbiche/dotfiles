@@ -26,6 +26,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
           ['<leader>b'] = { name = '+buffer' },
           ['<leader>f'] = { name = '+file' },
           ['<leader>g'] = { name = '+git' },
+          ['<leader>l'] = { name = '+lsp' },
           ['<leader>o'] = { name = '+open' },
           ['<leader>p'] = { name = '+project' },
           ['<leader>q'] = { name = '+session' },
@@ -81,57 +82,12 @@ moduleArgs@{ config, lib, pkgs, ... }:
     # Automatically source the .envrc (integration with direnv)
     direnv-vim
     {
-      # Better wildmenu
-      plugin = wilder-nvim;
+      # Shows a key sequence to jump to a word/letter letter after typing 's<letter><letter>'
+      plugin = leap-nvim;
       type = "lua";
       config = ''
-        if vim.g.vscode == nil then
-          local wilder = require('wilder')
-
-          wilder.setup({
-            modes = {':', '/', '?'},
-            next_key = '<C-n>',
-            previous_key = '<C-p>',
-          })
-
-          wilder.set_option('pipeline', {
-            wilder.branch(
-              wilder.python_file_finder_pipeline(),
-              wilder.cmdline_pipeline({
-                language = 'python',
-                fuzzy = 1,
-              }),
-              wilder.python_search_pipeline({
-                pattern = wilder.python_fuzzy_delimiter_pattern(),
-                sorter = wilder.python_difflib_sorter(),
-              })
-            )
-          })
-          wilder.set_option('renderer', wilder.renderer_mux({
-            [':'] = wilder.popupmenu_renderer(
-              wilder.popupmenu_border_theme({
-                border = 'rounded',
-                highlights = {
-                  border = 'Normal',
-                },
-                highlighter = wilder.basic_highlighter(),
-                min_width = '100%',
-                reverse = 1,
-                left = {' ', wilder.popupmenu_devicons()},
-                right = {' ', wilder.popupmenu_scrollbar()},
-              })
-            ),
-            ['/'] = wilder.wildmenu_renderer({
-              highlighter = wilder.basic_highlighter(),
-            })
-          }))
-        end
+        require('leap').add_default_mappings()
       '';
-    }
-    {
-      # Shows a key sequence to jump to a word/letter letter after typing 's<letter><letter>'
-      plugin = lightspeed-nvim;
-      type = "lua";
     }
     {
       plugin = searchbox-nvim;
@@ -176,6 +132,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
       plugin = gitsigns-nvim;
       type = "lua";
       config = ''
+        -- TODO: setup keybinds
         require('gitsigns').setup { }
       '';
     }
@@ -186,9 +143,9 @@ moduleArgs@{ config, lib, pkgs, ... }:
         local c = require('Comment')
 
         c.setup {
-          extra = {
-            line = {'<leader>;', '<M-;>'},
-          },
+          -- extra = {
+          --   line = {'<leader>;', '<M-;>'},
+          -- },
         }
       '';
     }
@@ -227,7 +184,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
              [[g#<cmd>lua require('hlslens').start()<CR>]],
              opts)
 
-        bind('n', '<leader>l', ':noh<CR>', opts)
+        bind('n', '<localleader>l', ':nohlsearch<CR>', opts)
       '';
     }
 
@@ -301,7 +258,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
               },
             },
             file_browser = {
-              hijack_netrw = true,
+              hijack_netrw = false,
               mappings = {
                 ["i"] = {
                   -- Match completions behavior of accepting with tab

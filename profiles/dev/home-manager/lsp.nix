@@ -14,7 +14,7 @@ in
     go gopls gocode gotools golangci-lint gore
 
     # Nix
-    nixfmt
+    rnix-lsp nil nixfmt
 
     # Shell
     nodePackages.bash-language-server shellcheck
@@ -32,17 +32,16 @@ in
     # ]))
     pyright
     # Rust
-    rnix-lsp
     rust-analyzer
     cargo cargo-audit cargo-edit clippy
     rustfmt
-    # Vala
     # YAML
     yaml-language-server
     # JSON, HTML, CSS    (I only care about JSON)
     nodePackages.vscode-langservers-extracted
   ]
   ++ lib.optionals isLinux [
+    # Vala
     vala-language-server
   ]
   ++ lib.optionals (pkgs.stdenv.hostPlatform.system != "aarch64-darwin") [

@@ -31,6 +31,7 @@ in
     ./plugins.nix
     ./lsp.nix
     ./ui.nix
+    ./cmp.nix
   ];
 
   home.packages = [

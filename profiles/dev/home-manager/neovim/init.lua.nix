@@ -112,6 +112,12 @@ vim.opt.inccommand = 'nosplit'
 vim.opt.shortmess:append({c = true, s = true, q = false,})
 
 
+-----
+-- Disable unnecessary mouse popup entry
+vim.cmd([[aunmenu PopUp.How-to\ disable\ mouse]])
+vim.cmd([[aunmenu PopUp.-1-]])
+
+
 -----------------------------------------------
 autocmd({'TextYankPost'}, {
   group = myCommandGroup,
@@ -188,8 +194,7 @@ bind('n', '<leader>bd', ':BufferClose<CR>', {silent = true}, 'Close buffer')
 bind('n', '<leader>bn', ':bnext<CR>', 'Next buffer')
 bind('n', '<leader>bp', ':bprevious<CR>', 'Previous buffer')
 bind('n', '<leader>bN', ':enew<CR>', 'New buffer')
--- Window management
-bind('n', '<leader>w', '<C-w>', '+window')
+-- Session management
 bind('n', '<leader>qq', '<cmd>quitall<CR>', 'Quit neovim')
 bind('n', '<leader>qQ', '<cmd>quitall!<CR>', 'Forcefully quit neovim')
 
