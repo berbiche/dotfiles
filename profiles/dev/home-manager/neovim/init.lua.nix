@@ -15,6 +15,8 @@ end
 local autocmd = vim.api.nvim_create_autocmd
 local myCommandGroup = vim.api.nvim_create_augroup('init.lua', {})
 
+local default_excluded_filetypes = { 'TelescopePrompt', 'NvimTree', 'startify', 'terminal', }
+
 -- Default settings
 vim.opt.compatible = false
 vim.opt.backup = false

@@ -79,13 +79,22 @@ moduleArgs@{ config, lib, pkgs, ... }:
         }
       '';
     }
-    # Automatically source the .envrc (integration with direnv)
-    direnv-vim
+    {
+      plugin = vim-illuminate;
+      type = "lua";
+      config = ''
+        require('illuminate').configure {
+          providers = { 'lsp', 'treesitter' },
+          filetypes_denylist = default_excluded_filetypes,
+        }
+      '';
+    }
     {
       # Shows a key sequence to jump to a word/letter letter after typing 's<letter><letter>'
       plugin = leap-nvim;
       type = "lua";
       config = ''
+        -- Hijacks {x, X}
         require('leap').add_default_mappings()
       '';
     }

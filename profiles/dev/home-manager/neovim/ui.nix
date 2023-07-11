@@ -8,6 +8,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
       {
         plugin = sonokai; # theme
         type = "lua";
+        optional = true;
         config = ''
           vim.g.sonokai_style = 'maia'
           vim.g.sonokai_enable_italic = 1
@@ -237,18 +238,18 @@ moduleArgs@{ config, lib, pkgs, ... }:
         require('barbecue').setup({
           attach_navic = false,
           create_autocmd = false,
-          exclude_filetypes = { "TelescopePrompt", "NvimTree", "startify", "terminal", "coc-explorer" },
+          exclude_filetypes = default_excluded_filetypes,
         })
         autocmd({
-          "WinResized",
-          "BufWinEnter",
-          "CursorHold",
-          "InsertLeave",
-          "BufModifiedSet",
+          'WinResized',
+          'BufWinEnter',
+          'CursorHold',
+          'InsertLeave',
+          'BufModifiedSet',
         }, {
-          group = vim.api.nvim_create_augroup("barbecue.updater", {}),
+          group = vim.api.nvim_create_augroup('barbecue.updater', {}),
           callback = function()
-            require("barbecue.ui").update()
+            require('barbecue.ui').update()
           end,
         })
       '';

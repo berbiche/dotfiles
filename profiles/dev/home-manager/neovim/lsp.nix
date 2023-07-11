@@ -14,7 +14,14 @@
       type = "lua";
       config = ''
         require('nvim-treesitter.configs').setup {
-          -- highlight = { enable = true, },
+          highlight = {
+            enable = true,
+            disable = function(lang, buf)
+              local max_file_size = 1000 * 1024 -- 1 MB
+              local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+              return ok and stats and stats.size > max_file_size
+            end,
+          },
           incremental_selection = { enable = true, },
           textobjects = {
             enable = true,
