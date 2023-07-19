@@ -62,6 +62,7 @@
         local lsp = require('lspconfig')
         local lspkind = require('lspkind')
         local cmp_lsp = require('cmp_nvim_lsp')
+        local hasnavic, navic = pcall(require, 'nvim-navic')
 
         lspkind.init()
 
@@ -102,8 +103,7 @@
 
           bind('v', 'ga', vim.lsp.buf.range_code_action, { buffer = bufnr }, 'Code action')
 
-          if client.server_capabilities['documentSymbolProvider'] then
-            local hasnavic, navic = pcall(require, 'nvim-navic')
+          if client.server_capabilities.documentSymbolProvider then
             if hasnavic then
               navic.attach(client, bufnr)
             end
@@ -155,6 +155,11 @@
         }
         -- Terraform
         lsp.terraformls.setup {
+          on_attach = on_attach_trouble,
+          capabilities = capabilities,
+        }
+        -- Docker
+        lsp.dockerls.setup {
           on_attach = on_attach_trouble,
           capabilities = capabilities,
         }

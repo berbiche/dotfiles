@@ -25,6 +25,9 @@ in
     # Typescript
     nodePackages.typescript-language-server
 
+    # Docker
+    nodePackages.dockerfile-language-server-nodejs
+
     # Python LSP setup
     # pipenv
     # (python3.withPackages (ps: with ps; [
