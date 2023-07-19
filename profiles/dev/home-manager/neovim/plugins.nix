@@ -233,6 +233,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
         local actions = require('telescope.actions')
         local fb_actions = ts.extensions.file_browser.actions
         local builtins = require('telescope.builtin')
+        local hastrouble, trouble = pcall(require, 'trouble.providers.telescope')
         -- local themes = require('telescope.themes')
 
         ts.setup {
@@ -241,11 +242,13 @@ moduleArgs@{ config, lib, pkgs, ... }:
             mappings = {
               i = {
                 ["<esc>"] = actions.close,
-                ["C-g"] = actions.close,
+                ["<C-g>"] = actions.close,
+                ["<C-e>"] = hastrouble and trouble.open_with_trouble or nil,
               },
               n = {
                 ["<esc>"] = actions.close,
-                ["C-g"] = actions.close,
+                ["<C-g>"] = actions.close,
+                ["<C-e>"] = hastrouble and trouble.open_with_trouble or nil,
               },
             },
           },
@@ -269,12 +272,12 @@ moduleArgs@{ config, lib, pkgs, ... }:
             file_browser = {
               hijack_netrw = false,
               mappings = {
-                ["i"] = {
+                i = {
                   -- Match completions behavior of accepting with tab
                   ["<Tab>"] = actions.select_default,
                   ["<C-e>"] = fb_actions.create_from_prompt,
                 },
-                ["n"] = {
+                n = {
                   ["<C-e>"] = fb_actions.create_from_prompt,
                 },
               },
