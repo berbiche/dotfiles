@@ -63,6 +63,9 @@ let
       "signon.rememberSignons" = false;
       "signon.autofillForms" = false;
 
+      # Disable backdoor restricting add-ons from running on certain domains
+      "extensions.quarantinedDomains.enabled" = false;
+
       # Enable DRM (Widevine)
       "media.eme.enabled" = true;
       "media.gmp-widevinecdm.visible" = true;
