@@ -31,6 +31,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
           ['<leader>p'] = { name = '+project' },
           ['<leader>q'] = { name = '+session' },
           ['<leader>w'] = { name = '+window' },
+          ['<leader>x'] = { name = '+diagnostics' },
         })
       '';
     }
@@ -131,10 +132,16 @@ moduleArgs@{ config, lib, pkgs, ... }:
           disable_insert_on_commit = false,
           integrations = {
             diffview = true,
+            telescope = true,
+          },
+          sections = {
+            recent = {
+              folded = false,
+            },
           },
         }
 
-        bind('n', '<leader>gg', neogit.open, {silent = true}, 'Open neogit')
+        bind('n', '<leader>gg', function() neogit.open() end, {silent = true}, 'Open neogit')
       '';
     }
     {
@@ -142,7 +149,43 @@ moduleArgs@{ config, lib, pkgs, ... }:
       type = "lua";
       config = ''
         -- TODO: setup keybinds
-        require('gitsigns').setup { }
+        local gs = require('gitsigns')
+        gs.setup {
+          on_attach = function(bufnr)
+            local bind = buf_bind(bufnr)
+
+            -- Navigation
+            bind('n', ']c', function()
+              if vim.wo.diff then return ']c' end
+              vim.schedule(function() gs.next_hunk() end)
+              return '<Ignore>'
+            end, {expr=true}, 'Next hunk')
+
+            bind('n', '[c', function()
+              if vim.wo.diff then return '[c' end
+              vim.schedule(function() gs.prev_hunk() end)
+              return '<Ignore>'
+            end, {expr=true}, 'Previous hunk')
+
+            -- Actions
+            -- bind('n', '<leader>gb', function() gs.blame_line{full=true} end, 'Blame line')
+            bind('n', '<leader>gb', gs.toggle_current_line_blame, 'Toggle blame line')
+            bind('n', '<leader>gd', gs.diffthis, 'Diff')
+            bind('n', '<leader>gD', function() gs.diffthis('~') end, 'Diff ???')
+            bind('n', '<leader>gp', gs.preview_hunk, 'Preview hunk')
+            bind('n', '<leader>gr', gs.reset_hunk, 'Reset hunk')
+            bind('v', '<leader>gr', function() gs.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end, 'Reset hunk')
+            bind('n', '<leader>gR', gs.reset_buffer, 'Reset buffer')
+            bind('n', '<leader>gs', gs.stage_hunk, 'Stage hunk')
+            bind('v', '<leader>gs', function() gs.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end, 'Stage hunk')
+            bind('n', '<leader>gS', gs.stage_buffer, 'Stage buffer')
+            bind('n', '<leader>gu', gs.undo_stage_hunk, 'Unstage hunk')
+            bind('n', '<leader>gx', gs.toggle_deleted, 'Toggle deleted??')
+
+            -- Text object
+            bind({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+          end,
+        }
       '';
     }
     {

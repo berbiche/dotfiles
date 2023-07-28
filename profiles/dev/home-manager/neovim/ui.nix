@@ -78,8 +78,8 @@ moduleArgs@{ config, lib, pkgs, ... }:
         }
       '';
     }
-    # Highlight ranges in the commandline such as :10,20
     {
+      # Highlight ranges in the commandline such as :10,20
       plugin = range-highlight-nvim;
       type = "lua";
       config = ''
@@ -111,7 +111,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
         }
 
         vim.g.startify_skiplist = { 'COMMIT_EDITMSG', '^/nix/store', }
-        vim.g.startify_bookmarks = {{ d = '~/dotfiles' }, { k = '~/dev/infra/infrastructure', }},
+        vim.g.startify_bookmarks = {{ D = '~/dotfiles' }, { I = '~/dev/infra/infrastructure', }},
 
         autocmd({'User'}, {
           group = myCommandGroup,
@@ -136,11 +136,12 @@ moduleArgs@{ config, lib, pkgs, ... }:
               end
 
               -- Find whether all buffers are listed
-              local exists_unlisted_buffer = false
-              for _, bufnr in pairs(buffer_list) do
-                if vim.fn.buflisted(bufnr) ~= 1 then
-                  exists_unlisted_buffer = true
-                  break
+              -- A new list is created for debugging purposes
+              local filtered_bl = {}
+              for _, bufnr in ipairs(buffer_list) do
+                -- Somehow, the diagnostics hover buffer prevents Startify from opening...
+                if vim.api.nvim_buf_is_valid(bufnr) and vim.bo[bufnr].buflisted then
+                  table.insert(filtered_bl, bufnr)
                 end
               end
 
@@ -148,7 +149,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
               local is_nameless_buffer = vim.api.nvim_buf_get_name(bufnr) == '''
               local is_buftype_empty = vim.api.nvim_buf_get_option(bufnr, 'buftype') == '''
 
-              if not exists_unlisted_buffer and is_nameless_buffer and is_buftype_empty then
+              if #filtered_bl > 0 and is_nameless_buffer and is_buftype_empty then
                 vim.cmd.Startify()
               end
             end,
@@ -200,32 +201,75 @@ moduleArgs@{ config, lib, pkgs, ... }:
 
     # Tab-bar
     {
-      plugin = barbar-nvim;
+      plugin = tabby-nvim;
       type = "lua";
       config = ''
-        require('barbar').setup {
-          icons = {
-            button = false,
-            modified = {
-              button = false,
-            },
-            filetype = {
-              enabled = true,
-            },
+        require('tabby.tabline').use_preset('active_wins_at_tail', {
+          nerdfont = true, -- whether use nerdfont
+          tab_name = {
+            -- name_fallback = function(tabid)
+            --   return 'Fallback name'
+            -- end,
           },
-          sidebar_filetypes = {
-            NvimTree = true,
+          buf_name = {
+            mode = 'shorten',
           },
-        }
+        })
+      '';
+    }
+    {
+      plugin = barbar-nvim;
+      type = "lua";
+      optional = true;
+      config = lib.mkIf false ''
+        -- Only used for the buffer functions it provides
+        vim.g.barbar_auto_setup = false
 
         local opts = {silent = true}
-
         for i=1,9 do
-          bind('n', '<A-' .. i .. '>', '<cmd>BufferGoto ' .. i .. '<CR>', opts)
+          bind('n', '<A-' .. i .. '>', '<cmd>BufferGoto ' .. i .. '<CR>', opts, 'Focus buffer ' .. i)
         end
-        bind('n', '<A-0>', '<cmd>BufferLast<CR>', opts)
-
+        bind('n', '<A-0>', '<cmd>BufferLast<CR>', opts, 'Focus last buffer')
+        bind('n', '<leader>bd', ':BufferClose<CR>', opts, 'Close buffer')
         bind('n', '<leader>bO', '<cmd>BufferCloseAllButCurrent<CR>', opts, 'Close other buffers')
+      '';
+    }
+    {
+      plugin = bufdelete-nvim;
+      type = "lua";
+      config = ''
+        local mbuf = require('bufdelete')
+
+        local function delete_other_buffers(wipeout)
+          local current_bufnr = vim.api.nvim_get_current_buf()
+          local buffer_list = vim.fn.tabpagebuflist(vim.api.nvim_get_current_tabpage())
+          if type(buffer_list) == 'table' then
+            table.remove(buffer_list, current_bufnr)
+          end
+          if wipeout then
+            mbuf.wipeout(buffer_list)
+          else
+            mbuf.bufdelete(buffer_list)
+          end
+        end
+
+        local function delete_current_buffer(wipeout)
+          local bufnr = vim.api.nvim_get_current_buf()
+          if wipeout then
+            mbuf.wipeout(bufnr)
+          else
+            mbuf.bufdelete(bufnr)
+          end
+        end
+
+        local opts = {silent = true}
+        -- for i=1,9 do
+        --   bind('n', '<A-' .. i .. '>', '<cmd>BufferGoto ' .. i .. '<CR>', opts, 'Focus buffer ' .. i)
+        -- end
+        bind('n', '<leader>bd', delete_current_buffer, opts, 'Close buffer')
+        bind('n', '<leader>bD', function() delete_current_buffer(true) end, opts, 'Wipeout buffer')
+        bind('n', '<leader>bo', delete_other_buffers, opts, 'Close other buffers')
+        bind('n', '<leader>bO', function() delete_other_buffers(true) end, opts, 'Wipeout other buffers')
       '';
     }
 
@@ -348,6 +392,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
           select_prompts = true,
           update_focused_file = {
             enable = true,
+            update_root = false,
             ignore_list = {'startify', 'dashboard'},
           },
 
@@ -480,7 +525,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
             inactive = true,
           },
         }
-        bind('n', '<leader>wz', twilight.toggle, 'Toggle focus-mode')
+        bind('n', '<leader>wz', twilight.toggle, 'Toggle presentation mode')
       '';
     }
 

@@ -1,7 +1,7 @@
 {...}:
 ''
 
-local function bind(mode, l, r, opts, desc)
+local function bind(mode, l, r, opts, desc, bufnr)
   if type(opts) == 'string' then
     opts = { desc = opts }
   else
@@ -10,12 +10,25 @@ local function bind(mode, l, r, opts, desc)
   if desc then
     opts.desc = desc
   end
+  if buffer then
+    opts.buffer = bufnr
+  end
   vim.keymap.set(mode, l, r, opts)
 end
+local function buf_bind(bufnr)
+  return function(mode, l, r, opts, desc)
+    bind(mode, l, r, opts, desc, bufnr)
+  end
+end
+local cmd = vim.cmd
 local autocmd = vim.api.nvim_create_autocmd
 local myCommandGroup = vim.api.nvim_create_augroup('init.lua', {})
 
 local default_excluded_filetypes = { 'TelescopePrompt', 'NvimTree', 'startify', 'terminal', }
+
+-- Disable netrw before any other settings
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 
 -- Default settings
 vim.opt.compatible = false
@@ -25,6 +38,10 @@ vim.opt.swapfile = false
 
 -- Update terminal's titlebar
 vim.opt.title = true
+-- Display tabline at all time
+vim.opt.showtabline = 2
+-- Hide command line under statusline
+vim.opt.cmdheight = 0
 
 -- Use utf-8 by default
 vim.opt.encoding = 'utf-8'
@@ -41,18 +58,15 @@ vim.g.maplocalleader = ','
 vim.opt.visualbell = true
 
 -- Basics
-vim.cmd.syntax('on')
-
-if vim.fn.has('termguicolors') == 1 then
-  vim.opt.termguicolors = true
-end
+cmd.syntax('on')
+vim.opt.termguicolors = true
 
 -- Extra config
 
 vim.opt.hidden = true
 vim.opt.hlsearch = true
 vim.opt.smartcase = true
-vim.cmd([[filetype plugin on]])
+cmd([[filetype plugin on]])
 vim.opt.listchars = [[tab:>-,trail:*]]
 
 -- Indentation stuff
@@ -116,8 +130,8 @@ vim.opt.shortmess:append({c = true, s = true, q = false,})
 
 -----
 -- Disable unnecessary mouse popup entry
-vim.cmd([[aunmenu PopUp.How-to\ disable\ mouse]])
-vim.cmd([[aunmenu PopUp.-1-]])
+cmd([[aunmenu PopUp.How-to\ disable\ mouse]])
+cmd([[aunmenu PopUp.-1-]])
 
 
 -----------------------------------------------
@@ -170,6 +184,10 @@ autocmd({'BufEnter'}, {
   end,
 })
 
+-- Hide EndOfBuffer mark
+-- vim.opt.fillchars = { eob = '~' }
+vim.api.nvim_set_hl(0, 'EndOfBuffer', {fg = 'bg'})
+
 ----- Keymaps
 
 -- Remove Ex mode keybind
@@ -192,7 +210,6 @@ autocmd({'VimEnter'}, {
     bind({'n', 'v'}, '<leader>b', ''', {buffer = true})
   end,
 })
-bind('n', '<leader>bd', ':BufferClose<CR>', {silent = true}, 'Close buffer')
 bind('n', '<leader>bn', ':bnext<CR>', 'Next buffer')
 bind('n', '<leader>bp', ':bprevious<CR>', 'Previous buffer')
 bind('n', '<leader>bN', ':enew<CR>', 'New buffer')
@@ -219,7 +236,7 @@ bind('c', '<C-k>', [[<C-\>egetcmdline()[:getcmdpos() - 2]<cr>]], 'Delete till en
 
 -- Highlight trailing whitespace
 -- g:terminal_color_1 is defined by poimandres-nvim
-vim.cmd([[
+cmd([[
   execute 'highlight TrailingWhitespace guibg=' . g:terminal_color_1
   match TrailingWhitespace /\s\+$/
 ]])
@@ -227,16 +244,16 @@ vim.cmd([[
 -- Fix terminal escape char
 bind('t', '<Esc>', [[<C-\><C-n>]])
 bind('n', '<leader>ot', function()
-  vim.cmd.botright('split')
-  vim.cmd.resize(-10)
-  vim.cmd.terminal()
+  cmd[[botright split]]
+  cmd.resize(-10)
+  cmd.terminal()
 end, {silent = true}, 'Open terminal')
 
 -- Switch to most recently used buffer
 local function switch_to_last_buffer()
   local last_buffer = vim.fn.bufnr('#')
-  if last_buffer ~= -1 and vim.fn.buflisted(last_buffer) == 1 then
-    vim.cmd.buffer(last_buffer)
+  if last_buffer ~= -1 and vim.bo[last_buffer].buflisted then
+    cmd.buffer(last_buffer)
   else
     -- If no last accessed buffer or it is unloaded, find the most recently used open buffer
     local buffer_list = vim.api.nvim_list_bufs()
@@ -248,7 +265,7 @@ local function switch_to_last_buffer()
     end
 
     for _, buf in ipairs(buffer_list) do
-      if vim.fn.buflisted(buf) == 1 then
+      if vim.bo[buf].buflisted then
         local lastused = vim.fn.getbufinfo(buf).lastused or 0
         if lastused > most_recent_time then
           most_recent_buffer = buf
@@ -258,7 +275,7 @@ local function switch_to_last_buffer()
     end
 
     if most_recent_buffer then
-      vim.cmd.buffer(most_recent_buffer)
+      cmd.buffer(most_recent_buffer)
     end
   end
 end

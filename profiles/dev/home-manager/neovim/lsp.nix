@@ -47,12 +47,12 @@
       plugin = nvim-lightbulb;
       type = "lua";
       config = ''
-        vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
-          pattern = '*',
-          callback = function ()
-            require('nvim-lightbulb').update_lightbulb()
-          end
-        })
+        require('nvim-lightbulb').setup {
+          autocmd = {
+            enabled = true,
+            updatetime = 0,
+          },
+        }
       '';
     }
     {
@@ -64,6 +64,7 @@
         local cmp_lsp = require('cmp_nvim_lsp')
         local hasnavic, navic = pcall(require, 'nvim-navic')
 
+        cmp_lsp.setup()
         lspkind.init()
 
         vim.diagnostic.config({ virtual_text = false })
@@ -72,36 +73,43 @@
         vim.api.nvim_create_autocmd('CursorHold', {
           pattern = '*',
           callback = function ()
-            vim.diagnostic.open_float(nil, {focus = false, scope='cursor'})
+            local bufnr, _ = vim.diagnostic.open_float(nil, {focus = false, scope='cursor'})
+            -- The buffer should not be listed...
+            if bufnr ~= nil then
+              -- vim.bo[bufnr].buflisted = false
+            end
           end
         })
 
         local function on_attach(client, bufnr)
-          local cmd = function (thing)
-            return '<cmd>' .. thing .. '<CR>'
-          end
           local map = {
-            K = {vim.lsp.buf.hover, 'Lookup documentation'},
-            ['<space>bf'] = {vim.lsp.buf.formatting, 'Format'},
-            ['[d'] = {vim.diagnostic.goto_prev, 'Goto previous error'},
-            [']d'] = {vim.diagnostic.goto_next, 'Goto next error'},
-            ['<leader>la'] = {vim.lsp.buf.code_action, 'Code action'},
+            -- Key -> {function, documentation, whether bind to visual mode}
+            ['<leader>la'] = {vim.lsp.buf.code_action, 'Code action', true},
             ['<leader>ld'] = {vim.lsp.buf.definition, 'Code definition'},
             ['<leader>lD'] = {vim.lsp.buf.declaration, 'Code declaration'},
-            ['<leader>li'] = {vim.lsp.buf.implementation, 'Code implementation'},
             ['<leader>le'] = {vim.diagnostic.open_float, 'Open diagnostic'},
+            ['<leader>lf'] = {vim.lsp.buf.format, 'Format'},
+            ['<leader>li'] = {vim.lsp.buf.implementation, 'Code implementation'},
             ['<leader>lr'] = {vim.lsp.buf.rename, 'Rename'},
             ['<leader>lt'] = {vim.lsp.buf.type_definition, 'Type definition'},
-            ['ga'] = {vim.lsp.buf.code_action, 'Code action'},
+            ['K'] = {vim.lsp.buf.hover, 'Lookup documentation'},
+            ['ga'] = {vim.lsp.buf.code_action, 'Code action', true},
             ['gd'] = {vim.lsp.buf.definition, 'Code definition'},
             ['gD'] = {vim.lsp.buf.declaration, 'Code declaration'},
+            ['gr'] = {vim.lsp.buf.references, 'Code references'},
+            ['[d'] = {vim.diagnostic.goto_prev, 'Previous diagnostic'},
+            [']d'] = {vim.diagnostic.goto_next, 'Next diagnostic'},
           }
 
           for key, value in pairs(map) do
-            bind('n', key, value[1], { buffer = bufnr }, value[2])
+            if value[1] ~= nil then
+              local mode = value[3] and {'n', 'v'} or {'n'}
+              bind(mode, key, function() value[1]() end, { buffer = bufnr }, value[2])
+            else
+              -- Debugging
+              vim.notify_once(string.format('Action does not exist for mapping %s -> %s', key, vim.inspect(value)), vim.log.levels.DEBUG, {title = 'LSP'})
+            end
           end
-
-          bind('v', 'ga', vim.lsp.buf.range_code_action, { buffer = bufnr }, 'Code action')
 
           if client.server_capabilities.documentSymbolProvider then
             if hasnavic then
@@ -233,6 +241,14 @@
       type = "lua";
       config = ''
         require('trouble').setup { }
+
+        local opts = { silent = true, }
+
+        bind('n', '<leader>xx', '<cmd>TroubleToggle<cr>', opts, 'Toggle Trouble')
+        bind('n', '<leader>xw', '<cmd>TroubleToggle workspace_diagnostics<cr>', opts, 'Toggle workspace diagnostics')
+        bind('n', '<leader>xd', '<cmd>TroubleToggle document_diagnostics<cr>', opts, 'Toggle document diagnostics')
+        bind('n', '<leader>xl', '<cmd>TroubleToggle loclist<cr>', opts, 'Toggle loclist')
+        bind('n', '<leader>xq', '<cmd>TroubleToggle quickfix<cr>', opts, 'Toggle quickfix')
       '';
     }
 

@@ -1,22 +1,27 @@
 { config, lib, pkgs, ... }:
 
 {
-  programs.neovim.plugins = with pkgs.vimPlugins; [
-    cmp-snippy
 
+  programs.neovim.plugins = with pkgs.vimPlugins; [
     # Completion popups
     cmp-nvim-lsp
     cmp-nvim-lsp-signature-help
     cmp-buffer
     cmp-path
+    cmp-snippy
+
+    # cmdline completion
+    cmp-cmdline
+    cmp-cmdline-history
+
     {
       plugin = nvim-cmp;
       type = "lua";
       config = ''
         local cmp = require('cmp')
         local lspkind = require('lspkind')
-        local cmp_autopairs = require('nvim-autopairs.completion.cmp')
         local snippy = require('snippy')
+        local has_intellitab, intellitab = pcall(require, 'intellitab')
 
         local has_words_before = function()
           unpack = unpack or table.unpack
@@ -27,17 +32,28 @@
         cmp.setup {
           confirmation = { default_behavior = cmp.ConfirmBehavior.Replace },
           formatting = {
-            format = function(entry, vim_item)
-              vim_item.kind = lspkind.presets.default[vim_item.kind]
-              vim_item.menu = ({
-                buffer = '[Buffer]',
-                nvim_lsp = '[LSP]',
-                luasnip = '[LuaSnip]',
-                nvim_lua = '[Lua]',
-                latex_symbols = '[LaTeX]',
-              })[entry.source.name]
-              return vim_item
-            end,
+            fields = {
+              cmp.ItemField.Abbr,
+              cmp.ItemField.Kind,
+              cmp.ItemField.Menu,
+            },
+            format = lspkind.cmp_format({
+              mode = 'symbol',
+              maxwidth = 50,
+              ellipsis_char = '...',
+              before = function(entry, vim_item)
+                vim_item.menu = ({
+                  buffer = '[Buffer]',
+                  nvim_lsp = '[LSP]',
+                  snippy = '[Snippet]',
+                  luasnip = '[LuaSnip]',
+                  nvim_lua = '[Lua]',
+                })[entry.source.name] or ('[%s]'):format(entry.source.name)
+
+                vim_item.abbr = entry:get_insert_text()
+                return vim_item
+              end,
+            }),
           },
 
           mapping = {
@@ -54,8 +70,7 @@
               elseif has_words_before() then
                 cmp.complete()
               else
-                local hasplugin, intellitab = pcall(require, 'intellitab')
-                if hasplugin then
+                if has_intellitab then
                   intellitab.indent()
                 else
                   fallback()
@@ -69,7 +84,7 @@
           },
           snippet = {
             expand = function(args)
-              require('snippy').expand_snippet(args.body)
+              snippy.expand_snippet(args.body)
             end,
           },
           sources = cmp.config.sources({
@@ -96,24 +111,8 @@
         }
 
         -- Automatically insert parenthesis after confirming
-        cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
-      '';
-    }
-    {
-      plugin = pkgs.runCommandLocal "dummy" { } "mkdir $out";
-      type = "lua";
-      config = ''
-        local cmp_lsp = require('cmp_nvim_lsp')
-        cmp_lsp.setup {
-        }
-      '';
-    }
+        cmp.event:on('confirm_done', require('nvim-autopairs.completion.cmp').on_confirm_done())
 
-    cmp-cmdline-history
-    {
-      plugin = cmp-cmdline;
-      type = "lua";
-      config = ''
         -- `/`, `?` cmdline setup.
         for _, cmd_type in pairs({'/', '?'}) do
           cmp.setup.cmdline(cmd_type, {
@@ -128,7 +127,8 @@
         cmp.setup.cmdline(':', {
           mapping = cmp.mapping.preset.cmdline(),
           sources = cmp.config.sources({
-            { name = 'path' }
+            { name = 'path' },
+            -- { name = 'cmdline_history' },
           }, {
             {
               name = 'cmdline',
@@ -149,6 +149,5 @@
 
       '';
     }
-    cmp-cmdline
   ];
 }
