@@ -19,7 +19,7 @@
   nix.distributedBuilds = true;
   nix.buildMachines = [
     {
-      systems = [ "x86_64-linux" ];
+      systems = [ "x86_64-linux" "i686-linux" ];
       supportedFeatures = [ "kvm" "big-parallel" ];
       maxJobs = 14;
       protocol = "ssh-ng";
@@ -28,15 +28,15 @@
       sshKey = "/etc/nix/nixos-builder.key";
       publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSU1RUHlybWxObExmcnVSMnJONXB2MEJSeGtqVGJna2wyb1E5dm5YSjNYOEMgcm9vdEBuaXhvcy1idWlsZGVyCg==";
     }
-    # {
-    #   systems = [ "x86_64-linux" ];
-    #   supportedFeatures = [ "big-parallel" ];
-    #   sshUser = "root";
-    #   maxJobs = 8;
-    #   hostName = "172.16.2.6";
-    #   sshKey = "/Users/tristan.gosselin-hane/.ssh/id_nixstore_builder";
-    #   # publicHostKey = "H+DeIUeuXgqoDI+XcNL43mBheZGSIBRHrPz/mrIIQqw";
-    # }
+    {
+      systems = [ "x86_64-linux" "i686-linux" ];
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "root";
+      maxJobs = 8;
+      hostName = "172.16.2.6";
+      sshKey = "/Users/nberbiche/.ssh/otakuthon";
+      # publicHostKey = "H+DeIUeuXgqoDI+XcNL43mBheZGSIBRHrPz/mrIIQqw";
+    }
   ];
   # nix.settings.builders-use-substitutes = true;
 
