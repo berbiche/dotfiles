@@ -32,6 +32,7 @@ in
     ./lsp.nix
     ./ui.nix
     ./cmp.nix
+    ./filetree.nix
   ];
 
   home.packages = [
