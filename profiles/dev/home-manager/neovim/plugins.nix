@@ -206,11 +206,9 @@
     }
 
     {
-      plugin = auto-hlsearch-nvim;
-      type = "lua";
-      config = ''
-        require('auto-hlsearch').setup()
-      '';
+      # Automatically disable search highlighting when moving
+      plugin = vim-cool;
+      # plugin = auto-hlsearch-nvim;
     }
     {
       plugin = nvim-hlslens;
@@ -222,24 +220,30 @@
 
         bind('n', 'n',
              [[<cmd>execute('normal! ' . v:count1 . 'n')<CR><cmd>lua require('hlslens').start()<CR>]],
-             opts)
+             opts,
+             'Search forward')
         bind('n', 'N',
              [[<cmd>execute('normal! ' . v:count1 . 'N')<CR><cmd>lua require('hlslens').start()<CR>]],
-             opts)
+             opts,
+             'Search backward')
         bind('n', '*',
              [[*<cmd>lua require('hlslens').start()<CR>]],
-             opts)
+             opts,
+             'Search word forward')
         bind('n', '#',
              [[#<cmd>lua require('hlslens').start()<CR>]],
-             opts)
+             opts,
+             'Search word backward')
         bind('n', 'g*',
              [[g*<cmd>lua require('hlslens').start()<CR>]],
-             opts)
+             opts,
+             'Search word forward')
         bind('n', 'g#',
              [[g#<cmd>lua require('hlslens').start()<CR>]],
-             opts)
+             opts,
+             'Search word backward')
 
-        bind('n', '<localleader>l', ':nohlsearch<CR>', opts)
+        bind('n', '<localleader>l', ':nohlsearch<CR>', opts, 'Disable search highlighting')
       '';
     }
 
