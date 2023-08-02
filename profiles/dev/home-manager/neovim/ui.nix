@@ -204,28 +204,41 @@
         require('fidget').setup {}
       '';
     }
+    # Breadcrumbs (fil d'Ariane) for the winbar
+    nvim-navic
     {
       plugin = lualine-nvim;
       type = "lua";
       config = ''
-        require("lualine").setup {
+        local colors = require('base16-colorscheme').colors
+        require('lualine').setup {
           options = {
-            disabled_filetypes = default_excluded_filetypes,
             theme = 'base16',
+            globalstatus = true,
+            disabled_filetypes = {
+              statusline = {'startify'},
+            },
+            ignore_focus = default_excluded_filetypes,
           },
           sections = {
+            lualine_a = { 'mode', },
             lualine_b = { 'branch', 'diagnostics', 'filename', },
-            lualine_x = { 'encoding', 'fileformat', 'filetype', },
-            lualine_y = { },
+            lualine_c = {
+              {'searchcount', color = { fg = colors.base0A }, }
+            },
+            lualine_x = { },
+            lualine_y = { 'encoding', 'fileformat', 'filetype', },
           },
           inactive_sections = {
             lualine_b = { 'diff', },
             lualine_y = { 'progress', },
           },
-          extensions = {
-            'nvim-tree',
-            'trouble',
+          winbar = {
+            lualine_c = {
+              {'navic', draw_empty = true, color_correction = 'dynamic', navic_opts = nil},
+            },
           },
+          extensions = { 'trouble', 'quickfix', 'man' },
         }
       '';
     }
@@ -299,32 +312,6 @@
         bind('n', '<leader>bD', function() delete_current_buffer(true) end, opts, 'Wipeout buffer')
         bind('n', '<leader>bo', delete_other_buffers, opts, 'Close other buffers')
         bind('n', '<leader>bO', function() delete_other_buffers(true) end, opts, 'Wipeout other buffers')
-      '';
-    }
-
-    # "Winbar" (breadcrumbs / fil d'Ariane)
-    nvim-navic
-    {
-      plugin = barbecue-nvim;
-      type = "lua";
-      config = ''
-        require('barbecue').setup({
-          attach_navic = false,
-          create_autocmd = false,
-          exclude_filetypes = default_excluded_filetypes,
-        })
-        autocmd({
-          'WinResized',
-          'BufWinEnter',
-          'CursorHold',
-          'InsertLeave',
-          'BufModifiedSet',
-        }, {
-          group = vim.api.nvim_create_augroup('barbecue.updater', {}),
-          callback = function()
-            require('barbecue.ui').update()
-          end,
-        })
       '';
     }
 
@@ -451,8 +438,6 @@
               }
               if fn then
                 original_bind(mode, key, fn, opts, desc)
-              else
-                vim.notify_once(string.format('Unknown binding for key: %s', key), vim.log.levels.WARN)
               end
             end
 
