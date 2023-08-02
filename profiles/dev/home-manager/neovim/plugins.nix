@@ -1,9 +1,15 @@
-moduleArgs@{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   programs.neovim.plugins = with pkgs.vimPlugins; [
+    # Show key completion
     {
-      # Show key completion
+      plugin = vim-startuptime;
+      type = "lua";
+      # Use the wrapped neovim to measure startup time
+      config = "vim.g.startuptime_exe_path = [[${config.home.profileDirectory}/bin/nvim]]";
+    }
+    {
       plugin = which-key-nvim;
       type = "lua";
       config = ''
@@ -76,7 +82,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
       config = ''
         require('nvim-autopairs').setup {
           check_ts = true,
-          disable_filetype = { 'TelescopePrompt', 'NvimTree', 'startify', 'terminal', 'coc-explorer' }
+          disable_filetype = default_excluded_filetypes,
         }
       '';
     }
@@ -113,9 +119,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
       plugin = diffview-nvim;
       type = "lua";
       config = ''
-        require('diffview').setup {
-
-        }
+        require('diffview').setup { }
       '';
     }
     {
@@ -148,7 +152,6 @@ moduleArgs@{ config, lib, pkgs, ... }:
       plugin = gitsigns-nvim;
       type = "lua";
       config = ''
-        -- TODO: setup keybinds
         local gs = require('gitsigns')
         gs.setup {
           on_attach = function(bufnr)
@@ -240,158 +243,6 @@ moduleArgs@{ config, lib, pkgs, ... }:
       '';
     }
 
-    # Jump to matching keyword, supercharged %
-    vim-matchup
-
-    plenary-nvim
-    {
-      plugin = sqlite-lua;
-      type = "lua";
-      config = ''
-        vim.g.sqlite_clib_path = [[${lib.getLib pkgs.sqlite}/lib/libsqlite3${pkgs.hostPlatform.extensions.sharedLibrary}]]
-      '';
-    }
-
-    {
-      plugin = workspaces-nvim;
-      type = "lua";
-      config = ''
-        require('workspaces').setup {
-          cd_type = 'tab',
-        }
-      '';
-    }
-
-    # telescope-project-nvim
-    telescope-frecency-nvim
-    telescope-fzy-native-nvim
-    telescope-fzf-native-nvim
-    telescope-file-browser-nvim
-    telescope-zoxide
-    {
-      plugin = telescope-nvim;
-      type = "lua";
-      config = ''
-        local ts = require('telescope')
-        local actions = require('telescope.actions')
-        local fb_actions = ts.extensions.file_browser.actions
-        local builtins = require('telescope.builtin')
-        local hastrouble, trouble = pcall(require, 'trouble.providers.telescope')
-        -- local themes = require('telescope.themes')
-
-        ts.setup {
-          defaults = {
-            layout_strategy = 'horizontal',
-            mappings = {
-              i = {
-                ["<esc>"] = actions.close,
-                ["<C-g>"] = actions.close,
-                ["<C-e>"] = hastrouble and trouble.open_with_trouble or nil,
-              },
-              n = {
-                ["<esc>"] = actions.close,
-                ["<C-g>"] = actions.close,
-                ["<C-e>"] = hastrouble and trouble.open_with_trouble or nil,
-              },
-            },
-          },
-          extensions = {
-            fzf = {
-              fuzzy = true,
-              override_generic_sorter = false,
-              override_file_sorter = true,
-              case_mode = "smart_case",
-            },
-            fzy_native = {
-              override_generic_sorter = false,
-              override_file_sorter = true,
-            },
-            project = {
-              display_type = 'full',
-              base_dirs = {
-                {'~/dev', max_depth = 3},
-              },
-            },
-            file_browser = {
-              hijack_netrw = false,
-              mappings = {
-                i = {
-                  -- Match completions behavior of accepting with tab
-                  ["<Tab>"] = actions.select_default,
-                  ["<C-e>"] = fb_actions.create_from_prompt,
-                },
-                n = {
-                  ["<C-e>"] = fb_actions.create_from_prompt,
-                },
-              },
-            },
-          },
-          pickers = {
-            buffers = {
-              sort_lastused = true,
-              sort_mru = true,
-              theme = "dropdown",
-              previewer = false,
-            },
-            find_files = {
-              theme = "dropdown",
-            },
-            spell_suggest = {
-              theme = "cursor"
-            },
-          },
-        }
-
-        ts.load_extension('fzy_native')
-        -- ts.load_extension('fzf')
-        ts.load_extension('frecency')
-        -- ts.load_extension('project')
-        ts.load_extension('file_browser')
-        ts.load_extension('notify')
-        ts.load_extension('zoxide')
-        ts.load_extension('workspaces')
-
-        local opts = { silent = true }
-
-        bind('n', '<space><space>', builtins.git_files, opts, 'Find file in project')
-        bind('n', '<leader>.',
-          function() ts.extensions.file_browser.file_browser({ cwd = vim.fn.expand('%:p:h'), select_buffer = true, }) end,
-          opts,
-          'Find file in current directory')
-
-        for _, v in pairs({',', 'b,', 'bi'}) do
-          bind('n', '<leader>'..v, builtins.buffers, opts, 'Find buffer')
-        end
-
-        -- List spelling suggestions
-        bind('n', '<leader>si', builtins.spell_suggest, opts, 'Show spelling suggestions')
-        bind('n', 'z=', builtins.spell_suggest, opts, 'Show spelling suggestions')
-        -- List recent files
-        bind('n', '<leader>fr', builtins.oldfiles, opts, 'Find recent files')
-        -- List most open files
-        bind('n', '<leader>fF', ts.extensions.frecency.frecency, opts, 'List most opened files')
-        -- bind('n', '<leader>pp', ts.extensions.project.project, opts)
-        bind('n', '<leader>pp', ts.extensions.workspaces.workspaces, opts, 'List projects')
-
-        -- Finding things
-        bind('n', '<leader>ss', builtins.current_buffer_fuzzy_find, opts, 'Search in current buffer')
-        bind('n', '<leader>sp', builtins.live_grep, opts, 'Search word in current project')
-        -- bind('n', '<leader>sd', function() builtins. end,)
-
-        -- List registers
-        bind('n', '<leader>ir', builtins.registers, opts, 'List registers')
-
-        --
-        autocmd('User', {
-          group = myCommandGroup,
-          pattern = 'TelescopePreviewerLoaded',
-          callback = function()
-            vim.opt_local.wrap = true
-          end,
-        })
-      '';
-    }
-
     {
       plugin = FTerm-nvim;
       type = "lua";
@@ -405,10 +256,9 @@ moduleArgs@{ config, lib, pkgs, ... }:
       '';
     }
   ]
-  ++ lib.optional (config.profiles.dev.wakatime.enable) {
+  ++ lib.optional (config.profiles.dev.wakatime.enable) (config.lib.neovim.lazy {
     plugin = vim-wakatime;
     type = "lua";
-    optional = true;
     config = ''
       -- WakaTime CLI path
       vim.g.wakatime_OverrideCommandPrefix = [[${pkgs.wakatime}/bin/wakatime]]
@@ -417,5 +267,5 @@ moduleArgs@{ config, lib, pkgs, ... }:
         vim.cmd([[packadd vim-wakatime]])
       end
     '';
-  };
+  });
 }

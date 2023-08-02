@@ -3,8 +3,6 @@ moduleArgs@{ config, lib, pkgs, inputs, ... }:
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
 
-  dummy = pkgs.runCommandLocal "dummy" { } "mkdir $out";
-
   shellAliases = rec {
     # The `-s` or `--remote` flag has to be specified last
     # The `mktemp -u` flag will not create the file (otherwise neovim will refuse to replace it)
@@ -28,7 +26,9 @@ let
 in
 {
   imports = [
+    ./utils.nix
     ./plugins.nix
+    ./telescope.nix
     ./lsp.nix
     ./ui.nix
     ./cmp.nix
@@ -64,12 +64,12 @@ in
     # Configuration that is set at the beginning of my configuration!
     plugins = lib.mkMerge [
       (lib.mkBefore [{
-        plugin = dummy;
+        plugin = config.lib.dummyPackage;
         type = "lua";
         config = import ./init.lua.nix { };
       }])
       (lib.mkAfter [{
-        plugin = dummy;
+        plugin = config.lib.dummyPackage;
         type = "lua";
         config = ''
           -- neovim-remote setup

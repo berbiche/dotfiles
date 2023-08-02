@@ -1,5 +1,7 @@
 {...}:
 ''
+-- Compile everything to start faster
+vim.loader.enable()
 
 local function bind(mode, l, r, opts, desc, bufnr)
   if type(opts) == 'string' then
@@ -24,11 +26,13 @@ local cmd = vim.cmd
 local autocmd = vim.api.nvim_create_autocmd
 local myCommandGroup = vim.api.nvim_create_augroup('init.lua', {})
 
-local default_excluded_filetypes = { 'TelescopePrompt', 'NvimTree', 'startify', 'terminal', }
+local default_excluded_filetypes = { 'TelescopePrompt', 'NvimTree', 'startify', 'terminal' }
 
 -- Disable netrw before any other settings
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+-- I use vim-matchup
+vim.g.loaded_matchit = 1
 
 -- Default settings
 vim.opt.compatible = false
@@ -161,9 +165,9 @@ autocmd({'FocusGained'}, {
 -- Close certain buffer types with only 'q'
 autocmd({'FileType'}, {
   group = myCommandGroup,
-  pattern = {'help', 'checkhealth', 'qf', 'man'},
-  callback = function()
-    bind({'n', 'v', 's', 'o'}, 'q', '<cmd>Sayonara<cr>', { buffer = true, silent = true }, 'Close buffer')
+  pattern = {'help', 'checkhealth', 'qf', 'man', 'startuptime'},
+  callback = function(ev)
+    bind({'n', 'v', 's', 'o'}, 'q', '<cmd>Sayonara<cr>', { buffer = ev.buf, silent = true }, 'Close buffer')
   end,
 })
 
@@ -192,6 +196,8 @@ vim.api.nvim_set_hl(0, 'EndOfBuffer', {fg = 'bg'})
 
 -- Remove Ex mode keybind
 bind('n', 'Q', ''')
+bind('c', '<M-Q>', ''')
+bind('c', '<M-q>', ''')
 
 -- Keep selection after indenting in Visual mode
 bind('v', '<', '<gv')
@@ -205,11 +211,6 @@ bind('n', 'gp', [['`['.strpart(getregtype(), 0, 1).'`]']],
   'Select pasted text'
 )
 -- Buffer management
-autocmd({'VimEnter'}, {
-  callback = function()
-    bind({'n', 'v'}, '<leader>b', ''', {buffer = true})
-  end,
-})
 bind('n', '<leader>bn', ':bnext<CR>', 'Next buffer')
 bind('n', '<leader>bp', ':bprevious<CR>', 'Previous buffer')
 bind('n', '<leader>bN', ':enew<CR>', 'New buffer')

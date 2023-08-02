@@ -3,6 +3,19 @@
 {
   # Languages and LSP
   programs.neovim.plugins = with pkgs.vimPlugins; [
+    {
+      plugin = SchemaStore-nvim;
+      type = "lua";
+      config = "";
+    }
+    # Jump to matching keyword, supercharged %
+    {
+      plugin = vim-matchup;
+      type = "lua";
+      config = ''
+        vim.g.matchup_matchparen_offscreen = { method = 'popup' }
+      '';
+    }
     lspkind-nvim
     lsp_signature-nvim
     nvim-ts-rainbow2
@@ -28,6 +41,7 @@
             lsp_interop = { enable = true, },
           },
           indent = { enable = true, },
+          -- With vim-matchup
           matchup = { enable = true, },
           -- With nvim-autopairs
           autopairs = { enable = true, },
@@ -70,7 +84,7 @@
         vim.diagnostic.config({ virtual_text = false })
 
         -- Display diagnostics only when hovering
-        vim.api.nvim_create_autocmd('CursorHold', {
+        autocmd('CursorHold', {
           pattern = '*',
           callback = function ()
             local bufnr, _ = vim.diagnostic.open_float(nil, {focus = false, scope='cursor'})
@@ -183,7 +197,12 @@
         lsp.yamlls.setup {
           on_attach = on_attach_trouble,
           capabilities = capabilities,
-          -- settings = { yaml = { schemas = { ["https://..."] } } },
+          settings = {
+            yaml = {
+              schemaStore = { enable = false, url = ''' },
+              schemas = require('schemastore').yaml.schemas(),
+            },
+          },
         }
         -- JSON
         lsp.jsonls.setup {
@@ -192,6 +211,7 @@
           settings = {
             json = {
               schemas = require('schemastore').json.schemas(),
+              validate = { enable = true },
             }
           }
         }
@@ -212,7 +232,7 @@
           capabilities = capabilities,
         }
         -- Diagnostic-ls
-        lsp.diagnosticls.setup { }
+        -- lsp.diagnosticls.setup { }
       '';
     }
 
@@ -271,9 +291,6 @@
           },
         })
       '';
-    }
-    {
-      plugin = SchemaStore-nvim;
     }
   ];
 }

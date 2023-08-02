@@ -1,34 +1,17 @@
-moduleArgs@{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   programs.neovim.plugins = with pkgs.vimPlugins; lib.mkMerge [
     (lib.mkOrder 5 [
       ### THEMES ###
-      gruvbox-nvim
       {
-        plugin = sonokai; # theme
-        type = "lua";
-        optional = true;
-        config = ''
-          vim.g.sonokai_style = 'maia'
-          vim.g.sonokai_enable_italic = 1
-          vim.g.sonokai_transparent_background = 0
-
-          -- Attemps to create a directory in /nix/store/...-sonokai/after
-          -- Obviously this doesn't work!
-          vim.g.sonokai_better_performance = 0
-
-          -- vim.cmd.colorscheme('sonokai')
-        '';
-      }
-      {
-        plugin = poimandres-nvim;
+        plugin = nvim-base16;
         type = "lua";
         config = ''
-          require('poimandres').setup {
-            disable_italics = true,
-          }
-          vim.cmd.colorscheme('poimandres')
+          require('base16-colorscheme').setup(
+            'tomorrow-night-eighties',
+            { telescope_borders = true, }
+          )
         '';
       }
     ])
@@ -73,7 +56,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
         require("indent_blankline").setup {
           use_treesitter = true,
           show_current_context = false,
-          filetype_exclude = {'help', 'startify'},
+          filetype_exclude = default_excluded_filetypes,
           buftype_exclude = {'terminal', 'startify'},
         }
       '';
@@ -98,6 +81,8 @@ moduleArgs@{ config, lib, pkgs, ... }:
         vim.g.startify_files_number = 10
         vim.g.startify_session_autoload = 0
         vim.g.startify_relative_path = 0
+        -- Disable changing to the file's directory
+        vim.g.startify_change_to_dir = 0
 
         vim.g.startify_custom_header = {}
         vim.g.startify_custom_footer = {}
@@ -110,8 +95,11 @@ moduleArgs@{ config, lib, pkgs, ... }:
           { type = 'commands',  header = {'   Commands'} },
         }
 
-        vim.g.startify_skiplist = { 'COMMIT_EDITMSG', '^/nix/store', }
-        vim.g.startify_bookmarks = {{ D = '~/dotfiles' }, { I = '~/dev/infra/infrastructure', }},
+        vim.g.startify_skiplist = { 'COMMIT_EDITMSG', '^/nix/store', '^/tmp', '^/private/var/tmp/', '^/run', }
+        vim.g.startify_bookmarks = {
+          { D = '~/dotfiles' },
+          { I = '~/dev/infra/infrastructure', },
+        }
 
         autocmd({'User'}, {
           group = myCommandGroup,
@@ -120,9 +108,9 @@ moduleArgs@{ config, lib, pkgs, ... }:
         })
 
         -- Save the current session
-        bind('n', '<leader>qS', '<cmd>SSave', {desc = 'Save the current session'})
+        bind('n', '<leader>qS', '<cmd>SSave', 'Save the current session')
         -- Load a session
-        bind('n', '<leader>qL', '<cmd>SLoad', {desc = 'Load a previous session'})
+        bind('n', '<leader>qL', '<cmd>SLoad', 'Load a previous session')
 
         -- Open Startify when it's the last remaining buffer
         if vim.g.vscode == nil then
@@ -155,6 +143,46 @@ moduleArgs@{ config, lib, pkgs, ... }:
             end,
           })
         end
+
+        -- Open nvim-tree automatically
+        autocmd('User', {
+          group = myCommandGroup,
+          nested = true,
+          pattern = 'StartifyBufferOpened',
+          callback = function(ev)
+            local nvim_tree = require('nvim-tree.api')
+            if not nvim_tree.tree.is_visible() then
+              nvim_tree.tree.open()
+              -- Unfocus
+              vim.cmd('noautocmd wincmd p')
+            end
+          end,
+        })
+
+        -- Automatically close when its last buffer/window
+        autocmd('QuitPre', {
+          group = myCommandGroup,
+          callback = function()
+            local tree_wins = {}
+            local floating_wins = {}
+            local wins = vim.api.nvim_list_wins()
+            for _, w in ipairs(wins) do
+              local bufname = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(w))
+              if bufname:match('NvimTree_') ~= nil then
+                table.insert(tree_wins, w)
+              end
+              if vim.api.nvim_win_get_config(w).relative ~= ''' then
+                table.insert(floating_wins, w)
+              end
+            end
+            -- If only one window with only nvim-tree then quit
+            if 1 == #wins - #floating_wins - #tree_wins then
+              for _, w in ipairs(tree_wins) do
+                vim.api.nvim_win_close(w, true)
+              end
+            end
+          end,
+        })
       '';
     }
     {
@@ -182,9 +210,8 @@ moduleArgs@{ config, lib, pkgs, ... }:
       config = ''
         require("lualine").setup {
           options = {
-            disabled_filetypes = { 'TelescopePrompt', 'NvimTree', 'startify', 'terminal', 'coc-explorer' },
-            -- theme = 'sonokai',
-            theme = 'poimandres',
+            disabled_filetypes = default_excluded_filetypes,
+            theme = 'base16',
           },
           sections = {
             lualine_b = { 'branch', 'diagnostics', 'filename', },
@@ -194,6 +221,10 @@ moduleArgs@{ config, lib, pkgs, ... }:
           inactive_sections = {
             lualine_b = { 'diff', },
             lualine_y = { 'progress', },
+          },
+          extensions = {
+            'nvim-tree',
+            'trouble',
           },
         }
       '';
@@ -205,7 +236,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
       type = "lua";
       config = ''
         require('tabby.tabline').use_preset('active_wins_at_tail', {
-          nerdfont = true, -- whether use nerdfont
+          nerdfont = true,
           tab_name = {
             -- name_fallback = function(tabid)
             --   return 'Fallback name'
@@ -242,10 +273,8 @@ moduleArgs@{ config, lib, pkgs, ... }:
 
         local function delete_other_buffers(wipeout)
           local current_bufnr = vim.api.nvim_get_current_buf()
-          local buffer_list = vim.fn.tabpagebuflist(vim.api.nvim_get_current_tabpage())
-          if type(buffer_list) == 'table' then
-            table.remove(buffer_list, current_bufnr)
-          end
+          local buffer_list = vim.api.nvim_list_bufs()
+          table.remove(buffer_list, current_bufnr)
           if wipeout then
             mbuf.wipeout(buffer_list)
           else
@@ -365,6 +394,21 @@ moduleArgs@{ config, lib, pkgs, ... }:
           end)
         end
 
+        local function open_tree(find_file)
+          local cwd = require('neogit').get_repo().state.git_root or '''
+          local opts = { focus = false }
+          if cwd ~= ''' then
+            opts['path'] = cwd
+            opts['update_root'] = true
+          end
+          if find_file then
+            opts = vim.tbl_extend('force', opts, { open = true, })
+            api.tree.find_file(opts)
+          else
+            api.tree.toggle(opts)
+          end
+        end
+
         require('nvim-tree').setup {
           git = {
             enable = true,
@@ -393,7 +437,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
           update_focused_file = {
             enable = true,
             update_root = false,
-            ignore_list = {'startify', 'dashboard'},
+            ignore_list = {'startify', 'dashboard', },
           },
 
           -- Attach keybinds
@@ -484,10 +528,8 @@ moduleArgs@{ config, lib, pkgs, ... }:
 
         local opts = { silent = true }
 
-        bind('n', '<leader>op', api.tree.toggle, opts, 'Open file tree')
-        bind('n', '<leader>oP', function()
-          api.tree.find_file({ open = true, update_root = false, })
-        end, opts, 'Focus current file in file tree')
+        bind('n', '<leader>op', function() open_tree(false) end, opts, 'Open file tree')
+        bind('n', '<leader>oP', function() open_tree(true) end, opts, 'Focus current file in file tree')
       '';
     }
 
@@ -532,7 +574,7 @@ moduleArgs@{ config, lib, pkgs, ... }:
 
     # Neovide specific settings
     {
-      plugin = pkgs.runCommandLocal "dummy" { } "mkdir $out";
+      plugin = config.lib.dummyPackage;
       type = "lua";
       config = ''
         if vim.g.neovide then
