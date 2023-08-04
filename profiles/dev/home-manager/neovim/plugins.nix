@@ -9,38 +9,6 @@
       # Use the wrapped neovim to measure startup time
       config = "vim.g.startuptime_exe_path = [[${config.home.profileDirectory}/bin/nvim]]";
     }
-    {
-      plugin = which-key-nvim;
-      type = "lua";
-      config = ''
-        local wk = require('which-key')
-        wk.setup {
-          marks = true,
-          registers = true,
-          spelling = { enabled = false, },
-          key_labels = {
-            ['<space>'] = 'SPC',
-          },
-          trigggers = {},
-          window = {
-            border = 'single'
-          },
-        }
-
-        wk.register({
-          ["<leader>'"] = { name = '+marks' },
-          ['<leader>b'] = { name = '+buffer' },
-          ['<leader>f'] = { name = '+file' },
-          ['<leader>g'] = { name = '+git' },
-          ['<leader>l'] = { name = '+lsp' },
-          ['<leader>o'] = { name = '+open' },
-          ['<leader>p'] = { name = '+project' },
-          ['<leader>q'] = { name = '+session' },
-          ['<leader>w'] = { name = '+window' },
-          ['<leader>x'] = { name = '+diagnostics' },
-        })
-      '';
-    }
     vim-repeat
     vim-indent-object
     vim-sensible
@@ -257,6 +225,43 @@
 
         local opts = { silent = true }
         bind('n', '<space>of', require('FTerm').toggle, opts, 'Open floating terminal')
+      '';
+    }
+
+    {
+      plugin = bufdelete-nvim;
+      type = "lua";
+      config = ''
+        local mbuf = require('bufdelete')
+
+        local function delete_other_buffers(wipeout)
+          local current_bufnr = vim.api.nvim_get_current_buf()
+          local buffer_list = vim.api.nvim_list_bufs()
+          table.remove(buffer_list, current_bufnr)
+          if wipeout then
+            mbuf.wipeout(buffer_list)
+          else
+            mbuf.bufdelete(buffer_list)
+          end
+        end
+
+        local function delete_current_buffer(wipeout)
+          local bufnr = vim.api.nvim_get_current_buf()
+          if wipeout then
+            mbuf.wipeout(bufnr)
+          else
+            mbuf.bufdelete(bufnr)
+          end
+        end
+
+        local opts = {silent = true}
+        -- for i=1,9 do
+        --   bind('n', '<A-' .. i .. '>', '<cmd>BufferGoto ' .. i .. '<CR>', opts, 'Focus buffer ' .. i)
+        -- end
+        bind('n', '<leader>bd', delete_current_buffer, opts, 'Close buffer')
+        bind('n', '<leader>bD', function() delete_current_buffer(true) end, opts, 'Wipeout buffer')
+        bind('n', '<leader>bo', delete_other_buffers, opts, 'Close other buffers')
+        bind('n', '<leader>bO', function() delete_other_buffers(true) end, opts, 'Wipeout other buffers')
       '';
     }
   ]
