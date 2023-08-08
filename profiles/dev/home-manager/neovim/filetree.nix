@@ -111,7 +111,7 @@
           update_focused_file = {
             enable = true,
             update_root = false,
-            ignore_list = {'startify', 'dashboard', },
+            ignore_list = {'startify', 'dashboard', 'qf', 'Trouble'},
           },
 
           -- Attach keybinds
@@ -152,8 +152,8 @@
             bind('n', '<C-p>', 'k', 'Previous item')
             bind('n', 'u', api.node.navigate.parent, 'Go to parent')
             bind('n', 'H', api.tree.change_root_to_parent, 'Change root to parent folder')
-            bind('n', '<A-j>', api.node.navigate.sibling.next, 'Next Sibling')
-            bind('n', '<A-k>', api.node.navigate.sibling.prev, 'Previous Sibling')
+            bind('n', '<M-j>', api.node.navigate.sibling.next, 'Next Sibling')
+            bind('n', '<M-k>', api.node.navigate.sibling.prev, 'Previous Sibling')
 
             -- Copying and other operations
             bind('n', 'ya', api.fs.copy.absolute_path, 'Copy absolute path')

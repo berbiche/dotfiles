@@ -26,7 +26,7 @@ local cmd = vim.cmd
 local autocmd = vim.api.nvim_create_autocmd
 local myCommandGroup = vim.api.nvim_create_augroup('init.lua', {})
 
-local default_excluded_filetypes = { 'TelescopePrompt', 'NvimTree', 'startify', 'terminal' }
+local default_excluded_filetypes = { 'TelescopePrompt', 'NvimTree', 'startify', 'terminal', 'Trouble', 'qf' }
 
 -- Disable netrw before any other settings
 vim.g.loaded_netrw = 1
@@ -56,7 +56,7 @@ vim.opt.termencoding = 'utf-8'
 vim.opt.updatetime = 100
 
 vim.g.mapleader = ' '
-vim.g.maplocalleader = ','
+-- vim.g.maplocalleader = ','
 
 -- Use visual bell
 vim.opt.visualbell = true
@@ -156,6 +156,15 @@ autocmd({'FileType'}, {
   end,
 })
 
+-- Set the right commentstring type for json5 files
+autocmd({'FileType'}, {
+  group = myCommandGroup,
+  pattern = 'json5',
+  callback = function()
+    vim.opt_local.commentstring = '// %s'
+  end,
+})
+
 -- Check if file has changed on buffer focus
 autocmd({'FocusGained'}, {
   group = myCommandGroup,
@@ -219,12 +228,12 @@ bind('n', '<leader>qq', '<cmd>quitall<CR>', 'Quit neovim')
 bind('n', '<leader>qQ', '<cmd>quitall!<CR>', 'Forcefully quit neovim')
 
 -- Move line below/above
-bind('n', '<A-j>', ':m .+1<CR>==', 'Move line below')
-bind('n', '<A-k>', ':m .-2<CR>', 'Move line above')
-bind('i', '<A-j>', '<Esc>:m .+1<CR>==gi', 'Move line below')
-bind('i', '<A-k>', '<Esc>:m .-2<CR>==gi', 'Move line above')
-bind('v', '<A-j>', [[:m '>+1<CR>gv=gv]], 'Move line below')
-bind('v', '<A-k>', [[:m '<-2<CR>gv=gv]], 'Move line above')
+bind('n', '<M-j>', ':m .+1<CR>==', 'Move line below')
+bind('n', '<M-k>', ':m .-2<CR>', 'Move line above')
+bind('i', '<M-j>', '<Esc>:m .+1<CR>==gi', 'Move line below')
+bind('i', '<M-k>', '<Esc>:m .-2<CR>==gi', 'Move line above')
+bind('v', '<M-j>', [[:m '>+1<CR>gv=gv]], 'Move line below')
+bind('v', '<M-k>', [[:m '<-2<CR>gv=gv]], 'Move line above')
 
 -- Command mode mappings
 bind('c', '<C-a>', '<Home>', 'Go to beginning of line')

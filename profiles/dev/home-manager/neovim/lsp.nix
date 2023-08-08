@@ -8,12 +8,28 @@
       type = "lua";
       config = "";
     }
-    # Jump to matching keyword, supercharged %
     {
+      # Jump to matching keyword, supercharged %
       plugin = vim-matchup;
       type = "lua";
       config = ''
         vim.g.matchup_matchparen_offscreen = { method = 'popup' }
+      '';
+    }
+    {
+      plugin = vim-illuminate;
+      type = "lua";
+      config = ''
+        -- tbl_flatten does a shallow copy of the table :)
+        local ft = vim.tbl_flatten(default_excluded_filetypes)
+        table.insert(ft, 'NeogitStatus')
+
+        require('illuminate').configure {
+          providers = { 'lsp', 'treesitter' },
+          filetypes_denylist = ft,
+          -- Don't highlight in files with more than 10k lines
+          large_file_cutoff = 10000,
+        }
       '';
     }
     lspkind-nvim
@@ -21,11 +37,15 @@
     nvim-ts-rainbow2
     nvim-ts-context-commentstring
     nvim-treesitter-endwise
-    # Language/grammar parser with multiple practical functionalities
+    nvim-treesitter-textobjects
     {
+      # Language/grammar parser with multiple practical functionalities
       plugin = nvim-treesitter.withAllGrammars;
       type = "lua";
+      # TODO: https://github.com/ghostbuster91/nvim-next#treesitter-text-objects
       config = ''
+        local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
+
         require('nvim-treesitter.configs').setup {
           highlight = {
             enable = true,
@@ -35,18 +55,65 @@
               return ok and stats and stats.size > max_file_size
             end,
           },
+
           incremental_selection = { enable = true, },
+
+          indent = { enable = true, },
+
           textobjects = {
             enable = true,
-            lsp_interop = { enable = true, },
+            -- lsp_interop = { enable = true, },
+            select = {
+              enable = true,
+              -- Don't jump to next object
+              lookahead = false,
+              -- Include preceding and succeeding whitespace
+              include_surrounding_whitespace = false,
+              keymaps = {
+                -- You can use the capture groups defined in textobjects.scm
+                ['af'] = {query = '@function.outer', desc = 'Select outer function'},
+                ['if'] = {query = '@function.inner', desc = 'Select inner function'},
+                ['ac'] = {query = '@class.outer', desc = 'Select outer class'},
+                ['ia'] = {query = '@parameter.inner', desc = 'Select inner argument'},
+                ['aa'] = {query = '@parameter.outer', desc = 'Select outer argument'},
+                ['ic'] = {query = '@class.inner', desc = 'Select inner part of a class region'},
+              },
+              selection_modes = {
+                ['@parameter.outer'] = 'v',
+                ['@function.outer'] = 'V',
+                ['@class.outer'] = '<C-v>',
+              },
+              lsp_interop = {enable = true},
+            },
+            move = {
+              enable = true,
+              set_jumps = true,
+              goto_next_start = {
+                [']a'] = {query = '@parameter.inner', desc = 'Next argument'},
+                [']M'] = {query = '@function.outer', desc = 'Jump to next function'},
+              },
+              goto_previous_start = {
+                ['[a'] = {query = '@parameter.inner', desc = 'Previous argument'},
+                ['[m'] = {query = '@function.outer', desc = 'Jump to beginning of function'},
+              },
+              goto_previous_end = {
+                ['[M'] = {query = '@function.outer', desc = 'Jump to previous function'},
+              },
+              goto_next_end = {
+                [']m'] = {query = '@function.outer', desc = 'Jump to end of function'},
+              },
+            },
           },
-          indent = { enable = true, },
+
           -- With vim-matchup
           matchup = { enable = true, },
+
           -- With nvim-autopairs
           autopairs = { enable = true, },
+
           -- With nvim-treesitter-endwise
           endwise = { enable = true, },
+
           -- With nvim-ts-rainbow
           rainbow = {
             enable = true,
@@ -70,30 +137,70 @@
       '';
     }
     {
+      # Show preview for jump-to definition/implementation/reference
+      plugin = glance-nvim;
+      type = "lua";
+      # TODO: Override LSP keybinds to use Glance
+      config = ''
+        local glance = require('glance')
+        local actions = glance.actions
+
+        glance.setup {
+          border = {
+            enable = true,
+          },
+          mappings = {
+            list = {
+              ['<C-n>'] = actions.next,
+              ['<C-p>'] = actions.previous,
+            },
+          },
+        }
+      '';
+    }
+    {
       plugin = nvim-lspconfig;
       type = "lua";
       config = ''
         local lsp = require('lspconfig')
         local lspkind = require('lspkind')
         local cmp_lsp = require('cmp_nvim_lsp')
+        local glance_actions = require('glance').actions
         local hasnavic, navic = pcall(require, 'nvim-navic')
+
+        local next_integrations = require("nvim-next.integrations")
+        local nndiag = next_integrations.diagnostic()
 
         cmp_lsp.setup()
         lspkind.init()
 
-        vim.diagnostic.config({ virtual_text = false })
+        -- cmp-lsp capabilities
+        local capabilities = cmp_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-        -- Display diagnostics only when hovering
-        autocmd('CursorHold', {
-          pattern = '*',
-          callback = function ()
-            local bufnr, _ = vim.diagnostic.open_float(nil, {focus = false, scope='cursor'})
-            -- The buffer should not be listed...
-            if bufnr ~= nil then
-              -- vim.bo[bufnr].buflisted = false
-            end
-          end
-        })
+        -- Display a border around floating popups
+        vim.diagnostic.config({ virtual_text = false, float = { border = 'rounded' }, })
+        -- Same for these handlers
+        local handlers = {
+          ["textDocument/hover"] =  vim.lsp.with(vim.lsp.handlers.hover, {border = 'rounded'}),
+          ["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = 'rounded'}),
+        }
+
+        local function attach_autocmd(buffer)
+          -- Display diagnostics when "hovering"
+          vim.api.nvim_create_autocmd('CursorHold', {
+            buffer = buffer,
+            group = myCommandGroup,
+            callback = function ()
+              vim.diagnostic.open_float(nil, {
+                focusable = false,
+                close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
+                prefix = ' ',
+                scope = 'cursor',
+                source = 'if_many',
+              })
+            end,
+          })
+        end
 
         local function on_attach(client, bufnr)
           local map = {
@@ -107,21 +214,45 @@
             ['<leader>lr'] = {vim.lsp.buf.rename, 'Rename'},
             ['<leader>lt'] = {vim.lsp.buf.type_definition, 'Type definition'},
             ['K'] = {vim.lsp.buf.hover, 'Lookup documentation'},
-            ['ga'] = {vim.lsp.buf.code_action, 'Code action', true},
-            ['gd'] = {vim.lsp.buf.definition, 'Code definition'},
-            ['gD'] = {vim.lsp.buf.declaration, 'Code declaration'},
-            ['gr'] = {vim.lsp.buf.references, 'Code references'},
-            ['[d'] = {vim.diagnostic.goto_prev, 'Previous diagnostic'},
-            [']d'] = {vim.diagnostic.goto_next, 'Next diagnostic'},
+            ['ga'] = {
+              client.server_capabilities.codeActionProvider
+                and vim.lsp.buf.code_action,
+              'Code action',
+              true
+            },
+            -- ['gd'] = {vim.lsp.buf.definition, 'Code definition'},
+            -- ['gD'] = {vim.lsp.buf.declaration, 'Code declaration'},
+            -- ['gr'] = {vim.lsp.buf.references, 'Code references'},
+            ['gd'] = {
+              function() glance_actions.open('definitions') end,
+              'Code definition'
+            },
+            ['gD'] = {
+              client.server_capabilities.declarationProvider
+                and function() glance_actions.open('implementations') end,
+              'Code declaration'
+            },
+            ['gr'] = {
+              function() glance_actions.open('references') end,
+              'Code references'
+            },
+            ['[d'] = {nndiag.goto_prev, 'Previous diagnostic'},
+            [']d'] = {nndiag.goto_next, 'Next diagnostic'},
           }
 
           for key, value in pairs(map) do
-            if value[1] ~= nil then
+            if value[1] then
               local mode = value[3] and {'n', 'v'} or {'n'}
               bind(mode, key, function() value[1]() end, { buffer = bufnr }, value[2])
             else
+              local mode = value[3] and {'n', 'v'} or {'n'}
+              bind(mode, key, '<nop>', { buffer = bufnr })
               -- Debugging
-              vim.notify_once(string.format('Action does not exist for mapping %s -> %s', key, vim.inspect(value)), vim.log.levels.DEBUG, {title = 'LSP'})
+              vim.notify_once(
+                ('Action does not exist for mapping %s -> %s'):format(key, vim.inspect(value)),
+                vim.log.levels.DEBUG,
+                {title = 'LSP'}
+              )
             end
           end
 
@@ -130,109 +261,88 @@
               navic.attach(client, bufnr)
             end
           end
+
+          attach_autocmd(bufnr)
         end
 
         local function on_attach_trouble(client, bufnr)
           on_attach(client, bufnr)
           require('lsp_signature').on_attach({
             bind = true,
-            handler_opts = { border = 'single', },
+            handler_opts = { border = 'rounded', },
           }, bufnr)
         end
 
-        -- cmp-lsp capabilities
-        local capabilities = cmp_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities())
-
-        -- C/CPP
-        lsp.clangd.setup {
-          default_config = {
-            cmd = {
-              'clangd', '--background-index', '--pch-storage=memory', '--clang-tidy', '--suggest-missing-includes',
+        local servers = {
+          -- Bash
+          'bashls',
+          -- C/CPP
+          clangd = {
+            default_config = {
+              cmd = {
+                'clangd', '--background-index', '--pch-storage=memory', '--clang-tidy', '--suggest-missing-includes',
+              },
+              filetypes = { 'c', },
+              root_dir = lsp.util.root_pattern('compile_commands.json', 'compile_flags.txt', '.git'),
             },
-            filetypes = { 'c', },
-            root_dir = lsp.util.root_pattern('compile_commands.json', 'compile_flags.txt', '.git'),
           },
-          on_attach = on_attach_trouble,
-          capabilities = capabilities,
-        }
-        -- Erlang
-        lsp.erlangls.setup {
-          on_attach = on_attach_trouble,
-          capabilities = capabilities,
-        }
-        -- Python
-        lsp.pyright.setup {
-          on_attach = on_attach_trouble,
-          capabilities = capabilities,
-        }
-        -- Rust
-        lsp.rust_analyzer.setup {
-          on_attach = on_attach_trouble,
-          capabilities = capabilities,
-        }
-        -- Go
-        lsp.gopls.setup {
-          on_attach = on_attach_trouble,
-          capabilities = capabilities,
-        }
-        -- Terraform
-        lsp.terraformls.setup {
-          on_attach = on_attach_trouble,
-          capabilities = capabilities,
-        }
-        -- Docker
-        lsp.dockerls.setup {
-          on_attach = on_attach_trouble,
-          capabilities = capabilities,
-        }
-        -- Zig
-        lsp.zls.setup {
-          on_attach = function(a, bufnr)
-            -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-            on_attach_trouble(a, bufnr)
-          end,
-          capabilities = capabilities,
-        }
-        -- YAML
-        lsp.yamlls.setup {
-          on_attach = on_attach_trouble,
-          capabilities = capabilities,
-          settings = {
-            yaml = {
-              schemaStore = { enable = false, url = ''' },
-              schemas = require('schemastore').yaml.schemas(),
+          -- diagnosticls = false,
+          -- Docker
+          'dockerls',
+          -- Erlang
+          'erlangls',
+          -- Elixir
+          elixirls = {
+            cmd = { [[${pkgs.elixir_ls}/lib/language_server.sh]] },
+          },
+          -- Go
+          'gopls',
+          -- JSON
+          jsonls = {
+            settings = {
+              json = {
+                schemas = require('schemastore').json.schemas(),
+                validate = { enable = true },
+              },
+            },
+          },
+          -- Nix
+          'nil_ls',
+          -- Python
+          'pyright',
+          -- Rust
+          'rust_analyzer',
+          -- Terraform
+          'terraformls',
+          -- Zig
+          'zls',
+          -- YAML
+          yamlls = {
+            settings = {
+              yaml = {
+                schemaStore = { enable = false, url = ''' },
+                schemas = require('schemastore').yaml.schemas(),
+              },
             },
           },
         }
-        -- JSON
-        lsp.jsonls.setup {
-          on_attach = on_attach_trouble,
-          capabilities = capabilities,
-          settings = {
-            json = {
-              schemas = require('schemastore').json.schemas(),
-              validate = { enable = true },
-            }
+        for server, override in pairs(servers) do
+          local opts = {
+            on_attach = on_attach_trouble,
+            capabilities = capabilities,
+            handlers = handlers,
           }
-        }
-        --[[ Vim
-        lsp.vimls.setup {
-          on_attach = on_attach,
-          capabilities = capabilities,
-        }
-        --]]
-        -- Nix
-        lsp.nil_ls.setup {
-          on_attach = on_attach_trouble,
-          capabilities = capabilities,
-        }
-        -- Bash
-        lsp.bashls.setup {
-          on_attach = on_attach,
-          capabilities = capabilities,
-        }
-        -- Diagnostic-ls
-        -- lsp.diagnosticls.setup { }
+          if type(server) == 'number' then
+            server = override
+            override = {}
+          end
+          if type(override) == 'boolean' and not override then
+            lsp[server].setup()
+          else
+            opts = vim.tbl_extend('force', opts, override)
+            lsp[server].setup(opts)
+          end
+        end
       '';
     }
 
@@ -264,11 +374,11 @@
 
         local opts = { silent = true, }
 
-        bind('n', '<leader>xx', '<cmd>TroubleToggle<cr>', opts, 'Toggle Trouble')
-        bind('n', '<leader>xw', '<cmd>TroubleToggle workspace_diagnostics<cr>', opts, 'Toggle workspace diagnostics')
-        bind('n', '<leader>xd', '<cmd>TroubleToggle document_diagnostics<cr>', opts, 'Toggle document diagnostics')
-        bind('n', '<leader>xl', '<cmd>TroubleToggle loclist<cr>', opts, 'Toggle loclist')
-        bind('n', '<leader>xq', '<cmd>TroubleToggle quickfix<cr>', opts, 'Toggle quickfix')
+        bind('n', '<leader>dx', '<cmd>TroubleToggle<cr>', opts, 'Toggle Trouble')
+        bind('n', '<leader>dw', '<cmd>TroubleToggle workspace_diagnostics<cr>', opts, 'Toggle workspace diagnostics')
+        bind('n', '<leader>dd', '<cmd>TroubleToggle document_diagnostics<cr>', opts, 'Toggle document diagnostics')
+        bind('n', '<leader>dl', '<cmd>TroubleToggle loclist<cr>', opts, 'Toggle loclist')
+        bind('n', '<leader>dq', '<cmd>TroubleToggle quickfix<cr>', opts, 'Toggle quickfix')
       '';
     }
 

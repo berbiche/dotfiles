@@ -21,6 +21,31 @@
       '';
     }
 
+    {
+      # Enables something like occur-mode in Emacs with the quickfix buffer
+      plugin = replacer-nvim;
+      type = "lua";
+      config = ''
+        require('replacer').setup {
+          rename_files = false,
+          save_on_write = false,
+        }
+        autocmd({'FileType'}, {
+          group = myCommandGroup,
+          pattern = {'qf'},
+          callback = function(ev)
+            local replacer = require('replacer')
+            local opts = { silent = true, buffer = ev.buf }
+            bind('n', '<C-c>', ''')
+            bind('n', '<C-c><C-l>', function() replacer.run() end, opts, 'Occur-mode')
+            bind('n', '<C-c><C-c>', function() replacer.save({rename_files = false}) end, opts, 'Save')
+            bind('n', '<C-c><C-k>', '<cmd>Sayonara<cr>' , opts, 'Close')
+          end,
+        })
+      '';
+    }
+
+
     # telescope-project-nvim
     telescope-frecency-nvim
     telescope-fzf-native-nvim
@@ -28,6 +53,7 @@
     {
       plugin = telescope-nvim;
       type = "lua";
+      # TODO: Make smart_send_to_qflist support entering 'occur-mode' (replacer.nvim)
       config = ''
         local ts = require('telescope')
         local themes = require('telescope.themes')
@@ -44,11 +70,15 @@
               i = {
                 ['<esc>'] = actions.close,
                 ['<C-g>'] = actions.close,
+                -- ['<C-c>'] = nil,
+                ['<C-q>'] = actions.smart_send_to_qflist + actions.open_qflist,
                 ['<C-e>'] = hastrouble and trouble.open_with_trouble or nil,
               },
               n = {
                 ['<esc>'] = actions.close,
                 ['<C-g>'] = actions.close,
+                -- ['<C-c>'] = nil,
+                ['<C-q>'] = actions.smart_send_to_qflist + actions.open_qflist,
                 ['<C-e>'] = hastrouble and trouble.open_with_trouble or nil,
               },
             },
@@ -76,6 +106,7 @@
                 },
                 n = {
                   ['<C-e>'] = fb_actions.create_from_prompt,
+                  ['<C-h>'] = fb_actions.toggle_hidden,
                 },
               },
             },
@@ -132,7 +163,6 @@
 
         for _, v in pairs({',', 'b,', 'bi'}) do
           bind('n', '<leader>'..v, function()
-            -- _G.list_buffers(themes.get_dropdown())
             builtins.buffers(themes.get_ivy({
               -- Scope to "current project"
               cwd = require('neogit').get_repo().state.git_root or ''',

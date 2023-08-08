@@ -1,8 +1,6 @@
-moduleArgs@{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
-  inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
-
   shellAliases = rec {
     # The `-s` or `--remote` flag has to be specified last
     # The `mktemp -u` flag will not create the file (otherwise neovim will refuse to replace it)
@@ -33,6 +31,7 @@ in
     ./ui.nix
     ./cmp.nix
     ./filetree.nix
+    ./neovide.nix
   ];
 
   home.packages = [
@@ -85,7 +84,7 @@ in
               end,
             })
 
-            local function DisconnectClients()
+            _G.DisconnectClients = function()
               if vim.b.nvr then
                 for _, client in pairs(vim.b.nvr) do
                   -- Call rpcnotify to exit the client
@@ -98,6 +97,9 @@ in
           end
         '';
       }])
+
+      # TODO: things to remember
+      # https://github.com/rhysd/clever-f.vim
     ];
   };
 }

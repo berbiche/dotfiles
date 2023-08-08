@@ -8,6 +8,7 @@
         plugin = nvim-base16;
         type = "lua";
         config = ''
+          vim.g.colors_name = 'base16-tomorrow-night-eighties'
           require('base16-colorscheme').setup(
             'tomorrow-night-eighties',
             { telescope_borders = true, }
@@ -49,7 +50,7 @@
 
 
     {
-      # Displays vertical line for the indentation level
+      # Displays vertical line for the indentation level (indent guides)
       plugin = indent-blankline-nvim;
       type = "lua";
       config = ''
@@ -57,7 +58,7 @@
           use_treesitter = true,
           show_current_context = false,
           filetype_exclude = default_excluded_filetypes,
-          buftype_exclude = {'terminal', 'startify'},
+          buftype_exclude = {'terminal', 'prompt'},
         }
       '';
     }
@@ -81,16 +82,19 @@
           spelling = { enabled = false, },
           key_labels = {
             ['<space>'] = 'SPC',
+            ['<leader>'] = 'SPC',
           },
           trigggers = {},
           window = {
-            border = 'single'
+            border = 'rounded'
           },
         }
 
         wk.register({
+          ['<leader>']  = { name = '+leader' },
           ["<leader>'"] = { name = '+marks' },
           ['<leader>b'] = { name = '+buffer' },
+          ['<leader>d'] = { name = '+diagnostics' },
           ['<leader>f'] = { name = '+file' },
           ['<leader>g'] = { name = '+git' },
           ['<leader>l'] = { name = '+lsp' },
@@ -98,7 +102,6 @@
           ['<leader>p'] = { name = '+project' },
           ['<leader>q'] = { name = '+session' },
           ['<leader>w'] = { name = '+window' },
-          ['<leader>x'] = { name = '+diagnostics' },
         })
       '';
     }
@@ -142,9 +145,9 @@
         })
 
         -- Save the current session
-        bind('n', '<leader>qS', '<cmd>SSave', 'Save the current session')
+        bind('n', '<leader>qS', '<cmd>SSave<cr>', 'Save the current session')
         -- Load a session
-        bind('n', '<leader>qL', '<cmd>SLoad', 'Load a previous session')
+        bind('n', '<leader>qL', '<cmd>SLoad<cr>', 'Load a previous session')
 
         -- Open Startify when there's no other buffer in the current tab
         if vim.g.vscode == nil then
@@ -227,8 +230,8 @@
       '';
     }
 
-    # Statusbar
     {
+      # Statusbar
       plugin = fidget-nvim;
       type = "lua";
       config = ''
@@ -243,6 +246,9 @@
       type = "lua";
       config = ''
         local colors = require('base16-colorscheme').colors
+        local ignored_fts = vim.tbl_flatten(default_excluded_filetypes)
+        table.insert(ignored_fts, 'Glance')
+
         require('lualine').setup {
           options = {
             theme = 'base16',
@@ -250,7 +256,7 @@
             disabled_filetypes = {
               statusline = {'startify'},
             },
-            ignore_focus = default_excluded_filetypes,
+            ignore_focus = ignored_fts,
           },
           sections = {
             lualine_a = { 'mode', },
@@ -275,8 +281,8 @@
       '';
     }
 
-    # Tab-bar
     {
+      # Tab-bar
       plugin = tabby-nvim;
       type = "lua";
       config = ''
@@ -329,33 +335,6 @@
           },
         }
         bind('n', '<leader>wz', function() twilight.toggle() end, 'Toggle presentation mode')
-      '';
-    }
-
-
-    # Neovide specific settings
-    {
-      plugin = config.lib.dummyPackage;
-      type = "lua";
-      config = ''
-        if vim.g.neovide then
-          vim.o.guifont = 'Source Code Pro:h14'
-          vim.g.neovide_input_use_logo = false
-          vim.g.neovide_input_macos_alt_is_meta = true
-          vim.g.neovide_cursor_animation_length = 0
-
-          vim.g.neovide_scale_factor = 1.0
-
-          -- Keybinds
-          local opts = { silent = true, }
-
-          bind('n', '<C-ScrollWheelUp', function()
-            vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.10
-          end, opts, 'Increase font size')
-          bind('n', '<C-ScrollWheelDown', function()
-            vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.10
-          end, opts, 'Decrease font size')
-        end
       '';
     }
     ]

@@ -48,6 +48,7 @@
                   snippy = '[Snippet]',
                   luasnip = '[LuaSnip]',
                   nvim_lua = '[Lua]',
+                  nvim_lsp_signature_help = '[Signature]',
                 })[entry.source.name] or ('[%s]'):format(entry.source.name)
 
                 vim_item.abbr = entry:get_insert_text()

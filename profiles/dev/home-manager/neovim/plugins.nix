@@ -9,13 +9,30 @@
       # Use the wrapped neovim to measure startup time
       config = "vim.g.startuptime_exe_path = [[${config.home.profileDirectory}/bin/nvim]]";
     }
-    vim-repeat
-    vim-indent-object
+
+    # Sensible default vim/nvim options
     vim-sensible
-    # Indent using tabs or spaces based on the content of the file
-    vim-sleuth
-    # Close buffers/windows/etc.
-    vim-sayonara
+
+    # Allows repeating most commands with '.' correctly
+    vim-repeat
+    {
+      # Allows repeating motions with ',' and ';'
+      plugin = nvim-next;
+      type = "lua";
+      config = ''
+        local nvim_next_builtins = require('nvim-next.builtins')
+        require('nvim-next').setup {
+          default_mappings = {
+            repeat_style = 'directional',
+          },
+          items = {
+            nvim_next_builtins.f,
+            nvim_next_builtins.t,
+          }
+        }
+      '';
+    }
+
     {
       plugin = vim-sandwich; # replaces vim-surround
       type = "lua";
@@ -26,25 +43,30 @@
         ]])
       '';
     }
+
+    # Indent using tabs or spaces based on the content of the file
+    vim-sleuth
+    # Indent object based on indentation level
+    vim-indent-object
     {
+      # Indent line to surrounding indentation
       plugin = intellitab-nvim;
       type = "lua";
       config = ''
         bind('i', '<Tab>', function() require('intellitab').indent() end, 'Indent')
       '';
     }
-    # editorconfig support for indent style, etc.
-    editorconfig-nvim
-    # Highlight TODO:, FIXME, HACK etc.
+
     {
+      # Highlight TODO:, FIXME, HACK etc.
       plugin = todo-comments-nvim;
       type = "lua";
       config = ''
         require('todo-comments').setup {}
       '';
     }
-    # Automatically close pairs of symbols like {}, [], (), "", etc.
     {
+      # Automatically close pairs of symbols like {}, [], (), "", etc.
       plugin = nvim-autopairs;
       type = "lua";
       config = ''
@@ -55,29 +77,23 @@
       '';
     }
     {
-      plugin = vim-illuminate;
-      type = "lua";
-      config = ''
-        require('illuminate').configure {
-          providers = { 'lsp', 'treesitter' },
-          filetypes_denylist = default_excluded_filetypes,
-        }
-      '';
-    }
-    {
       # Shows a key sequence to jump to a word/letter letter after typing 's<letter><letter>'
       plugin = leap-nvim;
       type = "lua";
       config = ''
         -- Hijacks {x, X}
         require('leap').add_default_mappings()
+        -- require('leap').add_repeat_mappings(';', ',', {
+        --   relative_directions = true,
+        --   modes = {'n', 'x', 'o'}
+        -- })
       '';
     }
     {
       plugin = searchbox-nvim;
       type = "lua";
       config = ''
-        bind({'n', 'v'}, '<leader>sh', require('searchbox').replace, 'Replace word')
+        bind({'n', 'v'}, '<leader>sh', function() require('searchbox').replace() end, 'Replace word')
         bind('x', '<leader>sh', function() require('searchbox').replace({visual_mode = true}) end, 'Replace word')
       '';
     }
@@ -87,7 +103,11 @@
       plugin = diffview-nvim;
       type = "lua";
       config = ''
-        require('diffview').setup { }
+        require('diffview').setup {
+          default_args = {
+            DiffviewOpen = { "--imply-local" },
+          }
+        }
       '';
     }
     {
@@ -121,22 +141,28 @@
       type = "lua";
       config = ''
         local gs = require('gitsigns')
+        local move = require('nvim-next.move')
         gs.setup {
           on_attach = function(bufnr)
             local bind = buf_bind(bufnr)
 
-            -- Navigation
-            bind('n', ']c', function()
-              if vim.wo.diff then return ']c' end
-              vim.schedule(function() gs.next_hunk() end)
-              return '<Ignore>'
-            end, {expr=true}, 'Next hunk')
-
-            bind('n', '[c', function()
+            local prev_hunk = function()
               if vim.wo.diff then return '[c' end
               vim.schedule(function() gs.prev_hunk() end)
               return '<Ignore>'
-            end, {expr=true}, 'Previous hunk')
+            end
+
+            local next_hunk = function()
+              if vim.wo.diff then return ']c' end
+              vim.schedule(function() gs.next_hunk() end)
+              return '<Ignore>'
+            end
+
+            local prev_hunk_wrapper, next_hunk_wrapper = move.make_repeatable_pair(prev_hunk, next_hunk)
+
+            -- Navigation
+            bind('n', '[c', prev_hunk_wrapper, {expr = true}, 'Previous hunk')
+            bind('n', ']c', next_hunk_wrapper, {expr = true}, 'Next hunk')
 
             -- Actions
             -- bind('n', '<leader>gb', function() gs.blame_line{full=true} end, 'Blame line')
@@ -211,7 +237,7 @@
              opts,
              'Search word backward')
 
-        bind('n', '<localleader>l', ':nohlsearch<CR>', opts, 'Disable search highlighting')
+        bind('n', '<C-l>', ':nohlsearch<CR>', opts, 'Disable search highlighting')
       '';
     }
 
@@ -228,6 +254,8 @@
       '';
     }
 
+    # Close buffers/windows/etc.
+    vim-sayonara
     {
       plugin = bufdelete-nvim;
       type = "lua";
@@ -255,9 +283,6 @@
         end
 
         local opts = {silent = true}
-        -- for i=1,9 do
-        --   bind('n', '<A-' .. i .. '>', '<cmd>BufferGoto ' .. i .. '<CR>', opts, 'Focus buffer ' .. i)
-        -- end
         bind('n', '<leader>bd', delete_current_buffer, opts, 'Close buffer')
         bind('n', '<leader>bD', function() delete_current_buffer(true) end, opts, 'Wipeout buffer')
         bind('n', '<leader>bo', delete_other_buffers, opts, 'Close other buffers')
