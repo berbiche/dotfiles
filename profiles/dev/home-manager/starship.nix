@@ -8,6 +8,7 @@
     settings = {
       add_newline = false;
       format = lib.concatStrings [
+        "$time"
         "$nix_shell"
         # "$username:$hostname "
         "$hostname"
@@ -44,12 +45,11 @@
         # "gcloud"
         # "env_var"
         # "crystal"
-        "$cmd_duration"
+        # "$cmd_duration"
         # "custom"
         # "$line_break"
         "$jobs"
         # "$directory"
-        # "$time"
         "$status"
         "$character"
       ];
