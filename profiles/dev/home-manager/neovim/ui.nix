@@ -1,22 +1,10 @@
 { config, lib, pkgs, ... }:
 
 {
-  programs.neovim.plugins = with pkgs.vimPlugins; lib.mkMerge [
-    (lib.mkOrder 5 [
-      ### THEMES ###
-      {
-        plugin = nvim-base16;
-        type = "lua";
-        config = ''
-          vim.g.colors_name = 'base16-tomorrow-night-eighties'
-          require('base16-colorscheme').setup(
-            'tomorrow-night-eighties',
-            { telescope_borders = true, }
-          )
-        '';
-      }
-    ])
-    [
+  programs.neovim.plugins = with pkgs.vimPlugins; [
+    ### THEMES ###
+    nvim-base16
+
     # Toolkits
     popup-nvim
     nui-nvim
@@ -28,8 +16,6 @@
         require('dressing').setup {}
       '';
     }
-
-
 
     {
       # Notifications display
@@ -71,154 +57,12 @@
       '';
     }
 
-    {
-      plugin = which-key-nvim;
-      type = "lua";
-      config = ''
-        local wk = require('which-key')
-        wk.setup {
-          marks = true,
-          registers = true,
-          spelling = { enabled = false, },
-          key_labels = {
-            ['<space>'] = 'SPC',
-            ['<leader>'] = 'SPC',
-          },
-          trigggers = {},
-          window = {
-            border = 'rounded'
-          },
-        }
-
-        wk.register({
-          ['<leader>']  = { name = '+leader' },
-          ["<leader>'"] = { name = '+marks' },
-          ['<leader>b'] = { name = '+buffer' },
-          ['<leader>d'] = { name = '+diagnostics' },
-          ['<leader>f'] = { name = '+file' },
-          ['<leader>g'] = { name = '+git' },
-          ['<leader>l'] = { name = '+lsp' },
-          ['<leader>o'] = { name = '+open' },
-          ['<leader>p'] = { name = '+project' },
-          ['<leader>q'] = { name = '+session' },
-          ['<leader>w'] = { name = '+window' },
-        })
-      '';
-    }
-
-
-
+    # Show keymaps when pressing <leader> after a small delay
+    which-key-nvim
 
     # Start screen
-    {
-      plugin = vim-startify;
-      type = "lua";
-      config = ''
-        vim.g.startify_use_env = 0
-        vim.g.startify_files_number = 10
-        vim.g.startify_session_autoload = 0
-        vim.g.startify_relative_path = 0
-        -- Disable changing to the file's directory
-        vim.g.startify_change_to_dir = 0
+    vim-startify
 
-        vim.g.startify_custom_header = {}
-        vim.g.startify_custom_footer = {}
-
-        vim.g.startify_lists = {
-          { type = 'dir',       header = {'   MRU ' .. vim.fn.getcwd()} },
-          { type = 'files',     header = {'   MRU'} },
-          { type = 'sessions',  header = {'   Sessions'} },
-          { type = 'bookmarks', header = {'   Bookmarks'} },
-          { type = 'commands',  header = {'   Commands'} },
-        }
-
-        vim.g.startify_skiplist = { 'COMMIT_EDITMSG', '^/nix/store', '^/tmp', '^/private/var/tmp/', '^/run', }
-        vim.g.startify_bookmarks = {
-          { D = '~/dotfiles' },
-          { I = '~/dev/infra/infrastructure', },
-        }
-
-        autocmd({'User'}, {
-          group = myCommandGroup,
-          pattern = 'Startified',
-          command = 'setlocal cursorline',
-        })
-
-        -- Save the current session
-        bind('n', '<leader>qS', '<cmd>SSave<cr>', 'Save the current session')
-        -- Load a session
-        bind('n', '<leader>qL', '<cmd>SLoad<cr>', 'Load a previous session')
-
-        -- Open Startify when there's no other buffer in the current tab
-        if vim.g.vscode == nil then
-          autocmd({'BufDelete'}, {
-            group = myCommandGroup,
-            callback = function()
-              -- List of buffers in the windows of the current tab
-              local buffer_list = vim.fn.tabpagebuflist()
-
-              -- Find whether all buffers are listed
-              -- A new list is created for debugging purposes
-              local filtered_bl = {}
-              for _, bufnr in ipairs(buffer_list) do
-                -- Somehow, the diagnostics hover buffer prevents Startify from opening...
-                if vim.api.nvim_buf_is_valid(bufnr) and vim.bo[bufnr].buflisted then
-                  table.insert(filtered_bl, bufnr)
-                end
-              end
-
-              local bufnr = vim.api.nvim_get_current_buf()
-              local is_nameless_buffer = vim.api.nvim_buf_get_name(bufnr) == '''
-              local is_buftype_empty = vim.api.nvim_buf_get_option(bufnr, 'buftype') == '''
-
-              if #filtered_bl > 0 and is_nameless_buffer and is_buftype_empty then
-                vim.cmd.Startify()
-              end
-            end,
-          })
-        end
-
-        -- Open nvim-tree automatically
-        autocmd('User', {
-          group = myCommandGroup,
-          nested = true,
-          pattern = 'StartifyBufferOpened',
-          callback = function(ev)
-            local nvim_tree = require('nvim-tree.api')
-            if not nvim_tree.tree.is_visible() then
-              nvim_tree.tree.open()
-              -- Unfocus
-              vim.cmd('noautocmd wincmd p')
-            end
-          end,
-        })
-
-        -- Automatically close when its last buffer/window
-        autocmd('QuitPre', {
-          group = myCommandGroup,
-          callback = function()
-            local tree_wins = {}
-            local floating_wins = {}
-            local wins = vim.api.nvim_list_wins()
-            for _, w in ipairs(wins) do
-              local bufname = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(w))
-              if bufname:match('NvimTree_') ~= nil then
-                table.insert(tree_wins, w)
-              end
-              if vim.api.nvim_win_get_config(w).relative ~= ''' then
-                table.insert(floating_wins, w)
-              end
-            end
-            -- If only one window with only nvim-tree then quit
-            if 1 == #wins - #floating_wins - #tree_wins then
-              for _, w in ipairs(tree_wins) do
-                vim.api.nvim_win_close(w, true)
-              end
-            end
-          end,
-        })
-      '';
-    }
     {
       ## For telescope
       plugin = nvim-web-devicons;
@@ -230,14 +74,9 @@
       '';
     }
 
-    {
-      # Statusbar
-      plugin = fidget-nvim;
-      type = "lua";
-      config = ''
-        require('fidget').setup {}
-      '';
-    }
+    # Display LSP server messages as virtual text in bottom
+    fidget-nvim
+
     # Breadcrumbs (fil d'Ariane) for the winbar
     nvim-navic
     {
@@ -300,6 +139,8 @@
       '';
     }
 
+    nvim-tree-lua
+
     # Highlight css colors such as #ccc
     {
       plugin = nvim-colorizer-lua;
@@ -334,9 +175,80 @@
             inactive = true,
           },
         }
-        bind('n', '<leader>wz', function() twilight.toggle() end, 'Toggle presentation mode')
       '';
     }
-    ]
+
+    {
+      # Like emacs' magit
+      plugin = neogit;
+      type = "lua";
+      config = ''
+        require('neogit').setup {
+          use_magit_keybindings = true,
+          auto_show_console = false,
+          console_timeout = 5000,
+          disable_commit_confirmation = true,
+          disable_insert_on_commit = false,
+          integrations = {
+            diffview = true,
+            telescope = true,
+          },
+          sections = {
+            recent = {
+              folded = false,
+            },
+          },
+        }
+      '';
+    }
+    {
+      plugin = gitsigns-nvim;
+      type = "lua";
+      config = ''
+        local gs = require('gitsigns')
+        local move = require('nvim-next.move')
+        gs.setup {
+          on_attach = function(bufnr)
+            local bind = buf_bind(bufnr)
+
+            local prev_hunk = function()
+              if vim.wo.diff then return '[c' end
+              vim.schedule(function() gs.prev_hunk() end)
+              return '<Ignore>'
+            end
+
+            local next_hunk = function()
+              if vim.wo.diff then return ']c' end
+              vim.schedule(function() gs.next_hunk() end)
+              return '<Ignore>'
+            end
+
+            local prev_hunk_wrapper, next_hunk_wrapper = move.make_repeatable_pair(prev_hunk, next_hunk)
+
+            -- Navigation
+            bind('n', '[c', prev_hunk_wrapper, {expr = true}, 'Previous hunk')
+            bind('n', ']c', next_hunk_wrapper, {expr = true}, 'Next hunk')
+
+            -- Actions
+            -- bind('n', '<leader>gb', function() gs.blame_line{full=true} end, 'Blame line')
+            bind('n', '<leader>gb', gs.toggle_current_line_blame, 'Toggle blame line')
+            bind('n', '<leader>gd', gs.diffthis, 'Diff')
+            bind('n', '<leader>gD', function() gs.diffthis('~') end, 'Diff ???')
+            bind('n', '<leader>gp', gs.preview_hunk, 'Preview hunk')
+            bind('n', '<leader>gr', gs.reset_hunk, 'Reset hunk')
+            bind('v', '<leader>gr', function() gs.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end, 'Reset hunk')
+            bind('n', '<leader>gR', gs.reset_buffer, 'Reset buffer')
+            bind('n', '<leader>gs', gs.stage_hunk, 'Stage hunk')
+            bind('v', '<leader>gs', function() gs.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end, 'Stage hunk')
+            bind('n', '<leader>gS', gs.stage_buffer, 'Stage buffer')
+            bind('n', '<leader>gu', gs.undo_stage_hunk, 'Unstage hunk')
+            bind('n', '<leader>gx', gs.toggle_deleted, 'Toggle deleted??')
+
+            -- Text object
+            bind({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+          end,
+        }
+      '';
+    }
   ];
 }

@@ -1,0 +1,287 @@
+{ ... }: ''
+local wk = require('which-key')
+local mbuf = require('bufdelete')
+local ts = require('telescope')
+local builtins = require('telescope.builtin')
+local themes = require('telescope.themes')
+
+local function wrap(fun, ...)
+  return function()
+    fun(unpack(arg))
+  end
+end
+
+local silent = {silent = true}
+
+wk.setup {
+  marks = true,
+  registers = true,
+  spelling = { enabled = false, },
+  key_labels = {
+    ['<space>'] = 'SPC',
+    ['<leader>'] = 'SPC',
+  },
+  trigggers = {},
+  window = {
+    border = 'rounded'
+  },
+}
+wk.register {
+  ['<leader>']  = { name = '+leader' },
+  ["<leader>'"] = { name = '+marks' },
+  ['<leader>b'] = { name = '+buffer' },
+  ['<leader>d'] = { name = '+diagnostics' },
+  ['<leader>f'] = { name = '+file' },
+  ['<leader>g'] = { name = '+git' },
+  ['<leader>l'] = { name = '+lsp' },
+  ['<leader>o'] = { name = '+open' },
+  ['<leader>p'] = { name = '+project' },
+  ['<leader>q'] = { name = '+session' },
+  ['<leader>w'] = { name = '+window' },
+}
+
+-- Remove Ex mode keybind
+bind('n', 'Q', ''')
+bind('c', '<M-Q>', ''')
+bind('c', '<M-q>', ''')
+
+-- Keep selection after indenting in Visual mode
+bind('v', '<', '<gv')
+bind('v', '>', '>gv')
+
+-- Smart indentation
+bind('i', '<Tab>', wrap(require('intellitab').indent), 'Indent')
+
+bind('n', '[o', 'O<Esc>j', 'Insert line above')
+bind('n', ']o', 'o<Esc>k', 'Insert line below')
+bind('n', 'Y', 'y$', 'Copy till EOL')
+
+bind('n', 'gp',
+  [['`['.strpart(getregtype(), 0, 1).'`]']],
+  { expr = true, },
+  'Select pasted text'
+)
+
+-- Buffer management
+bind('n', '<leader>bn', '<cmd>bnext<CR>', 'Next buffer')
+bind('n', '<leader>bp', '<cmd>bprevious<CR>', 'Previous buffer')
+bind('n', '<leader>bN', '<cmd>enew<CR>', 'New buffer')
+-- Session management
+bind('n', '<leader>qq', '<cmd>quitall<CR>', 'Quit neovim')
+bind('n', '<leader>qQ', '<cmd>quitall!<CR>', 'Forcefully quit neovim')
+
+-- Move line below/above
+bind('n', '<M-j>', ':m .+1<CR>==', 'Move line below')
+bind('n', '<M-k>', ':m .-2<CR>', 'Move line above')
+bind('i', '<M-j>', '<Esc>:m .+1<CR>==gi', 'Move line below')
+bind('i', '<M-k>', '<Esc>:m .-2<CR>==gi', 'Move line above')
+bind('v', '<M-j>', [[:m '>+1<CR>gv=gv]], 'Move line below')
+bind('v', '<M-k>', [[:m '<-2<CR>gv=gv]], 'Move line above')
+
+-- Command mode mappings
+bind('c', '<C-a>', '<Home>', 'Go to beginning of line')
+bind('c', '<C-e>', '<End>', 'Go to end of line')
+bind('c', '<M-BS>', '<C-w>', 'Delete word')
+-- I asked ChatGPT why I need to use -2 and it believes it's because <C-k>
+-- is silently/invisibly inserted
+-- Deletes from char until the end of the line
+bind('c', '<C-k>', [[<C-\>egetcmdline()[:getcmdpos() - 2]<cr>]], 'Delete till end of line')
+
+-- Fix terminal escape char
+bind('t', '<Esc>', [[<C-\><C-n>]])
+bind('n', '<leader>ot', function()
+  cmd[[botright split]]
+  cmd.resize(-10)
+  cmd.terminal()
+end, {silent = true}, 'Open terminal')
+
+
+-- Searching and replacing stuff
+bind({'n', 'v'}, '<leader>sh', wrap(require('searchbox').replace), 'Replace word')
+bind('x', '<leader>sh', wrap(require('searchbox').replace, {visual_mode = true}), 'Replace word')
+
+
+-- Terminal
+bind('n', '<space>of', function()
+  local fterm = require('FTerm')
+  fterm.setup {
+    border = 'rounded',
+  }
+  fterm.toggle()
+end, silent, 'Open floating terminal')
+
+-- Open Neogit
+bind('n', '<leader>gg', wrap(require('neogit').open), silent, 'Open neogit')
+
+-- Trouble
+bind('n', '<leader>dx', '<cmd>TroubleToggle<cr>', silent, 'Toggle Trouble')
+bind('n', '<leader>dw', '<cmd>TroubleToggle workspace_diagnostics<cr>', silent, 'Toggle workspace diagnostics')
+bind('n', '<leader>dd', '<cmd>TroubleToggle document_diagnostics<cr>', silent, 'Toggle document diagnostics')
+bind('n', '<leader>dl', '<cmd>TroubleToggle loclist<cr>', silent, 'Toggle loclist')
+bind('n', '<leader>dq', '<cmd>TroubleToggle quickfix<cr>', silent, 'Toggle quickfix')
+
+
+-- Nvim-tree
+local function open_tree(find_file)
+  local api = require('nvim-tree.api')
+  local cwd = require('neogit').get_repo().state.git_root or '''
+  local opts = { focus = false }
+  if cwd ~= ''' then
+    opts['path'] = cwd
+    opts['update_root'] = true
+  end
+  if find_file then
+    opts = vim.tbl_extend('force', opts, { open = true, })
+    api.tree.find_file(opts)
+  else
+    api.tree.toggle(opts)
+  end
+end
+bind('n', '<leader>op', wrap(open_tree, false), silent, 'Open file tree')
+bind('n', '<leader>oP', wrap(open_tree, true), silent, 'Focus current file in file tree')
+
+-- Require
+bind('n', '<leader>wz', function() require('twilight').toggle() end, 'Toggle presentation mode')
+
+
+-- Save the current session with startify's commands
+-- TODO: use a better session management plugin
+bind('n', '<leader>qS', '<cmd>SSave<cr>', 'Save the current session')
+-- Load a session
+bind('n', '<leader>qL', '<cmd>SLoad<cr>', 'Load a previous session')
+
+
+
+
+-- Buffer management
+local function delete_other_buffers(wipeout)
+  local current_bufnr = vim.api.nvim_get_current_buf()
+  local buffer_list = vim.api.nvim_list_bufs()
+  table.remove(buffer_list, current_bufnr)
+  if wipeout then
+    mbuf.wipeout(buffer_list)
+  else
+    mbuf.bufdelete(buffer_list)
+  end
+end
+
+local function delete_current_buffer(wipeout)
+  local bufnr = vim.api.nvim_get_current_buf()
+  if wipeout then
+    mbuf.wipeout(bufnr)
+  else
+    mbuf.bufdelete(bufnr)
+  end
+end
+
+bind('n', '<leader>bd', wrap(delete_current_buffer), silent, 'Close buffer')
+bind('n', '<leader>bD', wrap(delete_current_buffer, true), silent, 'Wipeout buffer')
+bind('n', '<leader>bo', wrap(delete_other_buffers), silent, 'Close other buffers')
+bind('n', '<leader>bO', wrap(delete_other_buffers, true), silent, 'Wipeout other buffers')
+
+-- Switch to most recently used buffer
+local function switch_to_last_buffer()
+  local last_buffer = vim.fn.bufnr('#')
+  if last_buffer ~= -1 and vim.bo[last_buffer].buflisted then
+    vim.cmd.buffer(last_buffer)
+  else
+    -- If no last accessed buffer or it is unloaded, find the most recently used open buffer
+    local buffer_list = vim.api.nvim_list_bufs()
+    local most_recent_buffer = nil
+    local most_recent_time = 0
+
+    if #buffer_list > 1 then
+      table.remove(buffer_list, vim.api.nvim_get_current_buf())
+    end
+
+    for _, buf in ipairs(buffer_list) do
+      if vim.bo[buf].buflisted then
+        local lastused = vim.fn.getbufinfo(buf).lastused or 0
+        if lastused > most_recent_time then
+          most_recent_buffer = buf
+          most_recent_time = timestamp
+        end
+      end
+    end
+
+    if most_recent_buffer then
+      vim.cmd.buffer(most_recent_buffer)
+    end
+  end
+end
+for _, key in ipairs({';', 'b;'}) do
+  bind('n', '<leader>'..key, wrap(switch_to_last_buffer), 'Switch to last buffer')
+end
+
+
+--- Telescope keybinds
+bind('n', '<space><space>', wrap(builtins.git_files, { show_untracked = true }),
+     silent, 'Find file in project')
+bind('n', '<leader>.', function()
+  local opts = vim.tbl_extend('force', themes.get_ivy(), {
+    cwd = vim.fn.expand('%:p:h'),
+    select_buffer = true,
+    hidden = true
+  })
+  ts.extensions.file_browser.file_browser(opts)
+end, silent, 'Find file in current directory')
+
+for _, v in pairs({',', 'b,', 'bi'}) do
+  bind('n', '<leader>'..v, function()
+    builtins.buffers(themes.get_ivy({
+      -- Scope to "current project"
+      cwd = require('neogit').get_repo().state.git_root or ''',
+      -- Theme settings
+      layout_config = { height = 10, },
+    }))
+  end, silent, 'Find buffer')
+end
+
+-- List spelling suggestions
+bind('n', '<leader>si', wrap(builtins.spell_suggest), silent, 'Show spelling suggestions')
+bind('n', 'z=', wrap(builtins.spell_suggest), silent, 'Show spelling suggestions')
+-- List recent files
+bind('n', '<leader>fr', wrap(builtins.oldfiles), silent, 'Find recent files')
+bind('n', '<leader>fF', function()
+  ts.extensions.frecency.frecency(themes.get_ivy())
+end, silent, 'List most opened files')
+bind('n', '<leader>pp', function()
+  ts.extensions.workspaces.workspaces(themes.get_dropdown())
+end, silent, 'List projects')
+
+-- Finding things
+bind('n', '<leader>ss', wrap(builtins.current_buffer_fuzzy_find), silent, 'Search in current buffer')
+bind('n', '<leader>sp', wrap(builtins.live_grep), silent, 'Search word in current project')
+
+-- List registers
+bind('n', '<leader>ir', wrap(builtins.registers), silent, 'List registers')
+
+
+-- hls-lens
+bind('n', 'n',
+     [[<cmd>execute('normal! ' . v:count1 . 'n')<CR><cmd>lua require('hlslens').start()<CR>]],
+     silent,
+     'Search forward')
+bind('n', 'N',
+     [[<cmd>execute('normal! ' . v:count1 . 'N')<CR><cmd>lua require('hlslens').start()<CR>]],
+     silent,
+     'Search backward')
+bind('n', '*',
+     [[*<cmd>lua require('hlslens').start()<CR>]],
+     silent,
+     'Search word forward')
+bind('n', '#',
+     [[#<cmd>lua require('hlslens').start()<CR>]],
+     silent,
+     'Search word backward')
+bind('n', 'g*',
+     [[g*<cmd>lua require('hlslens').start()<CR>]],
+     silent,
+     'Search word forward')
+bind('n', 'g#',
+     [[g#<cmd>lua require('hlslens').start()<CR>]],
+     silent,
+     'Search word backward')
+
+bind('n', '<C-l>', ':nohlsearch<CR>', silent, 'Disable search highlighting')
+''
