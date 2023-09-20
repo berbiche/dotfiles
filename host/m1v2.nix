@@ -29,7 +29,7 @@ in
     "autoconf" "automake" "libtool"
     "libidn" "pkg-config"
     "msgpack" "tinycdb"
-    "libmaxminddb" "openssl@1.1" "libxslt" "fop"
+    /* "libmaxminddb" */ "openssl@1.1" "libxslt" "fop"
     "kerl"
 
     "pcp"
