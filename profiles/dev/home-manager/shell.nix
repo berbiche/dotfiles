@@ -13,7 +13,7 @@ in
     "...."    = "cd ../../..";
     "....."   = "cd ../../../..";
     e         = "$EDITOR";
-    ls        = "${pkgs.exa}/bin/exa --color=auto --group-directories-first --classify";
+    ls        = "${pkgs.eza}/bin/exa --color=auto --group-directories-first --classify";
     lst       = "${ls} --tree";
     la        = "${ls} --all";
     ll        = "${ls} --all --long --header --group";

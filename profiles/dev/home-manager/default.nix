@@ -47,7 +47,7 @@ in
     dnsutils # dns lookups
     docker-compose # a nice wrapper for docker to manage multiple docker containers (for one-off projects)
     du-dust # du with a tree-like listing and usage graph
-    exa # a better ls with colors, tree support (it has to evaluate the entire file tree unfortunately)
+    eza # a better ls with colors, tree support (it has to evaluate the entire file tree unfortunately)
     fd # find with an easier syntax (though it doesn't replace find entirely)
     fzf # used in scripts as a fuzzy matcher for passed inputs as well as `kill -9 <tab><tab>` completion
     gitFull # contains extra stuff that I don't remember
