@@ -169,40 +169,42 @@ end
 local function on_attach(client, bufnr)
   local map = {
     -- Key -> {function, documentation, whether bind to visual mode}
-    ['<leader>la'] = {vim.lsp.buf.code_action, 'Code action', true},
-    ['<leader>ld'] = {vim.lsp.buf.definition, 'Code definition'},
-    ['<leader>lD'] = {vim.lsp.buf.declaration, 'Code declaration'},
-    ['<leader>le'] = {vim.diagnostic.open_float, 'Open diagnostic'},
-    ['<leader>lf'] = {vim.lsp.buf.format, 'Format'},
-    ['<leader>li'] = {vim.lsp.buf.implementation, 'Code implementation'},
-    ['<leader>lr'] = {vim.lsp.buf.rename, 'Rename'},
-    ['<leader>lt'] = {vim.lsp.buf.type_definition, 'Type definition'},
-    ['K'] = {vim.lsp.buf.hover, 'Lookup documentation'},
-    ['ga'] = {
+    ['<leader>la'] = {
+      -- {vim.lsp.buf.code_action, 'Code action', true},
       client.server_capabilities.codeActionProvider
         and vim.lsp.buf.code_action,
       'Code action',
       true
     },
-    -- ['gd'] = {vim.lsp.buf.definition, 'Code definition'},
-    -- ['gD'] = {vim.lsp.buf.declaration, 'Code declaration'},
-    -- ['gr'] = {vim.lsp.buf.references, 'Code references'},
-    ['gd'] = {
+    ['<leader>ld'] = {
+      -- {vim.lsp.buf.definition, 'Code definition'},
       function() glance_actions.open('definitions') end,
       'Code definition'
     },
-    ['gD'] = {
-      client.server_capabilities.declarationProvider
-        and function() glance_actions.open('implementations') end,
+    ['<leader>lD'] = {
+      -- {vim.lsp.buf.declaration, 'Code declaration'}
+      client.server_capabilities.referenceProvider
+        and function() glance_actions.open('references') end,
       'Code declaration'
     },
-    ['gr'] = {
-      function() glance_actions.open('references') end,
-      'Code references'
+    ['<leader>le'] = {vim.diagnostic.open_float, 'Open diagnostic'},
+    ['<leader>lf'] = {vim.lsp.buf.format, 'Format'},
+    ['<leader>li'] = {
+      -- {vim.lsp.buf.implementation, 'Code implementation'},
+      client.server_capabilities.declarationProvider
+        and function() glance_actions.open('implementations') end,
+      'Code implementation'
     },
+    ['<leader>lr'] = {vim.lsp.buf.rename, 'Rename'},
+    ['<leader>lt'] = {vim.lsp.buf.type_definition, 'Type definition'},
+    ['K'] = {vim.lsp.buf.hover, 'Lookup documentation'},
     ['[d'] = {nndiag.goto_prev, 'Previous diagnostic'},
     [']d'] = {nndiag.goto_next, 'Next diagnostic'},
   }
+  map['ga'] = map['<leader>la']
+  map['gd'] = map['<leader>ld']
+  map['gD'] = map['<leader>lD']
+  map['gI'] = map['<leader>li']
 
   for key, value in pairs(map) do
     if value[1] then
