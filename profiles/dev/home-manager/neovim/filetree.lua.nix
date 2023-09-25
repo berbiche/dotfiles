@@ -30,8 +30,11 @@ local function make_file(new_file)
 
   local err, _ = pa.uv.fs_stat(new_file)
   if err ~= nil then
-    -- Directory exists?
-    return nil
+    -- ENOENT == directory doesn't exist (success case)
+    if type(err) == 'string' and not err:match('ENOENT') then
+      -- Other unknown error
+      return err
+    end
   end
 
   -- It could inherit the shell's umask...
@@ -43,21 +46,27 @@ end
 
 local function create_directory()
   local node = api.tree.get_node_under_cursor()
-  local containing_folder = get_containing_folder()
+  local containing_folder = get_containing_folder(node)
 
   -- See :command-completion for options
   local prompt = { prompt = "Create directory ", default = containing_folder, completion = "dir" }
   vim.ui.input(prompt, function(new_file)
-    local err = make_file(new_file)
-    if err ~= nil then
-      vim.schedule(function()
+    pa.run(function()
+      local err = make_file(new_file)
+      if err ~= nil then
         vim.notify(
-          string.format('Cannot create directory: %s', err),
+          ('Cannot create directory due to error: %s'):format(err),
           vim.log.levels.WARN,
           { title = 'NvimTree' }
         )
-      end)
-    end
+      else
+        vim.notify(
+          'Successfully created directory ' .. vim.inspect(new_file),
+          vim.log.levels.INFO,
+          { title = 'NvimTree' }
+        )
+      end
+    end)
   end)
 end
 
