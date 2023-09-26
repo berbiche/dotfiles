@@ -1,0 +1,18 @@
+% parthenon, work
+
+# Example usage of parthenon
+
+parthenon @bid-request @consent_granted | jq
+
+; -------------------- ;
+
+% parthenon, debugging, work
+
+# Run parthenon against server
+curl -d "$(parthenon @"<athena_schema>" @"<input_request>")" -s -g "<server>"
+
+; Download schema from Athena
+$ athena_schema: echo bid-request
+; server: should be a full url with scheme, port and the right path
+
+; -------------------- ;

@@ -1,0 +1,17 @@
+% fly, work
+
+# Lists stale pipelines in Concourse
+fly -t prod.backend ps --json >pipelines.yml
+gh pr list --base master -s open --repo "adgear/<repo>" --json number >"<file>"
+jq -r -c --slurpfile open_prs "<file>" '($open_prs | .[0] | map("<repo>-pr-" + (.numbe
+| tostring))| sort) as $prs | map(select(.name | contains("<repo>-pr"))) | map(.name) | sort | . - $prs | .[]' pipelines.yml >closed_prs.txt
+xt
+xargs <closed_prs.txt -I{} -n1 -P4 fly -t prod.backend destroy-pipeline -n -p {}
+
+$ repo: echo 'rtb-gateway'
+$ file: mktemp -t "<repo>"
+
+; ---------------------
+
+% fly, work
+
