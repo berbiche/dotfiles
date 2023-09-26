@@ -15,11 +15,14 @@ lib.extend (libfinal: libprev: {
   myLib.filesInDir = directory:
     let
       files = readDir directory;
-      filteredFiles = libprev.filterAttrs (n: v: libprev.hasSuffix "nix" n && n != "default.nix") files;
       toPath = map (x: directory + "/${x}");
     in
       assert isPath directory;
       if pathExists directory then
-        toPath (attrNames filteredFiles)
+        toPath (attrNames files)
       else [];
+
+  # Returns a list of nix files in the directory without recursing (and without `default.nix`)
+  myLib.nixFilesInDir = directory:
+    libprev.filter (n: libprev.hasSuffix "nix" n && n != "default.nix") (libprev.myLib.filesInDir directory);
 })

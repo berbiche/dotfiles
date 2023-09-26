@@ -4,7 +4,7 @@ with lib;
 with builtins;
 
 {
-  imports = if isLinux then myLib.filesInDir ../modules/nixos else myLib.filesInDir ../modules/darwin;
+  imports = if isLinux then myLib.nixFilesInDir ../modules/nixos else myLib.filesInDir ../modules/darwin;
 
   options.my = {
     username = mkOption {
@@ -55,7 +55,7 @@ with builtins;
     my.defaults.file-explorer = mkIf isLinux "${pkgs.cinnamon.nemo}/bin/nemo";
 
     home-manager.sharedModules = [{
-      imports = (myLib.filesInDir ../modules/home-manager) ++ [ ./home-manager-options.nix ];
+      imports = (myLib.nixFilesInDir ../modules/home-manager) ++ [ ./home-manager-options.nix ];
 
       config.my.location = mkForce config.my.location;
       config.my.defaults = mkDefault config.my.defaults;
