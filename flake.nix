@@ -185,13 +185,6 @@
     };
 
     darwinConfigurations = {
-      PC335 = mkDarwinConfig {
-        hostname = "PC335";
-        username = "n.berbiche";
-        platform = "x86_64-darwin";
-        hostConfiguration = ./host/macos.nix;
-        userConfiguration = ./user/nicolas.nix;
-      };
       "AG-PC0211-M" = mkDarwinConfig {
         hostname = "AG-PC0211-M";
         username = "n.berbiche";

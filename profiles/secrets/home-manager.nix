@@ -7,7 +7,7 @@ let
   sopsKeyFile = "${config.xdg.configHome}/sops/age/keys.txt";
 in
 {
-  imports = [ ./ssh.nix ];
+  imports = [ ./ssh.nix ./nix-conf.nix ];
 
   config = lib.mkMerge [
     {

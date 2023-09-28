@@ -24,14 +24,13 @@ let
     nixpkgs.config.allowUnfree = allowUnfree;
     nix = {
       package = pkgs.nix;
-      extraOptions = ''
-        experimental-features = nix-command flakes
-        keep-outputs = true
-        keep-derivations = true
-
+      settings = {
+        experimental-features = ["nix-command" "flakes"];
+        keep-outputs = true;
+        keep-derivations = true;
         # Override the global registry because it should never have existed
-        flake-registry = ${builtins.toFile "flake-registry" (builtins.toJSON { version = 2; flakes = [ ]; })}
-      '';
+        flake-registry = "${builtins.toFile "flake-registry" (builtins.toJSON { version = 2; flakes = [ ]; })}";
+      };
       registry = {
         nixpkgs.flake = inputs.nixpkgs;
         nur = {

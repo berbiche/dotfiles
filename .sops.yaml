@@ -17,7 +17,7 @@ creation_rules:
   - pgp:
     - *mine
     - *mero
-- path_regex: 'secrets/(wakatime|ssh-config).cfg'
+- path_regex: 'secrets/(wakatime|ssh-config|nix-config).cfg'
   key_groups:
   - pgp:
     - *mine
