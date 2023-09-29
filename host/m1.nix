@@ -1,5 +1,8 @@
 { config, pkgs, lib, profiles, ... }:
 
+let
+  availableOnDarwin = lib.meta.availableOn pkgs.stdenv.hostPlatform;
+in
 {
   imports = with profiles; [ base dev programs core-darwin ];
 
@@ -47,8 +50,11 @@
   homebrew.taps = [
     "homebrew/cask-versions"
   ];
-  homebrew.brews = [ ];
+  homebrew.brews = [
+    "bitwarden-cli"
+  ];
   homebrew.casks = [
+    "asix-ax88179"
     "kitty"
     # "gcenx/wine/unofficial-wineskin"
     "spotify"
@@ -63,5 +69,8 @@
 
   my.home = { config, pkgs, osConfig, ... }: {
     home.sessionPath = [ osConfig.homebrew.brewPrefix "/opt/homebrew/sbin" ];
+    home.packages = [
+      pkgs.anki-bin
+    ];
   };
 }
