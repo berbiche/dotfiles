@@ -22,7 +22,7 @@
       plugin = nvim-notify;
       type = "lua";
       config = ''
-        local notify = require("notify")
+        local notify = require('notify')
         notify.setup({
           stages = 'fade',
           render = 'minimal',

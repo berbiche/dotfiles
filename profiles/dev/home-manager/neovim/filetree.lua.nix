@@ -127,6 +127,7 @@ require('nvim-tree').setup {
     -- Opening
     bind('n', '<2-LeftMouse>', api.node.open.edit, 'Open')
     bind('n', '<CR>', api.node.open.edit, 'Open')
+    bind('n', '<Tab>', api.node.open.edit, 'Open')
     bind('n', 'l', api.node.open.edit, 'Open')
     -- Select the window in which to open the buffer
     bind('n', 'op', api.node.open.preview, 'Open: preview')

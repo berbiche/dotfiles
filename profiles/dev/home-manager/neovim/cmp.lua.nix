@@ -70,10 +70,13 @@ cmp.setup {
         end
       end
     end, { 'i', 's', 'c' }),
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-p>'] = cmp.mapping.select_prev_item(),
     ['<C-n>'] = cmp.mapping.select_next_item(),
     ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-c>'] = cmp.mapping.close(),
+    ['<C-c>'] = cmp.mapping.abort(),
+    -- ['<Esc>'] = cmp.mapping.abort(),
   },
   snippet = {
     expand = function(args)
