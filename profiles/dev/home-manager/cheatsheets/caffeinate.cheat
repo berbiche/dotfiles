@@ -1,0 +1,4 @@
+% macos
+
+# Prevent computer from sleeping for infinite amount of time
+caffeinate -diu
