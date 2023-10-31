@@ -1,9 +1,14 @@
 % ngrep, work
 
-# Ngreps on port 8083 for incoming traffic
-sudo ngrep -d lo -W byline -q '' port 8083
+# Ngreps on port 8083 for incoming traffic, captures 5 packets
+sudo ngrep -dlo -n 5 -W byline -q '' 'dst port 8083'
 
 % ngrep, work
 
 # Ngreps on port 8084 for the matching HTTP X-User-Agent header
 sudo ngrep -dlo -Wbyline -qi 'X-User-Agent:' 'dst port 8084'
+
+% ngrep, work
+
+# Ngreps for the first two packets for a specific exchange
+sudo ngrep -dlo -n2 -W byline -qi '/requests/<exchange>' 'dst port 8083'
