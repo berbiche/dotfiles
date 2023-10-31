@@ -40,11 +40,14 @@
       plugin = indent-blankline-nvim;
       type = "lua";
       config = ''
-        require("indent_blankline").setup {
-          use_treesitter = true,
-          show_current_context = false,
-          filetype_exclude = default_excluded_filetypes,
-          buftype_exclude = {'terminal', 'prompt'},
+        require('ibl').setup {
+          scope = {
+            enabled = false,
+          },
+          exclude = {
+            filetypes = default_excluded_filetypes,
+            buftypes = {'terminal', 'prompt'},
+          },
         }
       '';
     }

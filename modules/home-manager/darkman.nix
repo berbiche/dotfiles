@@ -40,6 +40,7 @@ let
     });
 in
 {
+  disabledModules = ["services/darkman.nix"];
   meta.maintainers = [ maintainers.berbiche ];
 
   options.services.darkman = {
