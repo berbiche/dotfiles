@@ -1,5 +1,5 @@
 final: prev: let
-  toPlugin = n: v: prev.vimUtils.buildVimPluginFrom2Nix {
+  toPlugin = n: v: prev.vimUtils.buildVimPlugin {
     pname = n;
     version = "unstable";
     src = v;
