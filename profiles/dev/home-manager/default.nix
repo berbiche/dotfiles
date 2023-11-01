@@ -87,8 +87,6 @@ in
     # I often open repls to test things
     # v Works well with my python alias to "ptipython"
     (python3.withPackages (ps: [ ps.ptpython ps.ipython ]))
-    erlang
-    rebar3
 
   ] ++ lib.optionals isLinux [
     nix-top # status of packages being built

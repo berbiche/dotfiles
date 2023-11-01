@@ -4,7 +4,11 @@
 # Also includes settings related any UI tool performing some LSP task
 # i.e. glance-nvim
 #
-{ pkgs, ... }: ''
+{ pkgs, config, ... }:
+let
+  inherit (config.my.dev) beamPackages;
+in
+''
 
 local lsp = require('lspconfig')
 local lspkind = require('lspkind')
@@ -259,7 +263,7 @@ local servers = {
   'erlangls',
   -- Elixir
   elixirls = {
-    cmd = { [[${pkgs.elixir_ls}/lib/language_server.sh]] },
+    cmd = { [[${beamPackages.elixir-ls}/lib/language_server.sh]] },
   },
   -- Go
   'gopls',
