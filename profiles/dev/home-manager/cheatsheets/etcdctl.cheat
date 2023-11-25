@@ -1,0 +1,32 @@
+% etcdctl, infra
+
+# Get cluster status
+env TERM=xterm-256color oc rsh -n openshift-etcd -c etcdctl "<host>" env -u ETCDCTL_ENDPOINTS etcdctl endpoint status --cluster -w table
+
+$ host: kubectl get pods -n openshift-etcd -l app=etcd -o=jsonpath='{.items[0].metadata.name}'
+; host: etcd-ocp-tqfz5-master-0
+
+; ---------------------
+
+% etcdctl, infra
+
+# Get nodes that are not cluster leader
+env TERM=xterm-256color oc rsh -n openshift-etcd -c etcdctl "<host>" env -u ETCDCTL_ENDPOINTS etcdctl endpoint status --cluster -w json | jq 'map(select(.Status.header.member_id != .Status.leader))'
+
+$ host: kubectl get pods -n openshift-etcd -l app=etcd -o=jsonpath='{.items[0].metadata.name}'
+
+; ---------------------
+
+% etcdctl, infra
+
+# Defrag cluster by starting with non-leader
+env TERM=xterm-256color oc rsh -n openshift-etcd -c etcdctl <host> env -u ETCDCTL_ENDPOINTS etcdctl --command-timeout=30s --endpoints=https://localhost:2379 defrag
+
+$ master:
+$ host: kubectl get pods -n openshift-etcd -l app=etcd -o=jsonpath='{.items[$(@.metadata.name != "<master>")].metadata.name}'
+
+; host: kubectl get pods -n openshift-etcd -l app=etcd -o=jsonpath='{range .items[$(@.metadata.name != "<master>")]}{.metadata.name}{"\n"}{end}'
+
+; ---------------------
+
+

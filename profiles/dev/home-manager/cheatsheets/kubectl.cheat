@@ -1,0 +1,5 @@
+% kubectl, infra
+
+# Approve pending CSR certificates
+
+kubectl get csr | awk '/Pending/ {print $1}' | xargs -I {} kubectl certificate approve {}
