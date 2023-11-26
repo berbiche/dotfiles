@@ -51,7 +51,7 @@ let
     };
 
     # Link nixpkgs path to /run/current-system/nixpkgs
-    system.extraSystemBuilderCmds = ''
+    system.systemBuilderCommands = ''
       ln -s ${lib.escapeShellArg pkgs.path} "$out"/nixpkgs
     '';
 
