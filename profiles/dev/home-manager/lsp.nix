@@ -15,6 +15,12 @@ in
       erlang = pkgs.erlangR26;
       elixir = prev.elixir_1_15;
       elixir-ls = prev.elixir-ls.override { elixir = final.elixir; };
+      # The test suite does not run in parallel and is very slow
+      # ...so just skip it
+      rebar3 = prev.rebar3.overrideAttrs (_drv: {
+        doCheck = false;
+      });
+      rebar3WithPlugins = args: prev.rebar3WithPlugins (args // { rebar3 = final.rebar3; });
     });
 
     # Of course, all of these packages can be overriden by direnv (envrc)
