@@ -1,0 +1,6 @@
+% macos,linux
+
+# Generate QR code from clipboard
+<paste> | qrencode -d 192 -s 10 -o - | kitty +kitten icat
+
+paste: [[ "$(uname -s)" == Darwin ]] && { echo pbpaste; } || { echo "xclip -o sel"; }
