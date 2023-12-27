@@ -45,7 +45,7 @@ in
     ctop # shows running containers (supports docker, mock, runc)
     curl # make advanced http requests, fetch files, etc.
     dnsutils # dns lookups
-    docker-compose # a nice wrapper for docker to manage multiple docker containers (for one-off projects)
+    docker-buildx # a nice wrapper for docker to manage multiple docker containers (for one-off projects)
     du-dust # du with a tree-like listing and usage graph
     eza # a better ls with colors, tree support (it has to evaluate the entire file tree unfortunately)
     fd # find with an easier syntax (though it doesn't replace find entirely)

@@ -1,7 +1,7 @@
 { lib, pkgs, ... }: ''
 
 -- Export proper path to sqlite cli for sqlite-lua
-vim.g.sqlite_clib_path = [[${lib.getLib pkgs.sqlite}/lib/libsqlite3${pkgs.hostPlatform.extensions.sharedLibrary}]]
+vim.g.sqlite_clib_path = [[${lib.getLib pkgs.sqlite}/lib/libsqlite3${pkgs.stdenv.hostPlatform.extensions.sharedLibrary}]]
 
 -- Disable netrw before any other settings
 vim.g.loaded_netrw = 1

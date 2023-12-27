@@ -13,7 +13,7 @@ in
 
   nix.settings.max-jobs = 16;
 
-  environment.systemPackages = [ pkgs.vagrant pkgs.gnupg ];
+  environment.systemPackages = [ pkgs.gnupg ];
 
   system.defaults.loginwindow.LoginwindowText = "Property of Nicolas Berbiche";
 

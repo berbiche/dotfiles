@@ -22,6 +22,11 @@ let
     '');
     n = nvim;
   };
+
+  supportedOn = platform: pkg:
+    if pkg.meta ? platforms && pkg.meta ? badPlatforms
+    then builtins.elem platform pkg.meta.platforms && !builtins.elem platform pkg.meta.badPlatforms
+    else true;
 in
 {
   imports = [
@@ -32,9 +37,8 @@ in
   home.packages = [
     pkgs.fzf
     pkgs.neovim-remote
-    # graphical neovim
-    pkgs.neovide
-  ];
+  ]
+  ++ lib.optional (supportedOn pkgs.stdenv.hostPlatform.system pkgs.neovide) pkgs.neovide;
 
   # programs.neovim.defaultEditor = true;
   home.sessionVariables = {
@@ -267,7 +271,7 @@ in
         lspkind-nvim
         lsp_signature-nvim
         # Highlight nested paranthesis and other block delimiters with different colors
-        nvim-ts-rainbow2
+        rainbow-delimiters-nvim
         nvim-ts-context-commentstring
         # Auto-insert 'end' to specific construct (e.g. `do .. end`)
         nvim-treesitter-endwise
