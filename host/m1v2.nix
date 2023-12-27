@@ -66,6 +66,9 @@ in
         pkgs.vault-bin
         # Yeah...
         pkgs.asdf-vm
+
+        # Work
+        pkgs.parthenon-hs
       ]
       (lib.mkIf (availableOnDarwin pkgs.helm) [
         pkgs.helm
