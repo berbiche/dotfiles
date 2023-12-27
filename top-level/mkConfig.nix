@@ -25,11 +25,12 @@ let
     nix = {
       package = pkgs.nix;
       settings = {
-        experimental-features = ["nix-command" "flakes"];
+        experimental-features = ["nix-command" "flakes" "repl-flake"];
         keep-outputs = true;
         keep-derivations = true;
         # Override the global registry because it should never have existed
-        flake-registry = "${builtins.toFile "flake-registry" (builtins.toJSON { version = 2; flakes = [ ]; })}";
+        flake-registry = "";
+        use-registries = false;
       };
       registry = {
         nixpkgs.flake = inputs.nixpkgs;
