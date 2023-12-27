@@ -11,9 +11,10 @@ in
   };
 
   config = {
-    my.dev.beamPackages = pkgs.beamPackages.extend (_final: prev: {
+    my.dev.beamPackages = pkgs.beamPackages.extend (final: prev: {
       erlang = pkgs.erlangR26;
       elixir = prev.elixir_1_15;
+      elixir-ls = prev.elixir-ls.override { elixir = final.elixir; };
     });
 
     # Of course, all of these packages can be overriden by direnv (envrc)

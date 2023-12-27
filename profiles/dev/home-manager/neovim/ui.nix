@@ -210,27 +210,28 @@
       config = ''
         local gs = require('gitsigns')
         local move = require('nvim-next.move')
+        local nngs = require('nvim-next.integrations').gitsigns(gs)
         gs.setup {
           on_attach = function(bufnr)
             local bind = buf_bind(bufnr)
 
             local prev_hunk = function()
               if vim.wo.diff then return '[c' end
-              vim.schedule(function() gs.prev_hunk() end)
+              vim.schedule(function() nngs.prev_hunk() end)
               return '<Ignore>'
             end
 
             local next_hunk = function()
               if vim.wo.diff then return ']c' end
-              vim.schedule(function() gs.next_hunk() end)
+              vim.schedule(function() nngs.next_hunk() end)
               return '<Ignore>'
             end
 
-            local prev_hunk_wrapper, next_hunk_wrapper = move.make_repeatable_pair(prev_hunk, next_hunk)
+            -- local prev_hunk_wrapper, next_hunk_wrapper = move.make_repeatable_pair(prev_hunk, next_hunk)
 
             -- Navigation
-            bind('n', '[c', prev_hunk_wrapper, {expr = true}, 'Previous hunk')
-            bind('n', ']c', next_hunk_wrapper, {expr = true}, 'Next hunk')
+            bind('n', '[c', prev_hunk, {expr = true}, 'Previous hunk')
+            bind('n', ']c', next_hunk, {expr = true}, 'Next hunk')
 
             -- Actions
             -- bind('n', '<leader>gb', function() gs.blame_line{full=true} end, 'Blame line')

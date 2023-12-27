@@ -155,6 +155,13 @@ in
           plugin = vim-sandwich; # replaces vim-surround
           type = "lua";
           config = ''
+            vim.g['sandwich#recipes'] = vim.deepcopy(vim.g['sandwich#default_recipes'])
+            local sandwich_recipes = {
+
+            }
+            for _, recipe in ipairs(sandwich_recipes) do
+              table.insert(vim.g['sandwich#recipes'], recipe)
+            end
             -- Use surround.vim keymaps since the default keymap breaks vim-sneak
             vim.cmd([[
               runtime macros/sandwich/keymap/surround.vim

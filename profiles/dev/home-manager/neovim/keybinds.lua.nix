@@ -37,6 +37,7 @@ wk.register {
   ['<leader>o'] = { name = '+open' },
   ['<leader>p'] = { name = '+project' },
   ['<leader>q'] = { name = '+session' },
+  ['<leader>t'] = { name = '+tabs' },
   ['<leader>w'] = { name = '+window' },
 }
 
@@ -284,4 +285,10 @@ bind('n', 'g#',
      'Search word backward')
 
 bind('n', '<C-l>', ':nohlsearch<CR>', silent, 'Disable search highlighting')
+
+
+-- Tabs
+bind('n', '<leader>tn', ':tabnext<CR>', silent, 'Next tab')
+bind('n', '<leader>tp', ':tabprevious<CR>', silent, 'Previous tab')
+bind('n', '<leader>tk', ':tabclose<CR>', silent, 'Kill tab')
 ''

@@ -115,6 +115,7 @@ vim.filetype.add({
   },
   extension = {
     nix = 'nix',
+    avsc = 'json',
   },
   pattern = {
     ['.*'] = {

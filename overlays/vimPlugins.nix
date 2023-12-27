@@ -12,12 +12,6 @@ in {
       rev = "e1e684226d9b4a7313439bc7dd1be09d72bfb839";
       hash = "sha256-cT5XxqGF3RNpQiVn0MXZUFd0PMnBPcE7ioegfqCiUnM=";
     });
-    neogit = toPlugin "neogit" (prev.fetchFromGitHub {
-      owner = "NeogitOrg";
-      repo = "neogit";
-      rev = "72403277621bdcc5e3d6799d614becc7da015a26";
-      hash = "sha256-Xg03mbZn1s8G3Au3PDPDxuoRFZvv4AF+taDsQ2xV4VI=";
-    });
     workspaces-nvim = toPlugin "workspaces.nvim" (prev.fetchFromGitHub {
       owner = "natecraddock";
       repo = "workspaces.nvim";
