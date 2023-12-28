@@ -125,7 +125,7 @@ bind('n', '<leader>dq', '<cmd>TroubleToggle quickfix<cr>', silent, 'Toggle quick
 -- Nvim-tree
 local function open_tree(find_file)
   local api = require('nvim-tree.api')
-  local cwd = require('neogit').get_repo().state.git_root or '''
+  local cwd = require('neogit.lib.git.repository').git_root or '''
   local opts = { focus = false }
   if cwd ~= ''' then
     opts['path'] = cwd
@@ -231,7 +231,7 @@ for _, v in pairs({',', 'b,', 'bi'}) do
   bind('n', '<leader>'..v, function()
     builtins.buffers(themes.get_ivy({
       -- Scope to "current project"
-      cwd = require('neogit').get_repo().state.git_root or ''',
+      cwd = require('neogit.lib.git.repository').git_root or ''',
       -- Theme settings
       layout_config = { height = 10, },
     }))
