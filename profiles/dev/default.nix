@@ -23,9 +23,24 @@ in
   services.emacs.enable = lib.mkIf isDarwin (lib.mkDefault true);
 
   environment.pathsToLink = [ "/share/zsh" "/share/fish" ];
-  programs.fish.enable = true;
   programs.zsh = {
     enable = true;
     enableCompletion = true;
   };
+
+  programs.fish.enable = true;
+  # https://github.com/LnL7/nix-darwin/issues/122#issuecomment-1659465635
+  programs.fish.loginShellInit = let
+    # This naive quoting is good enough in this case. There shouldn't be any
+    # double quotes in the input string, and it needs to be double quoted in case
+    # it contains a space (which is unlikely!)
+    makeBinPath = pkg: lib.escapeShellArg "${lib.getBin pkg}/bin";
+    profiles = lib.concatMapStringsSep " " makeBinPath config.environment.profiles;
+  in lib.mkIf pkgs.stdenv.hostPlatform.isDarwin ''
+    if test (uname) = Darwin
+      fish_add_path --move --prepend --path (string split " " $NIX_PROFILES)[-1..1]/bin
+      set fish_user_paths $fish_user_paths
+    end
+  '';
+
 }
