@@ -30,7 +30,7 @@ let
         keep-derivations = true;
         # Override the global registry because it should never have existed
         flake-registry = "";
-        use-registries = false;
+        use-registries = true;
       };
       registry = {
         nixpkgs.flake = inputs.nixpkgs;
