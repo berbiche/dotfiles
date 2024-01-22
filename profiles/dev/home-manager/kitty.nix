@@ -1,5 +1,13 @@
 { config, pkgs, lib, ... }:
 
+let
+  kitty-kitten-search = pkgs.fetchFromGitHub {
+    owner = "trygveaa";
+    repo = "kitty-kitten-search";
+    rev = "0760138fad617c5e4159403cbfce8421ccdfe571";
+    hash = "sha256-egisza7V5dWplRYHIYt4bEQdqXa4E7UhibyWJAup8as=";
+  };
+in
 {
   programs.kitty.enable = true;
 
@@ -49,5 +57,10 @@
     "cmd+backspace" = "change_font_size current 0";
 
     "opt+cmd+r" = "clear_terminal reset all";
+
+    # Searching
+    "ctrl+shift+f" = "launch --location=hsplit --allow-remote-control kitty +kitten kitten_search/search.py @active-kitty-window-id";
   };
+
+  xdg.configFile."kitty/kitten_search".source = kitty-kitten-search;
 }
