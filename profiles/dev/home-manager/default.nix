@@ -109,5 +109,8 @@ in
 
     # onefetch's libresolv dependency does not build on aarch64
     onefetch # neofetch for a git repository : lines of code, repo, etc.
+  ] ++ lib.filter (lib.myLib.supportedOn pkgs.stdenv.hostPlatform.system) [
+    gping
+    asroute
   ];
 }

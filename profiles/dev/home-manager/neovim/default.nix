@@ -22,11 +22,6 @@ let
     '');
     n = nvim;
   };
-
-  supportedOn = platform: pkg:
-    if pkg.meta ? platforms && pkg.meta ? badPlatforms
-    then builtins.elem platform pkg.meta.platforms && !builtins.elem platform pkg.meta.badPlatforms
-    else true;
 in
 {
   imports = [
@@ -38,7 +33,7 @@ in
     pkgs.fzf
     pkgs.neovim-remote
   ]
-  ++ lib.optional (supportedOn pkgs.stdenv.hostPlatform.system pkgs.neovide) pkgs.neovide;
+  ++ lib.optional (lib.myLib.supportedOn pkgs.stdenv.hostPlatform.system pkgs.neovide) pkgs.neovide;
 
   # programs.neovim.defaultEditor = true;
   home.sessionVariables = {

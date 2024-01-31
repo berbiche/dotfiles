@@ -25,4 +25,11 @@ lib.extend (libfinal: libprev: {
   # Returns a list of nix files in the directory without recursing (and without `default.nix`)
   myLib.nixFilesInDir = directory:
     libprev.filter (n: libprev.hasSuffix "nix" n && n != "default.nix") (libprev.myLib.filesInDir directory);
+
+  # Returns a boolean indicating whether the the package `pkg` is supported on platform `platform`
+  # `true`: supported, `false`: unsupported
+  myLib.supportedOn = platform: pkg:
+    if pkg.meta ? platforms && pkg.meta ? badPlatforms
+    then builtins.elem platform pkg.meta.platforms && !builtins.elem platform pkg.meta.badPlatforms
+    else true;
 })
