@@ -20,6 +20,7 @@ in
   };
 
   profiles.dev.wakatime.enable = lib.mkDefault true;
+  profiles.dev.vscode.enable = lib.mkDefault true;
 
   # Alias jq to the go version of the tool
   home.shellAliases."jq" = "gojq";

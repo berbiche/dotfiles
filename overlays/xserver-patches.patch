@@ -48,15 +48,13 @@ diff --git a/nixos/modules/services/x11/display-managers/default.nix b/nixos/mod
 index 6743e6cfa2a..753e3fb2ff4 100644
 --- a/nixos/modules/services/x11/display-managers/default.nix
 +++ b/nixos/modules/services/x11/display-managers/default.nix
-@@ -86,9 +86,11 @@ let
+@@ -86,7 +86,9 @@ let
  
        ${cfg.displayManager.sessionCommands}
  
--      # Start systemd user services for graphical sessions
--      /run/current-system/systemd/bin/systemctl --user start graphical-session.target
+-      ${fakeSession "start"}
 +      ${optionalString (cfg.displayManager.job.startGraphicalSession) ''
-+        # Start systemd user services for graphical sessions
-+        /run/current-system/systemd/bin/systemctl --user start graphical-session.target
++        ${fakeSession "start"}
  
 +      ''}
        ${optionalString (cfg.displayManager.job.executeUserXsession) ''

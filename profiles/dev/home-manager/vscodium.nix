@@ -75,72 +75,76 @@ let
     });
 in
 {
-  programs.vscode = {
-    enable = lib.mkDefault true;
+  options.profiles.dev.vscode.enable = lib.mkEnableOption "vscode";
 
-    package = finalPackage;
-
-    extensions = [];
-
-    userSettings = {
-      "editor.bracketPairColorization.enabled" = true;
-      "editor.cursorSmoothCaretAnimation" = true;
-      "editor.fontFamily" = "'Source Code Pro', 'Anonymous Pro', 'Droid Sans Mono', monospace, 'Droid Sans Fallback'";
-      "editor.fontSize" = 15;
-      "editor.guides.bracketPairs" = true;
-      "editor.rulers" = [ 80 100 120 ];
-      "editor.smoothScrolling" = true;
-      "editor.stablePeek" = true;
-      "editor.wordWrap" = "on";
-      "explorer.autoReveal" = false;
-      "extensions.autoCheckUpdates" = false;
-      "git.suggestSmartCommit" = false;
-      "search.collapseResults" = "alwaysCollapse";
-      "terminal.integrated.tabs.enabled" = true;
-      "update.mode" = "none";
-      "update.channel" = "none";
-      "window.menuBarVisibility" = "toggle";
-      "window.restoreWindows" = "none";
-      "window.title" = "\${activeEditorShort}\${separator}\${rootName}\${separator}\${appName}";
-      "workbench.activityBar.visible" = false;
-      "workbench.colorTheme" = "Monokai Dimmed";
-      "workbench.editor.highlightModifiedTabs" = true;
-      "workbench.editor.showTabs" = true;
-      "workbench.editor.tabCloseButton" = "off";
-      "workbench.editor.untitled.labelFormat" = "name";
-      "workbench.list.smoothScrolling" = true;
-
-      # Extension settings
-      "java.semanticHighlighting.enabled" = true;
-      "vscode-neovim.neovimExecutablePaths.linux" = "${config.programs.neovim.finalPackage}/bin/nvim";
-
-      # Language settings
-      "[nix]"."editor.tabSize" = 2;
-      "[c]" = {
-        "editor.defaultFormatter" = "llvm-vs-code-extensions.vscode-clangd";
+  config = lib.mkIf config.profiles.dev.vscode.enable {
+    programs.vscode = {
+      enable = true;
+  
+      package = finalPackage;
+  
+      extensions = [];
+  
+      userSettings = {
+        "editor.bracketPairColorization.enabled" = true;
+        "editor.cursorSmoothCaretAnimation" = true;
+        "editor.fontFamily" = "'Source Code Pro', 'Anonymous Pro', 'Droid Sans Mono', monospace, 'Droid Sans Fallback'";
+        "editor.fontSize" = 15;
+        "editor.guides.bracketPairs" = true;
+        "editor.rulers" = [ 80 100 120 ];
+        "editor.smoothScrolling" = true;
+        "editor.stablePeek" = true;
+        "editor.wordWrap" = "on";
+        "explorer.autoReveal" = false;
+        "extensions.autoCheckUpdates" = false;
+        "git.suggestSmartCommit" = false;
+        "search.collapseResults" = "alwaysCollapse";
+        "terminal.integrated.tabs.enabled" = true;
+        "update.mode" = "none";
+        "update.channel" = "none";
+        "window.menuBarVisibility" = "toggle";
+        "window.restoreWindows" = "none";
+        "window.title" = "\${activeEditorShort}\${separator}\${rootName}\${separator}\${appName}";
+        "workbench.activityBar.visible" = false;
+        "workbench.colorTheme" = "Monokai Dimmed";
+        "workbench.editor.highlightModifiedTabs" = true;
+        "workbench.editor.showTabs" = true;
+        "workbench.editor.tabCloseButton" = "off";
+        "workbench.editor.untitled.labelFormat" = "name";
+        "workbench.list.smoothScrolling" = true;
+  
+        # Extension settings
+        "java.semanticHighlighting.enabled" = true;
+        "vscode-neovim.neovimExecutablePaths.linux" = "${config.programs.neovim.finalPackage}/bin/nvim";
+  
+        # Language settings
+        "[nix]"."editor.tabSize" = 2;
+        "[c]" = {
+          "editor.defaultFormatter" = "llvm-vs-code-extensions.vscode-clangd";
+        };
       };
+  
+      keybindings = [
+  
+      ];
     };
-
-    keybindings = [
-
-    ];
-  };
-
-  xdg.mimeApps = let
-    desktopFile =
-      if finalPackage.pname == "vscodium"
-      then "${finalPackage}/share/codium.desktop"
-      else "${finalPackage}/share/code.desktop";
-  in lib.mkIf isLinux {
-    defaultApplications = {
-      "x-scheme-handler/vscodium" = [ desktopFile ];
-      "x-scheme-handler/vscode" = [ desktopFile ];
-      "x-scheme-handler/code-url-handler" = [ desktopFile ];
-    };
-    associations.added = {
-      "x-scheme-handler/vscodium" = [ desktopFile ];
-      "x-scheme-handler/vscode" = [ desktopFile ];
-      "x-scheme-handler/code-url-handler" = [ desktopFile ];
+  
+    xdg.mimeApps = let
+      desktopFile =
+        if finalPackage.pname == "vscodium"
+        then "${finalPackage}/share/codium.desktop"
+        else "${finalPackage}/share/code.desktop";
+    in lib.mkIf isLinux {
+      defaultApplications = {
+        "x-scheme-handler/vscodium" = [ desktopFile ];
+        "x-scheme-handler/vscode" = [ desktopFile ];
+        "x-scheme-handler/code-url-handler" = [ desktopFile ];
+      };
+      associations.added = {
+        "x-scheme-handler/vscodium" = [ desktopFile ];
+        "x-scheme-handler/vscode" = [ desktopFile ];
+        "x-scheme-handler/code-url-handler" = [ desktopFile ];
+      };
     };
   };
 }

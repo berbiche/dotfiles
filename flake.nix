@@ -138,31 +138,35 @@
         profiles = import ./profiles { inherit isLinux; };
         extraProfiles' = map (x: profiles.home-manager.${x}) extraProfiles;
       in rec {
-        inherit (args) username;
         inherit pkgs; # to pull in my overlays
-        system = args.platform;
-        homeDirectory = args.homeDirectory or "/home/${args.username}";
-        stateVersion = "22.11";
         extraSpecialArgs = rec {
           inherit inputs isLinux;
           lib = self.lib pkgs;
           rootPath = ./.;
           isDarwin = !isLinux;
         };
-        configuration = { ... }: {
-          imports = with profiles.home-manager; [
-            dev
-          ]
-          ++ extraProfiles';
-        };
-        extraModules = [
+        modules = [
+          inputs.sops-nix.homeManagerModules.sops
+          {
+            imports = with profiles.home-manager; [
+              dev
+              secrets
+            ]
+            ++ extraProfiles';
+
+            # mkHomeManagerConfig arguments
+            home.username = args.username;
+            home.homeDirectory = args.homeDirectory or "/home/${args.username}";
+            home.stateVersion = "24.05";
+          }
           ./top-level/home-manager-options.nix
           (args.hostConfiguration or { })
           (args.userConfiguration or { })
-          {
+          ({ pkgs, ... }: {
             targets.genericLinux.enable = true;
             programs.home-manager.enable = true;
-          }
+            nix.package = pkgs.nix;
+          })
         ];
       });
 
@@ -207,6 +211,12 @@
         username = "blackarch";
         platform = "x86_64-linux";
         hostConfiguration = ./host/blackarch.nix;
+      };
+      work-laptop = mkHomeManagerConfig {
+        hostname = "AG-PC0069-L";
+        username = "n.berbiche";
+        platform = "x86_64-linux";
+        hostConfiguration = ./host/linux-work-laptop.nix;
       };
     };
 

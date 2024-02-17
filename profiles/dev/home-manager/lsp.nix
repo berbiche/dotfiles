@@ -14,6 +14,7 @@ in
     my.dev.beamPackages = pkgs.beamPackages.extend (final: prev: {
       erlang = pkgs.erlangR26;
       elixir = prev.elixir_1_15;
+      erlang-ls = prev.erlang-ls.overrideAttrs { doCheck = false; };
       elixir-ls = prev.elixir-ls.override { elixir = final.elixir; };
       # The test suite does not run in parallel and is very slow
       # ...so just skip it
