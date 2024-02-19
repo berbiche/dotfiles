@@ -57,17 +57,24 @@ with lib;
       type = types.str;
       default = "Adwaita";
     };
-    cursor.name = mkOption {
-      type = types.str;
-      example = "Adwaita";
-    };
-    cursor.size = mkOption {
-      type = types.ints.positive;
-      example = 24;
-    };
-    cursor.package = mkOption {
-      type = types.package;
-      example = literalExpression "pkgs.gnome.gnome-themes-extra";
+    cursor = mkOption {
+      type = types.nullOr (types.submodule {
+        options = {
+          name = mkOption {
+            type = types.str;
+            example = "Adwaita";
+          };
+          size = mkOption {
+            type = types.ints.positive;
+            example = 24;
+          };
+          package = mkOption {
+            type = types.package;
+            example = literalExpression "pkgs.gnome.gnome-themes-extra";
+          };
+        };
+      });
+      default = null;
     };
     icon.name = mkOption {
       type = types.str;
@@ -90,10 +97,21 @@ with lib;
   config = let
     themeCfg = config.my.theme;
   in {
-    home.packages = [
-      themeCfg.cursor.package
-      themeCfg.icon.package
-      themeCfg.package
-    ];
+    home.pointerCursor = lib.mkIf (themeCfg.cursor != null) {
+      package = themeCfg.cursor.package;
+      name = "${themeCfg.cursor.name}";
+      size = themeCfg.cursor.size;
+      gtk.enable = true;
+    };
+    gtk = {
+      iconTheme = lib.mkIf (themeCfg.icon.package != null) {
+        name = themeCfg.icon.name;
+        package = themeCfg.icon.package;
+      };
+      theme = lib.mkIf (themeCfg.package != null) {
+        name = themeCfg.light;
+        package = themeCfg.package;
+      };
+    };
   };
 }

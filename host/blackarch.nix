@@ -58,27 +58,6 @@ in
 
   gtk = {
     enable = true;
-    iconTheme = {
-      name = config.my.theme.icon.name;
-      package = config.my.theme.icon.package;
-    };
-    theme = {
-      name = config.my.theme.light;
-      package = config.my.theme.package;
-    };
-    gtk2.extraConfig = ''
-      gtk-cursor-theme-name="${config.my.theme.cursor.name}"
-      gtk-cursor-theme-size=${toString config.my.theme.cursor.size}
-    '';
-    gtk3.extraConfig = {
-      "gtk-cursor-theme-name" = "${config.my.theme.cursor.name}";
-      "gtk-cursor-theme-size" = config.my.theme.cursor.size;
-    };
-  };
-  home.pointerCursor = {
-    package = config.my.theme.cursor.package;
-    name = "${config.my.theme.cursor.name}";
-    size = config.my.theme.cursor.size;
   };
   xsession.preferStatusNotifierItems = true;
 

@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (config.my) username;
+  # inherit (config.my) username;
 in
 {
   my.identity = {
@@ -14,9 +14,9 @@ in
   my.defaults.terminal = "/usr/bin/kitty";
   my.defaults.file-explorer = "${pkgs.cinnamon.nemo}/bin/nemo";
 
-  my.theme.package = pkgs.materia-theme;
-  my.theme.dark = "Materia-dark-compact";
-  my.theme.light = "Materia-light-compact";
+  my.theme.light = "Orchis";
+  my.theme.dark = "Orchis-dark";
+  my.theme.package = pkgs.orchis-theme;
 
   my.theme.icon.name = "Papirus";
   my.theme.icon.package = pkgs.papirus-icon-theme;
@@ -24,9 +24,9 @@ in
   my.terminal.fontSize = 12.0;
   my.terminal.fontName = "MesloLGS Nerd Font Mono";
 
-  my.theme.cursor.name = "Adwaita";
-  my.theme.cursor.size = 24;
-  my.theme.cursor.package = pkgs.gnome.gnome-themes-extra;
+  # my.theme.cursor.name = "Adwaita";
+  # my.theme.cursor.size = 24;
+  # my.theme.cursor.package = pkgs.gnome.gnome-themes-extra;
 
   my.colors = {
     color0 = "#1d1f21";
@@ -58,29 +58,16 @@ in
 
   fonts.fontconfig.enable = lib.mkForce true;
 
+  home.keyboard = {
+    layout = "us";
+    options = ["lv3:ralt_alt" "compose:ralt" "caps:escape"];
+  };
+  dconf.settings."org/gnome/desktop/input-sources" = {
+    xkb-options = ["lv3:ralt_alt" "compose:ralt" "caps:escape"];
+  };
+
   gtk = {
     enable = true;
-    iconTheme = {
-      name = config.my.theme.icon.name;
-      package = config.my.theme.icon.package;
-    };
-    theme = {
-      name = config.my.theme.light;
-      package = config.my.theme.package;
-    };
-    gtk2.extraConfig = ''
-      gtk-cursor-theme-name="${config.my.theme.cursor.name}"
-      gtk-cursor-theme-size=${toString config.my.theme.cursor.size}
-    '';
-    gtk3.extraConfig = {
-      "gtk-cursor-theme-name" = "${config.my.theme.cursor.name}";
-      "gtk-cursor-theme-size" = config.my.theme.cursor.size;
-    };
-  };
-  home.pointerCursor = {
-    package = config.my.theme.cursor.package;
-    name = "${config.my.theme.cursor.name}";
-    size = config.my.theme.cursor.size;
   };
   xsession.preferStatusNotifierItems = true;
 
@@ -106,4 +93,17 @@ in
   # Disabled: https://github.com/nix-community/home-manager/issues/1454
   services.gnome-keyring.enable = true;
   services.gnome-keyring.components = [ "secrets" ];
+
+  services.darkman = let
+    dconf = "${lib.getBin pkgs.dconf}/bin/dconf";
+  in {
+    enable = true;
+    settings.usegeoclue = true;
+    darkModeScripts.gtk-theme = ''
+      ${dconf} write /org/gnome/desktop/interface/color-scheme "'prefer-dark'"
+    '';
+    lightModeScripts.gtk-theme = ''
+      ${dconf} write /org/gnome/desktop/interface/color-scheme "'prefer-light'"
+    '';
+  };
 }

@@ -118,7 +118,9 @@ let
     bindswitch --reload --locked lid:off output ${OUTPUT-LAPTOP} enable
 
     # Set default cursor size
-    seat default xcursor_theme ${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}
+    ${lib.optionalString (config.home.pointerCursor.package != null) ''
+      seat default xcursor_theme ${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}
+    ''}
 
     # We want to execute this last otherwise Waybar doesn't read the workspace names correctly
     exec ${binaries.on-startup-shutdown}/bin/session.sh --with-cleanup
