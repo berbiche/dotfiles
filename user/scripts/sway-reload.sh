@@ -2,9 +2,9 @@
 INTEGRATED_PANEL='eDP-1'
 
 OUTPUTS=$(swaymsg -t get_outputs | jq 'map({active, name, make, model, serial})')
-INTEGRATED_PANEL_STATE=$(echo $OUTPUTS |
+INTEGRATED_PANEL_STATE=$(echo "$OUTPUTS" |
   jq --arg DISPLAY "$INTEGRATED_PANEL"  '.[] | select(.name == $DISPLAY) | if .active then "enable" else "disable" end')
-MORE_THAN_ONE_OUTPUT=$(echo $OUTPUTS | jq '.[] | select(.active) | length > 0')
+MORE_THAN_ONE_OUTPUT=$(echo "$OUTPUTS" | jq '.[] | select(.active) | length > 0')
 
 # Command to reload sway
 COMMAND="swaymsg reload"
@@ -21,6 +21,7 @@ COMMAND="swaymsg 'output $INTEGRATED_PANEL %s'"
 
 # Deactivate the integrated display if necessary
 if [ "$MORE_THAN_ONE_OUTPUT" = "false" ]; then
+  # SHELLCHECK_IGNORE: SC2059
   COMMAND=$(printf "$COMMAND" "enable")
 else
   COMMAND=$(printf "$COMMAND" "$INTEGRATED_PANEL_STATE")

@@ -3,7 +3,7 @@
 main() {
   selected_workspace=$(get_workspaces | menu | cut -d':' -f1 | tr -d \")
 
-  if [[ ! -z "$selected_workspace" ]]; then
+  if [ -n "$selected_workspace" ]; then
     swaymsg workspace number "$selected_workspace"
   fi
 }

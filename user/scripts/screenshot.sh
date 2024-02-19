@@ -82,7 +82,7 @@ notify() {
 }
 
 copy_clipboard() {
-  if [ ! -z "$WAYLAND_DISPLAY" ]; then
+  if [ -n "$WAYLAND_DISPLAY" ]; then
     wl-copy < "$output_file"
   else
     xclip -selection clipboard -t image/png -i "$output_file"
@@ -99,8 +99,9 @@ print_selection() {
 
 print_window() {
   create_dir
-  if [ ! -z "$WAYLAND_DISPLAY" ]; then
-    local window=`$select_window`
+  if [ -n "$WAYLAND_DISPLAY" ]; then
+    local window
+    window=$($select_window)
     grim -g "$window" "$output_file"
   fi
 }
