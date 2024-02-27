@@ -11,6 +11,9 @@ in
 
   config = lib.mkMerge [
     {
+      home.packages = [ pkgs.age pkgs.sops ];
+    }
+    {
 
       # Create folder, I don't care if the folder is 755, as long as the content
       # of the secrets themselves is 400
@@ -19,6 +22,22 @@ in
       sops.age.generateKey = false;
       home.sessionVariables.SOPS_AGE_KEY_FILE = sopsKeyFile;
 
+      home.activation.setupSops = config.lib.dag.entryAfter [ "writeBoundary" ] ''
+        __systemctl() {
+          if [ -x /run/current-system/sw/bin/systemctl ]; then
+            echo /run/current-system/sw/bin/systemctl
+          elif [ -x /usr/bin/systemctl ]; then
+            echo /usr/bin/systemctl
+          fi
+        }
+        systemtl=$(__systemctl)
+
+        if [ -n "$systemctl" ]; then
+          if "$systemctl" --quiet --user list-unit-files sops-nix; then
+            "$systemctl" start --user sops-nix
+          fi
+        fi
+      '';
 
       # home.file.".gnupg/gpg-agent.conf".text = lib.mkAfter ''
       #   pinentry-program ${pkgs.pinentry.gnome3}/bin/pinentry
