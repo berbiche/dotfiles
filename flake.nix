@@ -152,7 +152,7 @@
               dev
               secrets
             ]
-            ++ extraProfiles';
+            ++ (map (x: profiles.home-manager."${x}") extraProfiles');
 
             # mkHomeManagerConfig arguments
             home.username = args.username;
@@ -160,13 +160,9 @@
             home.stateVersion = "24.05";
           }
           ./top-level/home-manager-options.nix
+          ./top-level/standalone-home-config.nix
           (args.hostConfiguration or { })
           (args.userConfiguration or { })
-          ({ pkgs, ... }: {
-            targets.genericLinux.enable = true;
-            programs.home-manager.enable = true;
-            nix.package = pkgs.nix;
-          })
         ];
       });
 
@@ -217,6 +213,7 @@
         username = "n.berbiche";
         platform = "x86_64-linux";
         hostConfiguration = ./host/linux-work-laptop.nix;
+        extraProfiles = [];
       };
     };
 
