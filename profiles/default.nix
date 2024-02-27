@@ -41,7 +41,10 @@ let
       else null;
   in
     foldl' (a: b: let
-      imports = filter (x: x != null) (map hm profiles.${b}.imports);
+      hm-imports = map hm profiles.${b}.imports;
+      imports = if builtins.all (x: x != null) hm-imports
+                then hm-imports
+                else [];
     in a // optionalAttrs (imports != [ ]) {
       ${b} = { inherit imports; };
     }) { } (attrNames profiles);
