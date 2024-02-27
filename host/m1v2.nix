@@ -64,8 +64,6 @@ in
         pkgs.krew
         pkgs.kubectl
         pkgs.vault-bin
-        # Yeah...
-        pkgs.asdf-vm
 
         # Work
         pkgs.parthenon-hs
@@ -75,18 +73,7 @@ in
       ])
     ];
 
-    programs.fish.interactiveShellInit = ''
-      begin
-        set -l path_asdf_vm ${lib.escapeShellArg pkgs.asdf-vm}/share/asdf-vm
-        set -x ASDF_DIR $path_asdf_vm
-        source "$path_asdf_vm"/asdf.fish
-        if set -l index (contains -i "$path_asdf_vm"/bin $fish_user_paths)
-          set --erase --universal fish_user_paths[$index]
-        end
-        if set -l index (contains -i "$path_asdf_vm"/bin $PATH)
-          set --erase PATH[$index]
-        end
-      end
-    '';
+    # Yeah...
+    profiles.dev.asdf.enable = true;
   };
 }

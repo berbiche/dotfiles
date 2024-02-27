@@ -51,6 +51,7 @@ in
   };
 
   profiles.dev.vscode.enable = false;
+  profiles.dev.asdf.enable = true;
 
   # HomeManager config
   # `man 5 home-configuration.nix`
