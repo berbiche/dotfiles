@@ -22,9 +22,11 @@ in
   my.theme.dark = "Orchis-dark";
   my.theme.package = packageIfLinux pkgs.orchis-theme;
 
-  my.theme.cursor.name = "Adwaita";
-  my.theme.cursor.size = 24;
-  my.theme.cursor.package = packageIfLinux pkgs.gnome.gnome-themes-extra;
+  my.theme.cursor = lib.mkIf (!isDarwin) {
+    name = "Adwaita";
+    size = 24;
+    package = packageIfLinux pkgs.gnome.gnome-themes-extra;
+  };
 
   my.theme.icon.name = "Papirus";
   my.theme.icon.package = packageIfLinux pkgs.papirus-icon-theme;

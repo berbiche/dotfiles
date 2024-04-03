@@ -3,7 +3,7 @@
 {
   programs.neovim.plugins = with pkgs.vimPlugins; [
     ### THEMES ###
-    nvim-base16
+    base16-nvim
 
     # Toolkits
     popup-nvim

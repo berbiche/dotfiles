@@ -31,10 +31,10 @@ in
       beamPackages.elixir beamPackages.elixir-ls
 
       # Go
-      go gopls gocode gotools golangci-lint gore
+      go gopls gotools golangci-lint gore
 
       # Nix
-      rnix-lsp nil nixfmt
+      nil nixfmt-classic
 
       # Shell
       nodePackages.bash-language-server shellcheck

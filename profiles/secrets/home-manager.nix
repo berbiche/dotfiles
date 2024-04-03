@@ -30,7 +30,7 @@ in
             echo /usr/bin/systemctl
           fi
         }
-        systemtl=$(__systemctl)
+        systemctl=$(__systemctl)
 
         if [ -n "$systemctl" ]; then
           if "$systemctl" --quiet --user list-unit-files sops-nix; then

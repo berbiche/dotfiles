@@ -7,8 +7,8 @@
     # nixpkgs.url = "git+file:///home/nicolas/dev/nixpkgs";
     master.url = "github:nixos/nixpkgs/master";
     nix-darwin = {
-      # url = "github:LnL7/nix-darwin";
-      url = "github:berbiche/nix-darwin/stuff-i-want-merged";
+      url = "github:LnL7/nix-darwin";
+      # url = "github:berbiche/nix-darwin/stuff-i-want-merged";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
