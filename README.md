@@ -191,6 +191,10 @@ Most programs configuration live under `user/programs`.
 1. `sudo nix run nixpkgs#ssh-to-pgp -- -i /etc/ssh/ssh_host_rsa_key -o secrets/hosts/"$(hostname -s)".asc`
 2. Copy the fingerprint to `.sops.yaml`
 
+OR
+
+1. `age-keygen -o "$SOPS_AGE_KEY_FILE"`
+
 Make sure to export `SOPS_AGE_KEY_FILE`!
 
     `SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt`
@@ -198,6 +202,10 @@ Make sure to export `SOPS_AGE_KEY_FILE`!
 **Updating keys**
 
 1. `sops updatekeys <FILE>`
+
+OR if a gpg key has expired:
+
+1. `nix shell nixpkgs#libfaketime -c 'faketime "<DATE>" sops updatekeys <FILE>`
 
 **Modifying secret**
 

@@ -80,11 +80,11 @@ in
   config = lib.mkIf config.profiles.dev.vscode.enable {
     programs.vscode = {
       enable = true;
-  
+
       package = finalPackage;
-  
+
       extensions = [];
-  
+
       userSettings = {
         "editor.bracketPairColorization.enabled" = true;
         "editor.cursorSmoothCaretAnimation" = true;

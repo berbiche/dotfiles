@@ -24,7 +24,7 @@ in
     systemd.user.sessionVariables.WAKATIME_HOME = wakatimeCfg;
 
     home.sessionVariables.WAKATIME_HOME = wakatimeCfg;
-    
+
     xdg.configFile."wakatime/.keep".text = "Managed by Home Manager.";
   };
 }

@@ -175,18 +175,17 @@ in
     }/bin";
   };
 
-  lib.my = lib.mkMerge [
-    (mkIf isLinux {
-      # Instead of using the path in the nix store, return the relative path of the script in my configuration
-      # This makes it possible to update scripts without reloading my Sway configuration
-      getScript = name:
-        assert lib.assertMsg (builtins.pathExists (../scripts + "/${name}"))
-          "The specified script '${name}' does not exist in the 'scripts/' folder";
-        "${config.home.homeDirectory}/${config.home.file."scripts".target}/${name}";
-    })
-
-    (mkIf isDarwin {
-      getScript = throw "getScript: this function does not work on Darwin";
-    })
-  ];
+  lib.my = let
+    # Instead of using the path in the nix store, return the relative path of the script in my configuration
+    # This makes it possible to update scripts without reloading my Sway configuration
+    getScriptLinux = name:
+      assert lib.assertMsg (builtins.pathExists (../scripts + "/${name}"))
+        "The specified script '${name}' does not exist in the 'scripts/' folder";
+      "${config.home.homeDirectory}/${config.home.file."scripts".target}/${name}";
+    getScriptDarwin = throw "getScript: this function does not work on Darwin";
+  in {
+    getScript = if isLinux then getScriptLinux
+    else if isDarwin then getScriptDarwin
+    else throw "getScript: unsupported platform";
+  };
 }

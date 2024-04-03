@@ -1,8 +1,6 @@
-{ config, lib, pkgs, ... }:
+## Ubuntu laptop
+{ inputs, config, lib, pkgs, ... }:
 
-let
-  # inherit (config.my) username;
-in
 {
   my.identity = {
     name = "Nicolas Berbiche";
@@ -12,7 +10,7 @@ in
 
   # Nix GL issues...
   my.defaults.terminal = "/usr/bin/kitty";
-  my.defaults.file-explorer = "${pkgs.cinnamon.nemo}/bin/nemo";
+  my.defaults.file-explorer = "";
 
   my.theme.light = "Orchis";
   my.theme.dark = "Orchis-dark";
@@ -61,15 +59,13 @@ in
 
   home.keyboard = {
     layout = "us";
-    options = ["lv3:ralt_alt" "compose:ralt" "caps:escape"];
+    options = ["compose:ralt" "caps:escape"];
   };
   dconf.settings."org/gnome/desktop/input-sources" = {
-    xkb-options = ["lv3:ralt_alt" "compose:ralt" "caps:escape"];
+    xkb-options = ["compose:ralt" "caps:escape"];
   };
 
-  gtk = {
-    enable = true;
-  };
+  gtk.enable = true;
   xsession.preferStatusNotifierItems = true;
 
   qt = {
@@ -90,6 +86,10 @@ in
     };
   };
 
+  home.packages = with pkgs; [
+    wl-clipboard # wl-copy/wl-paste
+  ];
+
   # Passwords and stuff
   # Disabled: https://github.com/nix-community/home-manager/issues/1454
   services.gnome-keyring.enable = true;
@@ -107,4 +107,22 @@ in
       ${dconf} write /org/gnome/desktop/interface/color-scheme "'prefer-light'"
     '';
   };
+
+  # Can't change default shell, so `exec` fish from bashrc login shell
+  programs.bash.bashrcExtra = ''
+    if [[ $(ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
+    then
+      shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION='''
+      exec fish $LOGIN_OPTION
+    fi
+  '';
+
+  # Override the service and disable it
+  # echo 'X-GNOME-Autostart-enabled=false' | sudo tee -a /etc/xdg/autostart/gnome-keyring-ssh.desktop
+  xdg.configFile."autostart/gnome-keyring-ssh.desktop".text = lib.mkIf false ''
+    [Desktop Entry]
+    Name=SSH Key Agent
+    #Hidden=true
+    X-GNOME-Autostart-enabled=false
+  '';
 }
