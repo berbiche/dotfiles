@@ -182,14 +182,15 @@ local function on_attach(client, bufnr)
     },
     ['<leader>ld'] = {
       -- {vim.lsp.buf.definition, 'Code definition'},
-      function() glance_actions.open('definitions') end,
+      client.server_capabilities.definitionProvider
+        and function() glance_actions.open('definitions') end,
       'Code definition'
     },
     ['<leader>lD'] = {
-      -- {vim.lsp.buf.declaration, 'Code declaration'}
-      client.server_capabilities.referenceProvider
+      -- {vim.lsp.buf.declaration, 'Code references'}
+      client.server_capabilities.referencesProvider
         and function() glance_actions.open('references') end,
-      'Code declaration'
+      'Code references'
     },
     ['<leader>le'] = {vim.diagnostic.open_float, 'Open diagnostic'},
     ['<leader>lf'] = {vim.lsp.buf.format, 'Format'},
