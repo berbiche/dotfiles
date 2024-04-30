@@ -23,7 +23,6 @@ in
   profiles.dev.vscode.enable = lib.mkDefault true;
 
   # Alias jq to the go version of the tool
-  home.shellAliases."jq" = "gojq";
   home.packages = with pkgs; [
     coreutils # just to make sure I use the right tools on MacOS, not the BSD variants
 

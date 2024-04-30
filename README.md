@@ -219,7 +219,7 @@ OR if a gpg key has expired:
 
 Many aliases are defined in my ZSH config that replaces default commands.
 
-- [exa](https://github.com/ogham/exa) (ls with --tree and other goodies)
+- [eza](https://github.com/eza-community/eza) (ls with --tree and other goodies)
 - [bat](https://github.com/sharkdp/bat) (cat with syntax highlighting and pagination)
 - [ripgrep](https://github.com/BurntSushi/ripgrep) (opiniated grep with defaults applied, claims to be faster than grep)
 - [fd](https://github.com/sharkdp/fd) (find with a much more intuitive syntax to me though I use them interchangeably)

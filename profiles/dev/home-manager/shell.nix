@@ -13,7 +13,9 @@ in
     "...."    = "cd ../../..";
     "....."   = "cd ../../../..";
     e         = "$EDITOR";
-    ls        = "${pkgs.eza}/bin/exa --color=auto --group-directories-first --classify";
+    g         = "git";
+    k         = "kubectl";
+    ls        = "${pkgs.eza}/bin/eza --color=auto --group-directories-first --classify";
     lst       = "${ls} --tree";
     la        = "${ls} --all";
     ll        = "${ls} --all --long --header --group";
@@ -23,10 +25,11 @@ in
     cat       = "cat -v";
     cdtemp    = ''cd "$(mktemp -d)"'';
     cp        = "cp -iv";
+    jq        = "gojq";
     ln        = "ln -v";
     mkdir     = "mkdir -vp";
     mv        = "mv -iv";
-    rm        = if isDarwin then "rm -v" else "rm --one-file-system -Iv";
+    rm        = if isDarwin then "rm -dv" else "rm --one-file-system -Idv";
     dh        = "du -h";
     df        = "df -h";
     py        = "ptipython";

@@ -8,6 +8,7 @@
     settings.aliases = {
       aliases = "alias list";
       co = "pr checkout";
+      fork = "repo fork";
       pv = "pr view";
       prc = "pr create";
       # Mnemonic: pr mine
