@@ -15,8 +15,6 @@
       url= "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nur.url = "github:nix-community/nur";
-    my-nur = { url = "github:berbiche/nur-packages"; flake = false; };
 
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
@@ -228,10 +226,7 @@
       nixpkgs-wayland = inputs.nixpkgs-wayland.overlay;
       # emacs = inputs.emacs-overlay.overlay;
       # neovim-nightly = inputs.neovim-nightly.overlay;
-      nur = inputs.nur.overlay;
       manual = final: prev: {
-        # nur = import inputs.nur { nurpkgs = final; pkgs = final; };
-        my-nur = import inputs.my-nur { pkgs = final; };
         nixpkgs-wayland = inputs.nixpkgs-wayland.overlay final prev;
         master = import inputs.master {
           system = prev.system;

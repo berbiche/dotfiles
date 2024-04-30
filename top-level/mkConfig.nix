@@ -34,11 +34,6 @@ let
       };
       registry = {
         nixpkgs.flake = inputs.nixpkgs;
-        nur = {
-          from = { type = "indirect"; id = "nur"; };
-          to = { type = "github"; owner = "berbiche"; repo = "nur-flake-wrapper"; };
-          exact = true;
-        };
       };
       # Automatic GC of nix files
       gc = {

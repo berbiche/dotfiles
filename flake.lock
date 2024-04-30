@@ -266,22 +266,6 @@
         "type": "github"
       }
     },
-    "my-nur": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1676316593,
-        "narHash": "sha256-fxiKkH9ER6bcdby72IYpzNnpN8T2577tcoMXEXahPCE=",
-        "owner": "berbiche",
-        "repo": "nur-packages",
-        "rev": "131bee026c049373ae7b9f78653e0ade609c239b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "berbiche",
-        "repo": "nur-packages",
-        "type": "github"
-      }
-    },
     "neovim-flake": {
       "inputs": {
         "flake-utils": "flake-utils_2",
@@ -495,33 +479,16 @@
         "type": "github"
       }
     },
-    "nur": {
-      "locked": {
-        "lastModified": 1714507581,
-        "narHash": "sha256-lTvZePeyupJPnbWjZk2ss+2FbLrnYVyEODcrpnW2jzM=",
-        "owner": "nix-community",
-        "repo": "nur",
-        "rev": "428b7f99a122d1a4744708615c2322ed59ea6db8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "nur",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "doom-emacs-source": "doom-emacs-source",
         "emacs-overlay": "emacs-overlay",
         "home-manager": "home-manager",
         "master": "master",
-        "my-nur": "my-nur",
         "neovim-nightly": "neovim-nightly",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs",
         "nixpkgs-wayland": "nixpkgs-wayland",
-        "nur": "nur",
         "sops-nix": "sops-nix"
       }
     },

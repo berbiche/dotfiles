@@ -8,7 +8,6 @@ in
 {
   programs.deadd-notification-center = {
     systemd.enable = true;
-    # package = pkgs.my-nur.deadd-notification-center;
     settings = {
       notification-center = {
         # marginTop = 30;
