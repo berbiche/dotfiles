@@ -12,7 +12,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
-      url= "github:nix-community/home-manager/master";
+      # url= "github:nix-community/home-manager/master";
+      url= "github:berbiche/home-manager/fix-navi-config-dir-on-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
