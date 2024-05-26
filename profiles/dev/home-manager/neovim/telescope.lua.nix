@@ -4,7 +4,7 @@ local ts = require('telescope')
 local actions = require('telescope.actions')
 local fb_actions = ts.extensions.file_browser.actions
 local replacer = require('replacer')
-local hastrouble, trouble = pcall(require, 'trouble.providers.telescope')
+local hastrouble, trouble = pcall(require, 'trouble.sources.telescope')
 
 require('workspaces').setup {
   cd_type = 'tab'
@@ -49,14 +49,14 @@ ts.setup {
         ['<C-g>'] = actions.close,
         -- ['<C-c>'] = nil,
         ['<C-q>'] = actions.smart_send_to_qflist + actions.open_qflist,
-        ['<C-e>'] = hastrouble and trouble.open_with_trouble or nil,
+        ['<C-e>'] = hastrouble and trouble.open or nil,
       },
       n = {
         ['<esc>'] = actions.close,
         ['<C-g>'] = actions.close,
         -- ['<C-c>'] = nil,
         ['<C-q>'] = actions.smart_send_to_qflist + actions.open_qflist,
-        ['<C-e>'] = hastrouble and trouble.open_with_trouble or nil,
+        ['<C-e>'] = hastrouble and trouble.open or nil,
       },
     },
   },

@@ -131,12 +131,35 @@ glance.setup {
   border = {
     enable = true,
   },
+  hooks = {
+    before_open = function(results, open, jump, method)
+      -- Don't open glance when there is only one result and it is located in the current buffer
+      local uri = vim.uri_from_bufnr(0)
+      if #results == 1 then
+        local target_uri = results[1].uri or results[1].targetUri
+
+        if target_uri == uri then
+          jump(results[1])
+        else
+          open(results)
+        end
+      else
+        open(results)
+      end
+    end,
+  },
   mappings = {
     list = {
       ['<C-n>'] = glance_actions.next,
       ['<C-p>'] = glance_actions.previous,
     },
+    preview = {
+      ['q'] = glance_actions.close,
+      ['<C-n>'] = glance_actions.next_location,
+      ['<C-p>'] = glance_actions.previous_location,
+    },
   },
+  use_trouble_qf = true,
 }
 
 
@@ -149,8 +172,8 @@ local capabilities = cmp_lsp.default_capabilities(vim.lsp.protocol.make_client_c
 vim.diagnostic.config({ virtual_text = false, float = { border = 'rounded' }, })
 -- Same for these handlers
 local handlers = {
-  ["textDocument/hover"] =  vim.lsp.with(vim.lsp.handlers.hover, {border = 'rounded'}),
-  ["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = 'rounded'}),
+  ['textDocument/hover'] =  vim.lsp.with(vim.lsp.handlers.hover, {border = 'rounded'}),
+  ['textDocument/signatureHelp'] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = 'rounded'}),
 }
 
 local function attach_autocmd(buffer)
@@ -172,39 +195,63 @@ end
 
 local function on_attach(client, bufnr)
   local map = {
-    -- Key -> {function, documentation, whether bind to visual mode}
+    -- Key -> {condition, function, documentation, whether to bind to visual mode}
     ['<leader>la'] = {
-      -- {vim.lsp.buf.code_action, 'Code action', true},
-      client.server_capabilities.codeActionProvider
-        and vim.lsp.buf.code_action,
+      client.supports_method('textDocument/codeAction'),
+      vim.lsp.buf.code_action,
       'Code action',
       true
     },
     ['<leader>ld'] = {
-      -- {vim.lsp.buf.definition, 'Code definition'},
-      client.server_capabilities.definitionProvider
-        and function() glance_actions.open('definitions') end,
+      client.supports_method('textDocument/definition'),
+      function() glance_actions.open('definitions') end,
       'Code definition'
     },
     ['<leader>lD'] = {
-      -- {vim.lsp.buf.declaration, 'Code references'}
-      client.server_capabilities.referencesProvider
-        and function() glance_actions.open('references') end,
+      client.supports_method('textDocument/references'),
+      function() glance_actions.open('references') end,
       'Code references'
     },
-    ['<leader>le'] = {vim.diagnostic.open_float, 'Open diagnostic'},
-    ['<leader>lf'] = {vim.lsp.buf.format, 'Format'},
+    ['<leader>le'] = {
+      true,
+      vim.diagnostic.open_float,
+      'Open diagnostic'
+    },
+    ['<leader>lf'] = {
+      client.supports_method('textDocument/formatting'),
+      vim.lsp.buf.format,
+      'Format'
+    },
     ['<leader>li'] = {
-      -- {vim.lsp.buf.implementation, 'Code implementation'},
-      client.server_capabilities.declarationProvider
-        and function() glance_actions.open('implementations') end,
+      client.supports_method('textDocument/declaration') or client.supports_method('textDocument/implementation'),
+      function() glance_actions.open('implementations') end,
       'Code implementation'
     },
-    ['<leader>lr'] = {vim.lsp.buf.rename, 'Rename'},
-    ['<leader>lt'] = {vim.lsp.buf.type_definition, 'Type definition'},
-    ['K'] = {vim.lsp.buf.hover, 'Lookup documentation'},
-    ['[d'] = {nndiag.goto_prev, 'Previous diagnostic'},
-    [']d'] = {nndiag.goto_next, 'Next diagnostic'},
+    ['<leader>lr'] = {
+      client.supports_method('textDocument/rename'),
+      vim.lsp.buf.rename,
+      'Rename'
+    },
+    ['<leader>lt'] = {
+      client.supports_method('textDocument/typeDefinition'),
+      vim.lsp.buf.type_definition,
+      'Type definition'
+    },
+    ['K'] = {
+      client.supports_method('textDocument/hover'),
+      vim.lsp.buf.hover,
+      'Lookup documentation'
+    },
+    ['[d'] = {
+      true,
+      nndiag.goto_prev,
+      'Previous diagnostic'
+    },
+    [']d'] = {
+      true,
+      nndiag.goto_next,
+      'Next diagnostic'
+    },
   }
   map['ga'] = map['<leader>la']
   map['gd'] = map['<leader>ld']
@@ -213,11 +260,11 @@ local function on_attach(client, bufnr)
 
   for key, value in pairs(map) do
     if value[1] then
-      local mode = value[3] and {'n', 'v'} or {'n'}
-      bind(mode, key, function() value[1]() end, { buffer = bufnr }, value[2])
+      local mode = value[4] and {'n', 'v'} or {'n'}
+      bind(mode, key, function() value[2]() end, { buffer = bufnr }, value[3])
     else
-      local mode = value[3] and {'n', 'v'} or {'n'}
-      bind(mode, key, '<nop>', { buffer = bufnr })
+      local mode = value[4] and {'n', 'v'} or {'n'}
+      bind(mode, key, '<nop>', { buffer = bufnr }, 'Unsupported: ' .. value[3])
       -- Debugging
       vim.notify_once(
         ('Action does not exist for mapping %s -> %s'):format(key, vim.inspect(value)),
@@ -227,7 +274,7 @@ local function on_attach(client, bufnr)
     end
   end
 
-  if client.server_capabilities.documentSymbolProvider then
+  if client.supports_method('textDocument/documentSymbol') then
     if hasnavic then
       navic.attach(client, bufnr)
     end
