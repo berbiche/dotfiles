@@ -16,6 +16,7 @@ in
   environment.systemPackages = [ pkgs.gnupg ];
 
   system.defaults.loginwindow.LoginwindowText = "Property of Nicolas Berbiche";
+  security.pam.enableSudoTouchIdAuth = true;
 
   homebrew.enable = true;
   homebrew.onActivation.upgrade = true;
@@ -30,7 +31,16 @@ in
     "libidn" "pkg-config"
     "msgpack" "tinycdb"
     /* "libmaxminddb" */ "openssl@1.1" "libxslt" "fop"
-    "kerl"
+    "kerl" # used by asdf
+    # Required by an upstream work tool that automatically brews install these shits
+    "brotli"
+    "libunistring"
+    "libidn2"
+    "libnghttp2"
+    "libssh2"
+    "openldap"
+    "rtmpdump"
+    "curl"
 
     "pcp"
   ] ++ lib.optionals (! availableOnDarwin pkgs.helm) [
@@ -59,18 +69,15 @@ in
 
   my.home = { config, pkgs, osConfig, ... }: {
     home.sessionPath = [ osConfig.homebrew.brewPrefix "/opt/homebrew/sbin" ];
-    home.packages = lib.mkMerge [
-      [
-        pkgs.krew
-        pkgs.kubectl
-        pkgs.vault-bin
-
-        # Work
-        pkgs.parthenon-hs
-      ]
-      (lib.mkIf (availableOnDarwin pkgs.helm) [
-        pkgs.helm
-      ])
+    home.packages = [
+      pkgs.krew
+      pkgs.kubectl
+      pkgs.vault-bin
+      pkgs.parthenon-hs
+      pkgs.awscli2
+      pkgs.saml2aws
+    ] ++ lib.filter availableOnDarwin [
+      pkgs.helm
     ];
 
     # Yeah...

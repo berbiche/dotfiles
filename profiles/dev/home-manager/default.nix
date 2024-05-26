@@ -56,6 +56,7 @@ in
     # httpie # like curl/wget with a simpler cli interface
     hyperfine # benchmarking tool
     kubie # a better kubens
+    k9s # kubernetes terminal dashboard, very handy for work
     lsof # shows information about opened files by processes, useful for debugging
     manix # lookup a nix function documentation or a NixOS/Home Manager option documentation
     mtr # interactive traceroute that updates continuously
