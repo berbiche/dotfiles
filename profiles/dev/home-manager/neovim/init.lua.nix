@@ -93,6 +93,15 @@ autocmd({'FileType'}, {
   end,
 })
 
+-- Show absolute line numbers in the terminal
+autocmd({'TermOpen'}, {
+  group = myCommandGroup,
+  callback = function()
+    vim.opt_local.number = true
+    vim.opt_local.relativenumber = false
+  end,
+})
+
 -- Highlight trailing whitespace
 -- g:terminal_color_1 is defined by poimandres-nvim aaaaaaaaaaaaaaaaa
 cmd([[
