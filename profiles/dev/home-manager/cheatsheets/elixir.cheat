@@ -1,0 +1,17 @@
+% elixir, erlang, work
+
+# Mix equivalent of `rebar3 shell`
+; useful with Erlang programs that use the Elixir toolchain
+iex -S mix run --no-start
+
+# Mix format one file
+mix format <file>
+
+# Mix format file without configuration
+sh -c 'mix format --dot-formatter <(echo "[]") <file>'
+
+# Mix run commontest for one module
+mix ct <module_name_SUITE>
+
+# Mix run commontest matching X modules
+: mix ct modules_*_SUITE

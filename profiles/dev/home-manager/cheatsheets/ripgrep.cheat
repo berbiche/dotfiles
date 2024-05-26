@@ -1,0 +1,4 @@
+% grep, ripgrep
+
+# ripgrep, excluding one folder from search
+rg -w <query> -tc -g '!<folder>/*'

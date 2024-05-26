@@ -1,0 +1,4 @@
+% work
+
+# Check if docker image exists in remote registry
+docker manifest inspect <image>
