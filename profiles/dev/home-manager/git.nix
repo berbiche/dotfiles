@@ -115,7 +115,7 @@ lib.mkMerge [
         # This alias runs git commit with the content of the last COMMIT_EDITMSG
         # when for instance I enter the wrong password for my pgp key
         # The cleanup doesn't work correctly and the file changelog is committed as part of the commit.
-        fuck = "commit --cleanup=strip -F .git/COMMIT_EDITMSG";
+        tabarnak = "commit --cleanup=strip -F .git/COMMIT_EDITMSG";
 
         # Copied from a coworker who probably copied it from here: https://stackoverflow.com/a/34467298
         lg = lg1;
@@ -127,16 +127,18 @@ lib.mkMerge [
         lg3-specific = "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(auto)%d%C(reset)%n''          %C(white)%s%C(reset)%n''          %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)'";
 
         p = "pull --prune";
+        pa = "${p} --autostash";
         pl = "${p} --rebase";
         pu = "${p} upstream";
         pum = "${pu} master:master";
         plum = "${pl} upstream master:master";
         pp = "push --prune";
-        ppff = "push --prune --force-with-lease";
+        ppff = "${pp} --force-with-lease --force-if-includes";
         r  = "rebase";
         ra = "rebase --abort";
         rc = "rebase --continue";
         ri = "rebase -i";
+        rh = "reset --hard";
         s = "show";
         st = "status";
         u = "reset HEAD";
