@@ -119,70 +119,75 @@ require('nvim-tree').setup {
     -- api.config.mappings.default_on_attach(bufnr)
 
     -- Custom mappings that resembles treemacs
-    bind('n', '?', api.tree.toggle_help, 'Show keybinds')
-    bind('n', '<C-?>', api.tree.toggle_help, 'Show keybinds')
-    bind('n', 'r', api.fs.reload, 'Reload')
-    bind('n', 'q', api.tree.close, 'Close')
+    local mappings = {
+      {'?', api.tree.toggle_help, 'Show keybinds'},
+      {'<C-?>', api.tree.toggle_help, 'Show keybinds'},
+      {'r', api.fs.reload, 'Reload'},
+      {'q', api.tree.close, 'Close'},
+      -- Opening
+      {'<2-LeftMouse>', api.node.open.edit, 'Open'},
+      {'<CR>', api.node.open.edit, 'Open'},
+      {'<Tab>', api.node.open.edit, 'Open'},
+      {'l', api.node.open.edit, 'Open'},
+      -- Select the window in which to open the buffer
+      {'op', api.node.open.preview, 'Open: preview'},
+      {'os', api.node.open.horizontal, 'Open: horizontal split'},
+      {'ot', api.node.open.tab, 'Open: new tab'},
+      {'ov', api.node.open.vertical, 'Open: vertical split'},
 
-    -- Opening
-    bind('n', '<2-LeftMouse>', api.node.open.edit, 'Open')
-    bind('n', '<CR>', api.node.open.edit, 'Open')
-    bind('n', '<Tab>', api.node.open.edit, 'Open')
-    bind('n', 'l', api.node.open.edit, 'Open')
-    -- Select the window in which to open the buffer
-    bind('n', 'op', api.node.open.preview, 'Open: preview')
-    bind('n', 'os', api.node.open.horizontal, 'Open: horizontal split')
-    bind('n', 'ot', api.node.open.tab, 'Open: new tab')
-    bind('n', 'ov', api.node.open.vertical, 'Open: vertical split')
+      -- Navigation
+      {'<C-n>', 'j', 'Next item'},
+      {'<C-p>', 'k', 'Previous item'},
+      {'u', api.node.navigate.parent, 'Go to parent'},
+      {'H', api.tree.change_root_to_parent, 'Change root to parent folder'},
+      {'<M-j>', api.node.navigate.sibling.next, 'Next Sibling'},
+      {'<M-k>', api.node.navigate.sibling.prev, 'Previous Sibling'},
 
-    -- Navigation
-    bind('n', '<C-n>', 'j', 'Next item')
-    bind('n', '<C-p>', 'k', 'Previous item')
-    bind('n', 'u', api.node.navigate.parent, 'Go to parent')
-    bind('n', 'H', api.tree.change_root_to_parent, 'Change root to parent folder')
-    bind('n', '<M-j>', api.node.navigate.sibling.next, 'Next Sibling')
-    bind('n', '<M-k>', api.node.navigate.sibling.prev, 'Previous Sibling')
+      -- Copying and other operations
+      {'ya', api.fs.copy.absolute_path, 'Copy absolute path'},
+      {'yf', api.fs.copy.node, 'Copy file'},
+      {'yn', api.fs.copy.filename, 'Copy name'},
+      {'yp', api.fs.copy.relative_path, 'Copy relative path'},
 
-    -- Copying and other operations
-    bind('n', 'ya', api.fs.copy.absolute_path, 'Copy absolute path')
-    bind('n', 'yf', api.fs.copy.node, 'Copy file')
-    bind('n', 'yn', api.fs.copy.filename, 'Copy name')
-    bind('n', 'yp', api.fs.copy.relative_path, 'Copy relative path')
+      -- Finding things
+      {'f/', api.live_filter.start, 'Filter'},
+      {'fc', api.live_filter.clear, 'Clean filter'},
+      {'fh', api.tree.toggle_hidden_filter, 'Toggle dotfiles'},
+      {'fi', api.tree.toggle_gitignore_filter, 'Toggle Git ignore'},
+      {'fs', api.tree.search_node, 'Search'},
 
-    -- Finding things
-    bind('n', 'f/', api.live_filter.start, 'Filter')
-    bind('n', 'fc', api.live_filter.clear, 'Clean filter')
-    bind('n', 'fh', api.tree.toggle_hidden_filter, 'Toggle dotfiles')
-    bind('n', 'fi', api.tree.toggle_gitignore_filter, 'Toggle Git ignore')
-    bind('n', 'fs', api.tree.search_node, 'Search')
-
-    -- Other useful stuff
-    bind('n', '<C-]>', api.tree.change_root_to_node, 'CD')
-    bind('n', '<C-k>', api.node.show_info_popup, 'Info')
-    -- While the below keybind can also be used to create directories or file,
-    -- the cf and cd maps are kept for similarity with treemacs
-    bind('n', 'cf', api.fs.create, 'Create file')
-    bind('n', 'cd', create_directory, 'Create directory')
-    bind('n', 'd', api.fs.remove, 'Delete')
-    if vim.fn.has('unix') == 1 then
+      -- Other useful stuff
+      {'<C-]>', api.tree.change_root_to_node, 'CD'},
+      {'<C-k>', api.node.show_info_popup, 'Info'},
+      -- While the below keybind can also be used to create directories or file,
+      -- the cf and cd maps are kept for similarity with treemacs
+      {'cf', api.fs.create, 'Create file'},
+      {'cd', create_directory, 'Create directory'},
+      {'d', api.fs.remove, 'Delete'},
       -- Uses Gio to trash the file
-      bind('n', 'D', api.fs.trash, 'Trash')
-    end
-    bind('n', 'R', api.fs.rename, 'Rename')
-    -- bind('n', 'e', api.fs.rename_basename, 'Rename: basename')
-    bind('n', '!', api.node.run.cmd, 'Run command')
-    -- bind('n', 's', api.node.run.system, 'Run system')
-    bind('n', 't', api.marks.toggle, 'Toggle bookmark')
+      vim.fn.has('unix') == 1 and {'D', api.fs.trash, 'Trash'},
+      {'R', api.fs.rename, 'Rename'},
+      -- {'e', api.fs.rename_basename, 'Rename: basename'}
+      {'!', api.node.run.cmd, 'Run command'},
+      -- {'s', api.node.run.system, 'Run system'}
+      {'t', api.marks.toggle, 'Toggle bookmark'},
 
-    bind('n', 'bmv', api.marks.bulk.move, 'Move bookmarked')
-    bind('n', 'E', api.tree.expand_all, 'Expand all')
-    bind('n', 'W', api.tree.collapse_all, 'Collapse')
-    bind('n', ']e', api.node.navigate.diagnostics.next, 'Next diagnostic')
-    bind('n', '[e', api.node.navigate.diagnostics.prev, 'Prev diagnostic')
-    bind('n', 'J', api.node.navigate.sibling.last, 'Last sibling')
-    bind('n', 'K', api.node.navigate.sibling.first, 'First sibling')
-    bind('n', 'p', api.fs.paste, 'Paste')
-    bind('n', 'x', api.fs.cut, 'Cut')
+      {'bmv', api.marks.bulk.move, 'Move bookmarked'},
+      {'E', api.tree.expand_all, 'Expand all'},
+      {'W', api.tree.collapse_all, 'Collapse'},
+      {']e', api.node.navigate.diagnostics.next, 'Next diagnostic'},
+      {'[e', api.node.navigate.diagnostics.prev, 'Prev diagnostic'},
+      {'J', api.node.navigate.sibling.last, 'Last sibling'},
+      {'K', api.node.navigate.sibling.first, 'First sibling'},
+      {'p', api.fs.paste, 'Paste'},
+      {'x', api.fs.cut, 'Cut'},
+    }
+
+    for _, value in ipairs(mappings) do
+      if value then
+        bind('n', unpack(value))
+      end
+    end
   end
 }
 
