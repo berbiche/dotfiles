@@ -41,6 +41,8 @@ in
     "openldap"
     "rtmpdump"
     "curl"
+    # Aerospike
+    "libev"
 
     "pcp"
   ] ++ lib.optionals (! availableOnDarwin pkgs.helm) [
