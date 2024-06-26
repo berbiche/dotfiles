@@ -70,8 +70,6 @@
     "com.apple.safari"."ShowFullURLInSmartSearchField" = true;
   };
 
-  fonts.fontDir.enable = lib.mkDefault true;
-
 
   # Symlink Home Manager apps to ~/Applications/Home\ Manager\ Apps
   # for Raycast (spotlight alternative)

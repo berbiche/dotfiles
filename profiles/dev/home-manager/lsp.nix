@@ -12,7 +12,7 @@ in
 
   config = {
     my.dev.beamPackages = pkgs.beamPackages.extend (final: prev: {
-      erlang = pkgs.erlangR26;
+      erlang = pkgs.erlang_26;
       elixir = prev.elixir_1_15;
       erlang-ls = prev.erlang-ls.overrideAttrs { doCheck = false; };
       elixir-ls = prev.elixir-ls.override { elixir = final.elixir; };

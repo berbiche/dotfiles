@@ -13,7 +13,7 @@ in
 
   my.home.imports = [ ./home-manager ];
 
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
     anonymousPro
     source-code-pro
     nerdfonts

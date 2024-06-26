@@ -49,7 +49,7 @@ in {
         #   version = "17.1.0";
         #   sha256 = "sha256-/DfyYCZnyScvLmWLgatX1tL/3ndh3pz7FeDY/KxC+Jw=";
         # });
-        package = prev.vscode-extensions.WakaTime.vscode-wakatime;
+        package = prev.vscode-extensions.wakatime.vscode-wakatime;
       in package.overrideAttrs (drv: {
         postInstall = drv.postInstall or "" + ''
           mkdir -p "$out/${drv.installPrefix}/wakatime-cli"
