@@ -188,7 +188,7 @@
         hostname = "AG-PC0211-M";
         username = "n.berbiche";
         platform = "aarch64-darwin";
-        hostConfiguration = ./host/m1v2.nix;
+        hostConfiguration = ./host/m1-work.nix;
         userConfiguration = ./user/nicolas.nix;
       };
       m1 = mkDarwinConfig {
