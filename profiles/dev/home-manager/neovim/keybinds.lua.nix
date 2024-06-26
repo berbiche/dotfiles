@@ -22,6 +22,18 @@ wk.setup {
     ['<leader>'] = 'SPC',
   },
   trigggers = {},
+  triggers_nowait = {
+    -- marks
+    --'`',
+    --"'",
+    --'g`',
+    --"g'",
+    -- registers
+    '"',
+    '<c-r>',
+    -- spelling
+    'z=',
+  },
   window = {
     border = 'rounded'
   },
@@ -94,7 +106,7 @@ bind('n', '<leader>ot', function()
   cmd[[botright split]]
   cmd.resize(-10)
   cmd.terminal()
-end, {silent = true}, 'Open terminal')
+end, silent, 'Open terminal')
 
 
 -- Searching and replacing stuff
@@ -115,11 +127,17 @@ end, silent, 'Open floating terminal')
 bind('n', '<leader>gg', wrap(require('neogit').open), silent, 'Open neogit')
 
 -- Trouble
-bind('n', '<leader>dx', '<cmd>TroubleToggle<cr>', silent, 'Toggle Trouble')
-bind('n', '<leader>dw', '<cmd>TroubleToggle workspace_diagnostics<cr>', silent, 'Toggle workspace diagnostics')
-bind('n', '<leader>dd', '<cmd>TroubleToggle document_diagnostics<cr>', silent, 'Toggle document diagnostics')
-bind('n', '<leader>dl', '<cmd>TroubleToggle loclist<cr>', silent, 'Toggle loclist')
-bind('n', '<leader>dq', '<cmd>TroubleToggle quickfix<cr>', silent, 'Toggle quickfix')
+wk.register({
+  ['dx'] = {'<cmd>Trouble<cr>', 'Trouble'},
+  ['dw'] = {'<cmd>Trouble diagnostics toggle<cr>', 'Diagnostics'},
+  ['db'] = {'<cmd>Trouble diagnostics toggle filter.buf=0<cr>', 'Buffer Diagnostics'},
+  ['dl'] = {'<cmd>Trouble loclist toggle<cr>', 'Loclist'},
+  ['dq'] = {'<cmd>Trouble quickfix toggle<cr>', 'Quickfix'},
+  ['ds'] = {'<cmd>Trouble symbols toggle focus=false<cr>', 'Symbols'},
+}, {
+  mode = 'n',
+  prefix = '<leader>',
+})
 
 
 -- Nvim-tree
@@ -175,10 +193,12 @@ local function delete_current_buffer(wipeout)
   end
 end
 
-bind('n', '<leader>bd', wrap(delete_current_buffer), silent, 'Close buffer')
-bind('n', '<leader>bD', wrap(delete_current_buffer, true), silent, 'Wipeout buffer')
-bind('n', '<leader>bo', wrap(delete_other_buffers), silent, 'Close other buffers')
-bind('n', '<leader>bO', wrap(delete_other_buffers, true), silent, 'Wipeout other buffers')
+wk.register({
+  ['bd'] = {wrap(delete_current_buffer), 'Close buffer'},
+  ['bD'] = {wrap(delete_current_buffer, true), 'Wipeout buffer'},
+  ['bo'] = {wrap(delete_other_buffers), 'Close other buffers'},
+  ['bO'] = {wrap(delete_other_buffers, true), 'Wipeout other buffers'},
+}, {prefix = '<leader>'})
 
 -- Switch to most recently used buffer
 local function switch_to_last_buffer()

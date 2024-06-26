@@ -143,6 +143,7 @@
     }
 
     nvim-tree-lua
+    neo-tree-nvim
 
     # Highlight css colors such as #ccc
     {
