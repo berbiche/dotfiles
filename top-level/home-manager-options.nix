@@ -19,6 +19,12 @@ with lib;
     };
   };
 
+  options.my.config.is-work-host = mkOption {
+    type = types.bool;
+    description = "Whether this is host is used for work purposes";
+    default = false;
+  };
+
   options.my.location = mkOption {
     type = types.nullOr (types.submodule {
       options.longitude = mkOption {

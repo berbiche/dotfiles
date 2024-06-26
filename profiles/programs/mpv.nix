@@ -5,7 +5,7 @@ let
 in
 {
   programs.mpv = {
-    enable = true;
+    enable = !config.my.config.is-work-host;
 
     scripts = lib.mkIf isLinux [ pkgs.mpvScripts.mpris ];
 

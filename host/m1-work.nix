@@ -70,6 +70,8 @@ in
   };
 
   my.home = { config, pkgs, osConfig, ... }: {
+    my.config.is-work-host = true;
+
     home.sessionPath = [ osConfig.homebrew.brewPrefix "/opt/homebrew/sbin" ];
     home.packages = [
       pkgs.krew

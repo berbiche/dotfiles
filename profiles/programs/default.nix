@@ -15,15 +15,17 @@ in
 {
   imports = [ ];
 
-  my.home = {
+  my.home = {config, ...}: let
+    homeCfg = config;
+  in {
     imports = customPrograms;
 
     home.packages = with pkgs; lib.mkMerge [
-      [
+      (lib.mkIf (!homeCfg.my.config.is-work-host) [
         element-desktop
         yt-dlp
-      ]
-      (lib.mkIf isLinux [
+      ])
+      (lib.mkIf (isLinux && !homeCfg.my.config.is-work-host) [
         fractal
         evince
         nwg-launchers
