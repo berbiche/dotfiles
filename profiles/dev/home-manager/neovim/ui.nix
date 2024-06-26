@@ -255,5 +255,6 @@
         }
       '';
     }
+    winshift-nvim
   ];
 }

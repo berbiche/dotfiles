@@ -27,7 +27,7 @@ cmd = vim.cmd
 autocmd = vim.api.nvim_create_autocmd
 myCommandGroup = vim.api.nvim_create_augroup('init.lua', {clear = true})
 
-default_excluded_filetypes = { 'TelescopePrompt', 'NvimTree', 'startify', 'terminal', 'Trouble', 'qf', 'FTerm' }
+default_excluded_filetypes = { 'TelescopePrompt', 'NvimTree', 'startify', 'terminal', 'Trouble', 'qf', 'FTerm', 'neo-tree' }
 
 -- Use the wrapped neovim to measure startup time
 vim.g.startuptime_exe_path = [[${config.home.profileDirectory}/bin/nvim]]

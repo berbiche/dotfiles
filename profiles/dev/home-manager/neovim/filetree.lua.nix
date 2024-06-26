@@ -191,4 +191,74 @@ require('nvim-tree').setup {
   end
 }
 
+
+local ncommands = require('neo-tree.command')
+-- ncommands.execute({
+--   action = 'focus',
+--   source = 'buffers',
+--   position = 'left',
+--   reveal = true,
+--   reveal_force_cwd = false,
+-- })
+require('neo-tree').setup {
+  buffers = {
+    components = {
+      name = function(config, node)
+        name = node.name
+        highlight = '''
+        if node.type == 'directory' then
+          if node:get_depth() == 1 then
+            return {
+              text = name,
+              highlight = 'NeoTreeRootName',
+            }
+          end
+          return nil
+        end
+        return {
+          text = name,
+          highlight = 'NeoTreeFileName',
+        }
+      end,
+    },
+    -- renderers = {
+    --   file = {
+    --     {'indent'},
+    --     {'icon'},
+    --     {
+    --       'container',
+    --       content = {
+    --         {'name', zindex = 10},
+    --         {'symlink_target', zindex = 10, highlight = 'NeoTreeSymbolicLinkTarget'},
+    --         {'bufnr', zindex = 10},
+    --       },
+    --     }
+    --   },
+    -- },
+  },
+  close_if_last_window = true,
+  default_component_configs = {
+    name = {
+      highlight_opened_files = true,
+    },
+  },
+  filesystem = {
+    -- Use spaces as word separators to search files
+    find_by_full_path_words = true,
+    filtered_items = {
+      hide_dotfiles = false,
+    },
+    use_libuv_file_watcher = true,
+  },
+  -- Use vim.ui.input popups instead of built-in
+  use_popups_for_input = false,
+  window = {
+    mappings = {
+      ['<space>'] = {'toggle_node', nowait = false},
+      ['A'] = nil,
+      ['cd'] = 'add_directory',
+    },
+  },
+}
+
 ''

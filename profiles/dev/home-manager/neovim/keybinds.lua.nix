@@ -21,6 +21,9 @@ wk.setup {
     ['<space>'] = 'SPC',
     ['<leader>'] = 'SPC',
   },
+  disable = {
+    filetypes = {'neo-tree',},
+  },
   trigggers = {},
   triggers_nowait = {
     -- marks
