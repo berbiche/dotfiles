@@ -129,14 +129,17 @@ vim.filetype.add({
   pattern = {
     ['.*'] = {
       priority = -math.huge,
-      function(path, bufnr, ext)
-        -- Match against shebang
-        local content = vim.filetype.getlines(bufnr, 1)
-        -- TODO: handle nix-shell wrappers
-        if vim.filetype.matchregex(content, [[^#!.*escript]]) then
-          return 'erlang'
+      (function()
+        local regex = vim.regex([[^#!.*escript]])
+        return function(path, bufnr, ext)
+          -- Match against shebang
+          local content = vim.api.nvim_buf_get_lines(bufnr, 0, 1, false)
+          -- TODO: handle nix-shell wrappers
+          if s ~= nil and regex:match_str(content) then
+            return 'erlang'
+          end
         end
-      end,
+      end)(),
     },
   },
 })

@@ -25,7 +25,7 @@ vim.opt.cmdheight = 0
 -- Use utf-8 by default
 vim.opt.encoding = 'utf-8'
 vim.opt.fileencoding = 'utf-8'
-vim.opt.termencoding = 'utf-8'
+--vim.opt.termencoding = 'utf-8'
 
 -- For CursorHold autocommand, required by which-key
 vim.opt.updatetime = 100
