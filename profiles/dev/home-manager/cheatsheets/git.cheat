@@ -1,8 +1,7 @@
 % git
+
 # Create a branch alias where source->destination ("source" is created)
 git symbolic-ref refs/heads/<source> refs/heads/<destination>
 
-
-% git
 # Delete a branch alias
 git symbolic-ref -d refs/heads/<source>

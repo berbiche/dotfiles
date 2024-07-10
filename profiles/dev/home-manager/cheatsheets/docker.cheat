@@ -2,3 +2,7 @@
 
 # Check if docker image exists in remote registry
 docker manifest inspect <image>
+
+# Export docker image filesystem
+echo docker image pull --platform=linux/amd64 <image>
+echo docker export '$(docker create <image>)' -o caca.tar.gz

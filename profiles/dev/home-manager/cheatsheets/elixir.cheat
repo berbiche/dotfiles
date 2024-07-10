@@ -1,8 +1,11 @@
 % elixir, erlang, work
 
 # Mix equivalent of `rebar3 shell`
-; useful with Erlang programs that use the Elixir toolchain
 iex -S mix run --no-start
+
+# Erlang eshell with Elixir project
+; https://stackoverflow.com/a/76815198
+elixir --erl '-user user_drv' -S mix run --no-start --no-halt
 
 # Mix format one file
 mix format <file>
