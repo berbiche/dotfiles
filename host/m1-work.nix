@@ -18,6 +18,13 @@ in
   system.defaults.loginwindow.LoginwindowText = "Property of Nicolas Berbiche";
   security.pam.enableSudoTouchIdAuth = true;
 
+  # Include Netskope's certificates
+  security.pki.certificateFiles = [
+    (pkgs.runCommandLocal "caa-out-of-store-symlink" {} ''
+      ln -s '/Library/Application Support/Netskope/STAgent/data/nscacert.pem' $out
+    '')
+  ];
+
   homebrew.enable = true;
   homebrew.onActivation.upgrade = true;
   homebrew.onActivation.cleanup = "uninstall";
