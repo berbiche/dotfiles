@@ -17,44 +17,50 @@ wk.setup {
   marks = true,
   registers = true,
   spelling = { enabled = false, },
-  key_labels = {
-    ['<space>'] = 'SPC',
-    ['<leader>'] = 'SPC',
+  replace = {
+    key = {
+      {'<space>', 'SPC'},
+      {'<leader>', 'SPC'},
+    },
   },
   disable = {
     filetypes = {'neo-tree',},
   },
-  trigggers = {},
-  triggers_nowait = {
-    -- marks
-    --'`',
-    --"'",
-    --'g`',
-    --"g'",
-    -- registers
-    '"',
-    '<c-r>',
-    -- spelling
-    'z=',
-  },
-  window = {
+  -- triggers = {},
+  delay = function(ctx)
+    return ctx.plugin and 0 or 200
+  end,
+  -- triggers_nowait = {
+  --   -- marks
+  --   --'`',
+  --   --"'",
+  --   --'g`',
+  --   --"g'",
+  --   -- registers
+  --   '"',
+  --   '<c-r>',
+  --   -- spelling
+  --   'z=',
+  -- },
+  win = {
     border = 'rounded'
   },
 }
-wk.register {
-  ['<leader>']  = { name = '+leader' },
-  ["<leader>'"] = { name = '+marks' },
-  ['<leader>b'] = { name = '+buffer' },
-  ['<leader>d'] = { name = '+diagnostics' },
-  ['<leader>f'] = { name = '+file' },
-  ['<leader>g'] = { name = '+git' },
-  ['<leader>l'] = { name = '+lsp' },
-  ['<leader>o'] = { name = '+open' },
-  ['<leader>p'] = { name = '+project' },
-  ['<leader>q'] = { name = '+session' },
-  ['<leader>t'] = { name = '+tabs' },
-  ['<leader>w'] = { name = '+window' },
-}
+wk.add({
+  {'<leader>',  group = '+leader'},
+  {'"<leader>', group = '+marks'},
+  {'<leader>b', group = '+buffer'},
+  {'<leader>d', group = '+diagnostics'},
+  {'<leader>f', group = '+file'},
+  {'<leader>g', group = '+git'},
+  {'<leader>l', group = '+lsp'},
+  {'<leader>o', group = '+open'},
+  {'<leader>p', group = '+project'},
+  {'<leader>q', group = '+session'},
+  {'<leader>s', group = '+search'},
+  {'<leader>t', group = '+tabs'},
+  {'<leader>w', group = '+window'},
+})
 
 -- Remove Ex mode keybind
 bind('n', 'Q', ''')
@@ -130,13 +136,13 @@ end, silent, 'Open floating terminal')
 bind('n', '<leader>gg', wrap(require('neogit').open), silent, 'Open neogit')
 
 -- Trouble
-wk.register({
-  ['dx'] = {'<cmd>Trouble<cr>', 'Trouble'},
-  ['dw'] = {'<cmd>Trouble diagnostics toggle<cr>', 'Diagnostics'},
-  ['db'] = {'<cmd>Trouble diagnostics toggle filter.buf=0<cr>', 'Buffer Diagnostics'},
-  ['dl'] = {'<cmd>Trouble loclist toggle<cr>', 'Loclist'},
-  ['dq'] = {'<cmd>Trouble quickfix toggle<cr>', 'Quickfix'},
-  ['ds'] = {'<cmd>Trouble symbols toggle focus=false<cr>', 'Symbols'},
+wk.add({
+  {'dx', '<cmd>Trouble<cr>', desc = 'Trouble'},
+  {'dw', '<cmd>Trouble diagnostics toggle<cr>', desc = 'Diagnostics'},
+  {'db', '<cmd>Trouble diagnostics toggle filter.buf=0<cr>', desc = 'Buffer Diagnostics'},
+  {'dl', '<cmd>Trouble loclist toggle<cr>', desc = 'Loclist'},
+  {'dq', '<cmd>Trouble quickfix toggle<cr>', desc = 'Quickfix'},
+  {'ds', '<cmd>Trouble symbols toggle focus=false<cr>', desc = 'Symbols'},
 }, {
   mode = 'n',
   prefix = '<leader>',
@@ -196,11 +202,11 @@ local function delete_current_buffer(wipeout)
   end
 end
 
-wk.register({
-  ['bd'] = {wrap(delete_current_buffer), 'Close buffer'},
-  ['bD'] = {wrap(delete_current_buffer, true), 'Wipeout buffer'},
-  ['bo'] = {wrap(delete_other_buffers), 'Close other buffers'},
-  ['bO'] = {wrap(delete_other_buffers, true), 'Wipeout other buffers'},
+wk.add({
+  {'bd', wrap(delete_current_buffer), desc = 'Close buffer'},
+  {'bD', wrap(delete_current_buffer, true), desc = 'Wipeout buffer'},
+  {'bo', wrap(delete_other_buffers), desc = 'Close other buffers'},
+  {'bO', wrap(delete_other_buffers, true), desc = 'Wipeout other buffers'},
 }, {prefix = '<leader>'})
 
 -- Switch to most recently used buffer

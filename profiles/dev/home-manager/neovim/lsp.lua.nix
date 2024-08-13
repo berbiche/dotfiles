@@ -265,12 +265,6 @@ local function on_attach(client, bufnr)
     else
       local mode = value[4] and {'n', 'v'} or {'n'}
       bind(mode, key, '<nop>', { buffer = bufnr }, 'Unsupported: ' .. value[3])
-      -- Debugging
-      vim.notify_once(
-        ('Action does not exist for mapping %s -> %s'):format(key, vim.inspect(value)),
-        vim.log.levels.DEBUG,
-        {title = 'LSP'}
-      )
     end
   end
 
