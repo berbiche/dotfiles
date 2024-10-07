@@ -108,6 +108,7 @@ lib.mkMerge [
         d = "diff";
         dc = "diff --cached";
         f = "fetch --prune";
+        fa = "${f} --all";
         fo = "${f} origin";
         fu = "${f} upstream";
         # Not sure how to correctly check if GIT_DIR and/or GIT_WORK_TREE are set...
