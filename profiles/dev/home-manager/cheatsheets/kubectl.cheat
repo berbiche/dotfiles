@@ -3,3 +3,8 @@
 # Approve pending CSR certificates
 
 kubectl get csr | awk '/Pending/ {print $1}' | xargs -I {} kubectl certificate approve {}
+
+# jsonpath example
+
+kubectl get pods -A -o jsonpath='{range .items[*]}{.metadata.namespace}{"/"}{.metadata.name}{"\n"}{end}'
+
