@@ -12,8 +12,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
-      # url= "github:nix-community/home-manager/master";
-      url= "github:berbiche/home-manager/fix-navi-config-dir-on-darwin";
+      # url = "github:nix-community/home-manager/master";
+      url = "github:berbiche/home-manager/fix-navi-config-dir-on-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -156,7 +156,7 @@
             # mkHomeManagerConfig arguments
             home.username = args.username;
             home.homeDirectory = args.homeDirectory or "/home/${args.username}";
-            home.stateVersion = "24.05";
+            home.stateVersion = "25.05";
           }
           ./top-level/home-manager-options.nix
           ./top-level/standalone-home-config.nix

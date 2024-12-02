@@ -15,7 +15,7 @@ in
       erlang = pkgs.erlang_26;
       elixir = prev.elixir_1_15;
       erlang-ls = prev.erlang-ls.overrideAttrs { doCheck = false; };
-      elixir-ls = prev.elixir-ls.override { elixir = final.elixir; };
+      # elixir-ls = prev.elixir-ls.override { elixir = final.elixir; };
       # The test suite does not run in parallel and is very slow
       # ...so just skip it
       rebar3 = prev.rebar3.overrideAttrs (_drv: {

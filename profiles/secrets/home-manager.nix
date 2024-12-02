@@ -66,7 +66,7 @@ in
       home.file.".gnupg/gpg-agent.conf".text =  lib.mkAfter ''
         pinentry-program ${
           if isAarch64 then
-            "${osConfig.homebrew.brewPrefix or "/opt/homebrew/bin"}/pinentry-mac"
+            "${osConfig.homebrew.brewPrefix}/pinentry-mac"
           else
             "/usr/local/bin/pinentry-mac"
         }

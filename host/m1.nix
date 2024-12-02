@@ -20,6 +20,12 @@ in
   system.defaults.loginwindow.LoginwindowText = "Property of Nicolas Berbiche";
 
   nix.distributedBuilds = true;
+  nix.settings.trusted-substituters = [
+    "ssh-ng://nixos-builder.node.tq.rs"
+  ];
+  nix.settings.trusted-public-keys = [
+    "nixos-builder.node.tq.rs:iRHmjI5sQ7vkwkArTZIBIYm8dFVs9VzVbgNwNhlzBfc="
+  ];
   nix.buildMachines = [
     {
       systems = [ "x86_64-linux" "i686-linux" ];
@@ -31,17 +37,18 @@ in
       sshKey = "/etc/nix/nixos-builder.key";
       publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSU1RUHlybWxObExmcnVSMnJONXB2MEJSeGtqVGJna2wyb1E5dm5YSjNYOEMgcm9vdEBuaXhvcy1idWlsZGVyCg==";
     }
-    {
-      systems = [ "x86_64-linux" "i686-linux" ];
-      supportedFeatures = [ "big-parallel" ];
-      sshUser = "root";
-      maxJobs = 8;
-      hostName = "172.16.2.6";
-      sshKey = "/Users/nberbiche/.ssh/otakuthon";
-      # publicHostKey = "H+DeIUeuXgqoDI+XcNL43mBheZGSIBRHrPz/mrIIQqw";
-    }
+    # {
+    #   systems = [ "x86_64-linux" "i686-linux" ];
+    #   supportedFeatures = [ "big-parallel" ];
+    #   sshUser = "root";
+    #   maxJobs = 8;
+    #   hostName = "172.16.2.6";
+    #   sshKey = "/Users/nberbiche/.ssh/otakuthon";
+    #   # publicHostKey = "H+DeIUeuXgqoDI+XcNL43mBheZGSIBRHrPz/mrIIQqw";
+    # }
   ];
-  # nix.settings.builders-use-substitutes = true;
+  # Instruct remote builders to use their own substitute cache
+  nix.settings.builders-use-substitutes = true;
 
   homebrew.enable = true;
   homebrew.onActivation.upgrade = true;

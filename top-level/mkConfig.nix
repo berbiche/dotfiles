@@ -25,7 +25,7 @@ let
     nix = {
       package = pkgs.nix;
       settings = {
-        experimental-features = ["nix-command" "flakes" "repl-flake"];
+        experimental-features = ["nix-command" "flakes"];
         keep-outputs = true;
         keep-derivations = true;
         # Override the global registry because it should never have existed
