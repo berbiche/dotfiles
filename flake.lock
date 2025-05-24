@@ -219,16 +219,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1732313367,
-        "narHash": "sha256-0dM7doA0c/rbw6sXFpMensfR/1XbtSwswmGNu6oo3zI=",
-        "owner": "berbiche",
+        "lastModified": 1747978958,
+        "narHash": "sha256-pQQnbxWpY3IiZqgelXHIe/OAE/Yv4NSQq7fch7M6nXQ=",
+        "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "771e2eb5c852cebb270af13fb2f5a57f35e9dc57",
+        "rev": "7419250703fd5eb50e99bdfb07a86671939103ea",
         "type": "github"
       },
       "original": {
-        "owner": "berbiche",
-        "ref": "fix-navi-config-dir-on-darwin",
+        "owner": "nix-community",
+        "ref": "master",
         "repo": "home-manager",
         "type": "github"
       }
