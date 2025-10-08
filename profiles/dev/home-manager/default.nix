@@ -33,8 +33,7 @@ in
 
     # Programming
     gnumake # for the `make` program
-    # Broken: 2023-05-22 because OpenSSL 1.1 is marked "unsecure"
-    #powershell # for some rare one-off scripts and tests
+    powershell # for some rare one-off scripts and tests
     tig # navigate a git repository's log and commits in a TUI, provides sorting, filtering, etc.
 
     aria # curl/wget on steroid to download files using different protocols
@@ -78,8 +77,6 @@ in
 
     github-cli # Quite useful actually
 
-    googler # search Google from the command line and copy links
-
     # NixOS/nixpkgs stuff
     nixpkgs-review # review nixpkgs PR
     nix-update # quickly update a package
@@ -90,27 +87,23 @@ in
     (python3.withPackages (ps: [ ps.ptpython ps.ipython ]))
 
   ] ++ lib.optionals isLinux [
-    nix-top # status of packages being built
-
     # Broken: 2021-07-10
     # pipr # interactive tool to write pipelines
     # bubblewrap # required by pipr
 
-    # Broken: 2023-03-05
-    ncdu # interactive du
-
     insomnia # GUI tool to test http APIs, alternative to postman and hoppscotch (formerly postwoman)
-
-    pv # view status of pipes (bandwidth, etc.)
 
     marker # markdown editor
   ] ++ lib.optionals (!isAarch64) [
-    iotop # see which processes/kernel tasks are using IO
-
     # onefetch's libresolv dependency does not build on aarch64
     onefetch # neofetch for a git repository : lines of code, repo, etc.
   ] ++ lib.filter (lib.myLib.supportedOn pkgs.stdenv.hostPlatform.system) [
+    nix-top # status of packages being built
+    ncdu # interactive du
+
+    pv # view status of pipes (bandwidth, etc.)
+
+    iotop # see which processes/kernel tasks are using IO
     gping
-    asroute
   ];
 }

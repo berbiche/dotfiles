@@ -5,6 +5,8 @@ local ts = require('telescope')
 local builtins = require('telescope.builtin')
 local themes = require('telescope.themes')
 
+local motions = require('user.motions')
+
 local function wrap(fun, ...)
   return function()
     fun(unpack(arg))
@@ -111,7 +113,7 @@ bind('c', '<C-k>', [[<C-\>egetcmdline()[:getcmdpos() - 2]<cr>]], 'Delete till en
 
 -- Fix terminal escape char
 bind('t', '<Esc>', [[<C-\><C-n>]])
-bind('n', '<leader>ot', function()
+bind('n', '<leader>o`', function()
   cmd[[botright split]]
   cmd.resize(-10)
   cmd.terminal()
@@ -137,15 +139,14 @@ bind('n', '<leader>gg', wrap(require('neogit').open), silent, 'Open neogit')
 
 -- Trouble
 wk.add({
-  {'dx', '<cmd>Trouble<cr>', desc = 'Trouble'},
-  {'dw', '<cmd>Trouble diagnostics toggle<cr>', desc = 'Diagnostics'},
-  {'db', '<cmd>Trouble diagnostics toggle filter.buf=0<cr>', desc = 'Buffer Diagnostics'},
-  {'dl', '<cmd>Trouble loclist toggle<cr>', desc = 'Loclist'},
-  {'dq', '<cmd>Trouble quickfix toggle<cr>', desc = 'Quickfix'},
-  {'ds', '<cmd>Trouble symbols toggle focus=false<cr>', desc = 'Symbols'},
+  {'<leader>dx', '<cmd>Trouble<cr>', desc = 'Trouble'},
+  {'<leader>dw', '<cmd>Trouble diagnostics toggle<cr>', desc = 'Diagnostics'},
+  {'<leader>db', '<cmd>Trouble diagnostics toggle filter.buf=0<cr>', desc = 'Buffer Diagnostics'},
+  {'<leader>dl', '<cmd>Trouble loclist toggle<cr>', desc = 'Loclist'},
+  {'<leader>dq', '<cmd>Trouble quickfix toggle<cr>', desc = 'Quickfix'},
+  {'<leader>ds', '<cmd>Trouble symbols toggle focus=false<cr>', desc = 'Symbols'},
 }, {
-  mode = 'n',
-  prefix = '<leader>',
+  mode = { 'n' },
 })
 
 
@@ -165,8 +166,8 @@ local function open_tree(find_file)
     api.tree.toggle(opts)
   end
 end
-bind('n', '<leader>op', wrap(open_tree, false), silent, 'Open file tree')
-bind('n', '<leader>oP', wrap(open_tree, true), silent, 'Focus current file in file tree')
+bind('n', '<leader>ot', wrap(open_tree, false), silent, 'Open file tree')
+bind('n', '<leader>oT', wrap(open_tree, true), silent, 'Focus current file in file tree')
 
 -- Require
 bind('n', '<leader>wz', function() require('twilight').toggle() end, 'Toggle presentation mode')
@@ -203,11 +204,13 @@ local function delete_current_buffer(wipeout)
 end
 
 wk.add({
-  {'bd', wrap(delete_current_buffer), desc = 'Close buffer'},
-  {'bD', wrap(delete_current_buffer, true), desc = 'Wipeout buffer'},
-  {'bo', wrap(delete_other_buffers), desc = 'Close other buffers'},
-  {'bO', wrap(delete_other_buffers, true), desc = 'Wipeout other buffers'},
-}, {prefix = '<leader>'})
+  {'<leader>bd', wrap(delete_current_buffer), desc = 'Close buffer'},
+  {'<leader>bD', wrap(delete_current_buffer, true), desc = 'Wipeout buffer'},
+  {'<leader>bo', wrap(delete_other_buffers), desc = 'Close other buffers'},
+  {'<leader>bO', wrap(delete_other_buffers, true), desc = 'Wipeout other buffers'},
+}, {
+  mode = { 'n' },
+})
 
 -- Switch to most recently used buffer
 local function switch_to_last_buffer()
@@ -267,6 +270,7 @@ for _, v in pairs({',', 'b,', 'bi'}) do
   end, silent, 'Find buffer')
 end
 
+
 -- List spelling suggestions
 bind('n', '<leader>si', wrap(builtins.spell_suggest), silent, 'Show spelling suggestions')
 bind('n', 'z=', wrap(builtins.spell_suggest), silent, 'Show spelling suggestions')
@@ -282,6 +286,20 @@ end, silent, 'List projects')
 -- Finding things
 bind('n', '<leader>ss', wrap(builtins.current_buffer_fuzzy_find), silent, 'Search in current buffer')
 bind('n', '<leader>sp', wrap(builtins.live_grep), silent, 'Search word in current project')
+bind('n', '<leader>sb', function()
+  builtins.live_grep({
+    cwd = vim.fn.expand('%:p:h')
+  })
+end, silent, 'Search text in current folder')
+bind('n', '<leader>sB', function()
+  builtins.live_grep({
+    cwd = vim.fn.expand('%:p:h'),
+    additional_args = function()
+      return {"--hidden", "--glob", "!.git/*"}
+    end
+  })
+end, silent, 'Search text in current folder (including hidden files)')
+
 
 -- List registers
 bind('n', '<leader>ir', wrap(builtins.registers), silent, 'List registers')
@@ -320,4 +338,10 @@ bind('n', '<C-l>', ':nohlsearch<CR>', silent, 'Disable search highlighting')
 bind('n', '<leader>tn', ':tabnext<CR>', silent, 'Next tab')
 bind('n', '<leader>tp', ':tabprevious<CR>', silent, 'Previous tab')
 bind('n', '<leader>tk', ':tabclose<CR>', silent, 'Kill tab')
+
+-- Motions
+bind('o', '~', wrap(motions.select_until_case_change), { desc = 'Motion: case change' })
+bind('x', '~', wrap(motions.select_until_case_change), { desc = 'Motion: case change' })
+bind('o', '~', wrap(motions.select_until_operator), { desc = 'Motion: until separator' })
+bind('x', '~', wrap(motions.select_until_operator), { desc = 'Motion: until separator' })
 ''

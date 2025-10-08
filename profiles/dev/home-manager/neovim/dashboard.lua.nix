@@ -59,22 +59,22 @@ if vim.g.vscode == nil then
   })
 end
 
--- Open nvim-tree automatically
-autocmd('User', {
-  group = myCommandGroup,
-  nested = true,
-  pattern = 'StartifyBufferOpened',
-  callback = function(ev)
-    local nvim_tree = require('nvim-tree.api')
-    if not nvim_tree.tree.is_visible() then
-      nvim_tree.tree.open()
-      -- Unfocus
-      vim.cmd('noautocmd wincmd p')
-    end
-  end,
-})
+-- -- Open nvim-tree automatically
+-- autocmd('User', {
+--   group = myCommandGroup,
+--   nested = true,
+--   pattern = 'StartifyBufferOpened',
+--   callback = function(ev)
+--     local nvim_tree = require('nvim-tree.api')
+--     if not nvim_tree.tree.is_visible() then
+--       nvim_tree.tree.open()
+--       -- Unfocus
+--       vim.cmd('noautocmd wincmd p')
+--     end
+--   end,
+-- })
 
--- Automatically close when its last buffer/window
+-- Automatically close when it's the last buffer/window
 autocmd('QuitPre', {
   group = myCommandGroup,
   callback = function()

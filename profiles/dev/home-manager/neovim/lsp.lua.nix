@@ -6,13 +6,14 @@
 #
 { pkgs, config, ... }:
 let
-  inherit (config.my.dev) beamPackages;
+  # inherit (config.my.dev) beamPackages;
+  inherit (pkgs) beamPackages;
 in
 ''
 
 local lsp = require('lspconfig')
 local lspkind = require('lspkind')
-local cmp_lsp = require('cmp_nvim_lsp')
+local blink = require('blink.cmp')
 local glance = require('glance')
 local glance_actions = glance.actions
 local hasnavic, navic = pcall(require, 'nvim-navic')
@@ -163,10 +164,9 @@ glance.setup {
 }
 
 
--- cmp-lsp capabilities
-cmp_lsp.setup()
+-- lsp capabilities
 lspkind.init()
-local capabilities = cmp_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = blink.get_lsp_capabilities()
 
 -- Display a border around floating popups
 vim.diagnostic.config({ virtual_text = false, float = { border = 'rounded' }, })

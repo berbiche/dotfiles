@@ -23,10 +23,10 @@ lib.mkMerge [
     ];
 
     programs.emacs = {
-      enable = true;
+      enable = false;
       package = lib.mkMerge [
-        (lib.mkIf isLinux (emacsWithPackages pkgs.emacs29-pgtk))
-        (lib.mkIf isDarwin (emacsWithPackages pkgs.emacs29))
+        (lib.mkIf isLinux (emacsWithPackages pkgs.emacs30-pgtk))
+        (lib.mkIf isDarwin (emacsWithPackages pkgs.emacs30))
       ];
     };
 
@@ -44,8 +44,7 @@ lib.mkMerge [
         name = "doom-emacs-dotfiles";
         src = ./doom.d;
         patches = [
-          (pkgs.substituteAll {
-            src = ./doom.d/envrc-package.patch;
+          (pkgs.replaceVars ./doom.d/envrc-package.patch {
             envrc_direnv_package = "${config.programs.direnv.package or pkgs.direnv}/bin/direnv";
           })
         ];

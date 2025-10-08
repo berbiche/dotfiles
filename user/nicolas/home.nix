@@ -16,6 +16,7 @@ in
 
   # my.defaults.terminal = "${config.programs.alacritty.package}/bin/alacritty";
   my.defaults.terminal = "${config.programs.kitty.package}/bin/kitty";
+  # my.defaults.terminal = "${config.programs.ghostty.package}/bin/ghostty";
   my.defaults.file-explorer = mkIf isLinux "${pkgs.cinnamon.nemo}/bin/nemo";
 
   my.theme.light = "Orchis";

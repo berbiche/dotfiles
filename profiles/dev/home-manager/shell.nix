@@ -7,6 +7,13 @@ in
   programs.zsh.enable = true;
   programs.bash.enable = true;
   programs.fish.enable = true;
+
+  home.shell = {
+    enableBashIntegration = true;
+    enableFishIntegration = true;
+    enableZshIntegration = true;
+  };
+
   home.shellAliases = rec {
     ".."      = "cd ..";
     "..."     = "cd ../..";

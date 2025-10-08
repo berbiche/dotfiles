@@ -16,7 +16,9 @@ in
   fonts.packages = with pkgs; [
     anonymousPro
     source-code-pro
-    nerdfonts
+    nerd-fonts.meslo-lg
+    nerd-fonts.droid-sans-mono
+    nerd-fonts.anonymice
     emacs-all-the-icons-fonts
   ];
 

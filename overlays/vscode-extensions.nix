@@ -53,7 +53,7 @@ in {
       in package.overrideAttrs (drv: {
         postInstall = drv.postInstall or "" + ''
           mkdir -p "$out/${drv.installPrefix}/wakatime-cli"
-          ln -sT "${prev.wakatime}/bin/wakatime" "$out/${drv.installPrefix}/wakatime-cli/wakatime-cli"
+          ln -sT "${prev.wakatime}/bin/wakatime-cli" "$out/${drv.installPrefix}/wakatime-cli/wakatime-cli"
         '';
       });
     };

@@ -79,13 +79,13 @@ in
 
   config = lib.mkIf config.profiles.dev.vscode.enable {
     programs.vscode = {
-      enable = true;
+      enable = false;
 
       package = finalPackage;
 
-      extensions = [];
+      profiles.default.extensions = [];
 
-      userSettings = {
+      profiles.default.userSettings = {
         "editor.bracketPairColorization.enabled" = true;
         "editor.cursorSmoothCaretAnimation" = true;
         "editor.fontFamily" = "'Source Code Pro', 'Anonymous Pro', 'Droid Sans Mono', monospace, 'Droid Sans Fallback'";
@@ -116,19 +116,17 @@ in
         # Extension settings
         "java.semanticHighlighting.enabled" = true;
         "vscode-neovim.neovimExecutablePaths.linux" = "${config.programs.neovim.finalPackage}/bin/nvim";
-  
+
         # Language settings
         "[nix]"."editor.tabSize" = 2;
         "[c]" = {
           "editor.defaultFormatter" = "llvm-vs-code-extensions.vscode-clangd";
         };
       };
-  
-      keybindings = [
-  
-      ];
+
+      profiles.default.keybindings = [ ];
     };
-  
+
     xdg.mimeApps = let
       desktopFile =
         if finalPackage.pname == "vscodium"

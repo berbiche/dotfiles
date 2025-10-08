@@ -30,15 +30,11 @@ in
 
       nix.settings.allowed-users = [ "@admin" config.my.username ];
       nix.settings.trusted-users = [ "@admin" config.my.username ];
-      nix.useDaemon = true;
-      services.nix-daemon.enable = true;
 
-      nix.gc.user = "root";
+      system.primaryUser = config.my.username;
 
       # Disable useless warning about NIX_PATH with a flake configuration
       system.checks.verifyNixPath = false;
-
-      nix.configureBuildUsers = true;
     }
   ];
 }

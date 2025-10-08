@@ -22,7 +22,7 @@
   };
 
   system.defaults.dock = lib.mkDefault {
-    expose-group-by-app = true;
+    expose-group-apps = true;
     minimize-to-application = true;
     mru-spaces = false;
     orientation = "bottom";
@@ -47,7 +47,7 @@
     NSAutomaticPeriodSubstitutionEnabled = false;
     NSAutomaticQuoteSubstitutionEnabled = false;
     NSAutomaticSpellingCorrectionEnabled = false;
-    InitialKeyRepeat = 25;
+    InitialKeyRepeat = 10;
     KeyRepeat = 2;
     "com.apple.keyboard.fnState" = false;
     "com.apple.mouse.tapBehavior" = 1;
@@ -70,6 +70,10 @@
     "com.apple.safari"."ShowFullURLInSmartSearchField" = true;
   };
 
+  security.pam.services.sudo_local = {
+    reattach = true;
+    touchIdAuth = true;
+  };
 
   # Symlink Home Manager apps to ~/Applications/Home\ Manager\ Apps
   # for Raycast (spotlight alternative)

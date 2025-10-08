@@ -44,7 +44,7 @@ in
       }
     ];
 
-    initExtra = ''
+    initContent = ''
       # Hello message
       (
       echo $USER@$HOST  $(uname -srm) \

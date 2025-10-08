@@ -8,3 +8,6 @@ kubectl get csr | awk '/Pending/ {print $1}' | xargs -I {} kubectl certificate a
 
 kubectl get pods -A -o jsonpath='{range .items[*]}{.metadata.namespace}{"/"}{.metadata.name}{"\n"}{end}'
 
+# kubie context example
+;            file          namespace user
+kubie ctx -f kubeconfig -n argocd admin

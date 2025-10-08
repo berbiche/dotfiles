@@ -31,5 +31,5 @@ lib.extend (libfinal: libprev: {
   myLib.supportedOn = platform: pkg:
     if pkg.meta ? platforms && pkg.meta ? badPlatforms
     then builtins.elem platform pkg.meta.platforms && !builtins.elem platform pkg.meta.badPlatforms
-    else true;
+    else false;
 })

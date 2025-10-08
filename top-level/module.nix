@@ -18,7 +18,7 @@ with builtins;
     # This only aliases the option, the logic to copy the configuration
     # is below in the `config` section.
     home = mkOption {
-      type = options.home-manager.users.type.functor.wrapped;
+      type = options.home-manager.users.type.nestedTypes.elemType;
     };
 
     location = mkOption {

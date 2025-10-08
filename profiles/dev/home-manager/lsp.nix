@@ -2,7 +2,7 @@
 
 let
   inherit (pkgs.stdenv.hostPlatform) isLinux isDarwin;
-  inherit (config.my.dev) beamPackages;
+  # inherit (config.my.dev) beamPackages;
 in
 {
   options.my.dev.beamPackages = lib.mkOption {
@@ -11,18 +11,19 @@ in
   };
 
   config = {
-    my.dev.beamPackages = pkgs.beamPackages.extend (final: prev: {
-      erlang = pkgs.erlang_26;
-      elixir = prev.elixir_1_15;
-      erlang-ls = prev.erlang-ls.overrideAttrs { doCheck = false; };
-      # elixir-ls = prev.elixir-ls.override { elixir = final.elixir; };
-      # The test suite does not run in parallel and is very slow
-      # ...so just skip it
-      rebar3 = prev.rebar3.overrideAttrs (_drv: {
-        doCheck = false;
-      });
-      rebar3WithPlugins = args: prev.rebar3WithPlugins (args // { rebar3 = final.rebar3; });
-    });
+    # my.dev.beamPackages = pkgs.beamPackages.extend (final: prev: {
+    #   # erlang = pkgs.erlang_27;
+    #   # elixir = prev.elixir_1_17.override { erlang = final.erlang; };
+    #   # elixir = final.elixir_1_18;
+    #   # erlang-ls = prev.erlang-ls.overrideAttrs { doCheck = false; };
+    #   # elixir-ls = prev.elixir-ls.override { elixir = final.elixir; };
+    #   # The test suite does not run in parallel and is very slow
+    #   # ...so just skip it
+    #   # rebar3 = prev.rebar3.overrideAttrs (_drv: {
+    #   #   doCheck = false;
+    #   # });
+    #   # rebar3WithPlugins = args: prev.rebar3WithPlugins (args // { rebar3 = final.rebar3; });
+    # });
 
     # Of course, all of these packages can be overriden by direnv (envrc)
     home.packages = with pkgs; [

@@ -48,6 +48,7 @@ in
     "${luaConfigLocation}/filetree.lua".text = import ./filetree.lua.nix moduleArgs;
     "${luaConfigLocation}/keybinds.lua".text = import ./keybinds.lua.nix moduleArgs;
     "${luaConfigLocation}/lsp.lua".text = import ./lsp.lua.nix moduleArgs;
+    "${luaConfigLocation}/motions.lua".text = import ./motions.lua.nix moduleArgs;
     "${luaConfigLocation}/neovide.lua".text = import ./neovide.lua.nix moduleArgs;
     "${luaConfigLocation}/settings.lua".text = import ./settings.lua.nix moduleArgs;
     "${luaConfigLocation}/telescope.lua".text = import ./telescope.lua.nix moduleArgs;
@@ -151,20 +152,10 @@ in
         # }
 
         {
-          plugin = vim-sandwich; # replaces vim-surround
+          plugin = nvim-surround;
           type = "lua";
           config = ''
-            vim.g['sandwich#recipes'] = vim.deepcopy(vim.g['sandwich#default_recipes'])
-            local sandwich_recipes = {
-
-            }
-            for _, recipe in ipairs(sandwich_recipes) do
-              table.insert(vim.g['sandwich#recipes'], recipe)
-            end
-            -- Use surround.vim keymaps since the default keymap breaks vim-sneak
-            vim.cmd([[
-              runtime macros/sandwich/keymap/surround.vim
-            ]])
+            require("nvim-surround").setup {}
           '';
         }
 
@@ -244,15 +235,8 @@ in
         nvim-snippy
 
         # Completion popups
-        cmp-nvim-lsp
-        cmp-nvim-lsp-signature-help
-        cmp-buffer
-        cmp-path
-        cmp-snippy
-        # cmdline completion
-        cmp-cmdline
-        cmp-cmdline-history
-        nvim-cmp
+        blink-cmp
+        blink-cmp-git
 
 
         # Languages and LSP

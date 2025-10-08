@@ -55,14 +55,16 @@ in
   homebrew.onActivation.cleanup = "uninstall";
   homebrew.brewPrefix = "/opt/homebrew/bin";
   homebrew.taps = [
-    "homebrew/cask-versions"
   ];
   homebrew.brews = [
     "bitwarden-cli"
   ];
   homebrew.casks = [
-    "asix-ax88179"
+    "android-platform-tools"
+    # "asix-ax88179"
     "kitty"
+    "ghostty"
+    # "darktable"
     # "gcenx/wine/unofficial-wineskin"
     "spotify"
     "rancher"
@@ -72,13 +74,14 @@ in
     "burp-suite"
 
     # Available on cask-versions tap
-    "virtualbox-beta"
+    "virtualbox@beta"
   ];
 
   my.home = { config, pkgs, osConfig, ... }: {
     home.sessionPath = [ osConfig.homebrew.brewPrefix "/opt/homebrew/sbin" ];
     home.packages = [
       pkgs.anki-bin
+      pkgs.coconutBattery
     ];
   };
 }

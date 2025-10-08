@@ -19,9 +19,7 @@ in
     xdg.configFile = lib.mkMerge [
       (lib.listToAttrs (v: {
         name = "qtile/${baseNameOf v}";
-        value.source = pkgs.substituteAll (cfg.binaries // {
-          src = v;
-        });
+        value.source = pkgs.replaceVars v cfg.binaries;
       }) [
         ./python/config.py
         ./python/traverse.py

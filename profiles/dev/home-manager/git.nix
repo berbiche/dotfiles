@@ -140,7 +140,8 @@ lib.mkMerge [
         rc = "rebase --continue";
         ri = "rebase -i";
         rh = "reset --hard";
-        s = "show";
+        s = "status";
+        sh = "show";
         st = "status";
         u = "reset HEAD";
         # Shows the latest commit with more detail

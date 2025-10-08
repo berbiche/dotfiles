@@ -16,9 +16,9 @@ let
   # passed to Sway's `bindsym`. See `makeNoRepeat`.
   defaultKeybindings = let
     # these variable names have no meanings
-    md = lib.head options.wayland.windowManager.sway.config.type.functor.wrapped.functor.payload.modules;
-    kb = (lib.head md.imports).options.keybindings.default;
-  in assert builtins.isAttrs kb; kb;
+    a = lib.head options.wayland.windowManager.sway.config.type.functor.wrapped.functor.payload.modules;
+    b = (lib.head a.imports).options.keybindings.default;
+  in assert builtins.isAttrs b; b;
 
   inherit (config.lib.my) getScript;
 

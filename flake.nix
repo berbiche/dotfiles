@@ -12,8 +12,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
-      # url = "github:nix-community/home-manager/master";
-      url = "github:berbiche/home-manager/fix-navi-config-dir-on-darwin";
+      url = "github:nix-community/home-manager/master";
+      # url = "github:berbiche/home-manager/fix-navi-config-dir-on-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -84,7 +84,7 @@
     # We don't use nixpkgs' `lib.nixosSystem` because patches applied
     # to NixOS modules are not visible from this function exposed in their flake.
     # The solution is to import eval-config.nix directly.
-    mkLinuxConfig = args@{ platform, hostname, stateVersion ? "22.11", ... }: let
+    mkLinuxConfig = args@{ platform, hostname, stateVersion ? "25.05", ... }: let
       pkgs = nixpkgsFor.${platform};
       lib = pkgs.lib;
     in import "${pkgs.path}/nixos/lib/eval-config.nix" {
@@ -184,13 +184,6 @@
     };
 
     darwinConfigurations = {
-      "AG-PC0211-M" = mkDarwinConfig {
-        hostname = "AG-PC0211-M";
-        username = "n.berbiche";
-        platform = "aarch64-darwin";
-        hostConfiguration = ./host/m1-work.nix;
-        userConfiguration = ./user/nicolas.nix;
-      };
       m1 = mkDarwinConfig {
         hostname = "m1";
         username = "nberbiche";
@@ -206,13 +199,6 @@
         username = "blackarch";
         platform = "x86_64-linux";
         hostConfiguration = ./host/blackarch.nix;
-      };
-      work-laptop = mkHomeManagerConfig {
-        hostname = "AG-PC0069-L";
-        username = "n.berbiche";
-        platform = "x86_64-linux";
-        hostConfiguration = ./host/linux-work-laptop.nix;
-        extraProfiles = [];
       };
     };
 
@@ -236,10 +222,7 @@
         };
       };
       darwin = final: prev: prev.lib.optionalAttrs (prev.stdenv.hostPlatform.isDarwin) {
-        # FIXME: https://github.com/NixOS/nixpkgs/issues/168984
-        golangci-lint = prev.golangci-lint.override {
-          buildGoModule = prev.buildGoModule;
-        };
+        # nothing
       };
       x86_64-for-aarch64 = final: prev: let
         inherit (prev) lib;

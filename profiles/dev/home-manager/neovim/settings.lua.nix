@@ -28,7 +28,7 @@ vim.opt.fileencoding = 'utf-8'
 --vim.opt.termencoding = 'utf-8'
 
 -- For CursorHold autocommand, required by which-key
-vim.opt.updatetime = 100
+vim.opt.updatetime = 50
 
 vim.g.mapleader = ' '
 -- vim.g.maplocalleader = ','
@@ -57,7 +57,7 @@ vim.opt.autoindent = true
 
 -- Show line numbers with relative numbering
 vim.opt.number = true
-vim.opt.relativenumber = true
+vim.opt.relativenumber = false
 
 -- Always show 5 lines of context when scrolling (e.g. with <C-e> or <C-y>)
 vim.opt.scrolloff = 5
@@ -104,6 +104,8 @@ vim.opt.inccommand = 'nosplit'
 -- Hide "search hit TOP, ..."
 vim.opt.shortmess:append({c = true, s = true, q = false,})
 
+
+vim.o.winborder = 'rounded'
 
 ----------
 -- Colorscheme
