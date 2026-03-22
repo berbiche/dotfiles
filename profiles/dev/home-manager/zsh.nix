@@ -1,16 +1,14 @@
 { config, lib, pkgs, ... }:
 
-let
-  inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
-in
-{
+let inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
+in {
   programs.zsh = {
     enable = true;
     autosuggestion.enable = true;
     enableCompletion = true;
     enableVteIntegration = isLinux;
     syntaxHighlighting.enable = true;
-    dotDir = ".config/zsh";
+    dotDir = "${config.xdg.configHome}/zsh";
 
     defaultKeymap = "emacs";
 
@@ -31,18 +29,16 @@ in
       ZSH_AUTOSUGGEST_COMPLETION_IGNORE = "*/nix/store/*|rsync *|scp *|*/tmp/*";
     };
 
-    plugins = [
-      {
-        src = pkgs.fetchFromGitHub {
-          owner = "zimfw";
-          repo = "completion";
-          rev = "db079f405397a9dc9af93883e47d8adff817e3b1";
-          hash = "sha256-LNVKj/85zkYPjpfDDhlxErwFmjVY/vwr07GBQJGUU+0=";
-        };
-        name = "completion";
-        file = "init.zsh";
-      }
-    ];
+    plugins = [{
+      src = pkgs.fetchFromGitHub {
+        owner = "zimfw";
+        repo = "completion";
+        rev = "db079f405397a9dc9af93883e47d8adff817e3b1";
+        hash = "sha256-LNVKj/85zkYPjpfDDhlxErwFmjVY/vwr07GBQJGUU+0=";
+      };
+      name = "completion";
+      file = "init.zsh";
+    }];
 
     initContent = ''
       # Hello message
@@ -161,12 +157,16 @@ in
       colors
 
       nrsf() {
-        ${lib.optionalString isLinux ''
-          local cmd=(nixos-rebuild switch --use-remote-sudo --flake ~/dotfiles -v -L)
-        ''}
-        ${lib.optionalString isDarwin ''
-          local cmd=(darwin-rebuild switch --flake ~/dotfiles -v -L)
-        ''}
+        ${
+          lib.optionalString isLinux ''
+            local cmd=(nixos-rebuild switch --use-remote-sudo --flake ~/dotfiles -v -L)
+          ''
+        }
+        ${
+          lib.optionalString isDarwin ''
+            local cmd=(darwin-rebuild switch --flake ~/dotfiles -v -L)
+          ''
+        }
         echo "''${cmd[@]}" "$@"
         "''${cmd[@]}" "$@"
       }

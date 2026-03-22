@@ -5,29 +5,41 @@
     sopsFile = rootPath + "/secrets/ssh-config.cfg";
     mode = "0400";
     format = "binary";
-    path = "${config.home.homeDirectory}/.ssh/config.d/01-managed-by-home-manager.cfg";
+    path =
+      "${config.home.homeDirectory}/.ssh/config.d/01-managed-by-home-manager.cfg";
   };
 
   home.file.".ssh/config.d/.keep".text = "# Managed by Home Manager";
 
-  programs.ssh.enable = true;
+  programs.ssh = {
+    enable = true;
+    enableDefaultConfig = false;
 
-  programs.ssh.includes = [
-    "config.d/*.cfg"
-  ];
-  programs.ssh.matchBlocks."git-hosts" = {
-    host = "github.com gitlab.com";
-    identityFile = [
-      "~/.ssh/yubikey.pub"
-      "~/.ssh/github.pub"
-    ];
+    includes = [ "config.d/*.cfg" ];
+
+    matchBlocks."*" = {
+      forwardAgent = false;
+      addKeysToAgent = "no";
+      compression = false;
+      serverAliveInterval = 0;
+      serverAliveCountMax = 3;
+      hashKnownHosts = true;
+      userKnownHostsFile = "~/.ssh/known_hosts";
+      controlMaster = "no";
+      controlPath = "~/.ssh/master-%r@%n:%p";
+      controlPersist = "no";
+      extraOptions = {
+        IdentitiesOnly = "yes";
+        IgnoreUnknown = "UseKeychain";
+        UseKeychain = "yes";
+      };
+    };
+
+    matchBlocks."git-hosts" = {
+      host = "github.com gitlab.com";
+      identityFile = [ "~/.ssh/yubikey.pub" "~/.ssh/github.pub" ];
+    };
   };
-  programs.ssh.hashKnownHosts = true;
-  programs.ssh.extraConfig = ''
-      IdentitiesOnly yes
-      IgnoreUnknown UseKeychain
-      UseKeychain yes
-  '';
 
   # Fuck it, let's just hardcode the public key :-)
   home.file.".ssh/yubikey.pub".text = ''

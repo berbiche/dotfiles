@@ -9,34 +9,35 @@ let
   # List of all file configurations (subfolder/default.nix or thisfolder/file.nix)
   customPrograms = let
     files = readDir ./.;
-    filtered = filterAttrs (n: v: n != "default.nix" && (v == "directory" || (v == "regular" && hasSuffix ".nix" n)));
+    filtered = filterAttrs (n: v:
+      n != "default.nix"
+      && (v == "directory" || (v == "regular" && hasSuffix ".nix" n)));
   in map (p: ./. + "/${p}") (attrNames (filtered files));
-in
-{
+in {
   imports = [ ];
 
-  my.home = {config, ...}: let
-    homeCfg = config;
-  in {
-    imports = customPrograms;
+  my.home = { config, ... }:
+    let homeCfg = config;
+    in {
+      imports = customPrograms;
 
-    home.packages = with pkgs; lib.mkMerge [
-      (lib.mkIf (!homeCfg.my.config.is-work-host) [
-        element-desktop
-        yt-dlp
-      ])
-      (lib.mkIf (isLinux && !homeCfg.my.config.is-work-host) [
-        fractal
-        evince
-        nwg-launchers
-        bitwarden bitwarden-cli
-        spotify
-        signal-desktop
-        libreoffice
-      ])
-      (lib.mkIf isDarwin [
+      home.packages = with pkgs;
+        lib.mkMerge [
+          (lib.mkIf (!homeCfg.my.config.is-work-host) [ yt-dlp ])
+          (lib.mkIf (isLinux && !homeCfg.my.config.is-work-host) [
+            element-desktop
+            fractal
+            evince
+            nwg-launchers
+            bitwarden
+            bitwarden-cli
+            spotify
+            signal-desktop
+            libreoffice
+          ])
+          (lib.mkIf isDarwin [
 
-      ])
-    ];
-  };
+          ])
+        ];
+    };
 }

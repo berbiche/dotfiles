@@ -1,9 +1,7 @@
 { config, pkgs, lib, ... }:
 
 {
-  imports = [
-    ./homebrew.nix
-  ];
+  imports = [ ./homebrew.nix ];
 
   environment.shells = [ pkgs.fish pkgs.zsh ];
 
@@ -59,7 +57,8 @@
     ShowDate = 2;
   };
 
-  system.defaults.screencapture.location = "${config.users.users.${config.my.username}.home}/Screenshots";
+  system.defaults.screencapture.location =
+    "${config.users.users.${config.my.username}.home}/Screenshots";
 
   system.defaults.trackpad = {
     Clicking = true;
@@ -75,17 +74,7 @@
     touchIdAuth = true;
   };
 
-  # Symlink Home Manager apps to ~/Applications/Home\ Manager\ Apps
-  # for Raycast (spotlight alternative)
   my.home = { config, pkgs, ... }: {
-    home.file."Applications/Home Manager Apps".source = let
-      apps = pkgs.buildEnv {
-        name = "home-manager-applications";
-        paths = config.home.packages;
-        pathsToLink = "/Applications";
-      };
-    in "${apps}/Applications";
-
     home.sessionPath = [ "$HOME/.local/bin" ];
   };
 }

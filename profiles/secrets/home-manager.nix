@@ -5,14 +5,11 @@ let
   osConfig = args.osConfig or { };
 
   sopsKeyFile = "${config.xdg.configHome}/sops/age/keys.txt";
-in
-{
+in {
   imports = [ ./ssh.nix ./nix-conf.nix ];
 
   config = lib.mkMerge [
-    {
-      home.packages = [ pkgs.age pkgs.sops ];
-    }
+    { home.packages = [ pkgs.age pkgs.sops ]; }
     {
 
       # Create folder, I don't care if the folder is 755, as long as the content
@@ -22,22 +19,23 @@ in
       sops.age.generateKey = false;
       home.sessionVariables.SOPS_AGE_KEY_FILE = sopsKeyFile;
 
-      home.activation.setupSops = config.lib.dag.entryAfter [ "writeBoundary" ] ''
-        __systemctl() {
-          if [ -x /run/current-system/sw/bin/systemctl ]; then
-            echo /run/current-system/sw/bin/systemctl
-          elif [ -x /usr/bin/systemctl ]; then
-            echo /usr/bin/systemctl
-          fi
-        }
-        systemctl=$(__systemctl)
+      home.activation.setupSops =
+        config.lib.dag.entryAfter [ "writeBoundary" ] ''
+          __systemctl() {
+            if [ -x /run/current-system/sw/bin/systemctl ]; then
+              echo /run/current-system/sw/bin/systemctl
+            elif [ -x /usr/bin/systemctl ]; then
+              echo /usr/bin/systemctl
+            fi
+          }
+          systemctl=$(__systemctl)
 
-        if [ -n "$systemctl" ]; then
-          if "$systemctl" --quiet --user list-unit-files sops-nix; then
-            "$systemctl" start --user sops-nix
+          if [ -n "$systemctl" ]; then
+            if "$systemctl" --quiet --user list-unit-files sops-nix; then
+              "$systemctl" start --user sops-nix
+            fi
           fi
-        fi
-      '';
+        '';
 
       # home.file.".gnupg/gpg-agent.conf".text = lib.mkAfter ''
       #   pinentry-program ${pkgs.pinentry.gnome3}/bin/pinentry
@@ -63,18 +61,16 @@ in
 
     (lib.mkIf isDarwin {
       # pinentry-mac is not packaged on nixpkgs
-      home.file.".gnupg/gpg-agent.conf".text =  lib.mkAfter ''
+      home.file.".gnupg/gpg-agent.conf".text = lib.mkAfter ''
         pinentry-program ${
           if isAarch64 then
-            "${osConfig.homebrew.brewPrefix}/pinentry-mac"
+            "${osConfig.homebrew.prefix}/bin/pinentry-mac"
           else
             "/usr/local/bin/pinentry-mac"
         }
       '';
 
-      programs.gpg.scdaemonSettings = {
-        disable-ccid = true;
-      };
+      programs.gpg.scdaemonSettings = { disable-ccid = true; };
     })
   ];
 }
