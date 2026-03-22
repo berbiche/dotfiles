@@ -1,9 +1,17 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   imports = [ ./homebrew.nix ];
 
-  environment.shells = [ pkgs.fish pkgs.zsh ];
+  environment.shells = [
+    pkgs.fish
+    pkgs.zsh
+  ];
 
   # Fix xdg.{dataHome,cacheHome} being empty in home-manager
   users.users.${config.my.username} = {
@@ -36,7 +44,8 @@
 
   system.defaults.NSGlobalDomain = {
     AppleKeyboardUIMode = 3;
-    AppleShowAllExtensions = with config.system.defaults.finder;
+    AppleShowAllExtensions =
+      with config.system.defaults.finder;
       if isNull AppleShowAllExtensions then false else AppleShowAllExtensions;
     AppleShowScrollBars = "Always";
     ApplePressAndHoldEnabled = false;
@@ -57,16 +66,13 @@
     ShowDate = 2;
   };
 
-  system.defaults.screencapture.location =
-    "${config.users.users.${config.my.username}.home}/Screenshots";
+  system.defaults.screencapture.location = "${
+    config.users.users.${config.my.username}.home
+  }/Screenshots";
 
   system.defaults.trackpad = {
     Clicking = true;
     TrackpadRightClick = true;
-  };
-
-  system.defaults.CustomUserPreferences = {
-    "com.apple.safari"."ShowFullURLInSmartSearchField" = true;
   };
 
   security.pam.services.sudo_local = {
@@ -74,7 +80,9 @@
     touchIdAuth = true;
   };
 
-  my.home = { config, pkgs, ... }: {
-    home.sessionPath = [ "$HOME/.local/bin" ];
-  };
+  my.home =
+    { config, pkgs, ... }:
+    {
+      home.sessionPath = [ "$HOME/.local/bin" ];
+    };
 }
