@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ config, pkgs, lib, ... }:
 
 {
   homebrew.enable = lib.mkDefault true;
@@ -17,7 +12,6 @@
   ];
   homebrew.casks = [
     "alt-tab" # Windows-like alt-tab
-    "cmux"
     # Amphetamine is only available on the App Store
     #"amphetamine"           # Disable automatic sleep when toggled
     "hiddenbar" # Hide extra things in the top bar
@@ -26,7 +20,7 @@
     "meetingbar" # Display next meeting in the top bar
     "monitorcontrol" # DDC control of external displays (brightness, volume, etc.)
     "raycast" # Spotlight alternative that works with the /nix/store apps
-    "rectangle" # Window-manager on top of Aqua
+    # "rectangle" # Window-manager on top of Aqua
     "linearmouse" # Inverse scroll for external mouse
   ];
 }

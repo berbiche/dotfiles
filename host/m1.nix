@@ -9,7 +9,7 @@ in {
     longitude = -73.597;
   };
 
-  profiles.dev.vmware.enable = true;
+  profiles.dev.vmware.enable = false;
 
   nix.settings.max-jobs = 16;
 
@@ -50,28 +50,36 @@ in {
   homebrew.onActivation.cleanup = "uninstall";
   homebrew.prefix = "/opt/homebrew";
   homebrew.taps = [ ];
-  homebrew.brews = [ "bitwarden-cli" ];
+  homebrew.brews = [
+    "bitwarden-cli"
+
+    "colima"
+    "docker"
+    "docker-compose"
+    "docker-credential-helper"
+  ];
   homebrew.casks = [
     "android-platform-tools"
     # "asix-ax88179"
-    "kitty"
+    "cmux"
     "ghostty"
-    # "darktable"
-    # "gcenx/wine/unofficial-wineskin"
+
+    "openchamber"
+
     "spotify"
-    "rancher"
     "switchresx"
-    "vagrant"
 
-    "burp-suite"
-
-    # Available on cask-versions tap
-    "virtualbox@beta"
+    # Wallpaper tool
+    "wallspace"
   ];
 
   my.home = { config, pkgs, osConfig, ... }: {
     home.sessionPath =
       [ "${osConfig.homebrew.prefix}/bin" "${osConfig.homebrew.prefix}/sbin" ];
-    home.packages = [ pkgs.anki-bin pkgs.coconutbattery ];
+      home.packages = [
+        pkgs.anki-bin
+        pkgs.coconutbattery
+        pkgs.awscli2
+      ];
   };
 }

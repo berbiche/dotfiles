@@ -9,9 +9,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    homebrew.casks = [
-      "vmware-fusion"
-    ];
+    # homebrew.casks = [
+    #   "vmware-fusion"
+    # ];
 
     # Yeah, I didn't read the TOS, might be illegal
     # USE AT YOUR OWN RISK, I DO NOT ENDORSE OR PROVIDE ANY SUPPORT
@@ -26,7 +26,7 @@ in
         UserName = "root";
         ProcessType = "Background";
         # 29 days in seconds: 29 days * 24 hours * 60 minutes * 60 seconds
-        StartInterval = 2505600; 
+        StartInterval = 2505600;
       };
     };
   };
