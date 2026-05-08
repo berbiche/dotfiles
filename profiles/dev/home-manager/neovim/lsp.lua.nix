@@ -302,7 +302,7 @@ in
       'erlangls',
       -- Elixir
       elixirls = {
-        cmd = { [[${beamPackages.elixir-ls}/lib/language_server.sh]] },
+        cmd = { [[${beamPackages.elixir-ls}/bin/elixir-ls]] },
       },
       -- Go
       'gopls',
