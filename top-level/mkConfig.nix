@@ -23,7 +23,7 @@ let
 
     nixpkgs.config.allowUnfree = allowUnfree;
     nix = {
-      package = pkgs.nix;
+      package = pkgs.lixPackageSets.stable.lix;
       settings = {
         experimental-features = ["nix-command" "flakes"];
         keep-outputs = true;

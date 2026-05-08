@@ -1,4 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   nixCfg = config.nix.settings;
@@ -10,31 +16,39 @@ in
   # support MacOS and is not loaded
   options.sops = lib.mkSinkUndeclaredOptions { };
 
-  config = lib.mkMerge [
-    {
-      my.defaults.file-explorer = "";
+  config = {
+    my.defaults.file-explorer = "";
 
-      system.stateVersion = 4;
+    system.stateVersion = 4;
 
-      nix.nixPath = [
-        "darwin=${inputs.nix-darwin}"
-      ];
-      nix.settings.extra-sandbox-paths = [
-        # Necessary
-        "/System/Library/Frameworks"
-        # Necessary
-        "/System/Library/PrivateFrameworks"
-        # Probably necessary
-        "/usr/lib"
-      ];
+    # I already do this in ./mkConfig.nix
+    nixpkgs.flake.setNixPath = false;
+    nixpkgs.flake.setFlakeRegistry = false;
 
-      nix.settings.allowed-users = [ "@admin" config.my.username ];
-      nix.settings.trusted-users = [ "@admin" config.my.username ];
+    nix.nixPath = [
+      "darwin=${inputs.nix-darwin}"
+    ];
+    nix.settings.extra-sandbox-paths = [
+      # Necessary
+      "/System/Library/Frameworks"
+      # Necessary
+      "/System/Library/PrivateFrameworks"
+      # Probably necessary
+      "/usr/lib"
+    ];
 
-      system.primaryUser = config.my.username;
+    nix.settings.allowed-users = [
+      "@admin"
+      config.my.username
+    ];
+    nix.settings.trusted-users = [
+      "@admin"
+      config.my.username
+    ];
 
-      # Disable useless warning about NIX_PATH with a flake configuration
-      system.checks.verifyNixPath = false;
-    }
-  ];
+    system.primaryUser = config.my.username;
+
+    # Disable useless warning about NIX_PATH with a flake configuration
+    system.checks.verifyNixPath = false;
+  };
 }
