@@ -27,56 +27,59 @@ in {
     # Of course, all of these packages can be overriden by direnv (envrc)
     home.packages = with pkgs;
       [
-        # Erlang/Elixir
+        ## Erlang/Elixir
         beamPackages.erlang
         erlang-language-platform
         beamPackages.rebar3
         beamPackages.elixir
-        beamPackages.elixir-ls
+        # beamPackages.elixir-ls
+        beamPackages.expert
 
-        # Go
+        ## Go
         go
         gopls
-        gotools
+        (lib.hiPrio gotools)
         golangci-lint
         gore
 
-        # Nix
+        ## Nix
         nil
         nixfmt
 
-        # Shell
-        nodePackages.bash-language-server
+        ## Shell
+        bash-language-server
         shellcheck
 
         # Not sure
-        nodePackages.diagnostic-languageserver
+        diagnostic-languageserver
 
-        # Typescript
-        nodePackages.typescript-language-server
+        ## Typescript
+        typescript-language-server
 
-        # Docker
+        ## Docker
         dockerfile-language-server
 
-        # Python LSP setup
+        ### Python LSP setup
         # pipenv
         # (python3.withPackages (ps: with ps; [
         #   black isort pyflakes pytest
         # ]))
         pyright
-        # Rust
-        rust-analyzer
-        cargo
-        cargo-audit
-        cargo-edit
-        clippy
-        rustfmt
+
+        ### Rust
+        # rust-analyzer
+        # cargo
+        # cargo-audit
+        # cargo-edit
+        # clippy
+        # rustfmt
+
         # YAML
         yaml-language-server
         # JSON, HTML, CSS    (I only care about JSON)
-        nodePackages.vscode-langservers-extracted
+        vscode-langservers-extracted
       ] ++ lib.optionals isLinux [
-        # Vala
+        ## Vala
         vala-language-server
       ] ++ lib.optionals (pkgs.stdenv.hostPlatform.system != "aarch64-darwin") [
         # For clangd

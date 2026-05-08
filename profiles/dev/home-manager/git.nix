@@ -163,8 +163,9 @@ in lib.mkMerge [
             clo = "${cl} origin";
             clu = "${cl} upstream";
             # Convenient aliases for committing
-            cm = "commit --verbose";
-            cma = "${cm} --amend";
+            c = "commit --verbose";
+            cm = "${c} -m";
+            cma = "${c} --amend";
             cmae = "${cma} --edit";
             cman = "${cma} --no-edit";
             cmar = "${cma} --reuse-message";
