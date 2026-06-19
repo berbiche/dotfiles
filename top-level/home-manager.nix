@@ -17,7 +17,7 @@
   };
   home-manager.sharedModules = [
     inputs.sops-nix.homeManagerModules.sops
-    {
+    (hmArgs: {
       # Specify Home Manager version compability
       home.stateVersion = "25.11";
       # Use the new systemd service activation/deactivation tool
@@ -32,6 +32,12 @@
 
       nix.enable = false;
       nix.assumeXdg = true;
-    }
+
+      xdg.configFile."nix/nix.conf".text = lib.mkIf (!hmArgs.config.nix.enable) ''
+        # Managed by Home-Manager (config.nix.enable = false)
+        # config.nix.extraOptions will follow
+        ${hmArgs.config.nix.extraOptions}
+      '';
+    })
   ];
 }

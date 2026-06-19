@@ -3,16 +3,17 @@
   pkgs,
   lib,
   inputs,
+  rootPath,
   ...
 }:
 
+let
+  determinateCustomConfLocation = "nix/nix.custom.conf";
+in
 {
-
-  # This option will never be read on Darwin since sops-nix does not
-  # support MacOS and is not loaded
-  options.sops = lib.mkSinkUndeclaredOptions { };
   imports = [
     inputs.home-manager.darwinModules.home-manager
+    inputs.sops-nix.darwinModules.sops
     inputs.determinate.darwinModules.default
   ];
 
@@ -45,6 +46,30 @@
       "@admin"
       config.my.username
     ];
+
+    # Configuration to use secret access-tokens
+    sops.secrets.nix-config = {
+      sopsFile = rootPath + "/secrets/nix-config.cfg";
+      mode = "0400";
+      format = "binary";
+    };
+
+    system.activationScripts.preActivation.text = lib.mkAfter ''
+      # Delete the previous determinateNix nix.custom.conf to inject secrets again
+      rm -f --one-file-system /etc/${determinateCustomConfLocation}
+    '';
+    system.activationScripts.postActivation.text = let
+      determinateNixConfFile = config.environment.etc."${determinateCustomConfLocation}".source;
+      sopsSecret = config.sops.secrets.nix-config.path;
+    in lib.mkAfter ''
+      # Merges secret nix config into /etc/${determinateCustomConfLocation}
+      {
+        rm -f --one-file-system /etc/${determinateCustomConfLocation};
+        umask 077;
+        # Uses a bashism to insert a newline reading from an empty file '<(echo)'
+        cat ${lib.escapeShellArg determinateNixConfFile} <(echo) ${lib.escapeShellArg sopsSecret} > /etc/${determinateCustomConfLocation};
+      }
+    '';
 
     system.primaryUser = config.my.username;
 

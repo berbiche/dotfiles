@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }@args:
 
 let
-  inherit (pkgs.stdenv.hostPlatform) isLinux isDarwin isAarch64;
+  inherit (pkgs.stdenv.hostPlatform) isLinux isDarwin;
   osConfig = args.osConfig or { };
 
   sopsKeyFile = "${config.xdg.configHome}/sops/age/keys.txt";
@@ -62,12 +62,7 @@ in {
     (lib.mkIf isDarwin {
       # pinentry-mac is not packaged on nixpkgs
       home.file.".gnupg/gpg-agent.conf".text = lib.mkAfter ''
-        pinentry-program ${
-          if isAarch64 then
-            "${osConfig.homebrew.prefix}/bin/pinentry-mac"
-          else
-            "/usr/local/bin/pinentry-mac"
-        }
+        pinentry-program "${osConfig.homebrew.prefix}/bin/pinentry-mac"
       '';
 
       programs.gpg.scdaemonSettings = { disable-ccid = true; };
