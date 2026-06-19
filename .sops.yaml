@@ -1,30 +1,25 @@
 keys:
-- &mine 328820E009708FDD29C08DBA1D0261F6BCA46C6E
-#- &mero 0DAC6AEF24C04C867FA1B0516D96FCE616772081
-- &mero
-- &m1v2 age1mnr4n27de0gq22dse6cp8ku7u3uecqg7sl0c793yh6s23ek3rv4su402ju
-- &m1 age196w9tul6k0apdns95tnz2lvh3hxq096cem5cj6ghljcg9wv3fqwsddyj3d
-- &samsung-work-laptop age1wd9vxqt4p6fq0722qjyj2shqglu85fe2mw8ekwjdlzgzxyudr4hqqylumr
+  - &mine 328820E009708FDD29C08DBA1D0261F6BCA46C6E
+  #- &mero 0DAC6AEF24C04C867FA1B0516D96FCE616772081
+  - &mero
+  # - &m1 age196w9tul6k0apdns95tnz2lvh3hxq096cem5cj6ghljcg9wv3fqwsddyj3d
+  - &m1 age13klmtuhghud3qyezanj8y7x3rku8tr5rxsqw4jvc9ar9h3gsduhqf7axg7
 creation_rules:
-- path_regex: 'secrets/smb-public-share.txt$'
-  key_groups:
-  - age:
-    - *mero
-    - *m1
-    pgp:
-    - *mine
-- path_regex: 'secrets/merovingian.ya?ml$'
-  key_groups:
-  - pgp:
-    - *mine
-    - *mero
-- path_regex: 'secrets/(wakatime|ssh-config|nix-config).cfg'
-  key_groups:
-  - age:
-    - *mero
-    - *m1v2
-    - *m1
-    - *samsung-work-laptop
-    pgp:
-    - *mine
-
+  - path_regex: "secrets/smb-public-share.txt$"
+    key_groups:
+      - age:
+          - *mero
+          - *m1
+        pgp:
+          - *mine
+  - path_regex: "secrets/merovingian.ya?ml$"
+    key_groups:
+      - pgp:
+          - *mine
+          - *mero
+  - path_regex: "secrets/(wakatime|ssh-config|nix-config).cfg"
+    key_groups:
+      - age:
+          - *m1
+        pgp:
+          - *mine
