@@ -6,15 +6,15 @@
   ...
 }:
 
-let
-  nixCfg = config.nix.settings;
-in
 {
-  imports = [ inputs.home-manager.darwinModules.home-manager ];
 
   # This option will never be read on Darwin since sops-nix does not
   # support MacOS and is not loaded
   options.sops = lib.mkSinkUndeclaredOptions { };
+  imports = [
+    inputs.home-manager.darwinModules.home-manager
+    inputs.determinate.darwinModules.default
+  ];
 
   config = {
     my.defaults.file-explorer = "";
@@ -22,26 +22,26 @@ in
     system.stateVersion = 4;
 
     # I already do this in ./mkConfig.nix
-    nixpkgs.flake.setNixPath = false;
-    nixpkgs.flake.setFlakeRegistry = false;
+    # nixpkgs.flake.setNixPath = false;
+    # nixpkgs.flake.setFlakeRegistry = false;
 
-    nix.nixPath = [
-      "darwin=${inputs.nix-darwin}"
-    ];
-    nix.settings.extra-sandbox-paths = [
-      # Necessary
-      "/System/Library/Frameworks"
-      # Necessary
-      "/System/Library/PrivateFrameworks"
-      # Probably necessary
-      "/usr/lib"
-    ];
+    # nix.nixPath = [
+    #   "darwin=${inputs.nix-darwin}"
+    # ];
+    # nix.settings.extra-sandbox-paths = [
+    #   # Necessary
+    #   "/System/Library/Frameworks"
+    #   # Necessary
+    #   "/System/Library/PrivateFrameworks"
+    #   # Probably necessary
+    #   "/usr/lib"
+    # ];
 
-    nix.settings.allowed-users = [
+    determinateNix.customSettings.allowed-users = [
       "@admin"
       config.my.username
     ];
-    nix.settings.trusted-users = [
+    determinateNix.customSettings.trusted-users = [
       "@admin"
       config.my.username
     ];

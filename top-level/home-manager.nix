@@ -1,10 +1,10 @@
 { config, lib, inputs, isLinux, rootPath, ... }:
 
 {
-  nix.nixPath = [
-    # For Manix
-    "home-manager=${inputs.home-manager}"
-  ];
+  # nix.nixPath = [
+  #   # For Manix
+  #   "home-manager=${inputs.home-manager}"
+  # ];
   home-manager = {
     useUserPackages = true;
     useGlobalPkgs = true;
@@ -19,7 +19,7 @@
     inputs.sops-nix.homeManagerModules.sops
     {
       # Specify Home Manager version compability
-      home.stateVersion = "25.05";
+      home.stateVersion = "25.11";
       # Use the new systemd service activation/deactivation tool
       # See https://github.com/nix-community/home-manager/pull/1656
       # systemd.user.startServices = "sd-switch";
@@ -28,7 +28,10 @@
       # inheriting the PATH from the environment during the activation is impure
       home.emptyActivationPath = true;
       # Home Manager's activation script fails on Darwin because it cannot run `nix-build`
-      home.extraActivationPath = [ config.nix.package ];
+      # home.extraActivationPath = [ config.nix.package ];
+
+      nix.enable = false;
+      nix.assumeXdg = true;
     }
   ];
 }

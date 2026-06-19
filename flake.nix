@@ -5,6 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     # nixpkgs.url = "git+file:///home/nicolas/dev/nixpkgs";
     master.url = "github:nixos/nixpkgs/master";
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
     nix-darwin = {
       url = "github:LnL7/nix-darwin";
       # url = "github:berbiche/nix-darwin/stuff-i-want-merged";
@@ -260,29 +261,6 @@
         in
         overlayFiles
         // {
-          lix =
-            _final: prev:
-            let
-              lixPackageSets = prev.lixPackageSets.override {
-                inherit (prev)
-                  colmena
-                  nix-direnv
-                  nix-fast-build
-                  nix-update
-                  nixpkgs-review
-                  ;
-              };
-            in
-            {
-              inherit lixPackageSets;
-              inherit (lixPackageSets.stable)
-                nixpkgs-review
-                nix-direnv
-                nix-eval-jobs
-                nix-fast-build
-                colmena
-                ;
-            };
           lib = _: prev: { lib = self.lib prev; };
           nixpkgs-wayland = inputs.nixpkgs-wayland.overlay;
           # emacs = inputs.emacs-overlay.overlay;
@@ -338,7 +316,6 @@
         pkgs.mkShell {
           nativeBuildInputs = with pkgs; [
             git
-            lixPackageSets.stable.lix
             sops.sops-import-keys-hook
           ];
 
