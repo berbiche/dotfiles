@@ -17,27 +17,25 @@
 
     includes = [ "config.d/*.cfg" ];
 
-    matchBlocks."*" = {
-      forwardAgent = false;
-      addKeysToAgent = "no";
-      compression = false;
-      serverAliveInterval = 0;
-      serverAliveCountMax = 3;
-      hashKnownHosts = true;
-      userKnownHostsFile = "~/.ssh/known_hosts";
-      controlMaster = "no";
-      controlPath = "~/.ssh/master-%r@%n:%p";
-      controlPersist = "no";
-      extraOptions = {
-        IdentitiesOnly = "yes";
-        IgnoreUnknown = "UseKeychain";
-        UseKeychain = "yes";
-      };
+    settings."*" = {
+      ForwardAgent = false;
+      AddKeysToAgent = "no";
+      Compression = false;
+      ServerAliveInterval = 0;
+      ServerAliveCountMax = 3;
+      HashKnownHosts = true;
+      UserKnownHostsFile = "~/.ssh/known_hosts";
+      ControlMaster = "no";
+      ControlPath = "~/.ssh/master-%r@%n:%p";
+      ControlPersist = "no";
+      IdentitiesOnly = "yes";
+      IgnoreUnknown = "UseKeychain";
+      UseKeychain = "yes";
     };
 
-    matchBlocks."git-hosts" = {
-      host = "github.com gitlab.com";
-      identityFile = [ "~/.ssh/yubikey.pub" "~/.ssh/github.pub" ];
+    settings."git-hosts" = {
+      Host = "github.com gitlab.com";
+      IdentityFile = [ "~/.ssh/yubikey.pub" "~/.ssh/github.pub" ];
     };
   };
 
