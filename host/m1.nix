@@ -64,11 +64,15 @@ in {
     # "asix-ax88179"
     "cmux"
     "ghostty"
-
+    # Zed editor
+    "zed"
+    # Opencode
     "openchamber"
 
     "spotify"
     "switchresx"
+
+    "pantafive/tap/fader"
 
     # Wallpaper tool
     "wallspace"
