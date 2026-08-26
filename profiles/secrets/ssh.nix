@@ -25,9 +25,13 @@
       ServerAliveCountMax = 3;
       HashKnownHosts = true;
       UserKnownHostsFile = "~/.ssh/known_hosts";
-      ControlMaster = "no";
-      ControlPath = "~/.ssh/master-%r@%n:%p";
-      ControlPersist = "no";
+
+      # TCP multiplexing - remove the need to authenticate with SSH
+      # Useful with git clones etc.
+      ControlMaster = "auto";
+      ControlPath = "~/.ssh/sockets/master-%r@%h:%p";
+      ControlPersist = "4h";
+
       IdentitiesOnly = "yes";
       IgnoreUnknown = "UseKeychain";
       UseKeychain = "yes";
