@@ -1,8 +1,7 @@
 { config, lib, pkgs, rootPath, ... }:
 
 let
-  inherit (lib) mkEnableOption types;
-  inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
+  inherit (lib) mkEnableOption;
 
   cfg = config.profiles.dev.wakatime;
 
