@@ -135,7 +135,7 @@ bind('n', '<space>of', function()
 end, silent, 'Open floating terminal')
 
 -- Open Neogit
-bind('n', '<leader>gg', wrap(require('neogit').open), silent, 'Open neogit')
+bind('n', '<leader>og', wrap(require('neogit').open), silent, 'Open neogit')
 
 -- Trouble
 wk.add({
